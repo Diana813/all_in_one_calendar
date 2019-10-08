@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ForGirlsFragment"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/periodStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/periodStart"
+            android:layout_margin="6dp"
+            android:textSize="20sp" />
+
+        <CalendarView
+            android:id="@+id/girlsCalendar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+        </CalendarView>
+
+        <TextView
+            android:id="@+id/periodLenght"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="6dp"
+            android:text="@string/periodLenght"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/periodTimeValue"
+            android:textSize="12sp"
+            />
+
+        <SeekBar
+            android:id="@+id/periodTime"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:max="10" />
+
+        <TextView
+            android:id="@+id/cycleLenght"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="6dp"
+            android:text="@string/cycleLenght"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cycleTimeValue"
+            android:textSize="12sp"/>
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:max="40"
+            android:id="@+id/cycleTime"/>
+
+    </LinearLayout>
+

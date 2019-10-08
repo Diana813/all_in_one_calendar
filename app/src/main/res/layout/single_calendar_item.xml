@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="58dp"
+    android:layout_height="80dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginStart="2dp"
+    android:id="@+id/singleItemLayout"
+   >
+
+    <RelativeLayout
+        android:id="@+id/singleItem"
+        android:layout_width="58dp"
+        android:layout_height="80dp"
+        android:background="@drawable/frame">
+
+        <TextView
+            android:id="@+id/dayNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:textSize="12sp"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_margin="7dp"
+            tools:text="8" />
+
+
+        <ImageView
+            android:id="@+id/periodImage"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="7dp"
+            />
+
+
+        <TextView
+            android:id="@+id/eventName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="4dp"
+            android:textSize="12sp"
+            tools:text="My Event"
+            android:textColor="#000"
+            />
+
+        <TextView
+            android:id="@+id/shiftNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="20sp"
+            tools:text="4" />
+
+    </RelativeLayout>
+</RelativeLayout>
+

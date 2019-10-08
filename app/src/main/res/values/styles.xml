@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#616161</item>
+        <item name="colorPrimaryDark">#331107</item>
+        <item name="colorAccent">#B71C1C</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:ambientShadowAlpha">0.6</item>
+        <item name="android:spotShadowAlpha">0.6</item>
+    </style>
+
+</resources>
