@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     public DrawerLayout mDrawer;
     private Toolbar toolbar;
-    private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
 
 
@@ -34,17 +34,13 @@ public class MainActivity extends AppCompatActivity {
         tx.replace(R.id.flContent, new CalendarFragment());
         tx.commit();
 
-
-
         toolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        NavigationView nvDrawer = (NavigationView) findViewById(R.id.nvView);
         setupDrawerContent(nvDrawer);
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
-
-
 
     }
 
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
@@ -124,7 +120,5 @@ public class MainActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
     }
-
-
 
 }

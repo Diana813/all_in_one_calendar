@@ -14,18 +14,20 @@ class CalendarViews {
     private LocalDate mPeriodStart;
     private LocalDate mPeriodEnd;
     private LocalDate mHeaderDate;
+    private int mColorSettings;
 
-    public CalendarViews(LocalDate calendarFill, LocalDate headerDate, int dayNumber, int shiftNumber, String eventName) {
+    public CalendarViews(int colorSettings, LocalDate calendarFill, LocalDate headerDate, int dayNumber, int shiftNumber, String eventName) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
         mEventName = eventName;
         mCalendarFill = calendarFill;
         mHeaderDate = headerDate;
+        mColorSettings = colorSettings;
 
 
     }
 
-    public CalendarViews(LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, int shiftNumber, String eventName, int imageResourceId) {
+    public CalendarViews(int colorSettings, LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, int shiftNumber, String eventName, int imageResourceId) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
         mEventName = eventName;
@@ -34,6 +36,7 @@ class CalendarViews {
         mPeriodStart = periodStart;
         mPeriodEnd = periodEnd;
         mHeaderDate = headerDate;
+        mColorSettings = colorSettings;
     }
 
 
@@ -67,6 +70,10 @@ class CalendarViews {
 
     public LocalDate getmHeaderDate(){
         return mHeaderDate;
+    }
+
+    public int getmColorSettings(){
+        return mColorSettings;
     }
 
     public boolean hasPeriod() {

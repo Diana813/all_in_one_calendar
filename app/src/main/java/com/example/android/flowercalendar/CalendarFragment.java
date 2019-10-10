@@ -17,7 +17,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.data.Contract;
@@ -42,7 +41,7 @@ import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.C
 public class CalendarFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri periodDataUri;
-    private static final int PERIOD_DATA_LOADER = 0;
+    public static final int PERIOD_DATA_LOADER = 0;
     private GridView gridView;
     private static final int DAYS_COUNT = 42;
     private ImageView previousButton;
@@ -54,7 +53,7 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     private LocalDate calendarFill;
     private CardView calendarCardView;
     private LocalDate headerDate;
-
+    private int colorSettings;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -63,7 +62,18 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
+
+
+        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
+
+        if (intent.getExtras() == null) {
+            colorSettings = 0;
+        } else if (intent.getExtras() != null) {
+            colorSettings = intent.getExtras().getInt("colorSettings");
+        }
+
 
         setHasOptionsMenu(true);
         gridView = rootView.findViewById(R.id.gridView);
@@ -76,7 +86,6 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
         return rootView;
     }
-
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -91,7 +100,15 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
             launchLoginActivity();
             return true;
         }
+        if (item.getItemId() == R.id.settings) {
+            setNewSettings();
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setNewSettings() {
+        Intent i = new Intent(getActivity(), ColorSettings.class);
+        startActivity(i);
     }
 
     private void launchLoginActivity() {
@@ -104,7 +121,7 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
         ArrayList<CalendarViews> views = new ArrayList<CalendarViews>();
 
-        //Data wyświetlena w górnym TextView
+        //Data wyświetlana w górnym TextView
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
         String todaysDate = calendarFill.format(sdf);
         date.setText(todaysDate);
@@ -148,7 +165,7 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                         (periodStartDate.isBefore(calendarFill) &&
                                 periodFinishDate.isAfter(calendarFill))) {
 
-                    views.add(new CalendarViews(calendarFill, headerDate, periodStartDate,
+                    views.add(new CalendarViews(colorSettings, calendarFill, headerDate, periodStartDate,
                             periodFinishDate, dayOfMonth, 0,
                             "event", R.mipmap.period_icon_v2));
 
@@ -171,19 +188,19 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                     }
                 } else {
 
-                    views.add(new CalendarViews(calendarFill, headerDate, dayOfMonth, 0, "event"));
+                    views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, 0, "event"));
                 }
             } else {
-                views.add(new CalendarViews(calendarFill, headerDate, dayOfMonth, 0, "event"));
+                views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, 0, "event"));
             }
 
             calendarFill = calendarFill.plusDays(1);
         }
 
+
         CalendarAdapter adapter = new CalendarAdapter(getContext(), views);
         gridView.setAdapter(adapter);
     }
-
 
     private void setPreviousButtonClickEvent() {
         previousButton.setOnClickListener(new View.OnClickListener() {
@@ -281,7 +298,9 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(@NonNull Loader loader) {
 
-        //TODO dopisać co ma robić przy resecie
+        fillTheCalendar();
+        setPreviousButtonClickEvent();
+        setNextButtonClickEvent();
     }
 
 }

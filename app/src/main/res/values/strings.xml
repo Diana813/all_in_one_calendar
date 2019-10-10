@@ -23,12 +23,12 @@
     <string name="cycleLenght">How long does your menstrual cycle last?</string>
     <string name="confirmationButton">Confirm</string>
     <string name="logOutButton">Log out</string>
+    <string name="settings">Settings</string>
+    <string name="chooseColor">Choose your favorite color</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save">Save</string>
     <!-- Dialog message when user is leaving editor but hasn't saved changes -->
     <string name="unsaved_changes_dialog_message">Discard your changes and quit editing?</string>
