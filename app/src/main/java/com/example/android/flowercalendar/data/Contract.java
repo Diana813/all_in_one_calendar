@@ -11,6 +11,7 @@ public class Contract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_PERIOD_DATA = "period_data";
     public static final String PATH_EVENT_DATA = "event_data";
+    public static final String PATH_COLOR_SETTINGS = "color_settings";
 
     public static final class PeriodDataEntry implements BaseColumns {
 
@@ -45,6 +46,22 @@ public class Contract {
 
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EVENT_DATA;
+
+    }
+
+    public static final class ColorDataEntry implements BaseColumns {
+
+        public static final String TABLE_NAME = "color_settings";
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLOR_NUMBER = "color_number";
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_COLOR_SETTINGS);
+
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_COLOR_SETTINGS;
+
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_COLOR_SETTINGS;
 
     }
 }

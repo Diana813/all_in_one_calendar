@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,11 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.data.Contract;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -41,7 +46,7 @@ import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.C
 public class CalendarFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri periodDataUri;
-    public static final int PERIOD_DATA_LOADER = 0;
+    private static final int PERIOD_DATA_LOADER = 0;
     private GridView gridView;
     private static final int DAYS_COUNT = 42;
     private ImageView previousButton;
@@ -54,6 +59,16 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     private CardView calendarCardView;
     private LocalDate headerDate;
     private int colorSettings;
+    private MyDataViewModel mViewModel = new MyDataViewModel();
+    private Button btn_bottom_sheet;
+    private BottomSheetBehavior sheetBehavior;
+    private RelativeLayout red;
+    private RelativeLayout blue;
+    private RelativeLayout yellow;
+    private RelativeLayout green;
+    private Uri colorDataUri;
+    private int clickedOn = 0;
+
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -64,7 +79,9 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
+        //mViewModel = ViewModelProviders.of(this).get(MyDataViewModel.class);
 
+        // colorSettings = mViewModel.color;
 
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
 
@@ -73,6 +90,17 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         } else if (intent.getExtras() != null) {
             colorSettings = intent.getExtras().getInt("colorSettings");
         }
+
+        RelativeLayout bottom_sheet = rootView.findViewById(R.id.colorSettings);
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
+        sheetBehavior.setHideable(true);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        red = (RelativeLayout) rootView.findViewById(R.id.red);
+        yellow = (RelativeLayout) rootView.findViewById(R.id.yellow);
+        green = (RelativeLayout) rootView.findViewById(R.id.green);
+        blue = (RelativeLayout) rootView.findViewById(R.id.blue);
+        colorDataUri = Contract.ColorDataEntry.CONTENT_URI;
 
 
         setHasOptionsMenu(true);
@@ -101,19 +129,108 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
             return true;
         }
         if (item.getItemId() == R.id.settings) {
-            setNewSettings();
+            if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+            bottomSheetListener();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setNewSettings() {
-        Intent i = new Intent(getActivity(), ColorSettings.class);
-        startActivity(i);
+    public void bottomSheetListener(){
+
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                        setBlue();
+                        setGreen();
+                        setRed();
+                        setYellow();
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
     }
+
 
     private void launchLoginActivity() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
+    }
+
+    public void setRed() {
+
+        red.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clickedOn = 1;
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("colorSettings", clickedOn);
+                startActivity(intent);
+                //saveData();
+            }
+
+        });
+
+
+
+    }
+
+    private void setYellow() {
+
+        yellow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clickedOn = 2;
+                //saveData();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("colorSettings", clickedOn);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void setGreen() {
+
+        green.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clickedOn = 3;
+                //saveData();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("colorSettings", clickedOn);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setBlue() {
+
+        blue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                clickedOn = 4;
+                //saveData();
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.putExtra("colorSettings", clickedOn);
+                startActivity(intent);
+            }
+        });
     }
 
 

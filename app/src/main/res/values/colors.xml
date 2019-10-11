@@ -12,4 +12,5 @@
     <color name="lightGreen">#9cff57</color>
     <color name="blue">#00e5ff</color>
     <color name="lightBlue">#84ffff</color>
+    <color name="toolbarColor">#424242</color>
 </resources>

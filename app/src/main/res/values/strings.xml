@@ -23,8 +23,8 @@
     <string name="cycleLenght">How long does your menstrual cycle last?</string>
     <string name="confirmationButton">Confirm</string>
     <string name="logOutButton">Log out</string>
-    <string name="settings">Settings</string>
-    <string name="chooseColor">Choose your favorite color</string>
+    <string name="settings">Color settings</string>
+    <string name="chooseColor">Choose your color theme</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
@@ -45,6 +45,7 @@
     <string name="No_message">No message provided</string>
     <string name="No_reminder">No reminder provided</string>
     <string name="No_end">No end provided</string>
+    <string name="No_color_set">No color set</string>
     <string name="Empty_field">Fill in all fields</string>
     <string name="insert_data_error">Error with saving data</string>
 
@@ -59,8 +60,12 @@
     <string name="delete_all_dialog_message">Delete all data?</string>
     <string name="delete_all">Delete all data</string>
     <string name="welcomeText">All in One Calendar</string>
-    <string name="LoginPhone">Login with phone number</string>
-    <string name="LoginEmail">Login with E-mail</string>
+    <string name="header">All in one calendar</string>
+    <string name="Calendar">Calendar</string>
+    <string name="ForGirls">For Girls</string>
+    <string name="Shifts">Shifts</string>
+    <string name="Coworkers">Coworkers</string>
+
 
     <string name="current_date"> Current date</string>
     <string name="add_event">Add event</string>

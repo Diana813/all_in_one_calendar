@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.data.Contract.PeriodDataEntry;
+import com.example.android.flowercalendar.data.Contract.ColorDataEntry;
 
 import java.util.Objects;
 
@@ -33,6 +34,10 @@ public class Provider extends ContentProvider {
 
     private static final int EVENTS_ID = 201;
 
+    private static final int COLOR = 300;
+
+    private static final int COLOR_ID = 301;
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -41,6 +46,9 @@ public class Provider extends ContentProvider {
         sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_PERIOD_DATA + "/#", DATES_ID);
         sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_EVENT_DATA, EVENTS);
         sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_EVENT_DATA + "/#", EVENTS_ID);
+
+        sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_COLOR_SETTINGS, COLOR);
+        sUriMatcher.addURI(Contract.CONTENT_AUTHORITY, Contract.PATH_COLOR_SETTINGS + "/#", COLOR_ID);
 
     }
 
@@ -54,6 +62,7 @@ public class Provider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+
         SQLiteDatabase database = dataBaseHelper.getReadableDatabase();
 
         Cursor cursor;
@@ -73,15 +82,25 @@ public class Provider extends ContentProvider {
                 cursor = database.query(PeriodDataEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
+
             case EVENTS:
-                cursor = database.query(Contract.EventDataEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                cursor = database.query(Contract.EventDataEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
+
             case EVENTS_ID:
                 selection = Contract.EventDataEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                cursor = database.query(Contract.EventDataEntry.TABLE_NAME, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                cursor = database.query(Contract.EventDataEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            case COLOR:
+                cursor = database.query(ColorDataEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+
+            case COLOR_ID:
+                selection = ColorDataEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = database.query(ColorDataEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
             default:
@@ -104,6 +123,10 @@ public class Provider extends ContentProvider {
                 return Contract.EventDataEntry.CONTENT_LIST_TYPE;
             case EVENTS_ID:
                 return Contract.EventDataEntry.CONTENT_ITEM_TYPE;
+            case COLOR:
+                return ColorDataEntry.CONTENT_LIST_TYPE;
+            case COLOR_ID:
+                return ColorDataEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
@@ -120,16 +143,19 @@ public class Provider extends ContentProvider {
             case EVENTS:
                 assert values != null;
                 return insertEventData(uri, values);
+            case COLOR:
+                assert values != null;
+                return insertColorData(uri, values);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
+
     private Uri insertPeriodData(Uri uri, ContentValues values) throws IllegalArgumentException {
 
         String startDate = values.getAsString(PeriodDataEntry.COLUMN_START_DATE);
         String periodLenght = values.getAsString(PeriodDataEntry.COLUMN_PERIOD_LENGHT);
         Integer cycleLenght = values.getAsInteger(String.valueOf(PeriodDataEntry.COLUMN_CYCLE_LENGHT));
-
 
 
         if (startDate == null) {
@@ -162,7 +188,6 @@ public class Provider extends ContentProvider {
         String end = values.getAsString(Contract.EventDataEntry.COLUMN_END);
 
 
-
         if (message == null) {
             throw new IllegalArgumentException(String.valueOf(R.string.No_message));
         }
@@ -186,6 +211,27 @@ public class Provider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
+    private Uri insertColorData(Uri uri, ContentValues values) throws IllegalArgumentException {
+
+        String colorSettings = values.getAsString(ColorDataEntry.COLOR_NUMBER);
+
+        if (colorSettings == null) {
+            throw new IllegalArgumentException(String.valueOf(R.string.No_color_set));
+        }
+
+
+        SQLiteDatabase database = dataBaseHelper.getWritableDatabase();
+
+        long id = database.insert(ColorDataEntry.TABLE_NAME, null, values);
+
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
+    }
 
 
     @Override
@@ -220,6 +266,19 @@ public class Provider extends ContentProvider {
                 rowsDeleted = database.delete(Contract.EventDataEntry.TABLE_NAME, selection, selectionArgs);
                 break;
 
+            case COLOR:
+
+                rowsDeleted = database.delete(ColorDataEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+
+            case COLOR_ID:
+
+                selection = ColorDataEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(ColorDataEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+
+
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
@@ -253,10 +312,21 @@ public class Provider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 assert values != null;
                 return updateEventData(uri, values, selection, selectionArgs);
+
+            case COLOR:
+                assert values != null;
+                return updateColorData(uri, values, selection, selectionArgs);
+
+            case COLOR_ID:
+                selection = ColorDataEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                assert values != null;
+                return updateColorData(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
+
     private int updatePeriodData(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         if (values.containsKey(PeriodDataEntry.COLUMN_START_DATE)) {
@@ -293,6 +363,7 @@ public class Provider extends ContentProvider {
         }
         return rowsUpdated;
     }
+
     private int updateEventData(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
         if (values.containsKey(Contract.EventDataEntry.COLUMN_MESSAGE)) {
@@ -323,6 +394,31 @@ public class Provider extends ContentProvider {
         SQLiteDatabase database = dataBaseHelper.getWritableDatabase();
 
         int rowsUpdated = database.update(Contract.EventDataEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        if (rowsUpdated != 0) {
+            Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
+    }
+
+
+    private int updateColorData(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        if (values.containsKey(ColorDataEntry.COLOR_NUMBER)) {
+            String color = values.getAsString(ColorDataEntry.COLOR_NUMBER);
+            if (color == null) {
+                throw new IllegalArgumentException(String.valueOf(R.string.No_message));
+            }
+        }
+
+
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        SQLiteDatabase database = dataBaseHelper.getWritableDatabase();
+
+        int rowsUpdated = database.update(ColorDataEntry.TABLE_NAME, values, selection, selectionArgs);
 
         if (rowsUpdated != 0) {
             Objects.requireNonNull(getContext()).getContentResolver().notifyChange(uri, null);
