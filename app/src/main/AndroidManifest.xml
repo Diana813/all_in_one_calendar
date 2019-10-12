@@ -27,7 +27,6 @@
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"/>
         <activity android:name=".CalendarAdapter" />
-        <activity android:name=".ColorSettings" />
 
         <provider
             android:name=".data.Provider"

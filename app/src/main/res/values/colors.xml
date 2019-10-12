@@ -13,4 +13,8 @@
     <color name="blue">#00e5ff</color>
     <color name="lightBlue">#84ffff</color>
     <color name="toolbarColor">#424242</color>
+    <color name="violet">#aa00ff</color>
+    <color name="lightViolet">#ce93d8</color>
+    <color name="grey">#757575</color>
+    <color name="lightGrey">#eeeeee</color>
 </resources>
