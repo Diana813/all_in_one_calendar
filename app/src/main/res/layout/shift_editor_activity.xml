@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Shifts.ShiftsEditor">
+
+    <include
+        android:id="@+id/toolbar2"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        app:cardElevation="20dp">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:background="@color/lightGrey"
+            android:layout_margin="10dp"
+            >
+
+
+            <TableRow style="@style/TableRowStyle">
+
+                <TextView
+                    android:id="@+id/shift_name"
+                    style="@style/OverviewStyle"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/addShiftName" />
+
+                <EditText
+                    android:id="@+id/shift_name_edit_text"
+                    style="@style/EditTextFieldStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:hint="@string/hintShiftName"
+                    android:layout_margin="10dp"
+                    android:inputType="text" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TableRow style="@style/TableRowStyle">
+
+                <TextView
+                    android:id="@+id/shift_schedule"
+                    style="@style/OverviewStyle"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/shiftStart" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2">
+
+                    <ImageView
+                        android:id="@+id/schedule_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/baseline_access_time_black_48"/>
+
+                    <TextView
+                        android:id="@+id/shiftStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:textSize="20sp"
+                        android:layout_toEndOf="@+id/schedule_button"
+                        android:layout_centerVertical="true"
+                        android:hint="@string/hintAlarm"/>
+                </RelativeLayout>/>
+
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TableRow style="@style/TableRowStyle">
+
+                <TextView
+                    android:id="@+id/shift_lenght"
+                    style="@style/OverviewStyle"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/shiftLenght" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2">
+
+                    <EditText
+                        android:id="@+id/shift_lenght_edit_text"
+                        style="@style/EditTextFieldStyle"
+                        android:layout_width="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_margin="20dp"
+                        android:layout_centerVertical="true"
+                        android:hint="@string/hintShiftLenght"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/shift_lenght_edit_text"
+                        android:textSize="20sp"
+                        android:layout_marginStart="35dp"
+                        android:text="@string/hours" />
+                </RelativeLayout>
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <TableRow style="@style/TableRowStyle">
+
+                <TextView
+                    android:id="@+id/shift_alarm"
+                    style="@style/OverviewStyle"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/alarm" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="2">
+
+                    <ImageView
+                        android:id="@+id/alarm_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:src="@drawable/baseline_access_time_black_48"/>
+
+                    <TextView
+                        android:id="@+id/alarmStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:textSize="20sp"
+                        android:layout_toEndOf="@+id/alarm_button"
+                        android:layout_centerVertical="true"
+                        android:hint="@string/hintAlarm"/>
+                </RelativeLayout>/>
+
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+        </TableLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -1,0 +1,9 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id = "@+id/weekendFrame"
+    android:shape="rectangle">
+    <solid android:color="@color/violet"
+        />
+    <stroke
+        android:width="2dip"
+        android:color="#000" />
+</shape>
