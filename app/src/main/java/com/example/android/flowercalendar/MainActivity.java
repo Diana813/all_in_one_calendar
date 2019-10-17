@@ -2,14 +2,12 @@ package com.example.android.flowercalendar;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.Coworkers.CoworkerFragment;
+import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
+import com.example.android.flowercalendar.Shifts.ShiftsFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;

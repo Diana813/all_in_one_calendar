@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Calendar;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -16,13 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.flowercalendar.Calendar.CalendarAdapter;
+import com.example.android.flowercalendar.Calendar.CalendarViews;
+import com.example.android.flowercalendar.LoginActivity;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.data.Contract;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -54,14 +57,13 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     private ImageView nextButton;
     private TextView date;
     private int cycleLenght;
+    private int periodLenght;
     private LocalDate periodStartDate;
     private LocalDate periodFinishDate;
     private LocalDate calendarFill;
     private CardView calendarCardView;
     private LocalDate headerDate;
     private int colorSettings;
-    private MyDataViewModel mViewModel = new MyDataViewModel();
-    private Button btn_bottom_sheet;
     private BottomSheetBehavior sheetBehavior;
     private RelativeLayout red;
     private RelativeLayout blue;
@@ -82,9 +84,6 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
-        //mViewModel = ViewModelProviders.of(this).get(MyDataViewModel.class);
-
-        // colorSettings = mViewModel.color;
 
         Intent intent = Objects.requireNonNull(getActivity()).getIntent();
 
@@ -342,10 +341,40 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                 flipAnimation();
                 //Odejmowanie miesiąca
                 calendarFill = headerDate.minusMonths(1);
+
+                periodStartDate = previousMonthPeriodStartDate();
+                periodFinishDate = periodStartDate.plusDays(periodLenght -1 );
                 //TODO prawidłowe wyświetlanie zdarzeń z poprzedniego miesiąca
                 fillTheCalendar();
             }
         });
+    }
+
+    private LocalDate previousMonthPeriodStartDate() {
+
+        int year = calendarFill.getYear();
+        int day = calendarFill.getDayOfMonth();
+        Month month = calendarFill.getMonth();
+
+        LocalDate firstDayOfPreviousMonth = LocalDate.of(year, month, 1);
+        int previousMonthBeginningCell = (firstDayOfPreviousMonth.getDayOfWeek().getValue()) - 1;
+        LocalDate firstDayOfPreviousMonthView = firstDayOfPreviousMonth.minusDays(previousMonthBeginningCell);
+
+        for (int i = 0; i < 42; i++) {
+            if (periodFinishDate.isAfter(firstDayOfPreviousMonthView)
+                    || periodFinishDate.isEqual(firstDayOfPreviousMonthView)) {
+                periodStartDate = periodStartDate.minusDays(cycleLenght);
+                periodFinishDate = periodFinishDate.minusDays(cycleLenght);
+
+                if (periodStartDate.isBefore(firstDayOfPreviousMonthView.minusDays(periodLenght))) {
+
+                    periodStartDate = periodStartDate.plusDays(cycleLenght);
+                    periodFinishDate = periodFinishDate.plusDays(cycleLenght);
+                }
+            }
+        }
+        return periodStartDate;
+
     }
 
     private void setNextButtonClickEvent() {
@@ -424,7 +453,7 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
                     int currentID = cursor.getInt(idColumnIndex);
                     String periodStart = cursor.getString(periodStartColumnIndex);
-                    int periodLenght = cursor.getInt(periodLenghtColumnIndex);
+                    periodLenght = cursor.getInt(periodLenghtColumnIndex);
                     cycleLenght = cursor.getInt(cycleLenghtColumnIndex);
                     String[] parts = periodStart.split(":");
 
@@ -444,10 +473,9 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                 if (cursor == null || cursor.getCount() < 1) {
 
                     colorDataUri = null;
-                    clickedOn = 0;
-                    fillTheCalendar();
-                    setNextButtonClickEvent();
-                    setPreviousButtonClickEvent();
+                    colorSettings = 0;
+                    calendarFill = LocalDate.now();
+                    getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
                 } else {
                     colorDataUri = Contract.ColorDataEntry.CONTENT_URI;
                 }
@@ -493,9 +521,6 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
             if (newUri == null) {
                 Toast.makeText(getContext(), getString(R.string.insert_data_error),
                         Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), getString(R.string.data_saved),
-                        Toast.LENGTH_SHORT).show();
             }
         } else {
 
@@ -505,13 +530,9 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
                 Toast.makeText(getContext(), getString(R.string.edit_data_error),
                         Toast.LENGTH_SHORT).show();
-            } else {
-
-                Toast.makeText(getContext(), getString(R.string.data_edited),
-                        Toast.LENGTH_SHORT).show();
             }
         }
-        
+
     }
 }
 

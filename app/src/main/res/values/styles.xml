@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">#616161</item>
         <item name="colorPrimaryDark">#331107</item>
         <item name="colorAccent">#B71C1C</item>
@@ -10,6 +9,7 @@
         <item name="android:ambientShadowAlpha">0.6</item>
         <item name="android:spotShadowAlpha">0.6</item>
     </style>
+
     <style name="colorPickerBigPart">
         <item name="android:layout_width">70dp</item>
         <item name="android:layout_height">50dp</item>
@@ -28,6 +28,72 @@
         <item name="android:layout_marginStart">35dp</item>
         <item name="android:layout_marginTop">15dp</item>
     </style>
+
+    <!-- Style for the table labels text views in shift activity-->
+    <style name="ShiftsTextViewLabelStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <!-- Style for the empty view Text Views-->
+    <style name="EmptyViewTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Style for the table's text views in table_item.xml-->
+    <style name="TableTextViews">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textColor">#2B3D4D</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Style for the table rows in shift editor activity-->
+    <style name="TableRowStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_margin">20dp</item>
+    </style>
+
+    <!-- Style for a category in the editor -->
+    <style name="OverviewStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Style for an EditText field in the editor -->
+    <style name="EditTextFieldStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:layout_gravity">center_vertical</item>
+
+    </style>
+
+
+
+
 
 
 </resources>

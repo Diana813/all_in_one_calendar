@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Calendar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -10,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.android.flowercalendar.Calendar.CalendarViews;
+import com.example.android.flowercalendar.R;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

@@ -78,4 +78,21 @@
     <string name="sat">SAT</string>
     <string name="last_date">30</string>
 
+    <string name="shift_name">Shift</string>
+    <string name="schedule">Schedule</string>
+    <string name="alarm">Alarm</string>
+    <string name="edit">Edit shift</string>
+    <string name="empty_view_title">Add shift</string>
+    <string name="hintSchedule">8:00 – 16:00</string>
+    <string name="hintShiftName">1 or \"morning\"</string>
+    <string name="hintAlarm"> 06:00</string>
+    <string name="shiftStart">Shift start</string>
+    <string name="shiftLenght">Shift length</string>
+    <string name="hintShiftLenght">10</string>
+    <string name="hours">hours</string>
+    <string name="addShiftName">Shift name</string>
+
+
+
+
 </resources>

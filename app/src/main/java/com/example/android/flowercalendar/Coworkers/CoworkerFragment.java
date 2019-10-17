@@ -1,21 +1,25 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Coworkers;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.flowercalendar.R;
+
 import androidx.fragment.app.Fragment;
 
-public class ShiftsFragment extends Fragment {
+public class CoworkerFragment extends Fragment {
 
-    public ShiftsFragment() {
+    public CoworkerFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_shifts, container, false);
+        View rootView = inflater.inflate(R.layout.activity_coworker, container, false);
         return rootView;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.ForGirls;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -22,6 +22,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.flowercalendar.MainActivity;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.data.Contract;
 
 import java.time.LocalDateTime;
