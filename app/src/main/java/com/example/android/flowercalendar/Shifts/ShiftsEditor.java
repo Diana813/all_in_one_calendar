@@ -36,23 +36,29 @@ public class ShiftsEditor extends Fragment {
     private String shift_name_extra;
     private String shift_schedule_extra;
     private String shift_alarm_extra;
+    private String shift_length_extra;
     private static final String EXTRA_SHIFT_NAME = "shift_name";
     private static final String EXTRA_SHIFT_ID = "id";
-    private static final String EXTRA_SHIFT_SCHEDULE = "shift_schedule";
+    private static final String EXTRA_SHIFT_SCHEDULE = "shift_start_time";
     private static final String EXTRA_SHIFT_ALARM = "shift_alarm";
+    private static final String EXTRA_SHIFT_LENGHT = "shift_length";
 
     private TextView shiftStartTextView;
     private TextView alarmTextView;
     private EditText shiftNameEditText;
+    private EditText shiftLengthEditText;
 
-    public static ShiftsEditor newInstance(int id, String shiftName, String schedule, String alarm) {
+    private int newShiftLength;
+
+    public static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
 
         ShiftsEditor fragment = new ShiftsEditor();
         Bundle args = new Bundle();
         args.putInt(EXTRA_SHIFT_ID, id);
         args.putString(EXTRA_SHIFT_NAME, shiftName);
-        args.putString(EXTRA_SHIFT_SCHEDULE, schedule);
+        args.putString(EXTRA_SHIFT_SCHEDULE, shift_start);
         args.putString(EXTRA_SHIFT_ALARM, alarm);
+        args.putString(EXTRA_SHIFT_LENGHT, String.valueOf(shift_length));
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +79,7 @@ public class ShiftsEditor extends Fragment {
         String shift_id_extra = args.getString(EXTRA_SHIFT_ID);
         shift_schedule_extra = args.getString(EXTRA_SHIFT_SCHEDULE);
         shift_alarm_extra = args.getString(EXTRA_SHIFT_ALARM);
+        shift_length_extra = args.getString(EXTRA_SHIFT_LENGHT);
 
         if (shift_name_extra == null) {
             shift_name_extra = "-1";
@@ -85,6 +92,9 @@ public class ShiftsEditor extends Fragment {
         View view = inflater.inflate(R.layout.shift_editor_activity, container, false);
 
         setHasOptionsMenu(true);
+
+        shiftLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
+
 
         shiftNameEditText = view.findViewById(R.id.shift_name_edit_text);
         shiftStartTextView = (TextView) view.findViewById(R.id.shiftStart);
@@ -112,6 +122,7 @@ public class ShiftsEditor extends Fragment {
             shiftNameEditText.setSelection(shift_name_extra.length());
             shiftStartTextView.setText(shift_schedule_extra);
             alarmTextView.setText(shift_alarm_extra);
+            shiftLengthEditText.setText(shift_length_extra);
         }
 
 
@@ -121,10 +132,24 @@ public class ShiftsEditor extends Fragment {
 
     private void saveShift() {
 
+
         int newId = 0;
         String newShiftName = shiftNameEditText.getText().toString();
         String newShiftStart = shiftStartTextView.getText().toString();
         String newAlarm = alarmTextView.getText().toString();
+
+
+        try {
+            newShiftLength = Integer.parseInt(shiftLengthEditText.getText().toString());
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+
+        }
+
+        if (newShiftName.isEmpty() &&
+                newAlarm.isEmpty() && newShiftStart.isEmpty()) {
+            return;
+        }
 
 
         ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
@@ -133,18 +158,21 @@ public class ShiftsEditor extends Fragment {
 
             Shift shiftToUpdate = shiftsDao.findByShiftName(shift_name_extra);
             if (shiftToUpdate != null) {
-                if (!shiftToUpdate.getShift_name().equals(newShiftName)) {
+                if ((!shiftToUpdate.getShift_name().equals(newShiftName)) ||
+                        (!shiftToUpdate.getSchedule().equals(newShiftStart)) ||
+                        (!shiftToUpdate.getAlarm().equals(newAlarm)) ||
+                        (shiftToUpdate.getShift_length() != newShiftLength)) {
                     shiftToUpdate.setShift_name(newShiftName);
                     shiftToUpdate.setSchedule(newShiftStart);
                     shiftToUpdate.setAlarm(newAlarm);
+                    shiftToUpdate.setShift_length(newShiftLength);
                     shiftsDao.update(shiftToUpdate);
 
                 }
             }
         } else {
-            shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm));
+            shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm, newShiftLength));
             newId++;
-
         }
 
     }

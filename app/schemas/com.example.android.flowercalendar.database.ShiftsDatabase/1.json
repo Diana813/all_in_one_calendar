@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7419622f3d4791c3a74246b3177412c7",
+    "identityHash": "c2018b5178893835837b402749e56adb",
     "entities": [
       {
         "tableName": "shift",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shift_name` TEXT, `schedule` TEXT, `alarm` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shift_name` TEXT, `schedule` TEXT, `alarm` TEXT, `shift_length` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -31,6 +31,12 @@
             "columnName": "alarm",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "shift_length",
+            "columnName": "shift_length",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -55,7 +61,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7419622f3d4791c3a74246b3177412c7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c2018b5178893835837b402749e56adb')"
     ]
   }
 }

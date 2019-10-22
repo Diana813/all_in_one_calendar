@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.CalendarViews;
 import com.example.android.flowercalendar.R;
 
 import java.time.DayOfWeek;
@@ -305,6 +304,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             }
         }
     }
+
 
 
 }

@@ -17,12 +17,15 @@ public class Shift {
     private String schedule;
     @ColumnInfo(name = "alarm")
     private String alarm;
+    @ColumnInfo (name = "shift_length")
+    private int shift_length;
 
-    public Shift(int id, String shift_name, String schedule, String alarm) {
+    public Shift(int id, String shift_name, String schedule, String alarm, int shift_length) {
         this.id = id;
         this.shift_name = shift_name;
         this.schedule = schedule;
         this.alarm = alarm;
+        this.shift_length = shift_length;
     }
 
     public int getId() {
@@ -40,6 +43,9 @@ public class Shift {
     public String getSchedule() {
         return schedule;
     }
+    public int getShift_length(){
+        return shift_length;
+    }
 
     public void setId(int newId){
         this.id = newId;
@@ -52,5 +58,9 @@ public class Shift {
     }
     public void setAlarm(String new_alarm){
         this.alarm = new_alarm;
+    }
+
+    public void setShift_length( int new_shift_length){
+        this.shift_length = new_shift_length;
     }
 }

@@ -1,6 +1,8 @@
 package com.example.android.flowercalendar.Shifts;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -8,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Shift;
@@ -31,6 +34,7 @@ public class ShiftsFragment extends Fragment {
     private ShiftsAdapter adapter;
     private ShiftsViewModel shiftsViewModel;
     private Context context;
+    private RelativeLayout empty_view;
 
     public static ShiftsFragment newInstance() {
         return new ShiftsFragment();
@@ -54,18 +58,21 @@ public class ShiftsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_shifts, container, false);
+
         RecyclerView recyclerView = view.findViewById(R.id.list_of_shifts);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         setHasOptionsMenu(true);
+        empty_view = (RelativeLayout) view.findViewById(R.id.empty_view);
+
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                showFragment(ShiftsEditor.newInstance(-1, null, null, null));
+                showFragment(ShiftsEditor.newInstance(-1, null, null, null, null));
             }
         });
 
@@ -84,10 +91,34 @@ public class ShiftsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_delete_all_entries) {
-            removeData();
+            showDeleteConfirmationDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void showDeleteConfirmationDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.delete_all_dialog_message);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+               removeData();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 
@@ -104,6 +135,12 @@ public class ShiftsFragment extends Fragment {
             @Override
             public void onChanged(@Nullable List<Shift> shifts) {
                 adapter.setShiftList(shifts);
+                assert shifts != null;
+                if(shifts.isEmpty()){
+                    empty_view.setVisibility(View.VISIBLE);
+                }else{
+                    empty_view.setVisibility(View.GONE);
+                }
             }
         });
     }

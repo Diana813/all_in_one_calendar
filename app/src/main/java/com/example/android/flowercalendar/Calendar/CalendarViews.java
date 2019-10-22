@@ -79,4 +79,8 @@ class CalendarViews {
     public boolean hasPeriod() {
         return mImageResourceId != NO_IMAGE_PROVIDED;
     }
+
+    public void setmColorSettings (int colorSettings){
+        mColorSettings = colorSettings;
+    }
 }

@@ -11,4 +11,9 @@
         android:title="@string/settings"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/settingShifts"
+        android:title="@string/settingShifts"
+        app:showAsAction="never" />
+
 </menu>

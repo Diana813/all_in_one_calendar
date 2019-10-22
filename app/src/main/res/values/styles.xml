@@ -8,7 +8,20 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:ambientShadowAlpha">0.6</item>
         <item name="android:spotShadowAlpha">0.6</item>
+        <item name="colorSecondary">@color/yellow</item>
     </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme.Green" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">#616161</item>
+        <item name="colorPrimaryDark">#331107</item>
+        <item name="colorAccent">#B71C1C</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:ambientShadowAlpha">0.6</item>
+        <item name="android:spotShadowAlpha">0.6</item>
+        <item name="colorSecondary">@color/green</item>
+    </style>
+
 
     <style name="colorPickerBigPart">
         <item name="android:layout_width">70dp</item>

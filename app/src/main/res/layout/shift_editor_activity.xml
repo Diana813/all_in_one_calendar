@@ -7,11 +7,6 @@
     android:orientation="vertical"
     tools:context=".Shifts.ShiftsEditor">
 
-    <include
-        android:id="@+id/toolbar2"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -42,10 +37,12 @@
 
                 <EditText
                     android:id="@+id/shift_name_edit_text"
-                    style="@style/EditTextFieldStyle"
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:textColor="#000"
                     android:hint="@string/hintShiftName"
+                    android:textSize="20sp"
                     android:layout_margin="10dp"
                     android:inputType="text" />
             </TableRow>
@@ -75,6 +72,7 @@
                         android:id="@+id/schedule_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/shiftStart"
                         android:layout_margin="20dp"
                         android:src="@drawable/baseline_access_time_black_48"/>
 
@@ -84,11 +82,11 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
                         android:textSize="20sp"
-                        android:layout_toEndOf="@+id/schedule_button"
+                        android:textColor="#000"
                         android:layout_centerVertical="true"
                         android:hint="@string/hintAlarm"/>
-                </RelativeLayout>/>
 
+                </RelativeLayout>/>
 
             </TableRow>
 
@@ -115,13 +113,14 @@
 
                     <EditText
                         android:id="@+id/shift_lenght_edit_text"
-                        style="@style/EditTextFieldStyle"
                         android:layout_width="wrap_content"
                         android:textSize="20sp"
                         android:layout_margin="20dp"
                         android:layout_centerVertical="true"
+                        android:textColor="#000"
                         android:hint="@string/hintShiftLenght"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:layout_height="wrap_content" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,6 +128,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/shift_lenght_edit_text"
                         android:textSize="20sp"
+                        android:textColor="#000"
                         android:layout_marginStart="35dp"
                         android:text="@string/hours" />
                 </RelativeLayout>
@@ -159,16 +159,17 @@
                         android:id="@+id/alarm_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/alarmStart"
                         android:layout_margin="20dp"
-                        android:src="@drawable/baseline_access_time_black_48"/>
+                        android:src="@drawable/baseline_alarm_black_48"/>
 
                     <TextView
                         android:id="@+id/alarmStart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
+                        android:textColor="#000"
                         android:textSize="20sp"
-                        android:layout_toEndOf="@+id/alarm_button"
                         android:layout_centerVertical="true"
                         android:hint="@string/hintAlarm"/>
                 </RelativeLayout>/>

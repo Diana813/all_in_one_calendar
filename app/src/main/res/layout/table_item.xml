@@ -1,48 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="20dp"
-    android:layout_margin="10dp">
-<TableLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:padding="8dp">
+    android:layout_margin="10dp"
+    app:cardElevation="20dp">
 
-    <LinearLayout
-        android:id="@+id/list_of_items"
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:descendantFocusability="blocksDescendants"
+        android:padding="8dp">
 
-        <TextView
-            android:id="@+id/shift"
-            style="@style/TableTextViews"
-            android:fontFamily="sans-serif-medium"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="2" />
-
-
-        <TextView
-            android:id="@+id/shift_schedule"
-            style="@style/TableTextViews"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/list_of_items"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="12:00 - 18:00" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/shift"
+                android:layout_width="60dp"
+                android:layout_height="80dp"
+                android:background="@drawable/weekend_frame"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#fff"
+                tools:text="2" />
 
 
-        <TextView
-            android:id="@+id/shift_alarm"
-            style="@style/TableTextViews"
-            tools:text="11:00" />
+            <TextView
+                android:id="@+id/shift_schedule"
+                style="@style/TableTextViews"
+                android:textSize="15sp"
+                android:layout_marginStart="10dp"
+                tools:text="12:00 - 18:00" />
 
-    </LinearLayout>
 
-</TableLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="8dp"
+                    android:src="@drawable/baseline_alarm_black_48"
+                    android:id="@+id/alarmClock">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/shift_alarm"
+                    android:layout_width="wrap_content"
+                    tools:text="11:00"
+                    android:textSize="15sp"
+                    style="@style/TableTextViews"
+              />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="7dp"
+                android:src="@drawable/baseline_create_black_36" />
+
+        </LinearLayout>
+
+    </TableLayout>
 
 </androidx.cardview.widget.CardView>

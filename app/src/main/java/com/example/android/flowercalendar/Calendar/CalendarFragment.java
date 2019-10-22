@@ -3,7 +3,8 @@ package com.example.android.flowercalendar.Calendar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.content.ContentValues;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,41 +17,49 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.flowercalendar.Calendar.CalendarAdapter;
-import com.example.android.flowercalendar.Calendar.CalendarViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.Shifts.ShiftsViewModel;
 import com.example.android.flowercalendar.data.Contract;
+import com.example.android.flowercalendar.database.Colors;
+import com.example.android.flowercalendar.database.ColorsDao;
+import com.example.android.flowercalendar.database.Shift;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.CONTENT_URI;
+import static com.example.android.flowercalendar.database.ColorsDatabase.getDatabase;
 
 
 public class CalendarFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri periodDataUri;
     private static final int PERIOD_DATA_LOADER = 0;
-    private static final int COLOR_DATA_LOADER = 1;
     private GridView gridView;
     private static final int DAYS_COUNT = 42;
     private ImageView previousButton;
@@ -63,61 +72,87 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     private LocalDate calendarFill;
     private CardView calendarCardView;
     private LocalDate headerDate;
-    private int colorSettings;
     private BottomSheetBehavior sheetBehavior;
+    private BottomSheetBehavior shiftsSheetBehavior;
     private RelativeLayout red;
     private RelativeLayout blue;
     private RelativeLayout yellow;
     private RelativeLayout green;
     private RelativeLayout violet;
     private RelativeLayout grey;
-    private Uri colorDataUri;
     private int clickedOn = 0;
+    private BottomLayoutShiftsAdapter shiftsAdapter;
+    private Context context;
+    private String shiftNumber;
+    private ColorsDao colorsDao;
+    private Colors colorToUpdate;
+    public  int colorSettings;
 
 
-    public CalendarFragment() {
-        // Required empty public constructor
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.context = context;
+        shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
     }
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
 
-        Intent intent = Objects.requireNonNull(getActivity()).getIntent();
-
-        if (intent.getExtras() == null) {
-            colorSettings = 0;
-        } else if (intent.getExtras() != null) {
-            colorSettings = intent.getExtras().getInt("colorSettings");
-        }
-
         CardView bottom_sheet = rootView.findViewById(R.id.colorSettings);
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
         sheetBehavior.setHideable(true);
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
+        LinearLayout shifts_bottom_sheet = rootView.findViewById(R.id.shiftsSettings);
+        shiftsSheetBehavior = BottomSheetBehavior.from(shifts_bottom_sheet);
+        shiftsSheetBehavior.setHideable(true);
+        shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
+
+        RecyclerView shifts_recycler_view = rootView.findViewById(R.id.shifts_list_recycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        shifts_recycler_view.setLayoutManager(layoutManager);
+        shifts_recycler_view.setAdapter(shiftsAdapter);
+
+        initShiftsData();
         red = (RelativeLayout) rootView.findViewById(R.id.red);
         yellow = (RelativeLayout) rootView.findViewById(R.id.yellow);
         green = (RelativeLayout) rootView.findViewById(R.id.green);
         blue = (RelativeLayout) rootView.findViewById(R.id.blue);
         violet = (RelativeLayout) rootView.findViewById(R.id.violet);
         grey = (RelativeLayout) rootView.findViewById(R.id.grey);
-        colorDataUri = Contract.ColorDataEntry.CONTENT_URI;
 
 
         setHasOptionsMenu(true);
         gridView = rootView.findViewById(R.id.gridView);
+        onGridViewItemClickListener();
+
         date = (TextView) rootView.findViewById(R.id.date);
         previousButton = (ImageView) rootView.findViewById(R.id.calendar_prev_button);
         nextButton = (ImageView) rootView.findViewById(R.id.calendar_next_button);
-        calendarFill = LocalDate.now();
         calendarCardView = (CardView) rootView.findViewById(R.id.calendarCardView);
         periodDataUri = CONTENT_URI;
         getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
-        getLoaderManager().initLoader(COLOR_DATA_LOADER, null, this);
         return rootView;
+    }
+
+    private void initShiftsData() {
+        ShiftsViewModel shiftsViewModel = ViewModelProviders.of(this).get(ShiftsViewModel.class);
+        shiftsViewModel.getShiftsList().observe(this, new Observer<List<Shift>>() {
+            @Override
+            public void onChanged(@Nullable List<Shift> shifts) {
+                shiftsAdapter.setShiftList(shifts);
+
+            }
+
+        });
     }
 
     @Override
@@ -140,11 +175,23 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                 sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
             }
             bottomSheetListener();
+            return true;
+        }
+        if (item.getItemId() == R.id.settingShifts) {
+
+            if (shiftsSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+            shiftsBottomSheetListener();
+            return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void bottomSheetListener() {
+    private void bottomSheetListener() {
 
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -168,6 +215,40 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
                         break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        break;
+                }
+            }
+
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+
+
+    }
+
+    private void shiftsBottomSheetListener() {
+        shiftsSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
+                        break;
                 }
             }
 
@@ -184,12 +265,14 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         startActivity(intent);
     }
 
-    public void setRed() {
+
+    private void setRed() {
 
         red.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 1;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
 
         });
@@ -202,17 +285,19 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         yellow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 2;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
         });
     }
 
-    public void setGreen() {
+    private void setGreen() {
 
         green.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 3;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
         });
     }
@@ -222,7 +307,8 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         blue.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 4;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
         });
     }
@@ -232,7 +318,8 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         violet.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 5;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
         });
     }
@@ -242,7 +329,8 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
         grey.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 clickedOn = 6;
-                saveData();
+                initShiftsData();
+                saveColor();
             }
         });
     }
@@ -252,6 +340,20 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
         ArrayList<CalendarViews> views = new ArrayList<CalendarViews>();
 
+        if (shiftNumber == null) {
+            shiftNumber = "0";
+        }
+
+
+        colorsDao = getDatabase(context).colorsDao();
+        colorToUpdate = colorsDao.findLastColor1();
+
+
+        if(colorToUpdate == null){
+            colorSettings = 0;
+        }else{
+            colorSettings = colorToUpdate.getColor_number();
+        }
         //Data wyświetlana w górnym TextView
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
         String todaysDate = calendarFill.format(sdf);
@@ -297,7 +399,7 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                                 periodFinishDate.isAfter(calendarFill))) {
 
                     views.add(new CalendarViews(colorSettings, calendarFill, headerDate, periodStartDate,
-                            periodFinishDate, dayOfMonth, 0,
+                            periodFinishDate, dayOfMonth, Integer.parseInt(shiftNumber),
                             "event", R.mipmap.period_icon_v2));
 
                     //Kiedy w kalendarzu wypełni się komórka z ostatnim dniem okresu
@@ -319,18 +421,27 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                     }
                 } else {
 
-                    views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, 0, "event"));
+                    views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, Integer.parseInt(shiftNumber), "event"));
                 }
             } else {
-                views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, 0, "event"));
+                views.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, Integer.parseInt(shiftNumber), "event"));
             }
 
             calendarFill = calendarFill.plusDays(1);
         }
+        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), views);
+        gridView.setAdapter(calendarAdapter);
 
+    }
 
-        CalendarAdapter adapter = new CalendarAdapter(getContext(), views);
-        gridView.setAdapter(adapter);
+    private void onGridViewItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+            }
+
+        });
     }
 
     private void setPreviousButtonClickEvent() {
@@ -342,8 +453,14 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
                 //Odejmowanie miesiąca
                 calendarFill = headerDate.minusMonths(1);
 
-                periodStartDate = previousMonthPeriodStartDate();
-                periodFinishDate = periodStartDate.plusDays(periodLenght -1 );
+                if (periodStartDate != null) {
+
+                    periodStartDate = previousMonthPeriodStartDate();
+                    periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
+
+                }
+
+
                 //TODO prawidłowe wyświetlanie zdarzeń z poprzedniego miesiąca
                 fillTheCalendar();
             }
@@ -412,7 +529,6 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public Loader onCreateLoader(int id, @Nullable Bundle args) {
 
-        if (id == 0) {
             String[] projection = {
                     Contract.PeriodDataEntry._ID,
                     Contract.PeriodDataEntry.COLUMN_START_DATE,
@@ -422,23 +538,15 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
             return new CursorLoader(Objects.requireNonNull(getActivity()), periodDataUri,
                     projection, null, null, null);
-        } else {
-            String[] projection = {
-                    Contract.ColorDataEntry._ID,
-                    Contract.ColorDataEntry.COLOR_NUMBER
-            };
-            return new CursorLoader(Objects.requireNonNull(getActivity()), colorDataUri,
-                    projection, null, null, null);
-        }
 
     }
 
 
     @Override
     public void onLoadFinished(@NonNull Loader loader, Cursor cursor) {
-        switch (loader.getId()) {
-            case 0:
+
                 if (cursor == null || cursor.getCount() < 1) {
+                    calendarFill = LocalDate.now();
                     fillTheCalendar();
                     setNextButtonClickEvent();
                     setPreviousButtonClickEvent();
@@ -463,40 +571,13 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
                     periodStartDate = LocalDate.of(periodYear, periodMonth, periodDay);
                     periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
+
+                    calendarFill = LocalDate.now();
                     fillTheCalendar();
                     setPreviousButtonClickEvent();
                     setNextButtonClickEvent();
 
                 }
-                break;
-            case 1:
-                if (cursor == null || cursor.getCount() < 1) {
-
-                    colorDataUri = null;
-                    colorSettings = 0;
-                    calendarFill = LocalDate.now();
-                    getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
-                } else {
-                    colorDataUri = Contract.ColorDataEntry.CONTENT_URI;
-                }
-                assert cursor != null;
-                if (cursor.moveToFirst()) {
-
-                    int idColumnIndex = cursor.getColumnIndex(Contract.ColorDataEntry._ID);
-                    int colorColumnIndex = cursor.getColumnIndex(Contract.ColorDataEntry.COLOR_NUMBER);
-
-                    int currentID = cursor.getInt(idColumnIndex);
-
-                    colorSettings = cursor.getInt(colorColumnIndex);
-                    calendarFill = LocalDate.now();
-                    getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
-                }
-
-                break;
-            default:
-                break;
-        }
-
     }
 
     @Override
@@ -504,35 +585,28 @@ public class CalendarFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
-    private void saveData() {
+    private void saveColor() {
 
-        if (colorDataUri == null &&
-                Integer.parseInt(String.valueOf(clickedOn)) == 0) {
-            return;
-        }
+        colorsDao = getDatabase(context).colorsDao();
+        colorToUpdate = colorsDao.findLastColor1();
 
-        final ContentValues values = new ContentValues();
+        if (colorToUpdate != null) {
+            if (colorToUpdate.getColor_number() != clickedOn) {
+                colorToUpdate.setId(getId());
+                colorToUpdate.setColor_number(clickedOn);
+                colorsDao.update(colorToUpdate);
 
-        values.put(Contract.ColorDataEntry.COLOR_NUMBER, clickedOn);
-
-        if (colorDataUri == null) {
-
-            Uri newUri = Objects.requireNonNull(getActivity()).getContentResolver().insert(Contract.ColorDataEntry.CONTENT_URI, values);
-            if (newUri == null) {
-                Toast.makeText(getContext(), getString(R.string.insert_data_error),
-                        Toast.LENGTH_SHORT).show();
             }
         } else {
-
-            int rowsAffected = Objects.requireNonNull(getActivity()).getContentResolver().update(colorDataUri, values,
-                    null, null);
-            if (rowsAffected == 0) {
-
-                Toast.makeText(getContext(), getString(R.string.edit_data_error),
-                        Toast.LENGTH_SHORT).show();
-            }
+            colorsDao.insert(new Colors(getId(), clickedOn));
         }
 
+        colorToUpdate = colorsDao.findLastColor1();
+        calendarFill = LocalDate.now();
+        getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
+
     }
+
+
 }
 
