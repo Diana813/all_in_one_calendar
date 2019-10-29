@@ -10,24 +10,24 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Shift.class}, version = 2)
-public abstract class ShiftsDatabase extends RoomDatabase {
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class}, version = 3)
+public abstract class CalendarDatabase extends RoomDatabase {
 
-    private static ShiftsDatabase INSTANCE;
-    private static final String DB_NAME = "shift.db";
+    private static CalendarDatabase INSTANCE;
+    private static final String DB_NAME = "calendar.db";
 
-    public static ShiftsDatabase getDatabase(final Context context) {
+    public static CalendarDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (ShiftsDatabase.class) {
+            synchronized (CalendarDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            ShiftsDatabase.class, DB_NAME)
+                            CalendarDatabase.class, DB_NAME)
                             .allowMainThreadQueries()
                             .addCallback(new RoomDatabase.Callback() {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
-                                    Log.d("ShiftDatabase", "populating with data...");
+                                    Log.d("CalendarDatabase", "populating with data...");
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
@@ -45,20 +45,21 @@ public abstract class ShiftsDatabase extends RoomDatabase {
         }
     }
 
-    public abstract ShiftsDao shiftsDao();
+    public abstract CalendarEventsDao calendarEventsDao();
 
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
-        private final ShiftsDao shiftsDao;
+        private final CalendarEventsDao calendarEventsDao;
 
-        public PopulateDbAsync(ShiftsDatabase instance) {
-            shiftsDao = instance.shiftsDao();
+        public PopulateDbAsync(CalendarDatabase instance) {
+            calendarEventsDao = instance.calendarEventsDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            shiftsDao.deleteAll();
+            calendarEventsDao.deleteAll();
             return null;
         }
     }
+
 }

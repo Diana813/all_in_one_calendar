@@ -19,7 +19,7 @@ public class ShiftsViewModel extends AndroidViewModel {
     public ShiftsViewModel(@NonNull Application application) {
         super(application);
         shiftsDao = ShiftsDatabase.getDatabase(application).shiftsDao();
-        shiftsLiveData = shiftsDao.getAllShifts();
+        shiftsLiveData = shiftsDao.sortByOrder();
     }
 
     public LiveData<List<Shift>> getShiftsList() {

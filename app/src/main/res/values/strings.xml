@@ -92,8 +92,8 @@
     <string name="hours">hours</string>
     <string name="addShiftName">Shift name</string>
     <string name="settingShifts"> Insert shifts</string>
-
-
+    <string name="snack_bar_text">Shift deleted</string>
+    <string name="snack_bar_undo">Undo</string>
 
 
 </resources>

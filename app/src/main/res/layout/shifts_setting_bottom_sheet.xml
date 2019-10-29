@@ -4,17 +4,26 @@
     android:id="@+id/shiftsSettings"
     android:layout_width="match_parent"
     android:layout_height="100dp"
+    android:orientation="vertical"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shifts_list_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:padding="5dp">
 
 
     </androidx.recyclerview.widget.RecyclerView>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_keyboard_arrow_down_black_48"
+        android:id="@+id/shiftsDownArrow">
+
+    </ImageView>
 
 </LinearLayout>
 

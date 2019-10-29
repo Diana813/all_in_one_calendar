@@ -218,5 +218,13 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </HorizontalScrollView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/colorSettingsDownArrow"
+            android:src="@drawable/baseline_keyboard_arrow_down_black_48">
+
+        </ImageView>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

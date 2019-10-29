@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
+import static com.example.android.flowercalendar.Shifts.ShiftsFragment.newId;
 
 
 public class ShiftsEditor extends Fragment {
@@ -47,7 +50,6 @@ public class ShiftsEditor extends Fragment {
     private TextView alarmTextView;
     private EditText shiftNameEditText;
     private EditText shiftLengthEditText;
-
     private int newShiftLength;
 
     public static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
@@ -95,7 +97,6 @@ public class ShiftsEditor extends Fragment {
 
         shiftLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
 
-
         shiftNameEditText = view.findViewById(R.id.shift_name_edit_text);
         shiftStartTextView = (TextView) view.findViewById(R.id.shiftStart);
         ImageView shiftStartSettingButton = (ImageView) view.findViewById(R.id.schedule_button);
@@ -132,8 +133,6 @@ public class ShiftsEditor extends Fragment {
 
     private void saveShift() {
 
-
-        int newId = 0;
         String newShiftName = shiftNameEditText.getText().toString();
         String newShiftStart = shiftStartTextView.getText().toString();
         String newAlarm = alarmTextView.getText().toString();
@@ -167,14 +166,13 @@ public class ShiftsEditor extends Fragment {
                     shiftToUpdate.setAlarm(newAlarm);
                     shiftToUpdate.setShift_length(newShiftLength);
                     shiftsDao.update(shiftToUpdate);
-
                 }
             }
         } else {
-            shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm, newShiftLength));
-            newId++;
-        }
 
+            shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm, newShiftLength));
+
+        }
     }
 
     private void shiftSettingDialog() {
@@ -223,10 +221,16 @@ public class ShiftsEditor extends Fragment {
         switch (item.getItemId()) {
             case R.id.save:
                 saveShift();
+
+                final InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                assert inputMethodManager != null;
+                inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getView()).getWindowToken(), 0);
+
                 FragmentTransaction fragmentTransaction =
                         Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.flContent, new ShiftsFragment());
                 fragmentTransaction.commitNow();
+
                 return true;
 
             case R.id.action_delete_all_entries:

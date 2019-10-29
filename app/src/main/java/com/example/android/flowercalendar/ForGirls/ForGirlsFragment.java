@@ -53,7 +53,6 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
 
     private CalendarView mCalendarView;
     private String startPeriodDate;
-    private boolean periodDataHasChanged = false;
     private Uri periodDataUri;
     private TextView periodTimeValue;
     private TextView cycleTimeValue;
@@ -67,7 +66,7 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
         @SuppressLint("ClickableViewAccessibility")
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            periodDataHasChanged = true;
+            boolean periodDataHasChanged = true;
             return false;
         }
     };

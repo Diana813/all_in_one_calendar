@@ -1,8 +1,8 @@
 package com.example.android.flowercalendar.Calendar;
 
-import android.app.Application;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +46,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ShiftsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ShiftsViewHolder holder, int position) {
 
         if (shiftList == null) {
             return;
@@ -59,15 +59,27 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent();
-                intent.putExtra("shiftNumber", shift.getShift_name());
-
+                ClipboardManager clipboard = (ClipboardManager)
+                        context.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData shiftNumber = ClipData.newPlainText("shiftNumber", shift.getShift_name());
+                assert clipboard != null;
+                clipboard.setPrimaryClip(shiftNumber);
             }
         });
 
         ColorsDao colorsDao = getDatabase(context).colorsDao();
         Colors colorToUpdate = colorsDao.findLastColor1();
-        int colorSettings = colorToUpdate.getColor_number();
+
+        int colorSettings;
+
+        if(colorToUpdate == null){
+            colorSettings = 0;
+        }else{
+            colorSettings = colorToUpdate.getColor_number();
+
+        }
+
+
 
         if (colorSettings == 1) {
             holder.shift.setBackgroundColor(Color.parseColor("#b71c1c"));
@@ -86,7 +98,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             holder.shift.setTextColor(Color.WHITE);
         } else {
             holder.shift.setBackgroundColor(Color.parseColor("#b71c1c"));
-            holder.shift.setTextColor(Color.parseColor("#0000000"));
+            holder.shift.setTextColor(Color.parseColor("#000000"));
         }
     }
 
@@ -100,15 +112,13 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
         }
     }
 
-    public static class ShiftsViewHolder extends RecyclerView.ViewHolder {
+    static class ShiftsViewHolder extends RecyclerView.ViewHolder {
         private TextView shift;
 
-        public ShiftsViewHolder(View itemView) {
+        ShiftsViewHolder(View itemView) {
 
             super(itemView);
             shift = itemView.findViewById(R.id.shift);
-
-
         }
     }
 }

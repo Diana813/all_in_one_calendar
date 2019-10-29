@@ -1,20 +1,21 @@
 package com.example.android.flowercalendar.Shifts;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Shift;
+import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.database.ShiftsDatabase;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,63 +25,71 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsViewHolder> {
 
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
     private LayoutInflater layoutInflater;
     private List<Shift> shiftList;
-    private String shift_finish;
     private int startHour;
     private int startminute;
-    private int finishHour;
+    private Shift shift;
+    private int shiftPosition;
+    private String shiftName;
+    private ArrayList<String> shiftsNames = new ArrayList<>();;
 
-    public ShiftsAdapter(Context requireNonNull, Context context) {
+
+    ShiftsAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
+        ShiftsAdapter.context = context;
+
     }
 
-    public void setShiftList(List<Shift> shiftList) {
+    public static Context getContext() {
+        return context;
+    }
+
+
+    void setShiftList(List<Shift> shiftList) {
         this.shiftList = shiftList;
         notifyDataSetChanged();
     }
 
-
     @NonNull
     @Override
-    public ShiftsAdapter.ShiftsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final View itemView = layoutInflater.inflate(R.layout.table_item, parent, false);
-        return new ShiftsAdapter.ShiftsViewHolder(itemView);
+    public ShiftsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = layoutInflater.inflate(R.layout.table_item, parent, false);
+        return new ShiftsViewHolder(itemView);
     }
 
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
-    public void onBindViewHolder(@NonNull ShiftsAdapter.ShiftsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShiftsViewHolder holder, int position) {
         if (shiftList == null) {
             return;
         }
 
-
         final Shift shift = shiftList.get(position);
-
 
         if (shift != null) {
 
             String shift_start_time = shift.getSchedule();
 
+            String shift_finish;
             if (shift_start_time.equals("")) {
                 shift_finish = "";
             } else {
 
-
                 String[] parts = shift_start_time.split(":");
 
-                try{
+                try {
                     startHour = Integer.parseInt(parts[0]);
                     startminute = Integer.parseInt(parts[1]);
-                }catch(NumberFormatException ex){
-                   ex.printStackTrace();
+                } catch (NumberFormatException ex) {
+                    ex.printStackTrace();
 
                 }
 
-
-                finishHour = startHour + shift.getShift_length();
+                int finishHour = startHour + shift.getShift_length();
                 if (finishHour == 24) {
                     finishHour = 0;
                 }
@@ -93,7 +102,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
             holder.shiftName.setText(shift.getShift_name());
             holder.shiftSchedule.setText(shift.getSchedule() + " - " + shift_finish);
-            if (shift.getSchedule().isEmpty()){
+            if (shift.getSchedule().isEmpty()) {
                 holder.shiftSchedule.setText("");
 
             }
@@ -110,6 +119,80 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
         }
     }
 
+    public void deleteItem(int position) {
+
+            shift = shiftList.get(position);
+            shiftPosition = position;
+            shiftName = shift.getShift_name();
+            shiftsNames.add(shiftName);
+            shiftList.remove(position);
+            notifyItemRemoved(position);
+            showUndoSnackbar();
+
+    }
+
+    void deleteFromDatabase() {
+
+        ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+
+        if (shiftsNames != null) {
+            for (int i = 0; i < shiftsNames.size(); i++) {
+
+                shiftsDao.deleteByShiftName(shiftsNames.get(i));
+
+            }
+        }
+    }
+
+    private void showUndoSnackbar() {
+
+        Snackbar snackbar = Snackbar.make( (((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
+                Snackbar.LENGTH_LONG);
+        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                undoDelete();
+            }
+        });
+        snackbar.show();
+    }
+
+    private void undoDelete() {
+        shiftList.add(shiftPosition,
+                shift);
+        shiftsNames.remove(shiftName);
+        notifyItemInserted(shiftPosition);
+    }
+
+    public void onItemMove(int fromPosition, int toPosition) {
+
+
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(shiftList, i, i + 1);
+            }
+
+        } else {
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(shiftList, i, i - 1);
+            }
+
+        }
+
+        notifyItemMoved(fromPosition, toPosition);
+
+    }
+
+    void setIndexInDatabase() {
+        ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+        for (Shift shift : shiftList) {
+            shift.setPosition(shiftList.indexOf(shift));
+            shiftsDao.update(shift);
+        }
+
+
+    }
+
     @Override
     public int getItemCount() {
         if (shiftList == null) {
@@ -123,18 +206,14 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
         private TextView shiftName;
         private TextView shiftSchedule;
         private TextView shiftAlarm;
-        private ImageView alarmClock;
 
-        public ShiftsViewHolder(View itemView) {
+        ShiftsViewHolder(View itemView) {
             super(itemView);
             shiftName = itemView.findViewById(R.id.shift);
             shiftSchedule = itemView.findViewById(R.id.shift_schedule);
             shiftAlarm = itemView.findViewById(R.id.shift_alarm);
-            alarmClock = itemView.findViewById(R.id.alarmClock);
 
         }
     }
-
-
 }
 

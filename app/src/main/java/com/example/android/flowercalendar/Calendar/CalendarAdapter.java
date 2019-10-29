@@ -34,6 +34,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     private DayOfWeek headerDateDayOfWeek;
 
 
+
     CalendarAdapter(Context context, ArrayList<CalendarViews> calendarViews) {
         super(context, 0, calendarViews);
 
@@ -45,6 +46,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         CalendarViews views = getItem(position);
+
 
         View gridItemView = convertView;
         if (gridItemView == null) {
@@ -89,7 +91,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             periodImage.setVisibility(View.GONE);
         }
 
-
         dayNumberTextView.setText(String.valueOf(views.getmDayNumber()));
         shiftNumberTextView.setText(String.valueOf(views.getmShiftNumber()));
         eventNameTextView.setText(views.getmEventName());
@@ -99,14 +100,14 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
 
     private void weekend() {
         dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-        shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+        shiftNumberTextView.setTextColor(Color.BLACK);
         eventNameTextView.setTextColor(Color.parseColor("#BDBDBD"));
     }
 
 
     private void todaysDateAtWeekend() {
         dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-        shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+        shiftNumberTextView.setTextColor(Color.BLACK);
         eventNameTextView.setTextColor(Color.parseColor("#BDBDBD"));
     }
 
@@ -117,12 +118,14 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
             layout.setBackgroundResource(R.drawable.weekend_frame);
             weekend();
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
 
         //Wyróżnienie dziesiejszej daty
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
+            shiftNumberTextView.setTextColor(Color.BLACK);
             singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend);
@@ -133,13 +136,17 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend);
                 weekend();
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -166,13 +173,17 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_yellow);
                 weekend();
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -199,13 +210,18 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_green);
                 weekend();
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+
 
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -232,12 +248,17 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_blue);
                 weekend();
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -263,13 +284,18 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_violet);
                 weekend();
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+
 
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
@@ -295,18 +321,20 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         //Wyróżnienie aktualnego miesiąca
         if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
             dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_grey);
                 weekend();
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
+
 
             }
+        }else{
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
-
-
-
 }
 
 

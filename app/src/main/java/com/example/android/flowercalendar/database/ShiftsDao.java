@@ -15,13 +15,13 @@ public interface ShiftsDao {
     @Query("SELECT * FROM shift WHERE shift_name = :shiftName LIMIT 1")
     Shift findByShiftName(String shiftName);
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Shift shift);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Shift... shifts);
 
-    @Update()
+    @Update(onConflict = OnConflictStrategy.IGNORE)
     void update(Shift shift);
 
     @Query("DELETE FROM Shift")
@@ -32,6 +32,15 @@ public interface ShiftsDao {
 
     @Query("DELETE FROM shift WHERE shift_name = :shiftName")
     void deleteByShiftName(String shiftName);
+
+    @Query("SELECT * FROM shift WHERE id = :id")
+    Shift findByShiftId(int id);
+
+    @Query("DELETE FROM shift WHERE shift_name = 'abrakadabra'")
+    void deleteRemovedShifts();
+
+    @Query("SELECT * FROM shift ORDER BY position ASC")
+    LiveData<List<Shift>> sortByOrder();
 }
 
 
