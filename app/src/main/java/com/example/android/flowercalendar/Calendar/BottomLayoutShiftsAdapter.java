@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Colors;
 import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Shift;
@@ -18,8 +19,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.example.android.flowercalendar.database.ColorsDatabase.getDatabase;
 
 public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayoutShiftsAdapter.ShiftsViewHolder> {
 
@@ -67,7 +66,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             }
         });
 
-        ColorsDao colorsDao = getDatabase(context).colorsDao();
+        ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
         Colors colorToUpdate = colorsDao.findLastColor1();
 
         int colorSettings;
@@ -82,23 +81,26 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
 
 
         if (colorSettings == 1) {
-            holder.shift.setBackgroundColor(Color.parseColor("#b71c1c"));
-            holder.shift.setTextColor(Color.WHITE);
+            //red
+            holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
         } else if (colorSettings == 2) {
-            holder.shift.setBackgroundColor(Color.parseColor("#ffeb3b"));
+            //yellow
+            holder.shift.setBackgroundColor(Color.parseColor("#fff9c4"));
         } else if (colorSettings == 3) {
-            holder.shift.setBackgroundColor(Color.parseColor("#64dd17"));
+            //green
+            holder.shift.setBackgroundColor(Color.parseColor("#9cff57"));
         } else if (colorSettings == 4) {
-            holder.shift.setBackgroundColor(Color.parseColor("#00e5ff"));
+            //blue
+            holder.shift.setBackgroundColor(Color.parseColor("#84ffff"));
         } else if (colorSettings == 5) {
-            holder.shift.setBackgroundColor(Color.parseColor("#aa00ff"));
-            holder.shift.setTextColor(Color.WHITE);
+            //violet
+            holder.shift.setBackgroundColor(Color.parseColor("#ce93d8"));
         } else if (colorSettings == 6) {
-            holder.shift.setBackgroundColor(Color.parseColor("#757575"));
-            holder.shift.setTextColor(Color.WHITE);
+            //grey
+            holder.shift.setBackgroundColor(Color.parseColor("#BDBDBD"));
         } else {
-            holder.shift.setBackgroundColor(Color.parseColor("#b71c1c"));
-            holder.shift.setTextColor(Color.parseColor("#000000"));
+            //red
+            holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
         }
     }
 

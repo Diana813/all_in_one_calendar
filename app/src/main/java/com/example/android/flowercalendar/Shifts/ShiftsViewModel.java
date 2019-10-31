@@ -2,9 +2,9 @@ package com.example.android.flowercalendar.Shifts;
 
 import android.app.Application;
 
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
-import com.example.android.flowercalendar.database.ShiftsDatabase;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class ShiftsViewModel extends AndroidViewModel {
 
     public ShiftsViewModel(@NonNull Application application) {
         super(application);
-        shiftsDao = ShiftsDatabase.getDatabase(application).shiftsDao();
+        shiftsDao = CalendarDatabase.getDatabase(application).shiftsDao();
         shiftsLiveData = shiftsDao.sortByOrder();
     }
 

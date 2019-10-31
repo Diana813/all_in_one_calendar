@@ -13,19 +13,20 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GestureInteractions extends ItemTouchHelper.SimpleCallback {
+public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
     private ShiftsAdapter shiftsAdapter;
 
     private Drawable icon;
     private final ColorDrawable background;
 
-    public GestureInteractions(ShiftsAdapter adapter) {
+    public GestureInteractionsRecyclerView(ShiftsAdapter adapter) {
         super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         shiftsAdapter = adapter;
         icon = ContextCompat.getDrawable(ShiftsAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
     }
+
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {

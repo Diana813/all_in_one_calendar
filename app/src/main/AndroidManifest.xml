@@ -29,11 +29,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".Calendar.CalendarAdapter" />
-
-        <provider
-            android:name=".data.Provider"
-            android:authorities="com.example.android.flowercalendar"
-            android:exported="false" />
     </application>
 
 </manifest>

@@ -34,11 +34,11 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/periodTimeValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/periodTimeValue"
-            android:textSize="12sp"
-            />
+            android:layout_marginStart="20dp"
+            android:textSize="12sp" />
 
         <SeekBar
             android:id="@+id/periodTime"
@@ -59,6 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:id="@+id/cycleTimeValue"
             android:textSize="12sp"/>
 

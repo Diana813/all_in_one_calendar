@@ -7,22 +7,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarEvents;
+import com.example.android.flowercalendar.database.Shift;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 
-
-public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
+public class DatabaseAdapter extends ArrayAdapter<CalendarEvents> {
 
     private TextView dayNumberTextView;
     private TextView shiftNumberTextView;
@@ -34,11 +34,11 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     private int month;
     private int year;
     private DayOfWeek headerDateDayOfWeek;
+    private List<CalendarEvents> events;
 
 
-
-    CalendarAdapter(Context context, ArrayList<CalendarViews> calendarViews) {
-        super(context, 0, calendarViews);
+    DatabaseAdapter(Context context, ArrayList<CalendarEvents> calendarEvents) {
+        super(context, 0, calendarEvents);
 
     }
 
@@ -47,7 +47,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        CalendarViews views = getItem(position);
+        CalendarEvents views = getItem(position);
 
 
         View gridItemView = convertView;
@@ -64,38 +64,65 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         layout = (RelativeLayout) gridItemView.findViewById(R.id.singleItem);
         singleItem = (RelativeLayout) gridItemView.findViewById(R.id.singleItemLayout);
         assert views != null;
-        calendarFill = views.getmCalendarFill();
-        headerDate = views.getmHeaderDate();
+        String calendarFillString = views.getCalendarFillString();
+        String[] parts = calendarFillString.split("-");
+        int yearCalendarFill = Integer.parseInt(parts[0]);
+        int monthCalendarFill = Integer.parseInt(parts[1]);
+        int dayCalendarFill = Integer.parseInt(parts[2]);
+        calendarFill = LocalDate.of(yearCalendarFill, monthCalendarFill, dayCalendarFill);
+        String headerDateString = views.getHeaderDateString();
+        String[] partsHeaderDate = headerDateString.split("-");
+        int yearHeader = Integer.parseInt(partsHeaderDate[0]);
+        int monthHeader = Integer.parseInt(partsHeaderDate[1]);
+        int dayHeader = Integer.parseInt(partsHeaderDate[2]);
+        headerDate = LocalDate.of(yearHeader, monthHeader, dayHeader);
         month = headerDate.getMonth().getValue();
         year = headerDate.getYear();
         headerDateDayOfWeek = calendarFill.getDayOfWeek();
 
-        if (views.getmColorSettings() == 1) {
+        if (views.getColorSettings() == 1) {
             setRed();
-        } else if (views.getmColorSettings() == 2) {
+        } else if (views.getColorSettings() == 2) {
             setYellow();
-        } else if (views.getmColorSettings() == 3) {
+        } else if (views.getColorSettings() == 3) {
             setGreen();
-        } else if ((views.getmColorSettings() == 4)) {
+        } else if ((views.getColorSettings() == 4)) {
             setBlue();
-        } else if ((views.getmColorSettings() == 5)) {
+        } else if ((views.getColorSettings() == 5)) {
             setViolet();
-        } else if ((views.getmColorSettings() == 6)) {
+        } else if ((views.getColorSettings() == 6)) {
             setGrey();
         } else {
             setRed();
         }
 
-        if (views.hasPeriod()) {
-            periodImage.setImageResource(views.getmImageResourceId());
-            periodImage.setVisibility(View.VISIBLE);
+
+        dayNumberTextView.setText(String.valueOf(views.getDayNumber()));
+        if (views.getShiftNumber() == null) {
+            shiftNumberTextView.setText("");
         } else {
-            periodImage.setVisibility(View.GONE);
+            shiftNumberTextView.setText(views.getShiftNumber());
+        }
+        if (views.getEventName() == null) {
+            eventNameTextView.setText("");
+        } else {
+            eventNameTextView.setText(views.getEventName());
         }
 
-        dayNumberTextView.setText(String.valueOf(views.getmDayNumber()));
-        shiftNumberTextView.setText(String.valueOf(views.getmShiftNumber()));
-        eventNameTextView.setText(views.getmEventName());
+        if(views.getPeriodStartString().equals(calendarFillString) ||
+        views.getPeriodEndString().equals(calendarFillString)){
+            periodImage.setImageResource(R.mipmap.period_icon_v2);
+        }else{
+            periodImage.setImageResource(0);
+        }
+
+
+        if (views.getImageResourceId() == 0) {
+            periodImage.setVisibility(View.GONE);
+        } else {
+            periodImage.setVisibility(View.VISIBLE);
+        }
+
         return gridItemView;
     }
 
@@ -147,7 +174,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
@@ -184,7 +211,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
@@ -222,7 +249,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
 
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
@@ -259,7 +286,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
                 shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
@@ -296,7 +323,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
 
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
@@ -333,17 +360,15 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
 
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
 
+    public void setEvetsList(List<CalendarEvents> events) {
+        this.events = events;
+        notifyDataSetChanged();
+    }
 }
-
-
-
-
-
-
 

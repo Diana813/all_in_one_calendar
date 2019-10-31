@@ -19,9 +19,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
-import com.example.android.flowercalendar.database.ShiftsDatabase;
 
 import java.util.Objects;
 
@@ -151,7 +151,7 @@ public class ShiftsEditor extends Fragment {
         }
 
 
-        ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
 
         if (!shift_name_extra.equals("-1")) {
 
@@ -249,7 +249,7 @@ public class ShiftsEditor extends Fragment {
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
 
-                ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+                ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
                 if (!shift_name_extra.equals("-1")) {
                     // clicked on item row -> delete
                     Shift shiftToDelete = shiftsDao.findByShiftName(shift_name_extra);

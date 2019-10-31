@@ -10,7 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class}, version = 3)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class}, version = 3)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -46,18 +46,30 @@ public abstract class CalendarDatabase extends RoomDatabase {
     }
 
     public abstract CalendarEventsDao calendarEventsDao();
+    public abstract ColorsDao colorsDao();
+    public abstract ShiftsDao shiftsDao();
+    public abstract PeriodDataDao periodDataDao();
 
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final CalendarEventsDao calendarEventsDao;
+        private final ColorsDao colorsDao;
+        private final ShiftsDao shiftsDao;
+        private final PeriodDataDao periodDataDao;
 
         public PopulateDbAsync(CalendarDatabase instance) {
             calendarEventsDao = instance.calendarEventsDao();
+            colorsDao = instance.colorsDao();
+            shiftsDao = instance.shiftsDao();
+            periodDataDao = instance.periodDataDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             calendarEventsDao.deleteAll();
+            colorsDao.deleteAll();
+            shiftsDao.deleteAll();
+            periodDataDao.deleteAll();
             return null;
         }
     }

@@ -13,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.GestureInteractions;
+import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.database.ShiftsDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -76,7 +76,7 @@ public class ShiftsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new GestureInteractions(adapter));
+                ItemTouchHelper(new GestureInteractionsRecyclerView(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         setHasOptionsMenu(true);
@@ -172,7 +172,7 @@ public class ShiftsFragment extends Fragment {
 
 
     private void reCreateDatabase() {
-        ShiftsDatabase.getDatabase(getContext()).clearDb();
+        CalendarDatabase.getDatabase(getContext()).clearDb();
     }
 
 }

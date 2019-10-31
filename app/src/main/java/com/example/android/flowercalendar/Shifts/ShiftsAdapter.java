@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
-import com.example.android.flowercalendar.database.ShiftsDatabase;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -133,7 +133,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
     void deleteFromDatabase() {
 
-        ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
 
         if (shiftsNames != null) {
             for (int i = 0; i < shiftsNames.size(); i++) {
@@ -184,7 +184,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     }
 
     void setIndexInDatabase() {
-        ShiftsDao shiftsDao = ShiftsDatabase.getDatabase(context).shiftsDao();
+        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
         for (Shift shift : shiftList) {
             shift.setPosition(shiftList.indexOf(shift));
             shiftsDao.update(shift);

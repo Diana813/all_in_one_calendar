@@ -2,14 +2,9 @@ package com.example.android.flowercalendar.ForGirls;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,11 +15,12 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.flowercalendar.MainActivity;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.data.Contract;
+import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.PeriodData;
+import com.example.android.flowercalendar.database.PeriodDataDao;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -32,34 +28,23 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 
-import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.COLUMN_CYCLE_LENGHT;
-import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.COLUMN_PERIOD_LENGHT;
-import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.COLUMN_START_DATE;
-import static com.example.android.flowercalendar.data.Contract.PeriodDataEntry.CONTENT_URI;
-
-public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ForGirlsFragment extends Fragment {
 
     public ForGirlsFragment() {
         // Required empty public constructor
     }
 
-    private static final int PERIOD_DATA_LOADER = 0;
-
     private CalendarView mCalendarView;
     private String startPeriodDate;
-    private Uri periodDataUri;
     private TextView periodTimeValue;
     private TextView cycleTimeValue;
     private int periodTimeChosenValue;
     private int cycleTimeChosenValue;
     private SeekBar periodTimeSeekBar;
     private SeekBar cycleTimeSeekBar;
+    private PeriodDataDao periodDataDao;
 
 
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -79,9 +64,7 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
 
         setHasOptionsMenu(true);
 
-        periodDataUri = CONTENT_URI;
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.edit_period_data_activity_label));
-        getLoaderManager().initLoader(PERIOD_DATA_LOADER, null, this);
 
 
         mCalendarView = (CalendarView)
@@ -129,6 +112,7 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
         });
 
         cycleTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -145,10 +129,14 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+
+
             }
         });
 
 
+        initData();
         return rootView;
 
     }
@@ -231,9 +219,18 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
         alertDialog.show();
     }
 
-    private void deleteAllData() {
-        int rowsDeleted = Objects.requireNonNull(getContext()).getContentResolver().delete(Contract.PeriodDataEntry.CONTENT_URI, null, null);
-        Log.v("ForGirlsFragment", rowsDeleted + " rows deleted from period database");
+    private void deleteLastPeriod() {
+        periodDataDao = CalendarDatabase.getDatabase(getContext()).periodDataDao();
+        PeriodData periodToDelete = periodDataDao.findLastPeriod();
+        if (periodToDelete != null) {
+            periodDataDao.deleteLastPeriod();
+        }
+
+        ZonedDateTime currentZonedDateTime = ZonedDateTime.now();
+        long currentZonedDateTimeInMilis = currentZonedDateTime.toInstant().toEpochMilli();
+        periodTimeSeekBar.setProgress(0);
+        cycleTimeSeekBar.setProgress(0);
+        mCalendarView.setDate(currentZonedDateTimeInMilis);
     }
 
     private void showDeleteConfirmationDialog() {
@@ -242,7 +239,7 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
         builder.setMessage(R.string.delete_all_dialog_message);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                deleteAllData();
+                deleteLastPeriod();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -261,122 +258,62 @@ public class ForGirlsFragment extends Fragment implements LoaderManager.LoaderCa
 
     private void saveData() {
 
-        if (periodDataUri == null &&
-                TextUtils.isEmpty(startPeriodDate) &&
-                Integer.parseInt(String.valueOf(periodTimeChosenValue)) == 0 &&
-                Integer.parseInt(String.valueOf(cycleTimeChosenValue)) == 0) {
-            return;
-        }
+        periodDataDao = CalendarDatabase.getDatabase(getContext()).periodDataDao();
+        PeriodData periodToUpdate = periodDataDao.findLastPeriod();
 
-        final ContentValues values = new ContentValues();
+        if (periodToUpdate != null) {
+            if (!periodToUpdate.getPeriodStartDate().equals(startPeriodDate)) {
+                if(startPeriodDate == null){
+                    periodToUpdate.setPeriodStartDate(periodToUpdate.getPeriodStartDate());
+                }else{
+                    periodToUpdate.setPeriodStartDate(startPeriodDate);
 
-        if (periodDataUri != null &&
-                TextUtils.isEmpty(startPeriodDate) ||
-                Integer.parseInt(String.valueOf(periodTimeChosenValue)) == 0 ||
-                Integer.parseInt(String.valueOf(cycleTimeChosenValue)) == 0) {
-            Toast.makeText(getContext(), getString(R.string.Empty_field),
-                    Toast.LENGTH_SHORT).show();
-        } else {
-
-            values.put(COLUMN_START_DATE, startPeriodDate);
-            values.put(COLUMN_PERIOD_LENGHT, periodTimeChosenValue);
-            values.put(COLUMN_CYCLE_LENGHT, cycleTimeChosenValue);
-
-
-            if (periodDataUri == null) {
-
-                Uri newUri = Objects.requireNonNull(getActivity()).getContentResolver().insert(CONTENT_URI, values);
-                if (newUri == null) {
-                    Toast.makeText(getContext(), getString(R.string.insert_data_error),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), getString(R.string.data_saved),
-                            Toast.LENGTH_SHORT).show();
                 }
-            } else {
+                periodToUpdate.setPeriodLength(periodTimeChosenValue);
+                periodToUpdate.setCycleLength(cycleTimeChosenValue);
 
-                int rowsAffected = Objects.requireNonNull(getActivity()).getContentResolver().update(periodDataUri, values,
-                        null, null);
-                if (rowsAffected == 0) {
+                periodDataDao.update(periodToUpdate);
 
-                    Toast.makeText(getContext(), getString(R.string.edit_data_error),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(getContext(), getString(R.string.data_edited),
-                            Toast.LENGTH_SHORT).show();
-                }
             }
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
-            getActivity().finish();
-        }
-    }
-
-    @NonNull
-    @Override
-    public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        String[] projection = {
-                Contract.PeriodDataEntry._ID,
-                Contract.PeriodDataEntry.COLUMN_START_DATE,
-                Contract.PeriodDataEntry.COLUMN_PERIOD_LENGHT,
-                Contract.PeriodDataEntry.COLUMN_CYCLE_LENGHT
-        };
-        return new CursorLoader(Objects.requireNonNull(getActivity()), periodDataUri,
-                projection, null, null, null);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-
-        if (cursor == null || cursor.getCount() < 1) {
-            periodDataUri = null;
-            Objects.requireNonNull(getActivity()).setTitle(getString(R.string.add_period_data_activity_label));
-            Objects.requireNonNull(getActivity()).invalidateOptionsMenu();
-            onLoaderReset(loader);
-            return;
         } else {
-            periodDataUri = CONTENT_URI;
+            periodDataDao.insert(new PeriodData(startPeriodDate, periodTimeChosenValue, cycleTimeChosenValue));
         }
 
-        if (cursor.moveToFirst()) {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+        getActivity().finish();
+    }
 
-            int idColumnIndex = cursor.getColumnIndex(Contract.PeriodDataEntry._ID);
-            int periodStartColumnIndex = cursor.getColumnIndex(Contract.PeriodDataEntry.COLUMN_START_DATE);
-            int periodLenghtColumnIndex = cursor.getColumnIndex(Contract.PeriodDataEntry.COLUMN_PERIOD_LENGHT);
-            int cycleLenghtColumnIndex = cursor.getColumnIndex(Contract.PeriodDataEntry.COLUMN_CYCLE_LENGHT);
+    private void initData() {
 
-            int currentID = cursor.getInt(idColumnIndex);
-            String periodStart = cursor.getString(periodStartColumnIndex);
-            int periodLenght = cursor.getInt(periodLenghtColumnIndex);
-            int cycleLenght = cursor.getInt(cycleLenghtColumnIndex);
-            String[] parts = periodStart.split(":");
+        periodDataDao = CalendarDatabase.getDatabase(getContext()).periodDataDao();
 
+        if (periodDataDao.findLastPeriod() == null) {
+
+            ZonedDateTime currentZonedDateTime = ZonedDateTime.now();
+            long currentZonedDateTimeInMilis = currentZonedDateTime.toInstant().toEpochMilli();
+            periodTimeSeekBar.setProgress(0);
+            cycleTimeSeekBar.setProgress(0);
+            mCalendarView.setDate(currentZonedDateTimeInMilis);
+        } else {
+            String periodStartDay = periodDataDao.findLastPeriod().getPeriodStartDate();
+            String[] parts = periodStartDay.split(":");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
             int day = Integer.parseInt(parts[2]);
-
             LocalDateTime periodStartDate = LocalDateTime.now().withYear(year).withMonth(month).withDayOfMonth(day);
-
             ZonedDateTime zdt = periodStartDate.atZone(ZoneId.systemDefault());
             long periodStartDateInMilis = zdt.toInstant().toEpochMilli();
-
             mCalendarView.setDate(periodStartDateInMilis);
-            periodTimeSeekBar.setProgress(periodLenght);
-            cycleTimeSeekBar.setProgress(cycleLenght);
+
+            int periodLength = periodDataDao.findLastPeriod().getPeriodLength();
+            periodTimeSeekBar.setProgress(periodLength);
+
+            int cycleLength = periodDataDao.findLastPeriod().getCycleLength();
+            cycleTimeSeekBar.setProgress(cycleLength);
 
         }
     }
 
-    @Override
-    public void onLoaderReset(@NonNull Loader loader) {
-
-        ZonedDateTime currentZonedDateTime = ZonedDateTime.now();
-        long currentZonedDateTimeInMilis = currentZonedDateTime.toInstant().toEpochMilli();
-        periodTimeSeekBar.setProgress(0);
-        cycleTimeSeekBar.setProgress(0);
-        mCalendarView.setDate(currentZonedDateTimeInMilis);
-
-    }
 }
 
