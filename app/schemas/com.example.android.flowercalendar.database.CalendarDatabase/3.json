@@ -2,51 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "6a336b2205143948bdaa08f7d499092d",
+    "identityHash": "5586b2a82a467068a9de6596b6601ccd",
     "entities": [
       {
         "tableName": "calendar_events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `colorSettings` INTEGER NOT NULL, `calendarFillString` TEXT, `headerDateString` TEXT, `periodStartString` TEXT, `periodEndStriong` TEXT, `dayNumber` INTEGER NOT NULL, `shiftNumber` TEXT, `eventName` TEXT, `imageResourceId` INTEGER NOT NULL, `pickedDate` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftNumber` TEXT, `eventName` TEXT, `pickedDate` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "colorSettings",
-            "columnName": "colorSettings",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "calendarFillString",
-            "columnName": "calendarFillString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "headerDateString",
-            "columnName": "headerDateString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "periodStartString",
-            "columnName": "periodStartString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "periodEndString",
-            "columnName": "periodEndStriong",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "dayNumber",
-            "columnName": "dayNumber",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -61,12 +25,6 @@
             "columnName": "eventName",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "imageResourceId",
-            "columnName": "imageResourceId",
-            "affinity": "INTEGER",
-            "notNull": true
           },
           {
             "fieldPath": "pickedDate",
@@ -211,7 +169,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6a336b2205143948bdaa08f7d499092d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5586b2a82a467068a9de6596b6601ccd')"
     ]
   }
 }

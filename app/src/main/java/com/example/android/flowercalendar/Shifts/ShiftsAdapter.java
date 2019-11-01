@@ -34,7 +34,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     private Shift shift;
     private int shiftPosition;
     private String shiftName;
-    private ArrayList<String> shiftsNames = new ArrayList<>();;
+    private ArrayList<String> shiftsNames = new ArrayList<>();
 
 
     ShiftsAdapter(Context requireNonNull, Context context) {
