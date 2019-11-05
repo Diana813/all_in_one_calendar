@@ -87,7 +87,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Style for a category in events -->
+    <style name="OverviewStyleEvents">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:textSize">20sp</item>

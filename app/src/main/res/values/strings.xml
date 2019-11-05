@@ -94,6 +94,24 @@
     <string name="settingShifts"> Insert shifts</string>
     <string name="snack_bar_text">Shift deleted</string>
     <string name="snack_bar_undo">Undo</string>
-
+    <string name="deleteAllShifts">Delete all shifts</string>
+    <string name="plans">Your plans for today:</string>
+    <string name="events">Events</string>
+    <string name="cyclicalEvents">Cyclical events</string>
+    <string name="frequentActivities">Frequent activities</string>
+    <string name="oneTimeEvents">One-time events</string>
+    <string name="activitiesList">Frequent activities list:</string>
+    <string name="addFrequentActivities">Add frequent activities</string>
+    <string name="descriptionFrequentActivities">Add all the events that happen often and
+        which you would like to easily add from the list to your calendar</string>
+    <string name="cyclicalEventsList">Cyclical events list:</string>
+    <string name="addCyclicalEvents">Add cyclical events</string>
+    <string name="descriptionCyclicalEvents">Add all events that occur periodically
+        and you want them to be marked on the calendar automatically</string>
+    <string name="dateOfTheEvent">Date</string>
+    <string name="timeOfTheEvent">Time</string>
+    <string name="period">How long?</string>
+    <string name="eventName">Event name:</string>
+    <string name="hintEventName">Cinema</string>
 
 </resources>

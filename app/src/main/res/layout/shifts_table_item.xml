@@ -21,6 +21,12 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#000"
+                android:padding="1dp">
+
             <TextView
                 android:id="@+id/shift"
                 android:layout_width="60dp"
@@ -29,8 +35,10 @@
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#fff"
+                android:textColor="#000"
                 tools:text="2" />
+
+            </FrameLayout>
 
 
             <TextView

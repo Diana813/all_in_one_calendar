@@ -16,4 +16,15 @@
         android:title="@string/settingShifts"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/deleteShifts"
+        android:title="@string/deleteAllShifts"
+        app:showAsAction="never" />
+
+   <!-- <item
+        android:id="@+id/deleteColors"
+        android:title="Delete colors"
+        app:showAsAction="never" />-->
+
+
 </menu>

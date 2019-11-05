@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,11 +26,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Events.EventsList;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.Shifts.ShiftsViewModel;
-import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Colors;
@@ -48,12 +50,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 
 public class CalendarFragment extends Fragment {
@@ -87,11 +91,11 @@ public class CalendarFragment extends Fragment {
     private ColorsDao colorsDao;
     private Colors colorToUpdate;
     private String event;
-    private ArrayList<CalendarEvents> viewsArrayList;
     private ArrayList<CalendarViews> calendarViewsArrayList;
     private String pickedDay;
     private LocalDate pickedDate;
     private String newShiftNumber;
+    private RelativeLayout backgroundDrawing;
 
 
     @Override
@@ -128,24 +132,26 @@ public class CalendarFragment extends Fragment {
         shifts_recycler_view.setAdapter(shiftsAdapter);
 
         initShiftsData();
-        red =  rootView.findViewById(R.id.red);
-        yellow =  rootView.findViewById(R.id.yellow);
-        green =  rootView.findViewById(R.id.green);
-        blue =  rootView.findViewById(R.id.blue);
-        violet =  rootView.findViewById(R.id.violet);
-        grey =  rootView.findViewById(R.id.grey);
-        colorSettingsDownArrow =  rootView.findViewById(R.id.colorSettingsDownArrow);
-        shiftsDownArrow =  rootView.findViewById(R.id.shiftsDownArrow);
+        red = rootView.findViewById(R.id.red);
+        yellow = rootView.findViewById(R.id.yellow);
+        green = rootView.findViewById(R.id.green);
+        blue = rootView.findViewById(R.id.blue);
+        violet = rootView.findViewById(R.id.violet);
+        grey = rootView.findViewById(R.id.grey);
+        colorSettingsDownArrow = rootView.findViewById(R.id.colorSettingsDownArrow);
+        shiftsDownArrow = rootView.findViewById(R.id.shiftsDownArrow);
+        backgroundDrawing = rootView.findViewById(R.id.backgroundDrawing);
 
         setHasOptionsMenu(true);
         gridView = rootView.findViewById(R.id.gridView);
         onGridViewItemClickListener();
         swipeTheCalendar();
+        deleteShiftFromPickedDate();
 
-        date =  rootView.findViewById(R.id.date);
-        previousButton =  rootView.findViewById(R.id.calendar_prev_button);
-        nextButton =  rootView.findViewById(R.id.calendar_next_button);
-        calendarCardView =  rootView.findViewById(R.id.calendarCardView);
+        date = rootView.findViewById(R.id.date);
+        previousButton = rootView.findViewById(R.id.calendar_prev_button);
+        nextButton = rootView.findViewById(R.id.calendar_next_button);
+        calendarCardView = rootView.findViewById(R.id.calendarCardView);
         loadPeriodData();
 
         return rootView;
@@ -198,8 +204,49 @@ public class CalendarFragment extends Fragment {
             return true;
 
         }
+
+        if (item.getItemId() == R.id.deleteShifts) {
+            showDeleteConfirmationDialog();
+            return true;
+        }
+
+       /* if (item.getItemId() == R.id.deleteColors) {
+
+            ColorsDao colorsDao = getDatabase(context).colorsDao();
+            colorsDao.deleteAll();
+            return true;
+        }*/
+
         return super.onOptionsItemSelected(item);
     }
+
+    private void showDeleteConfirmationDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.delete_all_dialog_message);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+                calendarEventsDao.deleteAllShifts(String.valueOf(headerDate.getMonth().getValue()));
+                calendarFill = LocalDate.now();
+                fillTheCalendar();
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 
     private void bottomSheetListener() {
 
@@ -371,15 +418,11 @@ public class CalendarFragment extends Fragment {
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), calendarViewsArrayList);
 
 
-        if (shiftNumber == null) {
-            shiftNumber = "";
-        }
-
         if (event == null) {
             event = "";
         }
 
-        colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
+        colorsDao = getDatabase(context).colorsDao();
         colorToUpdate = colorsDao.findLastColor1();
 
         int colorSettings;
@@ -419,7 +462,7 @@ public class CalendarFragment extends Fragment {
         //Ustawiam datę na tę, która powinna się znaleźć w pierwszej komórce mojej ArrayList
         calendarFill = calendarFill.minusDays(monthBeginningCell);
 
-        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
 
         //Wypełniam kalendarz
         while (calendarViewsArrayList.size() < DAYS_COUNT) {
@@ -427,12 +470,11 @@ public class CalendarFragment extends Fragment {
             int dayOfMonth = calendarFill.getDayOfMonth();
 
             CalendarEvents shiftToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
-            if(shiftToAdd == null){
+            if (shiftToAdd == null) {
                 shiftNumber = "";
-            }else{
+            } else {
                 shiftNumber = shiftToAdd.getShiftNumber();
             }
-
 
             if (periodStartDate != null) {
 
@@ -477,6 +519,8 @@ public class CalendarFragment extends Fragment {
             calendarFill = calendarFill.plusDays(1);
         }
 
+
+        setBackgroundDrawing();
 
         gridView.setAdapter(calendarAdapter);
 
@@ -527,24 +571,25 @@ public class CalendarFragment extends Fragment {
                     TextView shiftNumber1 = view.findViewById(R.id.shiftNumber);
                     shiftNumber1.setText(newShiftNumber);
                     pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
-                    pickedDay =String.valueOf(pickedDate);
+                    pickedDay = String.valueOf(pickedDate);
                     saveShiftToPickedDate();
 
 
                 } else {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivity(intent);
+                    FragmentTransaction tx =
+                            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                    tx.replace(R.id.flContent, new EventsList());
+                    tx.commit();
                 }
 
             }
 
         });
-
     }
 
     private void saveShiftToPickedDate() {
 
-        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
         CalendarEvents shiftToUpdate = calendarEventsDao.findBypickedDate(pickedDay);
 
 
@@ -555,8 +600,30 @@ public class CalendarFragment extends Fragment {
 
             }
         } else {
-            calendarEventsDao.insert(new CalendarEvents(newShiftNumber, "", pickedDay));
+            calendarEventsDao.insert(new CalendarEvents(newShiftNumber, "", pickedDay, String.valueOf(headerDate.getMonth().getValue())));
         }
+
+    }
+
+    private void deleteShiftFromPickedDate(){
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            @Override
+            public boolean onItemLongClick(AdapterView parentView, View childView, int position, long id) {
+
+                TextView shiftNumber1 = childView.findViewById(R.id.shiftNumber);
+                shiftNumber1.setText("");
+                pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
+                pickedDay = String.valueOf(pickedDate);
+
+                CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+                CalendarEvents shiftToDelete = calendarEventsDao.findBypickedDate(pickedDay);
+                if(shiftToDelete != null){
+                    calendarEventsDao.deleteBypickedDate(pickedDay);
+                }
+
+                return true;}});
+
 
     }
 
@@ -686,8 +753,8 @@ public class CalendarFragment extends Fragment {
 
         calendarFill = LocalDate.now();
 
-        PeriodDataDao periodDataDao = CalendarDatabase.getDatabase(context).periodDataDao();
-        if(periodDataDao.findLastPeriod() != null){
+        PeriodDataDao periodDataDao = getDatabase(context).periodDataDao();
+        if (periodDataDao.findLastPeriod() != null) {
             String periodStart = periodDataDao.findLastPeriod().getPeriodStartDate();
             String[] parts = periodStart.split(":");
 
@@ -704,7 +771,7 @@ public class CalendarFragment extends Fragment {
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
 
-        }else{
+        } else {
 
             periodStartDate = null;
             periodFinishDate = null;
@@ -718,7 +785,7 @@ public class CalendarFragment extends Fragment {
 
     private void saveColor() {
 
-        colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
+        colorsDao = getDatabase(context).colorsDao();
         colorToUpdate = colorsDao.findLastColor1();
 
         if (colorToUpdate != null) {
@@ -735,6 +802,26 @@ public class CalendarFragment extends Fragment {
         colorToUpdate = colorsDao.findLastColor1();
         calendarFill = LocalDate.now();
         loadPeriodData();
+
+    }
+
+    private void setBackgroundDrawing(){
+
+        Month currentMonth = headerDate.getMonth();
+
+        if(currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
+        currentMonth.equals(Month.FEBRUARY)){
+            backgroundDrawing.setBackgroundResource(R.mipmap.zima);
+        }else if(currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
+        currentMonth.equals(Month.MAY)){
+            backgroundDrawing.setBackgroundResource(R.mipmap.wiosna);
+        }else if(currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
+        currentMonth.equals(Month.AUGUST)){
+            backgroundDrawing.setBackgroundResource(R.mipmap.lato);
+        }else if(currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
+        currentMonth.equals(Month.NOVEMBER)){
+            backgroundDrawing.setBackgroundResource(R.mipmap.jesien);
+        }
 
     }
 

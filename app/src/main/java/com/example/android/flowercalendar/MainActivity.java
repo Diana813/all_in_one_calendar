@@ -6,6 +6,9 @@ import android.view.MenuItem;
 
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Coworkers.CoworkerFragment;
+import com.example.android.flowercalendar.Events.CyclicalEvents;
+import com.example.android.flowercalendar.Events.FrequentActivities;
+import com.example.android.flowercalendar.Events.OneTimeEvents;
 import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.Shifts.ShiftsFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -22,8 +25,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
 
     public DrawerLayout mDrawer;
     private Toolbar toolbar;
@@ -61,10 +62,9 @@ public class MainActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawer.openDrawer(GravityCompat.START);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            mDrawer.openDrawer(GravityCompat.START);
+            return true;
         }
         return super.onOptionsItemSelected(item);
 
@@ -94,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_shifts_activity:
                 fragmentClass = ShiftsFragment.class;
                 break;
+            case R.id.cyclicalEvents:
+                fragmentClass = CyclicalEvents.class;
+                break;
+            case R.id.frequentActivities:
+                fragmentClass = FrequentActivities.class;
+                break;
             case R.id.nav_coworker_activity:
                 fragmentClass = CoworkerFragment.class;
                 break;
@@ -108,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        assert fragment != null;
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         menuItem.setChecked(true);
@@ -117,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }

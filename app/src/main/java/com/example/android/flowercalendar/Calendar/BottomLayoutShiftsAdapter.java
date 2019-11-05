@@ -66,10 +66,12 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             }
         });
 
+        int colorSettings;
+
         ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
         Colors colorToUpdate = colorsDao.findLastColor1();
 
-        int colorSettings;
+  
 
         if(colorToUpdate == null){
             colorSettings = 0;
@@ -90,11 +92,11 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             //green
             holder.shift.setBackgroundColor(Color.parseColor("#9cff57"));
         } else if (colorSettings == 4) {
-            //blue
-            holder.shift.setBackgroundColor(Color.parseColor("#84ffff"));
+            //blue (#84ffff)
+            holder.shift.setBackgroundColor(Color.parseColor("#90caf9"));
         } else if (colorSettings == 5) {
-            //violet
-            holder.shift.setBackgroundColor(Color.parseColor("#ce93d8"));
+            //violet (#ce93d8)
+            holder.shift.setBackgroundColor(Color.parseColor("#e1bee7"));
         } else if (colorSettings == 6) {
             //grey
             holder.shift.setBackgroundColor(Color.parseColor("#BDBDBD"));

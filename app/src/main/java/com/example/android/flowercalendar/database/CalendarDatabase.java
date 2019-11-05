@@ -10,7 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class}, version = 3)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class}, version = 4)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;

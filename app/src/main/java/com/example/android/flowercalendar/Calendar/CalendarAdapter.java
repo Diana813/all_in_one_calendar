@@ -128,7 +128,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
             shiftNumberTextView.setTextColor(Color.BLACK);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend);
                 todaysDateAtWeekend();
@@ -165,7 +164,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_yellow);
                 todaysDateAtWeekend();
@@ -202,7 +200,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_green);
                 todaysDateAtWeekend();
@@ -240,7 +237,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_blue);
                 todaysDateAtWeekend();
@@ -276,7 +272,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_violet);
                 todaysDateAtWeekend();
@@ -313,7 +308,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(Color.parseColor("#000000"));
             layout.setBackgroundResource(R.drawable.frame2);
-            singleItem.setElevation(10);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_grey);
                 todaysDateAtWeekend();

@@ -50,8 +50,8 @@
 
         <ImageView
             android:id="@+id/empty_shelf_image"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_centerHorizontal="true"
             android:src="@drawable/baseline_access_time_black_48" />
 

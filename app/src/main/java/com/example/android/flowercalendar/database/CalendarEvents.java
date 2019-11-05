@@ -15,16 +15,20 @@ public class CalendarEvents {
     @ColumnInfo(name = "shiftNumber")
     private String shiftNumber;
 
+    @ColumnInfo(name = "currentMonth")
+    private String currentMonth;
+
     @ColumnInfo(name = "eventName")
     private String eventName;
 
     @ColumnInfo(name = "pickedDate")
     private String pickedDate;
 
-    public CalendarEvents(String shiftNumber, String eventName, String pickedDate) {
+    public CalendarEvents(String shiftNumber, String eventName, String pickedDate, String currentMonth) {
         this.shiftNumber = shiftNumber;
         this.eventName = eventName;
         this.pickedDate = pickedDate;
+        this.currentMonth = currentMonth;
     }
 
     public int getId() {
@@ -60,4 +64,11 @@ public class CalendarEvents {
         this.pickedDate = pickedDate;
     }
 
+    public String getCurrentMonth() {
+        return currentMonth;
+    }
+
+    public void setCurrentMonth(String currentMonth) {
+        this.currentMonth = currentMonth;
+    }
 }

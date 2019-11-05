@@ -2,51 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "6a336b2205143948bdaa08f7d499092d",
+    "identityHash": "d908309fad2fd7cea0b069c736cadc07",
     "entities": [
       {
         "tableName": "calendar_events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `colorSettings` INTEGER NOT NULL, `calendarFillString` TEXT, `headerDateString` TEXT, `periodStartString` TEXT, `periodEndStriong` TEXT, `dayNumber` INTEGER NOT NULL, `shiftNumber` TEXT, `eventName` TEXT, `imageResourceId` INTEGER NOT NULL, `pickedDate` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftNumber` TEXT, `currentMonth` TEXT, `eventName` TEXT, `pickedDate` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "colorSettings",
-            "columnName": "colorSettings",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "calendarFillString",
-            "columnName": "calendarFillString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "headerDateString",
-            "columnName": "headerDateString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "periodStartString",
-            "columnName": "periodStartString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "periodEndString",
-            "columnName": "periodEndStriong",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "dayNumber",
-            "columnName": "dayNumber",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -57,16 +21,16 @@
             "notNull": false
           },
           {
-            "fieldPath": "eventName",
-            "columnName": "eventName",
+            "fieldPath": "currentMonth",
+            "columnName": "currentMonth",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "imageResourceId",
-            "columnName": "imageResourceId",
-            "affinity": "INTEGER",
-            "notNull": true
+            "fieldPath": "eventName",
+            "columnName": "eventName",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "pickedDate",
@@ -211,7 +175,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6a336b2205143948bdaa08f7d499092d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd908309fad2fd7cea0b069c736cadc07')"
     ]
   }
 }

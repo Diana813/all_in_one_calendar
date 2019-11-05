@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.Shifts;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Colors;
+import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,7 +59,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     @NonNull
     @Override
     public ShiftsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.table_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.shifts_table_item, parent, false);
         return new ShiftsViewHolder(itemView);
     }
 
@@ -116,6 +119,33 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
                     activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, editorFragment).addToBackStack(null).commit();
                 }
             });
+        }
+
+        ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
+        Colors newColor = colorsDao.findLastColor1();
+        int chosenColor = newColor.getColor_number();
+
+        if(chosenColor == 1){
+            //red
+            holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
+        }else if(chosenColor == 2){
+            //yellow
+            holder.shiftName.setBackgroundColor(Color.parseColor("#ffeb3b"));
+        }else if(chosenColor == 3){
+            //green
+            holder.shiftName.setBackgroundColor(Color.parseColor("#64dd17"));
+        }else if(chosenColor == 4){
+            //blue
+            holder.shiftName.setBackgroundColor(Color.parseColor("#448aff"));
+        }else if(chosenColor == 5){
+            //violet
+            holder.shiftName.setBackgroundColor(Color.parseColor("#ba68c8"));
+        }else if(chosenColor == 6){
+            //grey
+            holder.shiftName.setBackgroundColor(Color.parseColor("#757575"));
+        }else{
+            //red
+            holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.android.flowercalendar.database;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -21,11 +20,18 @@ public interface CalendarEventsDao {
     @Query("SELECT * FROM calendar_events WHERE pickedDate = :pickedDate")
     CalendarEvents findBypickedDate(String pickedDate);
 
+    @Query("DELETE FROM calendar_events WHERE pickedDate = :pickedDate")
+    void deleteBypickedDate(String pickedDate);
+
     @Query("SELECT * FROM calendar_events WHERE id = (SELECT MAX(ID) FROM calendar_events)")
     CalendarEvents findLastCalendarEvent ();
 
     @Query("DELETE FROM calendar_events")
     void deleteAll();
+
+    @Query("UPDATE calendar_events SET shiftNumber = '' WHERE currentMonth = :currentMonth")
+    void deleteAllShifts(String currentMonth);
+
 
     @Query("SELECT * FROM calendar_events")
     LiveData<List<CalendarEvents>> getAllCalendarEvents();
