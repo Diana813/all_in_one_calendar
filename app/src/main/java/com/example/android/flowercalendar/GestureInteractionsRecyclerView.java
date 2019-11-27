@@ -6,6 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+import com.example.android.flowercalendar.Events.EventsListAdapter;
+import com.example.android.flowercalendar.Events.TestingListAdapter;
 import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
 
 import androidx.annotation.NonNull;
@@ -14,7 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
+    private TestingListAdapter testingListAdapter;
     private ShiftsAdapter shiftsAdapter;
+    private EventsListAdapter eventsListAdapter;
 
     private Drawable icon;
     private final ColorDrawable background;
@@ -27,18 +31,48 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
     }
 
+    public GestureInteractionsRecyclerView(EventsListAdapter adapter) {
+        super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        eventsListAdapter = adapter;
+        icon = ContextCompat.getDrawable(EventsListAdapter.getContext(),
+                R.drawable.baseline_delete_black_36);
+        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+    }
+
+    public GestureInteractionsRecyclerView(TestingListAdapter adapter) {
+        super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        testingListAdapter = adapter;
+        icon = ContextCompat.getDrawable(TestingListAdapter.getContext(),
+                R.drawable.baseline_delete_black_36);
+        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+    }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        shiftsAdapter.onItemMove(viewHolder.getAdapterPosition(),
-                target.getAdapterPosition());
+        if(shiftsAdapter == null && testingListAdapter == null){
+            eventsListAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        }else if (testingListAdapter == null && eventsListAdapter == null){
+            shiftsAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        }else{
+            testingListAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        }
+
+
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        shiftsAdapter.deleteItem(position);
+        if(shiftsAdapter == null){
+            eventsListAdapter.deleteItem(position);
+        }else{
+            shiftsAdapter.deleteItem(position);
+        }
+
     }
 
     @Override

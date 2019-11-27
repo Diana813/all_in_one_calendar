@@ -123,41 +123,43 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
         ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
         Colors newColor = colorsDao.findLastColor1();
-        int chosenColor = newColor.getColor_number();
+        if (newColor != null) {
+            int chosenColor = newColor.getColor_number();
 
-        if(chosenColor == 1){
-            //red
-            holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
-        }else if(chosenColor == 2){
-            //yellow
-            holder.shiftName.setBackgroundColor(Color.parseColor("#ffeb3b"));
-        }else if(chosenColor == 3){
-            //green
-            holder.shiftName.setBackgroundColor(Color.parseColor("#64dd17"));
-        }else if(chosenColor == 4){
-            //blue
-            holder.shiftName.setBackgroundColor(Color.parseColor("#448aff"));
-        }else if(chosenColor == 5){
-            //violet
-            holder.shiftName.setBackgroundColor(Color.parseColor("#ba68c8"));
-        }else if(chosenColor == 6){
-            //grey
-            holder.shiftName.setBackgroundColor(Color.parseColor("#757575"));
-        }else{
-            //red
-            holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
+            if (chosenColor == 1) {
+                //red
+                holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
+            } else if (chosenColor == 2) {
+                //yellow
+                holder.shiftName.setBackgroundColor(Color.parseColor("#ffeb3b"));
+            } else if (chosenColor == 3) {
+                //green
+                holder.shiftName.setBackgroundColor(Color.parseColor("#64dd17"));
+            } else if (chosenColor == 4) {
+                //blue
+                holder.shiftName.setBackgroundColor(Color.parseColor("#448aff"));
+            } else if (chosenColor == 5) {
+                //violet
+                holder.shiftName.setBackgroundColor(Color.parseColor("#ba68c8"));
+            } else if (chosenColor == 6) {
+                //grey
+                holder.shiftName.setBackgroundColor(Color.parseColor("#757575"));
+            } else {
+                //red
+                holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
+            }
         }
     }
 
     public void deleteItem(int position) {
 
-            shift = shiftList.get(position);
-            shiftPosition = position;
-            shiftName = shift.getShift_name();
-            shiftsNames.add(shiftName);
-            shiftList.remove(position);
-            notifyItemRemoved(position);
-            showUndoSnackbar();
+        shift = shiftList.get(position);
+        shiftPosition = position;
+        shiftName = shift.getShift_name();
+        shiftsNames.add(shiftName);
+        shiftList.remove(position);
+        notifyItemRemoved(position);
+        showUndoSnackbar();
 
     }
 
@@ -176,7 +178,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
     private void showUndoSnackbar() {
 
-        Snackbar snackbar = Snackbar.make( (((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
+        Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
                 Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
             @Override

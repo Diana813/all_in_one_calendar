@@ -65,6 +65,15 @@
     <string name="ForGirls">For Girls</string>
     <string name="Shifts">Shifts</string>
     <string name="Coworkers">Coworkers</string>
+    <string name="PersonalGrowth">Personal growth</string>
+    <string name="CyclicalEvents">Cyclical events</string>
+    <string name="FrequentActivities">Frequent activities</string>
+    <string name="OneTimeEvents">Events</string>
+    <string name="LifeAims">Aims</string>
+    <string name="lifePurpose">Where would you like to be in 5 years?</string>
+    <string name="fiveYearsPlan">What do you have to do to achieve this?</string>
+    <string name="lifeAims">Life aims</string>
+    <string name="bigPlan">Big plan</string>
 
 
     <string name="current_date"> Current date</string>
@@ -95,7 +104,7 @@
     <string name="snack_bar_text">Shift deleted</string>
     <string name="snack_bar_undo">Undo</string>
     <string name="deleteAllShifts">Delete all shifts</string>
-    <string name="plans">Your plans for today:</string>
+    <string name="plans">Your plans:</string>
     <string name="events">Events</string>
     <string name="cyclicalEvents">Cyclical events</string>
     <string name="frequentActivities">Frequent activities</string>
@@ -113,5 +122,6 @@
     <string name="period">How long?</string>
     <string name="eventName">Event name:</string>
     <string name="hintEventName">Cinema</string>
+    <string name="plansToMake">Make plans:)</string>
 
 </resources>

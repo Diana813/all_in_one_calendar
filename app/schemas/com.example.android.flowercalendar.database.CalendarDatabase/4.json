@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "d908309fad2fd7cea0b069c736cadc07",
+    "identityHash": "6ac26e9a82780725f2f4b2c007b40cf5",
     "entities": [
       {
         "tableName": "calendar_events",
@@ -170,12 +170,71 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_name` TEXT, `schedule` TEXT, `alarm` TEXT, `event_length` INTEGER NOT NULL, `position` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "event_name",
+            "columnName": "event_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schedule",
+            "columnName": "schedule",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "alarm",
+            "columnName": "alarm",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "event_length",
+            "columnName": "event_length",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_event_event_name",
+            "unique": false,
+            "columnNames": [
+              "event_name"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_event_event_name` ON `${TABLE_NAME}` (`event_name`)"
+          }
+        ],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd908309fad2fd7cea0b069c736cadc07')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6ac26e9a82780725f2f4b2c007b40cf5')"
     ]
   }
 }

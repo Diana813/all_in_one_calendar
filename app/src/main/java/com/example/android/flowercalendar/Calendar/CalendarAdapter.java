@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarEvents;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -103,14 +101,14 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     private void weekend() {
         dayNumberTextView.setTextColor(Color.parseColor("#000000"));
         shiftNumberTextView.setTextColor(Color.BLACK);
-        eventNameTextView.setTextColor(Color.parseColor("#BDBDBD"));
+        eventNameTextView.setTextColor(Color.parseColor("#ffffff"));
     }
 
 
     private void todaysDateAtWeekend() {
         dayNumberTextView.setTextColor(Color.parseColor("#000000"));
         shiftNumberTextView.setTextColor(Color.BLACK);
-        eventNameTextView.setTextColor(Color.parseColor("#BDBDBD"));
+        eventNameTextView.setTextColor(Color.parseColor("#ffffff"));
     }
 
 
@@ -158,6 +156,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
             layout.setBackgroundResource(R.drawable.weekend_frame_yellow);
             weekend();
+            eventNameTextView.setTextColor(Color.parseColor("#b71c1c"));
         }
 
         //Wyróżnienie dziesiejszej daty
@@ -167,6 +166,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
                 layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_yellow);
                 todaysDateAtWeekend();
+                eventNameTextView.setTextColor(Color.parseColor("#b71c1c"));
             }
         }
 

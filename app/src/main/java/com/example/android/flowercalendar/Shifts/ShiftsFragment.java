@@ -12,8 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Shift;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -59,12 +60,27 @@ public class ShiftsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        adapter.setIndexInDatabase();
+        adapter.deleteFromDatabase();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         adapter.setIndexInDatabase();
         adapter.deleteFromDatabase();
+    }
+
+    public void onDetach(){
+        super.onDetach();
+
+        FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+        tx.replace(R.id.flContent, new CalendarFragment());
+        tx.commit();
+
     }
 
     @Nullable
@@ -80,6 +96,7 @@ public class ShiftsFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         setHasOptionsMenu(true);
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Shifts));
         empty_view = (RelativeLayout) view.findViewById(R.id.empty_view);
 
 
@@ -95,6 +112,7 @@ public class ShiftsFragment extends Fragment {
         initData();
         return view;
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {

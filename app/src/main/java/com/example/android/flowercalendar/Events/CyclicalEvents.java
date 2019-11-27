@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 import com.example.android.flowercalendar.R;
 
+import java.util.Objects;
+
 import androidx.fragment.app.Fragment;
 
 public class CyclicalEvents extends Fragment {
@@ -55,7 +57,10 @@ public class CyclicalEvents extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cyclical_events, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_cyclical_events, container, false);
+
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
+        return rootView;
     }
 
 

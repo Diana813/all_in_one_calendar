@@ -18,15 +18,15 @@ public class CalendarEvents {
     @ColumnInfo(name = "currentMonth")
     private String currentMonth;
 
-    @ColumnInfo(name = "eventName")
-    private String eventName;
+    @ColumnInfo(name = "eventsNumber")
+    private String eventsNumber;
 
     @ColumnInfo(name = "pickedDate")
     private String pickedDate;
 
-    public CalendarEvents(String shiftNumber, String eventName, String pickedDate, String currentMonth) {
+    public CalendarEvents(String shiftNumber, String eventsNumber, String pickedDate, String currentMonth) {
         this.shiftNumber = shiftNumber;
-        this.eventName = eventName;
+        this.eventsNumber = eventsNumber;
         this.pickedDate = pickedDate;
         this.currentMonth = currentMonth;
     }
@@ -48,14 +48,6 @@ public class CalendarEvents {
         this.shiftNumber = shiftNumber;
     }
 
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
     String getPickedDate() {
         return pickedDate;
     }
@@ -70,5 +62,13 @@ public class CalendarEvents {
 
     public void setCurrentMonth(String currentMonth) {
         this.currentMonth = currentMonth;
+    }
+
+    public String getEventsNumber() {
+        return eventsNumber;
+    }
+
+    public void setEventsNumber(String eventsNamber) {
+        this.eventsNumber = eventsNamber;
     }
 }

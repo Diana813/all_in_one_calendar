@@ -10,7 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class}, version = 4)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class}, version = 1)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -49,6 +49,8 @@ public abstract class CalendarDatabase extends RoomDatabase {
     public abstract ColorsDao colorsDao();
     public abstract ShiftsDao shiftsDao();
     public abstract PeriodDataDao periodDataDao();
+    public abstract EventsDao eventsDao();
+    public abstract ImagePathDao imagePathDao();
 
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -56,12 +58,16 @@ public abstract class CalendarDatabase extends RoomDatabase {
         private final ColorsDao colorsDao;
         private final ShiftsDao shiftsDao;
         private final PeriodDataDao periodDataDao;
+        private final EventsDao eventsDao;
+        private final ImagePathDao imagePathDao;
 
         public PopulateDbAsync(CalendarDatabase instance) {
             calendarEventsDao = instance.calendarEventsDao();
             colorsDao = instance.colorsDao();
             shiftsDao = instance.shiftsDao();
             periodDataDao = instance.periodDataDao();
+            eventsDao = instance.eventsDao();
+            imagePathDao = instance.imagePathDao();
         }
 
         @Override
@@ -70,6 +76,8 @@ public abstract class CalendarDatabase extends RoomDatabase {
             colorsDao.deleteAll();
             shiftsDao.deleteAll();
             periodDataDao.deleteAll();
+            eventsDao.deleteAll();
+            imagePathDao.deleteAll();
             return null;
         }
     }

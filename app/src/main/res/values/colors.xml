@@ -9,8 +9,8 @@
     <color name="lightRed">#f05545</color>
     <color name="yellow">#ffeb3b</color>
     <color name="lightYellow">#fff9c4</color>
-    <color name="green">#64dd17</color>
-    <color name="lightGreen">#9cff57</color>
+    <color name="green">#00c853</color>
+    <color name="lightGreen">#5efc82</color>
     <color name="blue">#448aff</color><!--#00e5ff, #2979ff-->
     <color name="lightBlue">#90caf9</color> <!--#84ffff-->
     <color name="toolbarColor">#424242</color>
@@ -18,4 +18,10 @@
     <color name="lightViolet">#e1bee7</color><!--#ce93d8-->
     <color name="grey">#757575</color>
     <color name="lightGrey">#eeeeee</color>
+    <color name="eventBackgroundRed">#ef9a9a</color>
+    <color name="eventBackgroundyellow">#fff59d</color>
+    <color name="eventBackgroundGreen">#b9f6ca</color>
+    <color name="eventBackgroundBlue">#b2ebf2</color>
+    <color name="eventBackgroundViolet">#d1c4e9</color>
+    <color name="eventBackgroundGrey">#eeeeee</color>
 </resources>

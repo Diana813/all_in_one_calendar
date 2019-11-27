@@ -15,8 +15,6 @@ import androidx.core.app.ActivityCompat;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private CancellationSignal cancellationSignal;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    private Boolean checkBiometricSupport() {
+    private void checkBiometricSupport() {
 
         //KeyguardManager sprawdza, czy ekran można odblokować za pomocą alternatywnej metody,
         // innej niż odcisk palca
@@ -43,9 +41,10 @@ public class LoginActivity extends AppCompatActivity {
         //PackageManager sprawdza czy fingerprint authentication jest dostępne na tym urządzeniu
         PackageManager packageManager = this.getPackageManager();
 
+        assert keyguardManager != null;
         if (!keyguardManager.isKeyguardSecure()) {
             notifyUser("Lock screen security not enabled in Settings");
-            return false;
+            return;
         }
 
         //Sprawdza czy została udzielona zgoda na użycie biometric
@@ -54,14 +53,12 @@ public class LoginActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED) {
 
             notifyUser("Fingerprint authentication permission not enabled");
-            return false;
+            return;
         }
 
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
-            return true;
         }
 
-        return true;
     }
 
     //Metoda dająca użytkownikowi zwrotną informację o tym, czy jego odcisk palca
@@ -98,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Zatrzymywanie procesu autentyfikacji
     private CancellationSignal getCancellationSignal() {
-        cancellationSignal = new CancellationSignal();
+        CancellationSignal cancellationSignal = new CancellationSignal();
         cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
             @Override
             public void onCancel() {

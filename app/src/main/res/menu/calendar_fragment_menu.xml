@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
         android:id="@+id/logOut"
         android:title="@string/logOutButton"
@@ -21,10 +22,8 @@
         android:title="@string/deleteAllShifts"
         app:showAsAction="never" />
 
-   <!-- <item
+    <item
         android:id="@+id/deleteColors"
         android:title="Delete colors"
-        app:showAsAction="never" />-->
-
-
+        app:showAsAction="never" />
 </menu>

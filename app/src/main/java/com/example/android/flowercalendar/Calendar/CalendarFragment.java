@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsList;
+import com.example.android.flowercalendar.Events.EventsListTesting;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
@@ -35,6 +36,8 @@ import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Colors;
 import com.example.android.flowercalendar.database.ColorsDao;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.PeriodDataDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -50,7 +53,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,10 +94,11 @@ public class CalendarFragment extends Fragment {
     private Colors colorToUpdate;
     private String event;
     private ArrayList<CalendarViews> calendarViewsArrayList;
-    private String pickedDay;
+    public static String pickedDay;
     private LocalDate pickedDate;
     private String newShiftNumber;
     private RelativeLayout backgroundDrawing;
+    String eventsNumber;
 
 
     @Override
@@ -143,6 +146,7 @@ public class CalendarFragment extends Fragment {
         backgroundDrawing = rootView.findViewById(R.id.backgroundDrawing);
 
         setHasOptionsMenu(true);
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Calendar));
         gridView = rootView.findViewById(R.id.gridView);
         onGridViewItemClickListener();
         swipeTheCalendar();
@@ -153,6 +157,7 @@ public class CalendarFragment extends Fragment {
         nextButton = rootView.findViewById(R.id.calendar_next_button);
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
         loadPeriodData();
+
 
         return rootView;
     }
@@ -169,6 +174,7 @@ public class CalendarFragment extends Fragment {
 
         });
     }
+
 
 
     @Override
@@ -210,12 +216,12 @@ public class CalendarFragment extends Fragment {
             return true;
         }
 
-       /* if (item.getItemId() == R.id.deleteColors) {
+        if (item.getItemId() == R.id.deleteColors) {
 
             ColorsDao colorsDao = getDatabase(context).colorsDao();
             colorsDao.deleteAll();
             return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -229,7 +235,12 @@ public class CalendarFragment extends Fragment {
 
                 CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
                 calendarEventsDao.deleteAllShifts(String.valueOf(headerDate.getMonth().getValue()));
-                calendarFill = LocalDate.now();
+                calendarFill = headerDate;
+                if(periodStartDate != null){
+                    periodStartDate = previousMonthPeriodStartDate();
+                    periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
+                }
+
                 fillTheCalendar();
 
             }
@@ -463,18 +474,30 @@ public class CalendarFragment extends Fragment {
         calendarFill = calendarFill.minusDays(monthBeginningCell);
 
         CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+        EventsDao eventsDao = getDatabase(context).eventsDao();
 
         //Wypełniam kalendarz
         while (calendarViewsArrayList.size() < DAYS_COUNT) {
 
             int dayOfMonth = calendarFill.getDayOfMonth();
 
-            CalendarEvents shiftToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
-            if (shiftToAdd == null) {
+
+            CalendarEvents calendarEventToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
+            if (calendarEventToAdd == null) {
                 shiftNumber = "";
+                event = "";
             } else {
-                shiftNumber = shiftToAdd.getShiftNumber();
+                shiftNumber = calendarEventToAdd.getShiftNumber();
+                if(calendarEventToAdd.getShiftNumber() == null){
+                    shiftNumber = "";
+                }
+                event = calendarEventToAdd.getEventsNumber();
+                if(calendarEventToAdd.getEventsNumber().equals("0")
+                        || calendarEventToAdd.getEventsNumber() == null){
+                    event = "";
+                }
             }
+
 
             if (periodStartDate != null) {
 
@@ -575,11 +598,19 @@ public class CalendarFragment extends Fragment {
                     saveShiftToPickedDate();
 
 
+
                 } else {
-                    FragmentTransaction tx =
-                            Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                    tx.replace(R.id.flContent, new EventsList());
-                    tx.commit();
+
+                    pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
+                    pickedDay = String.valueOf(pickedDate);
+
+                    EventsList eventsList = new EventsList();
+                    Bundle args = new Bundle();
+                    args.putString("pickedDay", pickedDay);
+                    eventsList.setArguments(args);
+                    assert getFragmentManager() != null;
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).addToBackStack( "tag" ).commit();
+
                 }
 
             }
@@ -594,20 +625,48 @@ public class CalendarFragment extends Fragment {
 
 
         if (shiftToUpdate != null) {
-            if (!shiftToUpdate.getShiftNumber().equals(newShiftNumber)) {
+
+            if(shiftToUpdate.getShiftNumber() != null){
+                if (!shiftToUpdate.getShiftNumber().equals(newShiftNumber)) {
+                    shiftToUpdate.setShiftNumber(newShiftNumber);
+                    calendarEventsDao.update(shiftToUpdate);
+
+                }
+            }else{
                 shiftToUpdate.setShiftNumber(newShiftNumber);
                 calendarEventsDao.update(shiftToUpdate);
-
             }
+
         } else {
             calendarEventsDao.insert(new CalendarEvents(newShiftNumber, "", pickedDay, String.valueOf(headerDate.getMonth().getValue())));
         }
 
     }
 
-    private void deleteShiftFromPickedDate(){
+    public void saveEventsNumberToPickedDate(){
 
-        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        EventsDao eventsDao = getDatabase(context).eventsDao();
+        List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay);
+        int numberOfEvents = listOfEvents.size();
+
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+        CalendarEvents eventToUpdate = calendarEventsDao.findBypickedDate(pickedDay);
+
+
+        if (eventToUpdate != null) {
+            if (!eventToUpdate.getEventsNumber().equals(String.valueOf(numberOfEvents))) {
+                eventToUpdate.setEventsNumber(String.valueOf(numberOfEvents));
+                calendarEventsDao.update(eventToUpdate);
+
+            }
+        } else {
+            calendarEventsDao.insert(new CalendarEvents(shiftNumber, String.valueOf(numberOfEvents), pickedDay,""));
+        }
+    }
+
+    private void deleteShiftFromPickedDate() {
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView parentView, View childView, int position, long id) {
 
@@ -618,11 +677,13 @@ public class CalendarFragment extends Fragment {
 
                 CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
                 CalendarEvents shiftToDelete = calendarEventsDao.findBypickedDate(pickedDay);
-                if(shiftToDelete != null){
+                if (shiftToDelete != null) {
                     calendarEventsDao.deleteBypickedDate(pickedDay);
                 }
 
-                return true;}});
+                return true;
+            }
+        });
 
 
     }
@@ -805,21 +866,21 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private void setBackgroundDrawing(){
+    private void setBackgroundDrawing() {
 
         Month currentMonth = headerDate.getMonth();
 
-        if(currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
-        currentMonth.equals(Month.FEBRUARY)){
+        if (currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
+                currentMonth.equals(Month.FEBRUARY)) {
             backgroundDrawing.setBackgroundResource(R.mipmap.zima);
-        }else if(currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
-        currentMonth.equals(Month.MAY)){
+        } else if (currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
+                currentMonth.equals(Month.MAY)) {
             backgroundDrawing.setBackgroundResource(R.mipmap.wiosna);
-        }else if(currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
-        currentMonth.equals(Month.AUGUST)){
+        } else if (currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
+                currentMonth.equals(Month.AUGUST)) {
             backgroundDrawing.setBackgroundResource(R.mipmap.lato);
-        }else if(currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
-        currentMonth.equals(Month.NOVEMBER)){
+        } else if (currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
+                currentMonth.equals(Month.NOVEMBER)) {
             backgroundDrawing.setBackgroundResource(R.mipmap.jesien);
         }
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="1dp"
+    android:background="@color/colorPrimary"
+    android:layout_margin="2dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/hour"
+        android:background="#fff"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="30sp"
+        tools:text="01:00" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/event"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_margin="5dp"
+        android:layout_weight="2"
+        android:elevation="3dp">
+
+        <EditText
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:inputType="text"
+            android:textSize="30sp"
+            tools:ignore="Autofill"
+            tools:text="Cinema" />
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
