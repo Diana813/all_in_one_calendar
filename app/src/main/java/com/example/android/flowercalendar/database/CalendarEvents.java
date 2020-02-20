@@ -1,7 +1,5 @@
 package com.example.android.flowercalendar.database;
 
-import java.time.LocalDate;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

@@ -52,7 +52,7 @@ public class ShiftsEditor extends Fragment {
     private EditText shiftLengthEditText;
     private int newShiftLength;
 
-    public static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
+    static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
 
         ShiftsEditor fragment = new ShiftsEditor();
         Bundle args = new Bundle();

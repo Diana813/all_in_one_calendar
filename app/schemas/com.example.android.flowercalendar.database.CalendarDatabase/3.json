@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "45f41aff66981afcc0dbbbaa02c6d83f",
+    "identityHash": "93ad768461b5c7b4eaa8f699c384f43e",
     "entities": [
       {
         "tableName": "calendar_events",
@@ -237,8 +237,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "imageUri",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `uri` TEXT, `position` INTEGER NOT NULL)",
+        "tableName": "imagePath",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `imagePath` TEXT, `position` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -247,8 +247,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "uri",
-            "columnName": "uri",
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -267,12 +267,44 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "big_plan_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER NOT NULL, `aimNumber` TEXT, `aimContents` TEXT, PRIMARY KEY(`position`))",
+        "fields": [
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aimNumber",
+            "columnName": "aimNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aimContents",
+            "columnName": "aimContents",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "position"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '45f41aff66981afcc0dbbbaa02c6d83f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '93ad768461b5c7b4eaa8f699c384f43e')"
     ]
   }
 }

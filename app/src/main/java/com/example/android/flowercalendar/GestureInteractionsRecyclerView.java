@@ -7,7 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.Events.TestingListAdapter;
+import com.example.android.flowercalendar.Events.EventsListHoursAdapter;
+import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
 
 import androidx.annotation.NonNull;
@@ -16,15 +17,16 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
-    private TestingListAdapter testingListAdapter;
+    private EventsListHoursAdapter testingListAdapter;
     private ShiftsAdapter shiftsAdapter;
     private EventsListAdapter eventsListAdapter;
+    private BigPlanAdapter bigPlanAdapter;
 
     private Drawable icon;
     private final ColorDrawable background;
 
     public GestureInteractionsRecyclerView(ShiftsAdapter adapter) {
-        super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         shiftsAdapter = adapter;
         icon = ContextCompat.getDrawable(ShiftsAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
@@ -32,30 +34,43 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
     }
 
     public GestureInteractionsRecyclerView(EventsListAdapter adapter) {
-        super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         eventsListAdapter = adapter;
         icon = ContextCompat.getDrawable(EventsListAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
     }
 
-    public GestureInteractionsRecyclerView(TestingListAdapter adapter) {
-        super(ItemTouchHelper.UP|ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+
+    public GestureInteractionsRecyclerView(EventsListHoursAdapter adapter) {
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         testingListAdapter = adapter;
-        icon = ContextCompat.getDrawable(TestingListAdapter.getContext(),
+        icon = ContextCompat.getDrawable(EventsListHoursAdapter.getContext(),
+                R.drawable.baseline_delete_black_36);
+        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+    }
+
+    public GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        bigPlanAdapter = adapter;
+        icon = ContextCompat.getDrawable(BigPlanAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if(shiftsAdapter == null && testingListAdapter == null){
+        if (shiftsAdapter == null && testingListAdapter == null && bigPlanAdapter == null) {
             eventsListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        }else if (testingListAdapter == null && eventsListAdapter == null){
+        } else if (testingListAdapter == null && eventsListAdapter == null && bigPlanAdapter == null) {
             shiftsAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        }else{
+        }else if (testingListAdapter == null && eventsListAdapter == null && shiftsAdapter == null){
+            bigPlanAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        } else {
+            assert testingListAdapter != null;
             testingListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
         }
@@ -67,9 +82,12 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        if(shiftsAdapter == null){
+        if (shiftsAdapter == null && bigPlanAdapter == null) {
             eventsListAdapter.deleteItem(position);
-        }else{
+        }else if(shiftsAdapter == null && eventsListAdapter == null){
+            bigPlanAdapter.deleteItem(position);
+        } else {
+            assert shiftsAdapter != null;
             shiftsAdapter.deleteItem(position);
         }
 

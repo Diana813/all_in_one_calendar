@@ -1,57 +1,53 @@
 package com.example.android.flowercalendar.Events;
 
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.Event;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Application;
-import android.content.Context;
-import android.os.Bundle;
-import android.provider.CalendarContract;
-import android.text.style.TtsSpan;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
-import android.widget.RelativeLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
-import com.example.android.flowercalendar.MainActivity;
-import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarEvents;
-import com.example.android.flowercalendar.database.CalendarEventsDao;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
-import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.database.ShiftsDao;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
-import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
-
 public class EventsList extends Fragment {
 
     private FloatingActionButton fab;
     private EventsListAdapter eventsListAdapter;
+    private FrequentActivitiesListAdapter frequentActivitiesListAdapter;
+    private EventsListHoursAdapter eventsListHoursAdapter;
     private Context context;
-    private RelativeLayout empty_view;
     static int newId;
     private String pickedDay;
     private String shiftNumber;
     private String shiftStart;
     private int shiftLength;
+    private DrawerLayout mDrawer;
+    private RecyclerView hoursListRecyclerView;
+    private ArrayList listOfHours;
+
 
     public EventsList() {
         // Required empty public constructor
@@ -66,6 +62,8 @@ public class EventsList extends Fragment {
         super.onAttach(context);
         this.context = context;
         eventsListAdapter = new EventsListAdapter(context, context);
+        frequentActivitiesListAdapter = new FrequentActivitiesListAdapter(context, context);
+        eventsListHoursAdapter = new EventsListHoursAdapter(context, context);
     }
 
 
@@ -91,7 +89,9 @@ public class EventsList extends Fragment {
 
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.OneTimeEvents));
         fab = rootView.findViewById(R.id.fab);
-        empty_view = rootView.findViewById(R.id.empty_view_events);
+        RecyclerView listView = rootView.findViewById(R.id.listView);
+        listView.setAdapter(frequentActivitiesListAdapter);
+        listView.setLayoutManager(new LinearLayoutManager(context));
 
         RecyclerView recyclerView = rootView.findViewById(R.id.list_of_events);
         recyclerView.setAdapter(eventsListAdapter);
@@ -100,18 +100,51 @@ public class EventsList extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        hoursListRecyclerView = rootView.findViewById(R.id.list_of_hours);
+        hoursListRecyclerView.setAdapter(eventsListHoursAdapter);
+        hoursListRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        ItemTouchHelper itemTouchHelperHours = new
+                ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListHoursAdapter));
+        itemTouchHelperHours.attachToRecyclerView(hoursListRecyclerView);
+
+        setHasOptionsMenu(true);
+        mDrawer = rootView.findViewById(R.id.drawer_layout);
+        mDrawer.setScrimColor(Color.TRANSPARENT);
+
+
         assert getArguments() != null;
         pickedDay = getArguments().getString("pickedDay");
         TextView date = rootView.findViewById(R.id.expandedDayDate);
         date.setText(pickedDay);
         onFabClick();
         initData();
+        addFreqActivList();
         CalendarFragment calendarFragment = new CalendarFragment();
         calendarFragment.saveEventsNumberToPickedDate();
 
+        addHoursList();
 
         return rootView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.expanded_day_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.freqAct) {
+            mDrawer = Objects.requireNonNull(getActivity()).findViewById(R.id.drawer_layout);
+            NavigationView navigationView = getActivity().findViewById(R.id.nvView);
+            mDrawer.openDrawer(navigationView);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void onFabClick() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -136,14 +169,32 @@ public class EventsList extends Fragment {
                 assert events != null;
                 eventsListAdapter.setEventsList(events);
                 newId = events.size();
-                if (events.isEmpty()) {
-                    empty_view.setVisibility(View.VISIBLE);
-                } else {
-                    empty_view.setVisibility(View.GONE);
-                }
+
             }
         });
     }
+
+    private void addFreqActivList() {
+
+        FrequentActivitiesViewModel eventsViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
+        eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+            @Override
+            public void onChanged(@Nullable List<Event> events) {
+                assert events != null;
+                frequentActivitiesListAdapter.setEventsList(events);
+            }
+        });
+    }
+
+    private void addHoursList() {
+
+        listOfHours = new ArrayList<String>();
+        while(listOfHours.size() < 24) {
+            listOfHours.add(new Hours("00:00", null));
+        }
+
+    }
+
 
    /* public void initWorkData() {
 
@@ -181,4 +232,5 @@ public class EventsList extends Fragment {
 
 
     }*/
+
 }

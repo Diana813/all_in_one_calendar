@@ -17,7 +17,7 @@ public class LifeAimsAdapter extends FragmentPagerAdapter {
     LifeAimsAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-        layouts = new int[]{R.layout.activity_life_aims, R.layout.activity_five_years_plan};
+        layouts = new int[]{R.layout.activity_life_aims, R.layout.big_plan, R.layout.big_plan, R.layout.big_plan};
     }
 
 
@@ -29,26 +29,41 @@ public class LifeAimsAdapter extends FragmentPagerAdapter {
             LifeAims fragment = new LifeAims();
             fragment.setContent(layouts[position]);
             return fragment;
-        } else {
-            FiveYearsPlan fragment = new FiveYearsPlan();
+        } else if (position == 1) {
+            BigPlan fragment = new BigPlan();
+            fragment.setContent(layouts[position]);
+            return fragment;
+
+        } else if(position == 2) {
+            OneYearPlan fragment = new OneYearPlan();
+            fragment.setContent(layouts[position]);
+            return fragment;
+        }else{
+            ThisMonthPlan fragment = new ThisMonthPlan();
             fragment.setContent(layouts[position]);
             return fragment;
 
         }
     }
 
-    @Override
+
     public int getCount() {
-        return 2;
+        return 4;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
             return mContext.getString(R.string.lifeAims);
-        } else {
+        } else if (position == 1) {
             return mContext.getString(R.string.bigPlan);
+
+        } else if (position == 2) {
+            return mContext.getString(R.string.thisYear);
+        }else{
+            return mContext.getString(R.string.thisMonth);
         }
     }
+
 }
 

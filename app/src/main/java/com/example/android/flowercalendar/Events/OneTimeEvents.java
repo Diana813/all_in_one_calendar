@@ -138,6 +138,9 @@ public class OneTimeEvents extends Fragment {
 
         assert getArguments() != null;
         pickedDay = getArguments().getString("pickedDay");
+        if(pickedDay == null){
+            pickedDay = "";
+        }
 
 
         setScheduleButton();
@@ -163,12 +166,23 @@ public class OneTimeEvents extends Fragment {
                 assert inputMethodManager != null;
                 inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getView()).getWindowToken(), 0);
 
-                EventsList eventsList = new EventsList();
-                Bundle args = new Bundle();
-                args.putString("pickedDay", pickedDay);
-                eventsList.setArguments(args);
-                assert getFragmentManager() != null;
-                getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).commit();
+                if(!pickedDay.equals("")){
+                    EventsList eventsList = new EventsList();
+                    Bundle args = new Bundle();
+                    args.putString("pickedDay", pickedDay);
+                    eventsList.setArguments(args);
+                    assert getFragmentManager() != null;
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).commit();
+                }else{
+                    FrequentActivities frequentActivities = new FrequentActivities();
+                    Bundle args = new Bundle();
+                    args.putString("pickedDay", pickedDay);
+                    frequentActivities.setArguments(args);
+                    assert getFragmentManager() != null;
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, frequentActivities).commit();
+
+                }
+
                 return true;
 
             case R.id.action_delete_all_entries:

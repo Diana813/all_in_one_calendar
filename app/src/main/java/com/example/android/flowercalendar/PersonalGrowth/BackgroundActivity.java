@@ -2,6 +2,7 @@ package com.example.android.flowercalendar.PersonalGrowth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -37,6 +38,7 @@ public class BackgroundActivity extends Fragment {
         LifeAimsAdapter adapter = new LifeAimsAdapter(getContext(), getChildFragmentManager()) {
         };
 
+
         ViewPager viewPager = rootView.findViewById(R.id.viewpager);
         TabLayout tabs = rootView.findViewById(R.id.tabs);
 
@@ -45,9 +47,11 @@ public class BackgroundActivity extends Fragment {
         // Connect the tab layout with the view pager.
         tabs.setupWithViewPager(viewPager);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
-
         return rootView;
 
     }
+
+
+
 }
 

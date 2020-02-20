@@ -77,9 +77,9 @@ public class ShiftsFragment extends Fragment {
     public void onDetach(){
         super.onDetach();
 
-        FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-        tx.replace(R.id.flContent, new CalendarFragment());
-        tx.commit();
+//        FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+//        tx.replace(R.id.flContent, new CalendarFragment());
+//        tx.commit();
 
     }
 

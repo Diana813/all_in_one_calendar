@@ -1,16 +1,13 @@
 package com.example.android.flowercalendar.Events;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.CalendarAdapter;
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
@@ -32,7 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class EventsListTesting extends Fragment {
 
     private FloatingActionButton fab;
-    private TestingListAdapter testingListAdapter;
+    private EventsListHoursAdapter testingListAdapter;
     private Context context;
     private RelativeLayout empty_view;
     static int newId;
@@ -56,7 +53,7 @@ public class EventsListTesting extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        testingListAdapter = new TestingListAdapter(context, context);
+        testingListAdapter = new EventsListHoursAdapter(context, context);
     }
 
 
@@ -96,7 +93,7 @@ public class EventsListTesting extends Fragment {
         TextView date = rootView.findViewById(R.id.expandedDayDate);
         date.setText(pickedDay);
         onFabClick();
-        initData();
+        //initData();
         CalendarFragment calendarFragment = new CalendarFragment();
         calendarFragment.saveEventsNumberToPickedDate();
 
@@ -121,7 +118,7 @@ public class EventsListTesting extends Fragment {
         });
     }
 
-    private void initData() {
+   /* private void initData() {
 
         EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
         eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
@@ -138,11 +135,11 @@ public class EventsListTesting extends Fragment {
             }
         });
     }
-
+*/
     private void addingHoursToThePlanner() {
         hoursArrayList = new ArrayList<>();
 
-        TestingListAdapter planerAdapter = new TestingListAdapter(context,context);
+        EventsListHoursAdapter planerAdapter = new EventsListHoursAdapter(context,context);
         int hour = 0;
         int minute = 0;
         for(int i = 0; i<24; i ++){

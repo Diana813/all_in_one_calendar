@@ -16,15 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TestingListAdapter extends RecyclerView.Adapter<TestingListAdapter.EventsViewHolder> {
+public class EventsListHoursAdapter extends RecyclerView.Adapter<EventsListHoursAdapter.EventsViewHolder> {
 
     private static Context context;
     private final LayoutInflater layoutInflater;
-    private List<Event> eventsList;
+    private List<Hours> eventsList;
 
-    TestingListAdapter(Context requireNonNull, Context context) {
+    EventsListHoursAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        TestingListAdapter.context = context;
+        EventsListHoursAdapter.context = context;
     }
 
     public static Context getContext() {
@@ -32,27 +32,26 @@ public class TestingListAdapter extends RecyclerView.Adapter<TestingListAdapter.
     }
 
 
-    void setEventsList(List<Event> eventsList) {
+    void setEventsList(List<Hours> eventsList) {
         this.eventsList = eventsList;
         notifyDataSetChanged();
     }
     @NonNull
     @Override
-    public TestingListAdapter.EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.single_testing_item, parent, false);
+    public EventsListHoursAdapter.EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = layoutInflater.inflate(R.layout.single_hours_item, parent, false);
         return new EventsViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TestingListAdapter.EventsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventsListHoursAdapter.EventsViewHolder holder, int position) {
 
         if (eventsList == null) {
             return;
         }
 
-        final Event event = eventsList.get(position);
-
-
+        final Hours hour = eventsList.get(position);
+        holder.hour.setText(hour.getHour());
 
     }
 

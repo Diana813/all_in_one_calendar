@@ -77,65 +77,9 @@ public class ForGirlsFragment extends Fragment {
         periodTimeValue = (TextView) rootView.findViewById(R.id.periodTimeValue);
         cycleTimeValue = (TextView) rootView.findViewById(R.id.cycleTimeValue);
 
-        mCalendarView
-                .setOnDateChangeListener(
-                        new CalendarView
-                                .OnDateChangeListener() {
-                            @Override
-                            public void onSelectedDayChange(
-                                    @NonNull CalendarView view,
-                                    int year,
-                                    int month,
-                                    int dayOfMonth) {
-                                startPeriodDate = year + ":" + (month + 1) + ":" + dayOfMonth;
-
-                            }
-                        });
-
-        periodTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                periodTimeValue.setText("" + progress);
-                periodTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
-                periodTimeChosenValue = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-        cycleTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                cycleTimeValue.setText("" + progress);
-                cycleTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
-                cycleTimeChosenValue = progress;
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-
-
-            }
-        });
-
-
+        setPeriodStartDate();
+        setPeriodTimeValue();
+        setCycleTimeValue();
         initData();
         return rootView;
 
@@ -181,6 +125,74 @@ public class ForGirlsFragment extends Fragment {
                 return true;*/
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setPeriodStartDate(){
+        mCalendarView
+                .setOnDateChangeListener(
+                        new CalendarView
+                                .OnDateChangeListener() {
+                            @Override
+                            public void onSelectedDayChange(
+                                    @NonNull CalendarView view,
+                                    int year,
+                                    int month,
+                                    int dayOfMonth) {
+                                startPeriodDate = year + ":" + (month + 1) + ":" + dayOfMonth;
+
+                            }
+                        });
+
+    }
+
+    private void setPeriodTimeValue(){
+
+        periodTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+                periodTimeValue.setText("" + progress);
+                periodTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                periodTimeChosenValue = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+    }
+
+    private void setCycleTimeValue(){
+
+        cycleTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
+                cycleTimeValue.setText("" + progress);
+                cycleTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
+                cycleTimeChosenValue = progress;
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+
+
+            }
+        });
     }
 
     //TODO pokazać showUnsavedChangesDialog po naciśnięciu Back buttona

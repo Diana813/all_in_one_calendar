@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6b679898edb5899a12000fc267fc748d",
+    "identityHash": "1edb759306100d690593dfc4cbea18b8",
     "entities": [
       {
         "tableName": "calendar_events",
@@ -267,12 +267,44 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "big_plan_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `AimNumber` TEXT, `aimContents` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aimNumber",
+            "columnName": "AimNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aimContents",
+            "columnName": "aimContents",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6b679898edb5899a12000fc267fc748d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1edb759306100d690593dfc4cbea18b8')"
     ]
   }
 }

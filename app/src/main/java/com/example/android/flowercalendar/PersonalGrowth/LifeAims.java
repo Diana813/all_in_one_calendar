@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -52,11 +53,11 @@ public class LifeAims extends Fragment {
     private ImageView addImage;
     private ImageView addPhoto;
     private ImageView searchImage;
-    private ImageView nextButton;
     private Bitmap selectedImageBitmap;
     private String absolutePath;
     private ImagePathDao imagePathDao;
     private int layout;
+    private PersonalGrowthUtils personalGrowthUtils = new PersonalGrowthUtils();
 
     public LifeAims() {
         // Required empty public constructor
@@ -70,7 +71,7 @@ public class LifeAims extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if(layout == 0){
+        if (layout == 0) {
             layout = R.layout.activity_life_aims;
         }
         ViewGroup rootView = (ViewGroup) inflater.inflate(layout, container, false);
@@ -82,7 +83,7 @@ public class LifeAims extends Fragment {
         addPhoto = rootView.findViewById(R.id.addPhoto);
         searchImage = rootView.findViewById(R.id.searchPhoto);
 
-        displayImageFromDB();
+        personalGrowthUtils.displayImageFromDB(aimImage);
         askPermissions();
         checkCameraHardware(getActivity());
         setAddImageClickListener();
@@ -92,19 +93,6 @@ public class LifeAims extends Fragment {
         return rootView;
     }
 
-    private void displayImageFromDB() {
-
-        imagePathDao = getDatabase(getContext()).imagePathDao();
-        ImagePath imagePath = imagePathDao.findLastImage();
-        if (imagePath != null) {
-            String aimImagePath = imagePath.getImagePath();
-            if (aimImagePath.contains("imageDir")) {
-                loadImageFromStorage(aimImagePath);
-            } else if (aimImagePath.contains("JPEG_")) {
-                aimImage.setImageURI(Uri.parse(aimImagePath));
-            }
-        }
-    }
 
     private static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
@@ -182,17 +170,7 @@ public class LifeAims extends Fragment {
     }
 
 
-    private void loadImageFromStorage(String path) {
 
-        try {
-            File file = new File(path, "aimImage.jpg");
-            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-            aimImage.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     private void setAddPhotoOnClickListener() {
         addPhoto.setOnClickListener(new View.OnClickListener() {
@@ -272,7 +250,7 @@ public class LifeAims extends Fragment {
                         @SuppressLint("SimpleDateFormat")
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                         String imageFileName = "JPEG_" + timeStamp + "_";
-                        File storageDir = Objects.requireNonNull(getActivity()).getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                        File storageDir = Objects.requireNonNull(getContext()).getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                         File image = File.createTempFile(
                                 imageFileName,
                                 ".jpg",

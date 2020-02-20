@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "6ac26e9a82780725f2f4b2c007b40cf5",
+    "identityHash": "77119455e0442ed1ad7a4cdb08091031",
     "entities": [
       {
         "tableName": "calendar_events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftNumber` TEXT, `currentMonth` TEXT, `eventName` TEXT, `pickedDate` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `shiftNumber` TEXT, `currentMonth` TEXT, `eventsNumber` TEXT, `pickedDate` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -27,8 +27,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "eventName",
-            "columnName": "eventName",
+            "fieldPath": "eventsNumber",
+            "columnName": "eventsNumber",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -173,7 +173,7 @@
       },
       {
         "tableName": "event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_name` TEXT, `schedule` TEXT, `alarm` TEXT, `event_length` INTEGER NOT NULL, `position` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_name` TEXT, `schedule` TEXT, `alarm` TEXT, `event_length` INTEGER NOT NULL, `position` INTEGER NOT NULL, `picked_day` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -210,6 +210,12 @@
             "columnName": "position",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "pickedDay",
+            "columnName": "picked_day",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -229,12 +235,76 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "imagePath",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `imagePath` TEXT, `position` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imagePath",
+            "columnName": "imagePath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "big_plan_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `aimNumber` TEXT, `aimContents` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aimNumber",
+            "columnName": "aimNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "aimContents",
+            "columnName": "aimContents",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "position"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6ac26e9a82780725f2f4b2c007b40cf5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '77119455e0442ed1ad7a4cdb08091031')"
     ]
   }
 }

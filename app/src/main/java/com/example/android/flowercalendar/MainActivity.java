@@ -45,10 +45,8 @@ public class MainActivity extends AppCompatActivity {
     public DrawerLayout mDrawer;
     private Toolbar toolbar;
     private ActionBarDrawerToggle drawerToggle;
-    ExpandableListView expandableListView;
-    CustomExpandableListAdapter expandableListAdapter;
-    List<String> expandableListTitle;
-    HashMap<String, List<String>> expandableListDetail;
+    private ExpandableListView expandableListView;
+    private CustomExpandableListAdapter expandableListAdapter;
 
 
     @Override
@@ -173,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void addListData() {
 
-        expandableListDetail = getData();
-        expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
+        HashMap<String, List<String>> expandableListDetail = getData();
+        List<String> expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, (LinkedHashMap<String, List<String>>) expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
 

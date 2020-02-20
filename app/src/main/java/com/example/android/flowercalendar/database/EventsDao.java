@@ -41,6 +41,10 @@ public interface EventsDao {
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay ORDER BY position ASC")
     LiveData<List<Event>> sortByOrder(String pickedDay);
+
+    @Query("SELECT * FROM event WHERE picked_day = :pickedDay")
+    LiveData<List<Event>> findByEventDay(String pickedDay);
+
 }
 
 

@@ -4,13 +4,16 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.android.flowercalendar.PersonalGrowth.BigPlan;
+
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class}, version = 1)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 5)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -31,6 +34,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -51,6 +55,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
     public abstract PeriodDataDao periodDataDao();
     public abstract EventsDao eventsDao();
     public abstract ImagePathDao imagePathDao();
+    public abstract BigPlanDao bigPlanDao();
 
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -60,6 +65,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
         private final PeriodDataDao periodDataDao;
         private final EventsDao eventsDao;
         private final ImagePathDao imagePathDao;
+        private final BigPlanDao bigPlanDao;
 
         public PopulateDbAsync(CalendarDatabase instance) {
             calendarEventsDao = instance.calendarEventsDao();
@@ -68,6 +74,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
             periodDataDao = instance.periodDataDao();
             eventsDao = instance.eventsDao();
             imagePathDao = instance.imagePathDao();
+            bigPlanDao = instance.bigPlanDao();
         }
 
         @Override
@@ -78,6 +85,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
             periodDataDao.deleteAll();
             eventsDao.deleteAll();
             imagePathDao.deleteAll();
+            bigPlanDao.deleteAll();
             return null;
         }
     }

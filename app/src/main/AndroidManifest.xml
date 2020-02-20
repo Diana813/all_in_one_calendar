@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PersonalGrowth.FiveYearsPlan">
+        <activity android:name=".PersonalGrowth.BigPlan">
         </activity>
         <activity
             android:name=".LoginActivity"

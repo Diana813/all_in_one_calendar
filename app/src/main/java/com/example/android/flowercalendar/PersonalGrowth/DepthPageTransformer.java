@@ -1,8 +1,15 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
+import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
+import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.viewpager.widget.ViewPager;
+
+import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
 
 class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
@@ -13,7 +20,7 @@ class DepthPageTransformer implements ViewPager.PageTransformer {
         view.setTranslationX(-1 * view.getWidth() * position);
 
         if (position < -1) { // [-Infinity,-1)
-            // This page is way off-screen to the left.
+            // This page is screen to the left.
             view.setAlpha(0f);
 
         } else if (position <= 0) { // [-1,0]
@@ -22,6 +29,12 @@ class DepthPageTransformer implements ViewPager.PageTransformer {
             view.setTranslationX(0f);
             view.setScaleX(1f);
             view.setScaleY(1f);
+
+            //Hide keyboard
+            final InputMethodManager imm = (InputMethodManager)getContext().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         } else if (position <= 1) { // (0,1]
             // Fade the page out.
@@ -36,9 +49,13 @@ class DepthPageTransformer implements ViewPager.PageTransformer {
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
 
+
+
         } else { // (1,+Infinity]
             // This page is way off-screen to the right.
             view.setAlpha(0f);
         }
     }
+
+
 }

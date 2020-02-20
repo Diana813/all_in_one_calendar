@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsList;
-import com.example.android.flowercalendar.Events.EventsListTesting;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
@@ -99,6 +98,7 @@ public class CalendarFragment extends Fragment {
     private String newShiftNumber;
     private RelativeLayout backgroundDrawing;
     String eventsNumber;
+    private int numberOfMonthsSincePeriodStartDate;
 
 
     @Override
@@ -175,8 +175,6 @@ public class CalendarFragment extends Fragment {
         });
     }
 
-
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.calendar_fragment_menu, menu);
@@ -236,7 +234,7 @@ public class CalendarFragment extends Fragment {
                 CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
                 calendarEventsDao.deleteAllShifts(String.valueOf(headerDate.getMonth().getValue()));
                 calendarFill = headerDate;
-                if(periodStartDate != null){
+                if (periodStartDate != null) {
                     periodStartDate = previousMonthPeriodStartDate();
                     periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
                 }
@@ -455,6 +453,7 @@ public class CalendarFragment extends Fragment {
         //potrzebna do prawidłowego działania buttonów i kolorowania kalendarza
         headerDate = LocalDate.of(year, month, day);
 
+
         //Ustawiam datę na pierwszy dzień aktualnego miesiąca
         calendarFill = LocalDate.of(year, month, 1);
 
@@ -464,6 +463,30 @@ public class CalendarFragment extends Fragment {
                 (firstDayOfNextMonth.getDayOfWeek().getValue()) - 1;
         LocalDate mondayBeforeFirstDayOfNextMonth
                 = firstDayOfNextMonth.minusDays(nextMonthBeginningCell);
+
+        LocalDate lastDayOfPreviousMonth = calendarFill.minusDays(1);
+        int previousMonthEndCell = lastDayOfPreviousMonth.getDayOfWeek().getValue() - 1;
+        LocalDate mondayBeforeLastDayOfPreviousMonth = lastDayOfPreviousMonth.minusDays(previousMonthEndCell);
+
+
+        //Żeby dane na temat okresu wyświetlały się kiedy rozpocznie się następny miesiąc
+        if (periodStartDate != null) {
+
+
+            if (periodStartDate.getMonth().getValue() < calendarFill.getMonth().getValue()) {
+
+            /*numberOfMonthsSincePeriodStartDate = calendarFill.getMonth().getValue()
+                    - periodStartDate.getMonth().getValue();
+
+            periodStartDate = periodStartDate.plusDays(numberOfMonthsSincePeriodStartDate *
+                    cycleLenght);
+
+            periodFinishDate = periodStartDate.plusDays(periodLenght - 1);*/
+
+
+            }
+        }
+
 
         //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
         //poprzez sprawdzenie odpowiadającego mu numeru dnia tygodnia. Odejmuję jeden, bo
@@ -488,19 +511,18 @@ public class CalendarFragment extends Fragment {
                 event = "";
             } else {
                 shiftNumber = calendarEventToAdd.getShiftNumber();
-                if(calendarEventToAdd.getShiftNumber() == null){
+                if (calendarEventToAdd.getShiftNumber() == null) {
                     shiftNumber = "";
                 }
                 event = calendarEventToAdd.getEventsNumber();
-                if(calendarEventToAdd.getEventsNumber().equals("0")
-                        || calendarEventToAdd.getEventsNumber() == null){
+                if (calendarEventToAdd.getEventsNumber().equals("0")
+                        || calendarEventToAdd.getEventsNumber() == null) {
                     event = "";
                 }
             }
 
 
             if (periodStartDate != null) {
-
 
                 if ((periodStartDate.isEqual(calendarFill) ||
                         periodFinishDate.isEqual(calendarFill)) ||
@@ -598,7 +620,6 @@ public class CalendarFragment extends Fragment {
                     saveShiftToPickedDate();
 
 
-
                 } else {
 
                     pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
@@ -609,7 +630,7 @@ public class CalendarFragment extends Fragment {
                     args.putString("pickedDay", pickedDay);
                     eventsList.setArguments(args);
                     assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).addToBackStack( "tag" ).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).addToBackStack("tag").commit();
 
                 }
 
@@ -626,13 +647,13 @@ public class CalendarFragment extends Fragment {
 
         if (shiftToUpdate != null) {
 
-            if(shiftToUpdate.getShiftNumber() != null){
+            if (shiftToUpdate.getShiftNumber() != null) {
                 if (!shiftToUpdate.getShiftNumber().equals(newShiftNumber)) {
                     shiftToUpdate.setShiftNumber(newShiftNumber);
                     calendarEventsDao.update(shiftToUpdate);
 
                 }
-            }else{
+            } else {
                 shiftToUpdate.setShiftNumber(newShiftNumber);
                 calendarEventsDao.update(shiftToUpdate);
             }
@@ -643,7 +664,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    public void saveEventsNumberToPickedDate(){
+    public void saveEventsNumberToPickedDate() {
 
         EventsDao eventsDao = getDatabase(context).eventsDao();
         List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay);
@@ -660,7 +681,7 @@ public class CalendarFragment extends Fragment {
 
             }
         } else {
-            calendarEventsDao.insert(new CalendarEvents(shiftNumber, String.valueOf(numberOfEvents), pickedDay,""));
+            calendarEventsDao.insert(new CalendarEvents(shiftNumber, String.valueOf(numberOfEvents), pickedDay, ""));
         }
     }
 
