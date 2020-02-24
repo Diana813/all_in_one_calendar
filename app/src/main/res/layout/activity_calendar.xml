@@ -8,24 +8,23 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/calendarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/calendarLayout">
+        android:orientation="vertical">
 
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@mipmap/jesien"
             android:id="@+id/backgroundDrawing"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/dateView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:background="#98FFFFFF"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -41,6 +40,7 @@
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#000"
                     android:textSize="20sp"
                     tools:text="23 lipca 2019" />
 
@@ -145,7 +145,8 @@
     </LinearLayout>
 
     <include layout="@layout/color_settings" />
-    <include layout="@layout/shifts_setting_bottom_sheet"/>
+
+    <include layout="@layout/shifts_setting_bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

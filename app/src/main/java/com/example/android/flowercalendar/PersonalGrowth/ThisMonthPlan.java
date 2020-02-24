@@ -33,8 +33,8 @@ public class ThisMonthPlan extends Fragment {
         // Required empty public constructor
     }
 
-    public static BigPlan newInstance() {
-        return new BigPlan();
+    public static ThisMonthPlan newInstance() {
+        return new ThisMonthPlan();
     }
 
     @Override
@@ -89,8 +89,8 @@ public class ThisMonthPlan extends Fragment {
         personalGrowthUtils.displayImageFromDB(imageView);
         personalGrowthUtils.setRecyclerView(recyclerView,adapter,context);
         personalGrowthUtils.setItemTouchHelper(adapter, recyclerView);
-        personalGrowthUtils.initData(this,adapter);
-        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText);
+        personalGrowthUtils.initDataThisMonth(this,adapter);
+        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText, 3);
         return rootView;
     }
 

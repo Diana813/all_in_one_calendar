@@ -10,6 +10,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -893,16 +894,16 @@ public class CalendarFragment extends Fragment {
 
         if (currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
                 currentMonth.equals(Month.FEBRUARY)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.zima);
+            backgroundDrawing.setBackgroundResource(R.mipmap.klonzima);
         } else if (currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
                 currentMonth.equals(Month.MAY)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.wiosna);
+            backgroundDrawing.setBackgroundResource(R.mipmap.klonwiosna);
         } else if (currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
                 currentMonth.equals(Month.AUGUST)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.lato);
+            backgroundDrawing.setBackgroundResource(R.mipmap.klonlato);
         } else if (currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
                 currentMonth.equals(Month.NOVEMBER)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.jesien);
+            backgroundDrawing.setBackgroundResource(R.mipmap.klonjesien);
         }
 
     }

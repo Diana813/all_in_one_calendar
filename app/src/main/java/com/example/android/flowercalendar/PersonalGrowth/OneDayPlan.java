@@ -22,19 +22,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class BigPlan extends Fragment {
+public class OneDayPlan extends Fragment {
 
     private int layout;
     private BigPlanAdapter adapter;
     private Context context;
     private PersonalGrowthUtils personalGrowthUtils = new PersonalGrowthUtils();
 
-    public BigPlan() {
+    public OneDayPlan() {
         // Required empty public constructor
     }
 
-    public static BigPlan newInstance() {
-        return new BigPlan();
+    public static OneDayPlan newInstance() {
+        return new OneDayPlan();
     }
 
     @Override
@@ -55,7 +55,6 @@ public class BigPlan extends Fragment {
         super.onDestroyView();
         adapter.setIndexInDatabase();
         adapter.deleteFromDatabase();
-        personalGrowthUtils.initDataBigPlan(this,adapter);
         personalGrowthUtils.hideKeyboard(getView());
     }
 
@@ -83,15 +82,15 @@ public class BigPlan extends Fragment {
         EditText aimText = rootView.findViewById(R.id.aimText);
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
         TextView question = rootView.findViewById(R.id.title);
-        question.setText(R.string.fiveYearsPlan);
+        question.setText(R.string.OneDayPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
 
         setHasOptionsMenu(true);
         personalGrowthUtils.displayImageFromDB(imageView);
         personalGrowthUtils.setRecyclerView(recyclerView,adapter,context);
         personalGrowthUtils.setItemTouchHelper(adapter, recyclerView);
-        personalGrowthUtils.initDataBigPlan(this,adapter);
-        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText, 1);
+        personalGrowthUtils.initDataOneDay(this,adapter);
+        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText, 4);
         return rootView;
     }
 

@@ -7,20 +7,24 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "big_plan_data")
 public class BigPlanData {
 
-        @PrimaryKey(autoGenerate = true)
-        private int position;
+    @PrimaryKey(autoGenerate = true)
+    private int position;
 
-        @ColumnInfo(name = "aimNumber")
-        private String aimNumber;
+    @ColumnInfo(name = "aimNumber")
+    private String aimNumber;
 
-        @ColumnInfo(name = "aimContents")
-        private String aimContents;
 
-        public BigPlanData(String aimNumber, String aimContents) {
-            this.aimNumber = aimNumber;
-            this.aimContents = aimContents;
-        }
+    @ColumnInfo(name = "aimTime")
+    private int aimTime;
 
+    @ColumnInfo(name = "aimContents")
+    private String aimContents;
+
+    public BigPlanData(int aimTime, String aimNumber, String aimContents) {
+        this.aimTime = aimTime;
+        this.aimNumber = aimNumber;
+        this.aimContents = aimContents;
+    }
 
 
     public String getAimNumber() {
@@ -45,5 +49,13 @@ public class BigPlanData {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public int getAimTime() {
+        return aimTime;
+    }
+
+    public void setAimTime(int aimTime) {
+        this.aimTime = aimTime;
     }
 }

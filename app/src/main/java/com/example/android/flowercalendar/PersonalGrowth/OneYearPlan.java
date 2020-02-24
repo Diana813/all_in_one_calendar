@@ -33,8 +33,8 @@ public class OneYearPlan extends Fragment {
         // Required empty public constructor
     }
 
-    public static BigPlan newInstance() {
-        return new BigPlan();
+    public static OneYearPlan newInstance() {
+        return new OneYearPlan();
     }
 
     @Override
@@ -89,8 +89,8 @@ public class OneYearPlan extends Fragment {
         personalGrowthUtils.displayImageFromDB(imageView);
         personalGrowthUtils.setRecyclerView(recyclerView,adapter,context);
         personalGrowthUtils.setItemTouchHelper(adapter, recyclerView);
-        personalGrowthUtils.initData(this,adapter);
-        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText);
+        personalGrowthUtils.initDataOneYear(this,adapter);
+        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText,2);
         return rootView;
     }
 

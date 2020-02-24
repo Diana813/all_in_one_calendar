@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-public class BigPlanViewModel extends AndroidViewModel {
+public class ThisMonthViewModel extends AndroidViewModel {
 
     private BigPlanDao bigPlanDao;
     private LiveData<List<BigPlanData>> bigPlanLiveData;
 
-    public BigPlanViewModel(@NonNull Application application) {
+    public ThisMonthViewModel(@NonNull Application application) {
         super(application);
         bigPlanDao = CalendarDatabase.getDatabase(application).bigPlanDao();
-        bigPlanLiveData = bigPlanDao.findByAimTime(1);
+        bigPlanLiveData = bigPlanDao.findByAimTime(3);
     }
 
     LiveData<List<BigPlanData>> getAimsList() {
@@ -44,3 +44,4 @@ public class BigPlanViewModel extends AndroidViewModel {
     }
 
 }
+

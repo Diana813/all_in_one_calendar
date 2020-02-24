@@ -29,6 +29,7 @@ import java.util.Objects;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -90,11 +91,11 @@ class PersonalGrowthUtils {
         }
     }
 
-    void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView textView) {
+    void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView textView, final int i) {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData(textView);
+                saveData(textView, i);
                 adapter.setIndexInDatabase();
                 textView.setText("");
             }
@@ -102,16 +103,16 @@ class PersonalGrowthUtils {
 
     }
 
-    private void saveData(TextView textView) {
+    private void saveData(TextView textView, int i) {
 
         String aimTextString = textView.getText().toString();
 
         BigPlanDao bigPlanDao = (BigPlanDao) CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-        bigPlanDao.insert(new BigPlanData(String.valueOf((newId + 1) + "."), aimTextString));
+        bigPlanDao.insert(new BigPlanData(i,String.valueOf((newId + 1) + "."), aimTextString));
 
     }
 
-    void initData(Fragment fragment, final BigPlanAdapter adapter) {
+    void initDataBigPlan(Fragment fragment, final BigPlanAdapter adapter) {
         BigPlanViewModel bigPlanViewModel = ViewModelProviders.of(fragment).get(BigPlanViewModel.class);
         bigPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
             @Override
@@ -126,6 +127,55 @@ class PersonalGrowthUtils {
         });
 
     }
+
+    void initDataOneYear(Fragment fragment, final BigPlanAdapter adapter) {
+        OneYearPlanViewModel oneYearPlanViewModel = ViewModelProviders.of(fragment).get(OneYearPlanViewModel.class);
+        oneYearPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
+            @Override
+            public void onChanged(@Nullable List<BigPlanData> aims) {
+                adapter.setAimsList(aims);
+                if (aims == null) {
+                    newId = 0;
+                } else {
+                    newId = aims.size();
+                }
+            }
+        });
+
+    }
+
+    void initDataThisMonth(Fragment fragment, final BigPlanAdapter adapter) {
+        ThisMonthViewModel thisMonthViewModel = ViewModelProviders.of(fragment).get(ThisMonthViewModel.class);
+        thisMonthViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
+            @Override
+            public void onChanged(@Nullable List<BigPlanData> aims) {
+                adapter.setAimsList(aims);
+                if (aims == null) {
+                    newId = 0;
+                } else {
+                    newId = aims.size();
+                }
+            }
+        });
+
+    }
+
+    void initDataOneDay(Fragment fragment, final BigPlanAdapter adapter) {
+        OneDayViewModel oneDayViewModel = ViewModelProviders.of(fragment).get(OneDayViewModel.class);
+        oneDayViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
+            @Override
+            public void onChanged(@Nullable List<BigPlanData> aims) {
+                adapter.setAimsList(aims);
+                if (aims == null) {
+                    newId = 0;
+                } else {
+                    newId = aims.size();
+                }
+            }
+        });
+
+    }
+
 
     void displayImageFromDB(ImageView view) {
 

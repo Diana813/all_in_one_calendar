@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
     private EventsListHoursAdapter testingListAdapter;

@@ -71,13 +71,16 @@
     <string name="OneTimeEvents">Events</string>
     <string name="LifeAims">Aims</string>
     <string name="lifePurpose">Where would you like to be in 5 years?</string>
-    <string name="fiveYearsPlan">What do you have to do to achieve this?</string>
-    <string name="thisYearsPlan">What do you have to do this year?</string>
-    <string name="thisMonthPlan">What do you have to do this month?</string>
+    <string name="fiveYearsPlan">What will you do to achieve this?</string>
+    <string name="thisYearsPlan">What will you do this year?</string>
+    <string name="thisMonthPlan">What will you do this month?</string>
+    <string name="OneDayPlan">What will you do today?</string>
     <string name="lifeAims">Life aims</string>
     <string name="bigPlan">Big plan</string>
     <string name="thisYear">This year</string>
     <string name="thisMonth">This month</string>
+    <string name="dayPlan">One day plan</string>
+    <string name="tasks">Add your task</string>
 
 
 

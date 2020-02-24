@@ -16,15 +16,15 @@ import androidx.lifecycle.LiveData;
 public class EventsViewModel extends AndroidViewModel {
     private EventsDao eventsDao;
     private LiveData<List<Event>> eventsLiveData;
-    private String pickedDay = CalendarFragment.pickedDay;
 
     public EventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
+        String pickedDay = CalendarFragment.pickedDay;
         eventsLiveData = eventsDao.sortByOrder(pickedDay);
     }
 
-    public LiveData<List<Event>> getEventsList() {
+    LiveData<List<Event>> getEventsList() {
         return eventsLiveData;
     }
 

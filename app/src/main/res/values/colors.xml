@@ -25,4 +25,5 @@
     <color name="eventBackgroundViolet">#d1c4e9</color>
     <color name="eventBackgroundGrey">#eeeeee</color>
     <color name="semiTransparentColor">#90FFFFFF</color>
+    <color name="semiTransparentColorGrey">#98BDBDBD</color>
 </resources>

@@ -100,9 +100,6 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         }
 
         setAimNumbersInDB();
-
-
-
     }
 
     private void showUndoSnackbar() {
@@ -155,7 +152,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         }
     }
 
-    private void setAimNumbersInDB(){
+    private void setAimNumbersInDB() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
         int i = 1;
