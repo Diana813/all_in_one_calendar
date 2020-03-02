@@ -1,16 +1,10 @@
 package com.example.android.flowercalendar.Calendar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -27,11 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.EventsList;
+import com.example.android.flowercalendar.Events.BackgroundActivityEvents;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.Shifts.ShiftsViewModel;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Colors;
@@ -39,7 +30,6 @@ import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.PeriodDataDao;
-import com.example.android.flowercalendar.database.Shift;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
@@ -50,11 +40,8 @@ import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -86,7 +73,6 @@ public class CalendarFragment extends Fragment {
     private RelativeLayout grey;
     private ImageView colorSettingsDownArrow;
     private ImageView shiftsDownArrow;
-    private int clickedOn = 0;
     private BottomLayoutShiftsAdapter shiftsAdapter;
     private Context context;
     private String shiftNumber;
@@ -97,9 +83,14 @@ public class CalendarFragment extends Fragment {
     public static String pickedDay;
     private LocalDate pickedDate;
     private String newShiftNumber;
-    private RelativeLayout backgroundDrawing;
-    String eventsNumber;
-    private int numberOfMonthsSincePeriodStartDate;
+    private LinearLayout backgroundDrawing;
+    private CalendarUtils calendarUtils = new CalendarUtils();
+    private int dayOfMonth;
+    private LocalDate lastMondayOfCurrentMonth;
+    private BottomLayoutsUtils bottomLayoutsUtils = new BottomLayoutsUtils();
+    private CardView bottom_sheet;
+    private LinearLayout shifts_bottom_sheet;
+    private RecyclerView shifts_recycler_view;
 
 
     @Override
@@ -107,7 +98,6 @@ public class CalendarFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
-
     }
 
 
@@ -117,25 +107,25 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Calendar));
 
-        CardView bottom_sheet = rootView.findViewById(R.id.colorSettings);
-        sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
-        sheetBehavior.setHideable(true);
-        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        findViews(rootView);
+        setBottomSheetsBehavior();
+        setBottomLayoutShiftsAdapter();
+        bottomLayoutsUtils.initShiftsData(this, shiftsAdapter);
+        setHasOptionsMenu(true);
+        onGridViewItemClickListener();
+        swipeTheCalendar();
+        deleteShiftFromPickedDate();
+        loadPeriodData();
+        return rootView;
+    }
 
-        LinearLayout shifts_bottom_sheet = rootView.findViewById(R.id.shiftsSettings);
-        shiftsSheetBehavior = BottomSheetBehavior.from(shifts_bottom_sheet);
-        shiftsSheetBehavior.setHideable(true);
-        shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    private void findViews(View rootView) {
 
-        shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
-
-        RecyclerView shifts_recycler_view = rootView.findViewById(R.id.shifts_list_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        shifts_recycler_view.setLayoutManager(layoutManager);
-        shifts_recycler_view.setAdapter(shiftsAdapter);
-
-        initShiftsData();
+        bottom_sheet = rootView.findViewById(R.id.colorSettings);
+        shifts_bottom_sheet = rootView.findViewById(R.id.shiftsSettings);
+        shifts_recycler_view = rootView.findViewById(R.id.shifts_list_recycler);
         red = rootView.findViewById(R.id.red);
         yellow = rootView.findViewById(R.id.yellow);
         green = rootView.findViewById(R.id.green);
@@ -145,39 +135,34 @@ public class CalendarFragment extends Fragment {
         colorSettingsDownArrow = rootView.findViewById(R.id.colorSettingsDownArrow);
         shiftsDownArrow = rootView.findViewById(R.id.shiftsDownArrow);
         backgroundDrawing = rootView.findViewById(R.id.backgroundDrawing);
-
-        setHasOptionsMenu(true);
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Calendar));
         gridView = rootView.findViewById(R.id.gridView);
-        onGridViewItemClickListener();
-        swipeTheCalendar();
-        deleteShiftFromPickedDate();
-
         date = rootView.findViewById(R.id.date);
         previousButton = rootView.findViewById(R.id.calendar_prev_button);
         nextButton = rootView.findViewById(R.id.calendar_next_button);
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
-        loadPeriodData();
-
-
-        return rootView;
     }
 
+    private void setBottomSheetsBehavior() {
 
-    private void initShiftsData() {
-        ShiftsViewModel shiftsViewModel = ViewModelProviders.of(this).get(ShiftsViewModel.class);
-        shiftsViewModel.getShiftsList().observe(this, new Observer<List<Shift>>() {
-            @Override
-            public void onChanged(@Nullable List<Shift> shifts) {
-                shiftsAdapter.setShiftList(shifts);
+        sheetBehavior = BottomSheetBehavior.from(bottom_sheet);
+        sheetBehavior.setHideable(true);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        shiftsSheetBehavior = BottomSheetBehavior.from(shifts_bottom_sheet);
+        shiftsSheetBehavior.setHideable(true);
+        shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
 
-            }
+    private void setBottomLayoutShiftsAdapter() {
 
-        });
+        shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        shifts_recycler_view.setLayoutManager(layoutManager);
+        shifts_recycler_view.setAdapter(shiftsAdapter);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.calendar_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -189,34 +174,23 @@ public class CalendarFragment extends Fragment {
             launchLoginActivity();
             return true;
         }
-        if (item.getItemId() == R.id.settings) {
-            if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            } else {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
-            bottomSheetListener();
+        if (item.getItemId() == R.id.settingsColor) {
+            bottomLayoutsUtils.checkColorLayoutState(sheetBehavior);
+            bottomLayoutsUtils.bottomSheetListener(sheetBehavior, colorSettingsDownArrow, red, yellow, green, blue, violet, grey, context, this);
             return true;
         }
         if (item.getItemId() == R.id.settingShifts) {
-
-            if (shiftsSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            } else {
-                shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
-            shiftsBottomSheetListener();
+            bottomLayoutsUtils.checkShiftsLayoutState(shiftsSheetBehavior);
+            bottomLayoutsUtils.shiftsBottomSheetListener(shiftsSheetBehavior, shiftsDownArrow);
             return true;
-
         }
 
         if (item.getItemId() == R.id.deleteShifts) {
-            showDeleteConfirmationDialog();
+            calendarUtils.showDeleteConfirmationDialog(context, headerDate, date, backgroundDrawing, gridView);
             return true;
         }
 
         if (item.getItemId() == R.id.deleteColors) {
-
             ColorsDao colorsDao = getDatabase(context).colorsDao();
             colorsDao.deleteAll();
             return true;
@@ -225,222 +199,33 @@ public class CalendarFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showDeleteConfirmationDialog() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(R.string.delete_all_dialog_message);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
-                calendarEventsDao.deleteAllShifts(String.valueOf(headerDate.getMonth().getValue()));
-                calendarFill = headerDate;
-                if (periodStartDate != null) {
-                    periodStartDate = previousMonthPeriodStartDate();
-                    periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
-                }
-
-                fillTheCalendar();
-
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-
-    private void bottomSheetListener() {
-
-        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-                        setBlue();
-                        setGreen();
-                        setRed();
-                        setYellow();
-                        setViolet();
-                        setGrey();
-                        hideColorSettings();
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                        break;
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        break;
-                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-
-            }
-        });
-
-
-    }
-
-    private void shiftsBottomSheetListener() {
-        shiftsSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-                        hideShifts();
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                        break;
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        break;
-                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-
-            }
-        });
-    }
-
 
     private void launchLoginActivity() {
         Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
     }
 
-
-    private void setRed() {
-
-        red.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 1;
-                initShiftsData();
-                saveColor();
-            }
-
-        });
-
-
-    }
-
-    private void setYellow() {
-
-        yellow.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 2;
-                initShiftsData();
-                saveColor();
-            }
-        });
-    }
-
-    private void setGreen() {
-
-        green.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 3;
-                initShiftsData();
-                saveColor();
-            }
-        });
-    }
-
-    private void setBlue() {
-
-        blue.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 4;
-                initShiftsData();
-                saveColor();
-            }
-        });
-    }
-
-    private void setViolet() {
-
-        violet.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 5;
-                initShiftsData();
-                saveColor();
-            }
-        });
-    }
-
-    private void setGrey() {
-
-        grey.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                clickedOn = 6;
-                initShiftsData();
-                saveColor();
-            }
-        });
-    }
-
-    private void hideColorSettings() {
-        colorSettingsDownArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-    }
-
-    private void hideShifts() {
-        shiftsDownArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
-        });
-    }
-
-
-    private void fillTheCalendar() {
+    void fillTheCalendar(Context context, TextView date, LinearLayout backgroundDrawing, GridView gridView) {
 
         calendarViewsArrayList = new ArrayList<>();
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), calendarViewsArrayList);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(context, calendarViewsArrayList);
+        displayEmptyEvents();
+        displayHeaderDate(date);
+        displayCalendarWithData();
+        calendarUtils.setBackgroundDrawing(headerDate, backgroundDrawing);
+        gridView.setAdapter(calendarAdapter);
 
+    }
+
+    private void displayEmptyEvents() {
 
         if (event == null) {
             event = "";
         }
+    }
 
-        colorsDao = getDatabase(context).colorsDao();
-        colorToUpdate = colorsDao.findLastColor1();
+    private void displayHeaderDate(TextView date) {
 
-        int colorSettings;
-        if (colorToUpdate == null) {
-            colorSettings = 0;
-        } else {
-            colorSettings = colorToUpdate.getColor_number();
-        }
         //Data wyświetlana w górnym TextView
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
         String todaysDate = calendarFill.format(sdf);
@@ -453,122 +238,142 @@ public class CalendarFragment extends Fragment {
         //Zmienna do przechowywania daty, która wyświetla się w górnym TextView
         //potrzebna do prawidłowego działania buttonów i kolorowania kalendarza
         headerDate = LocalDate.of(year, month, day);
+    }
 
+    private void displayCalendarWithData() {
 
-        //Ustawiam datę na pierwszy dzień aktualnego miesiąca
-        calendarFill = LocalDate.of(year, month, 1);
-
-        //Zmienne potrzebne do prawidłowego wyświetlania zdarzeń cyklicznych w widoku kalendarza
-        LocalDate firstDayOfNextMonth = calendarFill.plusMonths(1);
-        int nextMonthBeginningCell =
-                (firstDayOfNextMonth.getDayOfWeek().getValue()) - 1;
-        LocalDate mondayBeforeFirstDayOfNextMonth
-                = firstDayOfNextMonth.minusDays(nextMonthBeginningCell);
-
-        LocalDate lastDayOfPreviousMonth = calendarFill.minusDays(1);
-        int previousMonthEndCell = lastDayOfPreviousMonth.getDayOfWeek().getValue() - 1;
-        LocalDate mondayBeforeLastDayOfPreviousMonth = lastDayOfPreviousMonth.minusDays(previousMonthEndCell);
-
-
-        //Żeby dane na temat okresu wyświetlały się kiedy rozpocznie się następny miesiąc
-        if (periodStartDate != null) {
-
-
-            if (periodStartDate.getMonth().getValue() < calendarFill.getMonth().getValue()) {
-
-            /*numberOfMonthsSincePeriodStartDate = calendarFill.getMonth().getValue()
-                    - periodStartDate.getMonth().getValue();
-
-            periodStartDate = periodStartDate.plusDays(numberOfMonthsSincePeriodStartDate *
-                    cycleLenght);
-
-            periodFinishDate = periodStartDate.plusDays(periodLenght - 1);*/
-
-
-            }
-        }
-
-
-        //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
-        //poprzez sprawdzenie odpowiadającego mu numeru dnia tygodnia. Odejmuję jeden, bo
-        //poniedziałek ma numer 1, a komórki w ArrayList są naliczane od 0.
-        int monthBeginningCell = (calendarFill.getDayOfWeek().getValue()) - 1;
-
-        //Ustawiam datę na tę, która powinna się znaleźć w pierwszej komórce mojej ArrayList
-        calendarFill = calendarFill.minusDays(monthBeginningCell);
-
-        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
-        EventsDao eventsDao = getDatabase(context).eventsDao();
-
+        calendarFill = setDateAtFirstDayOfAMonth();
+        lastMondayOfCurrentMonth = lastMondayOfCurrentMonth(calendarFill);
+        displayPeriodEveryMonth();
+        calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar();
         //Wypełniam kalendarz
         while (calendarViewsArrayList.size() < DAYS_COUNT) {
 
-            int dayOfMonth = calendarFill.getDayOfMonth();
-
-
-            CalendarEvents calendarEventToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
-            if (calendarEventToAdd == null) {
-                shiftNumber = "";
-                event = "";
-            } else {
-                shiftNumber = calendarEventToAdd.getShiftNumber();
-                if (calendarEventToAdd.getShiftNumber() == null) {
-                    shiftNumber = "";
-                }
-                event = calendarEventToAdd.getEventsNumber();
-                if (calendarEventToAdd.getEventsNumber().equals("0")
-                        || calendarEventToAdd.getEventsNumber() == null) {
-                    event = "";
-                }
-            }
-
+            dayOfMonth = calendarFill.getDayOfMonth();
+            displayEventsAndShiftsIfEmpty();
 
             if (periodStartDate != null) {
-
-                if ((periodStartDate.isEqual(calendarFill) ||
-                        periodFinishDate.isEqual(calendarFill)) ||
-                        (periodStartDate.isBefore(calendarFill) &&
-                                periodFinishDate.isAfter(calendarFill))) {
-
-                    calendarViewsArrayList.add(new CalendarViews(colorSettings, calendarFill, headerDate, periodStartDate,
-                            periodFinishDate, dayOfMonth, shiftNumber,
-                            event, R.mipmap.period_icon_v2));
-
-                    //Kiedy w kalendarzu wypełni się komórka z ostatnim dniem okresu
-                    //trzeba dodać długość cyklu do daty początkowej i do daty końcowej okresu,
-                    //ale tylko pod warunkiem, że ten okres nie powinien wyświetlić się na
-                    //następnej stronie kalendarza. Jeśli musi się wyświetlić, data tego okresu powinna
-                    //zostać taka jak była
-                    if (periodFinishDate.isEqual(calendarFill) &&
-                            periodFinishDate.isBefore(mondayBeforeFirstDayOfNextMonth)) {
-
-                        periodStartDate = periodStartDate.plusDays(cycleLenght);
-                        periodFinishDate = periodFinishDate.plusDays(cycleLenght);
-
-
-                        //TODO Jeżeli następny miesiąc obejmuje dwie linijki w widoku kalendarza,
-                        //a początek okresu występuje w obu tych linijkach, to na następnej stronie
-                        // kalendarza trzeba będzie wyświetlić pierwszy okres z pierwszej z tych
-                        // linijek i do niego dodawać długość cyklu
-                    }
-                } else {
-
-                    calendarViewsArrayList.add(new CalendarViews(colorSettings, calendarFill, headerDate,
-                            dayOfMonth, shiftNumber, event));
-                }
+                displayCalendarWithPeriodData();
 
             } else {
-                calendarViewsArrayList.add(new CalendarViews(colorSettings, calendarFill, headerDate, dayOfMonth, shiftNumber, event));
+                calendarViewsArrayList.add(new CalendarViews(setCalendarColor(), calendarFill, headerDate, dayOfMonth, shiftNumber, event));
             }
 
 
             calendarFill = calendarFill.plusDays(1);
         }
 
+    }
 
-        setBackgroundDrawing();
+    private LocalDate setDateAtFirstDayOfAMonth() {
 
-        gridView.setAdapter(calendarAdapter);
+        int year = calendarFill.getYear();
+        Month month = calendarFill.getMonth();
+
+        //Ustawiam datę na pierwszy dzień aktualnego miesiąca
+        calendarFill = LocalDate.of(year, month, 1);
+
+        return calendarFill;
+    }
+
+    private LocalDate lastMondayOfCurrentMonth(LocalDate localeDate) {
+
+        LocalDate firstDayOfNextMonth = localeDate.plusMonths(1);
+        int nextMonthBeginningCell =
+                (firstDayOfNextMonth.getDayOfWeek().getValue()) - 1;
+        return firstDayOfNextMonth.minusDays(nextMonthBeginningCell);
+    }
+
+
+    private void displayPeriodEveryMonth() {
+
+        //Żeby dane na temat okresu wyświetlały się kiedy rozpocznie się następny miesiąc
+        if (periodStartDate != null) {
+            for (int i = 0; i < 1000; i++) {
+                calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar();
+                if (periodFinishDate.isBefore(calendarFill)) {
+                    periodStartDate = periodStartDate.plusDays(cycleLenght);
+                    periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
+                }
+                if (periodFinishDate.isEqual(calendarFill) || periodFinishDate.isAfter(calendarFill)) {
+                    break;
+                }
+            }
+        }
+
+    }
+
+    private LocalDate findWhatDateIsInTheFirstCellOfTheCalendar() {
+
+        //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
+        //poprzez sprawdzenie odpowiadającego mu numeru dnia tygodnia. Odejmuję jeden, bo
+        //poniedziałek ma numer 1, a komórki w ArrayList są naliczane od 0.
+        int monthBeginningCell = (calendarFill.getDayOfWeek().getValue()) - 1;
+        //Ustawiam datę na tę, która powinna się znaleźć w pierwszej komórce mojej ArrayList
+        calendarFill = calendarFill.minusDays(monthBeginningCell);
+        return calendarFill;
+    }
+
+    private void displayEventsAndShiftsIfEmpty() {
+
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+        EventsDao eventsDao = getDatabase(context).eventsDao();
+        CalendarEvents calendarEventToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
+        if (calendarEventToAdd == null) {
+            shiftNumber = "";
+            event = "";
+        } else {
+            shiftNumber = calendarEventToAdd.getShiftNumber();
+            if (calendarEventToAdd.getShiftNumber() == null) {
+                shiftNumber = "";
+            }
+            event = calendarEventToAdd.getEventsNumber();
+            if (calendarEventToAdd.getEventsNumber().equals("0")
+                    || calendarEventToAdd.getEventsNumber() == null) {
+                event = "";
+            }
+        }
+    }
+
+    private void displayCalendarWithPeriodData() {
+
+        if ((periodStartDate.isEqual(calendarFill) ||
+                periodFinishDate.isEqual(calendarFill)) ||
+                (periodStartDate.isBefore(calendarFill) &&
+                        periodFinishDate.isAfter(calendarFill))) {
+
+            calendarViewsArrayList.add(new CalendarViews(setCalendarColor(),
+                    calendarFill,
+                    headerDate,
+                    periodStartDate,
+                    periodFinishDate,
+                    dayOfMonth,
+                    shiftNumber,
+                    event,
+                    R.mipmap.period_icon_v2));
+
+            //Kiedy w kalendarzu wypełni się komórka z ostatnim dniem okresu
+            //trzeba dodać długość cyklu do daty początkowej i do daty końcowej okresu,
+            //ale tylko pod warunkiem, że ten okres nie powinien wyświetlić się na
+            //następnej stronie kalendarza. Jeśli musi się wyświetlić, data tego okresu powinna
+            //zostać taka jak była
+            if (periodFinishDate.isEqual(calendarFill) &&
+                    periodFinishDate.isBefore(lastMondayOfCurrentMonth)) {
+
+                periodStartDate = periodStartDate.plusDays(cycleLenght);
+                periodFinishDate = periodFinishDate.plusDays(cycleLenght);
+
+
+                //TODO Jeżeli następny miesiąc obejmuje dwie linijki w widoku kalendarza,
+                //a początek okresu występuje w obu tych linijkach, to na następnej stronie
+                // kalendarza trzeba będzie wyświetlić pierwszy okres z pierwszej z tych
+                // linijek i do niego dodawać długość cyklu
+            }
+        } else {
+
+            calendarViewsArrayList.add(new CalendarViews(setCalendarColor(), calendarFill, headerDate,
+                    dayOfMonth, shiftNumber, event));
+        }
 
     }
 
@@ -626,7 +431,7 @@ public class CalendarFragment extends Fragment {
                     pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
                     pickedDay = String.valueOf(pickedDate);
 
-                    EventsList eventsList = new EventsList();
+                    BackgroundActivityEvents eventsList = new BackgroundActivityEvents();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
                     eventsList.setArguments(args);
@@ -716,7 +521,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                flipAnimation();
+                calendarUtils.flipAnimation(calendarCardView);
                 //Odejmowanie miesiąca
                 calendarFill = headerDate.minusMonths(1);
 
@@ -728,7 +533,7 @@ public class CalendarFragment extends Fragment {
                 }
 
                 //TODO prawidłowe wyświetlanie zdarzeń z poprzedniego miesiąca
-                fillTheCalendar();
+                fillTheCalendar(context, date, backgroundDrawing, gridView);
             }
         });
     }
@@ -765,9 +570,9 @@ public class CalendarFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flipAnimation();
+                calendarUtils.flipAnimation(calendarCardView);
                 calendarFill = headerDate.plusMonths(1);
-                fillTheCalendar();
+                fillTheCalendar(context, date, backgroundDrawing, gridView);
 
             }
         });
@@ -783,27 +588,20 @@ public class CalendarFragment extends Fragment {
 
             public void onSwipeRight() {
 
-                flipAnimation();
+                calendarUtils.flipAnimation(calendarCardView);
                 calendarFill = headerDate.plusMonths(1);
-                fillTheCalendar();
+                fillTheCalendar(context, date, backgroundDrawing, gridView);
 
             }
 
             public void onSwipeLeft() {
 
-                flipAnimation();
+                calendarUtils.flipAnimation(calendarCardView);
                 //Odejmowanie miesiąca
                 calendarFill = headerDate.minusMonths(1);
-
-                if (periodStartDate != null) {
-
-                    periodStartDate = previousMonthPeriodStartDate();
-                    periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
-
-                }
-
+                displayPrewiousMonthPeriod();
                 //TODO prawidłowe wyświetlanie zdarzeń z poprzedniego miesiąca
-                fillTheCalendar();
+                fillTheCalendar(context, date, backgroundDrawing, gridView);
 
 
             }
@@ -814,21 +612,13 @@ public class CalendarFragment extends Fragment {
         });
     }
 
-    //Animacja obrotu kalendarza
-    private void flipAnimation() {
+    private void displayPrewiousMonthPeriod() {
+        if (periodStartDate != null) {
 
-        final ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 1f, 0f);
-        final ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 0f, 1f);
-        objectAnimator.setInterpolator(new DecelerateInterpolator());
-        objectAnimator2.setInterpolator(new AccelerateDecelerateInterpolator());
-        objectAnimator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                objectAnimator2.start();
-            }
-        });
-        objectAnimator.start();
+            periodStartDate = previousMonthPeriodStartDate();
+            periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
+
+        }
     }
 
 
@@ -850,7 +640,7 @@ public class CalendarFragment extends Fragment {
             cycleLenght = periodDataDao.findLastPeriod().getCycleLength();
             periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
 
-            fillTheCalendar();
+            fillTheCalendar(context, date, backgroundDrawing, gridView);
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
 
@@ -858,15 +648,13 @@ public class CalendarFragment extends Fragment {
 
             periodStartDate = null;
             periodFinishDate = null;
-            fillTheCalendar();
+            fillTheCalendar(context, date, backgroundDrawing, gridView);
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
         }
-
-
     }
 
-    private void saveColor() {
+    void saveColor(int clickedOn) {
 
         colorsDao = getDatabase(context).colorsDao();
         colorToUpdate = colorsDao.findLastColor1();
@@ -888,24 +676,29 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private void setBackgroundDrawing() {
+    void deleteAllShifts(LocalDate date) {
 
-        Month currentMonth = headerDate.getMonth();
-
-        if (currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
-                currentMonth.equals(Month.FEBRUARY)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.klonzima);
-        } else if (currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
-                currentMonth.equals(Month.MAY)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.klonwiosna);
-        } else if (currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
-                currentMonth.equals(Month.AUGUST)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.klonlato);
-        } else if (currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
-                currentMonth.equals(Month.NOVEMBER)) {
-            backgroundDrawing.setBackgroundResource(R.mipmap.klonjesien);
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+        calendarEventsDao.deleteAllShifts(String.valueOf(date.getMonth().getValue()));
+        calendarFill = date;
+        if (periodStartDate != null) {
+            periodStartDate = previousMonthPeriodStartDate();
+            periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
         }
+    }
 
+    private int setCalendarColor() {
+
+        colorsDao = getDatabase(context).colorsDao();
+        colorToUpdate = colorsDao.findLastColor1();
+
+        int colorSettings;
+        if (colorToUpdate == null) {
+            colorSettings = 0;
+        } else {
+            colorSettings = colorToUpdate.getColor_number();
+        }
+        return colorSettings;
     }
 
 }

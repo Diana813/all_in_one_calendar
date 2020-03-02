@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.PersonalGrowth;
+package com.example.android.flowercalendar.Events;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,9 +16,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class BackgroundActivity extends Fragment {
+public class BackgroundActivityEvents extends Fragment {
 
-    public BackgroundActivity() {
+    public BackgroundActivityEvents() {
         // Required empty public constructor
     }
 
@@ -32,10 +32,10 @@ public class BackgroundActivity extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.background_viewpager, container, false);
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.events));
 
         // Create an adapter that knows which fragment should be shown on each page
-        LifeAimsAdapter adapter = new LifeAimsAdapter(getContext(), getChildFragmentManager()) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager()) {
         };
 
 
@@ -50,8 +50,4 @@ public class BackgroundActivity extends Fragment {
         return rootView;
 
     }
-
-
-
 }
-

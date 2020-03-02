@@ -26,18 +26,17 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     private TextView shiftNumberTextView;
     private TextView eventNameTextView;
     private RelativeLayout layout;
-    private RelativeLayout singleItem;
     private LocalDate calendarFill;
     private LocalDate headerDate;
     private int month;
     private int year;
     private DayOfWeek headerDateDayOfWeek;
-
+    private Context context;
 
 
     CalendarAdapter(Context context, ArrayList<CalendarViews> calendarViews) {
         super(context, 0, calendarViews);
-
+        this.context = context;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -60,7 +59,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         eventNameTextView = (TextView) gridItemView.findViewById(R.id.eventName);
         ImageView periodImage = (ImageView) gridItemView.findViewById(R.id.periodImage);
         layout = (RelativeLayout) gridItemView.findViewById(R.id.singleItem);
-        singleItem = (RelativeLayout) gridItemView.findViewById(R.id.singleItemLayout);
         assert views != null;
         calendarFill = views.getmCalendarFill();
         headerDate = views.getmHeaderDate();
@@ -69,19 +67,54 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         headerDateDayOfWeek = calendarFill.getDayOfWeek();
 
         if (views.getmColorSettings() == 1) {
-            setRed();
+            setCalendarColor(R.drawable.weekend_frame,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend,
+                    R.drawable.frame_for_other_months_weekend);
         } else if (views.getmColorSettings() == 2) {
-            setYellow();
+            setCalendarColor(R.drawable.weekend_frame_yellow,
+                    Color.parseColor("#b71c1c"),
+                    Color.parseColor("#000000"),
+                    Color.parseColor("#b71c1c"),
+                    R.drawable.frame_for_current_day_at_weekend_yellow,
+                    R.drawable.frame_for_other_months_weekend_yellow);
         } else if (views.getmColorSettings() == 3) {
-            setGreen();
+            setCalendarColor(R.drawable.weekend_frame_green,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend_green,
+                    R.drawable.frame_for_other_months_weekend_green);
         } else if ((views.getmColorSettings() == 4)) {
-            setBlue();
+            setCalendarColor(R.drawable.weekend_frame_blue,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend_blue,
+                    R.drawable.frame_for_other_months_weekend_blue);
         } else if ((views.getmColorSettings() == 5)) {
-            setViolet();
+            setCalendarColor(R.drawable.weekend_frame_violet,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend_violet,
+                    R.drawable.frame_for_other_months_weekend_violet);
         } else if ((views.getmColorSettings() == 6)) {
-            setGrey();
+            setCalendarColor(R.drawable.weekend_frame_grey,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend_grey,
+                    R.drawable.frame_for_other_months_weekend_grey);
         } else {
-            setRed();
+            setCalendarColor(R.drawable.weekend_frame,
+                    Color.BLACK,
+                    Color.parseColor("#000000"),
+                    Color.BLACK,
+                    R.drawable.frame_for_current_day_at_weekend,
+                    R.drawable.frame_for_other_months_weekend);
         }
 
         if (views.hasPeriod()) {
@@ -112,22 +145,22 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     }
 
 
-    private void setRed() {
+    private void setCalendarColor(int backgroundResourceForWeekend, int textColorForWeekendShift, int textColorForCurrentDayNum, int texColorForShiftCurrentDay, int backgroundForCurrentDayWeekend, int backgroundForOtherMonthWeekend) {
 
         //Kolory kalendarza w zależności od dnia tygodnia
         if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame);
+            layout.setBackgroundResource(backgroundResourceForWeekend);
             weekend();
-            shiftNumberTextView.setTextColor(Color.BLACK);
+            shiftNumberTextView.setTextColor(textColorForWeekendShift);
         }
 
         //Wyróżnienie dziesiejszej daty
         if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
+            dayNumberTextView.setTextColor(textColorForCurrentDayNum);
             layout.setBackgroundResource(R.drawable.frame2);
-            shiftNumberTextView.setTextColor(Color.BLACK);
+            shiftNumberTextView.setTextColor(texColorForShiftCurrentDay);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend);
+                layout.setBackgroundResource(backgroundForCurrentDayWeekend);
                 todaysDateAtWeekend();
             }
         }
@@ -138,201 +171,27 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend);
+                layout.setBackgroundResource(backgroundForOtherMonthWeekend);
                 weekend();
                 shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
 
             }
-        }else{
+        } else {
             shiftNumberTextView.setTextColor(Color.BLACK);
         }
     }
 
 
-    private void setYellow() {
-
-        //Kolory kalendarza w zależności od dnia tygodnia
-        if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame_yellow);
-            weekend();
-            eventNameTextView.setTextColor(Color.parseColor("#b71c1c"));
-        }
-
-        //Wyróżnienie dziesiejszej daty
-        if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-            layout.setBackgroundResource(R.drawable.frame2);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_yellow);
-                todaysDateAtWeekend();
-                eventNameTextView.setTextColor(Color.parseColor("#b71c1c"));
-            }
-        }
-
-        //Wyróżnienie aktualnego miesiąca
-        if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
-            dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_yellow);
-                weekend();
-                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-                dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-
-            }
-        }else{
-            shiftNumberTextView.setTextColor(Color.BLACK);
-        }
+    @NonNull
+    @Override
+    public Context getContext() {
+        return context;
     }
 
-
-    private void setGreen() {
-
-        //Kolory kalendarza w zależności od dnia tygodnia
-        if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame_green);
-            weekend();
-        }
-
-        //Wyróżnienie dziesiejszej daty
-        if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-            layout.setBackgroundResource(R.drawable.frame2);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_green);
-                todaysDateAtWeekend();
-            }
-        }
-
-        //Wyróżnienie aktualnego miesiąca
-        if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
-            dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_green);
-                weekend();
-                dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-
-
-            }
-        }else{
-            shiftNumberTextView.setTextColor(Color.BLACK);
-        }
+    public void setContext(Context context) {
+        this.context = context;
     }
-
-
-    private void setBlue() {
-
-        //Kolory kalendarza w zależności od dnia tygodnia
-        if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame_blue);
-            weekend();
-        }
-
-        //Wyróżnienie dziesiejszej daty
-        if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-            layout.setBackgroundResource(R.drawable.frame2);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_blue);
-                todaysDateAtWeekend();
-            }
-        }
-
-        //Wyróżnienie aktualnego miesiąca
-        if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
-            dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_blue);
-                weekend();
-                dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-
-            }
-        }else{
-            shiftNumberTextView.setTextColor(Color.BLACK);
-        }
-    }
-
-    private void setViolet() {
-
-        //Kolory kalendarza w zależności od dnia tygodnia
-        if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame_violet);
-            weekend();
-        }
-
-        //Wyróżnienie dziesiejszej daty
-        if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-            layout.setBackgroundResource(R.drawable.frame2);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_violet);
-                todaysDateAtWeekend();
-            }
-        }
-
-        //Wyróżnienie aktualnego miesiąca
-        if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
-            dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_violet);
-                weekend();
-                dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-
-
-            }
-        }else{
-            shiftNumberTextView.setTextColor(Color.BLACK);
-        }
-    }
-
-    private void setGrey() {
-
-        //Kolory kalendarza w zależności od dnia tygodnia
-        if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(R.drawable.weekend_frame_grey);
-            weekend();
-        }
-
-        //Wyróżnienie dziesiejszej daty
-        if (headerDate.isEqual(calendarFill)) {
-            dayNumberTextView.setTextColor(Color.parseColor("#000000"));
-            layout.setBackgroundResource(R.drawable.frame2);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend_grey);
-                todaysDateAtWeekend();
-            }
-        }
-
-        //Wyróżnienie aktualnego miesiąca
-        if (month != calendarFill.getMonth().getValue() || year != calendarFill.getYear()) {
-            dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-            layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
-            if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend_grey);
-                weekend();
-                dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-                shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
-
-
-            }
-        }else{
-            shiftNumberTextView.setTextColor(Color.BLACK);
-        }
-    }
-
-
 }
 
 

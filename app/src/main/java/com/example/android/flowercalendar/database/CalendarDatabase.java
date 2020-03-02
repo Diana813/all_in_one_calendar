@@ -13,7 +13,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 6)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 7)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -85,7 +85,6 @@ public abstract class CalendarDatabase extends RoomDatabase {
             periodDataDao.deleteAll();
             eventsDao.deleteAll();
             imagePathDao.deleteAll();
-            bigPlanDao.deleteAll();
             return null;
         }
     }

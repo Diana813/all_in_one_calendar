@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.Events;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EventsListHoursAdapter extends RecyclerView.Adapter<EventsListHoursAdapter.EventsViewHolder> {
 
+    @SuppressLint("StaticFieldLeak")
     private static Context context;
     private final LayoutInflater layoutInflater;
     private List<Hours> eventsList;

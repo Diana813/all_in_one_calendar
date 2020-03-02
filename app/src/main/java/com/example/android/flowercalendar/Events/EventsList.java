@@ -35,8 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class EventsList extends Fragment {
 
     private FloatingActionButton fab;
-    private EventsListAdapter eventsListAdapter;
-    private FrequentActivitiesListAdapter frequentActivitiesListAdapter;
+    private CyclicalEventsListAdapter cyclicalEventsListAdapter;
+    private FrequentActivitiesDrawerListAdapter frequentActivitiesDrawerListAdapter;
     private EventsListHoursAdapter eventsListHoursAdapter;
     private Context context;
     static int newId;
@@ -45,8 +45,7 @@ public class EventsList extends Fragment {
     private String shiftStart;
     private int shiftLength;
     private DrawerLayout mDrawer;
-    private RecyclerView hoursListRecyclerView;
-    private ArrayList listOfHours;
+    private int layout;
 
 
     public EventsList() {
@@ -57,13 +56,18 @@ public class EventsList extends Fragment {
         return new EventsList();
     }
 
+    public void setContent(int layout) {
+        this.layout = layout;
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        eventsListAdapter = new EventsListAdapter(context, context);
-        frequentActivitiesListAdapter = new FrequentActivitiesListAdapter(context, context);
+        cyclicalEventsListAdapter = new CyclicalEventsListAdapter(context, context);
+        frequentActivitiesDrawerListAdapter = new FrequentActivitiesDrawerListAdapter(context, context);
         eventsListHoursAdapter = new EventsListHoursAdapter(context, context);
+        FrequentActivitiesListAdapter frequentActivitiesListAdapter = new FrequentActivitiesListAdapter(context, context);
     }
 
 
@@ -76,8 +80,8 @@ public class EventsList extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        eventsListAdapter.setIndexInDatabase();
-        eventsListAdapter.deleteFromDatabase();
+        cyclicalEventsListAdapter.setIndexInDatabase();
+        cyclicalEventsListAdapter.deleteFromDatabase();
     }
 
 
@@ -85,22 +89,22 @@ public class EventsList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.activity_expanded_day_view, container, false);
+        View rootView = inflater.inflate(layout, container, false);
 
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.OneTimeEvents));
         fab = rootView.findViewById(R.id.fab);
         RecyclerView listView = rootView.findViewById(R.id.listView);
-        listView.setAdapter(frequentActivitiesListAdapter);
+        listView.setAdapter(frequentActivitiesDrawerListAdapter);
         listView.setLayoutManager(new LinearLayoutManager(context));
 
         RecyclerView recyclerView = rootView.findViewById(R.id.list_of_events);
-        recyclerView.setAdapter(eventsListAdapter);
+        recyclerView.setAdapter(cyclicalEventsListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         ItemTouchHelper itemTouchHelper = new
-                ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
+                ItemTouchHelper(new GestureInteractionsRecyclerView(cyclicalEventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        hoursListRecyclerView = rootView.findViewById(R.id.list_of_hours);
+        RecyclerView hoursListRecyclerView = rootView.findViewById(R.id.list_of_hours);
         hoursListRecyclerView.setAdapter(eventsListHoursAdapter);
         hoursListRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         ItemTouchHelper itemTouchHelperHours = new
@@ -113,9 +117,12 @@ public class EventsList extends Fragment {
 
 
         assert getArguments() != null;
-        pickedDay = getArguments().getString("pickedDay");
-        TextView date = rootView.findViewById(R.id.expandedDayDate);
-        date.setText(pickedDay);
+        if(pickedDay != null){
+            pickedDay = getArguments().getString("pickedDay");
+            TextView date = rootView.findViewById(R.id.expandedDayDate);
+            date.setText(pickedDay);
+        }
+
         onFabClick();
         initData();
         addFreqActivList();
@@ -155,7 +162,7 @@ public class EventsList extends Fragment {
                 args.putString("pickedDay", pickedDay);
                 oneTimeEvents.setArguments(args);
                 assert getFragmentManager() != null;
-                getFragmentManager().beginTransaction().replace(R.id.flContent, oneTimeEvents).commit();
+                getFragmentManager().beginTransaction().replace(R.id.background_layout, oneTimeEvents).commit();
             }
         });
     }
@@ -167,7 +174,7 @@ public class EventsList extends Fragment {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 assert events != null;
-                eventsListAdapter.setEventsList(events);
+                cyclicalEventsListAdapter.setEventsList(events);
                 newId = events.size();
 
             }
@@ -176,19 +183,19 @@ public class EventsList extends Fragment {
 
     private void addFreqActivList() {
 
-        FrequentActivitiesViewModel eventsViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
-        eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+       FrequentActivitiesViewModel frequentActivitiesViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
+        frequentActivitiesViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 assert events != null;
-                frequentActivitiesListAdapter.setEventsList(events);
+                frequentActivitiesDrawerListAdapter.setEventsList(events);
             }
         });
     }
 
     private void addHoursList() {
 
-        listOfHours = new ArrayList<String>();
+        ArrayList listOfHours = new ArrayList<String>();
         while(listOfHours.size() < 24) {
             listOfHours.add(new Hours("00:00", null));
         }

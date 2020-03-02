@@ -174,12 +174,12 @@ public class OneTimeEvents extends Fragment {
                     assert getFragmentManager() != null;
                     getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).commit();
                 }else{
-                    FrequentActivities frequentActivities = new FrequentActivities();
+                    CyclicalEvents cyclicalEvents = new CyclicalEvents();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
-                    frequentActivities.setArguments(args);
+                    cyclicalEvents.setArguments(args);
                     assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.flContent, frequentActivities).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEvents).commit();
 
                 }
 
@@ -257,7 +257,7 @@ public class OneTimeEvents extends Fragment {
             }
         } else {
 
-            eventsDao.insert(new Event(newId, newEventName, newEventStart, newAlarm, newEventLength, pickedDay));
+            eventsDao.insert(new Event(newId, newEventName, newEventStart, newAlarm, newEventLength, pickedDay, 0));
 
         }
     }

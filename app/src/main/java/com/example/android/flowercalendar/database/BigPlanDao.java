@@ -27,8 +27,8 @@ public interface BigPlanDao {
     @Query("UPDATE big_plan_data SET aimNumber = :aimNumber")
     void updateAimNumber(String aimNumber);
 
-    @Query("DELETE FROM big_plan_data")
-    void deleteAll();
+    @Query("DELETE FROM big_plan_data WHERE aimTime = :aimTime")
+    void deleteAll(int aimTime);
 
     @Query("SELECT * FROM big_plan_data")
     LiveData<List<BigPlanData>> getAllBigPlanData();
@@ -41,4 +41,5 @@ public interface BigPlanDao {
 
     @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime")
     LiveData<List<BigPlanData>> findByAimTime(int aimTime);
+
 }

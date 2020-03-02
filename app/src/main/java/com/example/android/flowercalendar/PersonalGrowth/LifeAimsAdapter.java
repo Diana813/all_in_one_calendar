@@ -17,7 +17,7 @@ public class LifeAimsAdapter extends FragmentPagerAdapter {
     LifeAimsAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-        layouts = new int[]{R.layout.activity_life_aims, R.layout.big_plan, R.layout.big_plan, R.layout.big_plan,R.layout.big_plan};
+        layouts = new int[]{R.layout.activity_life_aims, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout,R.layout.personal_growth_plans_layout};
     }
 
 

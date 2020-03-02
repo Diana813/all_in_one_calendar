@@ -8,16 +8,10 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/calendarLayout"
+        android:id="@+id/backgroundDrawing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
-        <RelativeLayout
-            android:id="@+id/backgroundDrawing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/dateView"
@@ -34,7 +28,8 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="60dp"
-                    android:src="@drawable/baseline_keyboard_arrow_left_black_48" />
+                    android:src="@drawable/baseline_keyboard_arrow_left_black_48"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/date"
@@ -56,7 +51,6 @@
                 android:id="@+id/calendarCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/dateView"
                 android:layout_margin="12dp"
                 android:elevation="20dp"
                 card_view:cardElevation="30dp">
@@ -140,13 +134,42 @@
                     </GridView>
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
-        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:orientation="horizontal"
+            android:background="#98FFFFFF"
+            android:layout_margin="5dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="@string/weather"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:gravity="center_vertical">
+            </TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                tools:text="29 degrees, sunny"
+                android:textColor="#000"
+                android:textSize="25sp"
+                android:gravity="center_vertical">
+            </TextView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <include layout="@layout/color_settings" />
 
+    <include layout="@layout/color_settings" />
     <include layout="@layout/shifts_setting_bottom_sheet" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

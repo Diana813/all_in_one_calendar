@@ -8,18 +8,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.BigPlanData;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OneDayPlan extends Fragment {
@@ -27,7 +33,9 @@ public class OneDayPlan extends Fragment {
     private int layout;
     private BigPlanAdapter adapter;
     private Context context;
-    private PersonalGrowthUtils personalGrowthUtils = new PersonalGrowthUtils();
+    private AppUtils appUtils = new AppUtils();
+    private int newId;
+
 
     public OneDayPlan() {
         // Required empty public constructor
@@ -55,7 +63,7 @@ public class OneDayPlan extends Fragment {
         super.onDestroyView();
         adapter.setIndexInDatabase();
         adapter.deleteFromDatabase();
-        personalGrowthUtils.hideKeyboard(getView());
+        appUtils.hideKeyboard(getView());
     }
 
     @Override
@@ -85,12 +93,18 @@ public class OneDayPlan extends Fragment {
         question.setText(R.string.OneDayPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
 
+        CheckBox today = rootView.findViewById(R.id.checkboxToday);
+        CheckBox tomorrow = rootView.findViewById(R.id.checkboxTomorrow);
+
+        today.setVisibility(View.VISIBLE);
+        tomorrow.setVisibility(View.VISIBLE);
+
         setHasOptionsMenu(true);
-        personalGrowthUtils.displayImageFromDB(imageView);
-        personalGrowthUtils.setRecyclerView(recyclerView,adapter,context);
-        personalGrowthUtils.setItemTouchHelper(adapter, recyclerView);
-        personalGrowthUtils.initDataOneDay(this,adapter);
-        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText, 4);
+        appUtils.displayImageFromDB(imageView);
+        appUtils.setRecyclerViewPersonalGrowth(recyclerView,adapter,context);
+        appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
+        initData(this,adapter);
+        appUtils.setConfirmButton(confirm,adapter,aimText, 4, newId);
         return rootView;
     }
 
@@ -104,11 +118,22 @@ public class OneDayPlan extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_delete_all_entries) {
-            personalGrowthUtils.showDeleteConfirmationDialog();
+            appUtils.showDeleteConfirmationDialog(4);
             return true;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initData(Fragment fragment, final BigPlanAdapter adapter) {
+        OneDayViewModel oneDayViewModel = ViewModelProviders.of(fragment).get(OneDayViewModel.class);
+        oneDayViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
+            @Override
+            public void onChanged(@Nullable List<BigPlanData> aims) {
+                adapter.setAimsList(aims);
+            }
+        });
+
     }
 
 

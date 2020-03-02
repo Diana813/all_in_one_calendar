@@ -33,6 +33,30 @@
                 android:textSize="25sp"
                 tools:text="@string/fiveYearsPlan" />
 
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkboxToday"
+                android:text="@string/today"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp">
+
+            </CheckBox>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkboxTomorrow"
+                android:text="@string/tomorrow"
+                android:textColor="@color/colorWhite"
+                android:layout_marginStart="10dp"
+                android:visibility="gone"
+                android:textSize="20sp">
+
+            </CheckBox>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/aimsList"
                 android:layout_width="match_parent"

@@ -40,7 +40,7 @@ public class ThisMonthViewModel extends AndroidViewModel {
     }
 
     public void deleteAll() {
-        bigPlanDao.deleteAll();
+        bigPlanDao.deleteAll(3);
     }
 
 }

@@ -13,13 +13,18 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.BigPlanData;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ThisMonthPlan extends Fragment {
@@ -27,7 +32,8 @@ public class ThisMonthPlan extends Fragment {
     private int layout;
     private BigPlanAdapter adapter;
     private Context context;
-    private PersonalGrowthUtils personalGrowthUtils = new PersonalGrowthUtils();
+    private AppUtils appUtils = new AppUtils();
+    private int newId;
 
     public ThisMonthPlan() {
         // Required empty public constructor
@@ -55,7 +61,7 @@ public class ThisMonthPlan extends Fragment {
         super.onDestroyView();
         adapter.setIndexInDatabase();
         adapter.deleteFromDatabase();
-        personalGrowthUtils.hideKeyboard(getView());
+        appUtils.hideKeyboard(getView());
     }
 
     @Override
@@ -86,11 +92,12 @@ public class ThisMonthPlan extends Fragment {
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
 
         setHasOptionsMenu(true);
-        personalGrowthUtils.displayImageFromDB(imageView);
-        personalGrowthUtils.setRecyclerView(recyclerView,adapter,context);
-        personalGrowthUtils.setItemTouchHelper(adapter, recyclerView);
-        personalGrowthUtils.initDataThisMonth(this,adapter);
-        personalGrowthUtils.setConfirmButton(confirm,adapter,aimText, 3);
+        appUtils.displayImageFromDB(imageView);
+        appUtils.setRecyclerViewPersonalGrowth(recyclerView,adapter,context);
+        appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
+        initData(this,adapter);
+        appUtils.setConfirmButton(confirm,adapter,aimText, 3, newId);
+
         return rootView;
     }
 
@@ -104,13 +111,28 @@ public class ThisMonthPlan extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_delete_all_entries) {
-            personalGrowthUtils.showDeleteConfirmationDialog();
+            appUtils.showDeleteConfirmationDialog(3);
             return true;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void initData(Fragment fragment, final BigPlanAdapter adapter) {
+        ThisMonthViewModel thisMonthViewModel = ViewModelProviders.of(fragment).get(ThisMonthViewModel.class);
+        thisMonthViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
+            @Override
+            public void onChanged(@Nullable List<BigPlanData> aims) {
+                adapter.setAimsList(aims);
+                if (aims == null) {
+                    newId = 0;
+                } else {
+                    newId = aims.size();
+                }
+            }
+        });
+
+    }
 
 }
 

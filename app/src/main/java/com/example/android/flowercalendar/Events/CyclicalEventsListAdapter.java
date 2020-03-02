@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.Events;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.CalendarEvents;
-import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Colors;
 import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
-import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -33,7 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
-public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.EventsViewHolder> {
+public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEventsListAdapter.EventsViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
@@ -51,9 +45,9 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
     private String shiftStart;
 
 
-    EventsListAdapter(Context requireNonNull, Context context) {
+    CyclicalEventsListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        EventsListAdapter.context = context;
+        CyclicalEventsListAdapter.context = context;
 
     }
 
@@ -138,27 +132,27 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
         if(colorToUpdate == null){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.red));
+                    .getColor(R.color.lightRed));
         }else if(colorToUpdate.getColor_number() == 1){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.red));
+                    .getColor(R.color.lightRed));
         }else if(colorToUpdate.getColor_number() == 2){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.yellow));
+                    .getColor(R.color.lightYellow));
             holder.eventName.setTextColor(getContext().getResources().getColor(R.color.grey));
             holder.eventSchedule.setTextColor(getContext().getResources().getColor(R.color.grey));
         }else if(colorToUpdate.getColor_number() == 3){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.green));
+                    .getColor(R.color.lightGreen));
         }else if(colorToUpdate.getColor_number() == 4){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.blue));
+                    .getColor(R.color.lightBlue));
         }else if(colorToUpdate.getColor_number() == 5){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.violet));
+                    .getColor(R.color.lightViolet));
         }else if(colorToUpdate.getColor_number() == 6){
             holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.grey));
+                    .getColor(R.color.lightGrey));
         }
 
     }
@@ -227,7 +221,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
 
     }
 
-    void setIndexInDatabase() {
+    public void setIndexInDatabase() {
         EventsDao eventsDao = getDatabase(context).eventsDao();
         for (Event event : eventsList) {
             event.setPosition(eventsList.indexOf(event));
@@ -252,10 +246,11 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Ev
         private TextView eventAlarm;
         private LinearLayout listOfItems;
 
+
         EventsViewHolder(View itemView) {
             super(itemView);
             eventName = itemView.findViewById(R.id.event);
-            eventSchedule = itemView.findViewById(R.id.event_schedule);
+            eventSchedule = itemView.findViewById(R.id.eventNumber);
             //eventAlarm = itemView.findViewById(R.id.event_alarm);
             listOfItems = itemView.findViewById(R.id.list_of_items);
 

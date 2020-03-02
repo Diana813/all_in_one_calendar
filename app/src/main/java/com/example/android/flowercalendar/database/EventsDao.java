@@ -36,6 +36,9 @@ public interface EventsDao {
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay")
     List<Event> findByEventDate(String pickedDay);
 
+    @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY position ASC")
+    LiveData<List<Event>> findByEventKind(int eventKind);
+
     @Query("DELETE FROM event WHERE event_name = 'abrakadabra'")
     void deleteRemovedEvents();
 

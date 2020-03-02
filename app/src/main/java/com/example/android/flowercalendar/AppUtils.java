@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.PersonalGrowth;
+package com.example.android.flowercalendar;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,25 +12,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
-import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.Events.FrequentActivitiesListAdapter;
+import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,18 +35,16 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
-class PersonalGrowthUtils {
+public class AppUtils {
 
-    private int newId;
-
-    void setRecyclerView(RecyclerView recyclerView, BigPlanAdapter adapter, Context context){
+    public void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context){
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
     }
 
-    void setItemTouchHelper(BigPlanAdapter adapter, RecyclerView recyclerView){
+    public void setItemTouchHelperPersonalGrowth(BigPlanAdapter adapter, RecyclerView recyclerView){
 
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new GestureInteractionsRecyclerView(adapter));
@@ -59,14 +53,14 @@ class PersonalGrowthUtils {
 
     }
 
-    void showDeleteConfirmationDialog() {
+    public void showDeleteConfirmationDialog(final int i) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.delete_all_dialog_message);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 BigPlanDao bigPlanDao = (BigPlanDao) CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-                bigPlanDao.deleteAll();
+                bigPlanDao.deleteAll(i);
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -82,7 +76,7 @@ class PersonalGrowthUtils {
         alertDialog.show();
     }
 
-    void hideKeyboard(View view) {
+    public void hideKeyboard(View view) {
 
         final InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
 
@@ -91,11 +85,11 @@ class PersonalGrowthUtils {
         }
     }
 
-    void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView textView, final int i) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView textView, final int i, final int newId) {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData(textView, i);
+                saveData(textView, i, newId);
                 adapter.setIndexInDatabase();
                 textView.setText("");
             }
@@ -103,7 +97,20 @@ class PersonalGrowthUtils {
 
     }
 
-    private void saveData(TextView textView, int i) {
+    public void setConfirmButtonFreqAct(ImageButton confirm, final FrequentActivitiesListAdapter adapter, final TextView textView, final int i, final int newId) {
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveDataFreqAct(textView, i, newId);
+                adapter.setIndexInDatabase();
+                textView.setText("");
+            }
+        });
+
+    }
+
+
+    private void saveData(TextView textView, int i, int newId) {
 
         String aimTextString = textView.getText().toString();
 
@@ -112,72 +119,14 @@ class PersonalGrowthUtils {
 
     }
 
-    void initDataBigPlan(Fragment fragment, final BigPlanAdapter adapter) {
-        BigPlanViewModel bigPlanViewModel = ViewModelProviders.of(fragment).get(BigPlanViewModel.class);
-        bigPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
-            }
-        });
-
-    }
-
-    void initDataOneYear(Fragment fragment, final BigPlanAdapter adapter) {
-        OneYearPlanViewModel oneYearPlanViewModel = ViewModelProviders.of(fragment).get(OneYearPlanViewModel.class);
-        oneYearPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
-            }
-        });
-
-    }
-
-    void initDataThisMonth(Fragment fragment, final BigPlanAdapter adapter) {
-        ThisMonthViewModel thisMonthViewModel = ViewModelProviders.of(fragment).get(ThisMonthViewModel.class);
-        thisMonthViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
-            }
-        });
-
-    }
-
-    void initDataOneDay(Fragment fragment, final BigPlanAdapter adapter) {
-        OneDayViewModel oneDayViewModel = ViewModelProviders.of(fragment).get(OneDayViewModel.class);
-        oneDayViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
-            }
-        });
-
+    private void saveDataFreqAct(TextView textView, int i, int newId){
+        String eventTextString = textView.getText().toString();
+        EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
+        eventsDao.insert(new Event(newId,eventTextString, String.valueOf(newId + 1), null, 0,null,1));
     }
 
 
-    void displayImageFromDB(ImageView view) {
+    public void displayImageFromDB(ImageView view) {
 
         ImagePathDao imagePathDao = getDatabase(getContext()).imagePathDao();
         ImagePath imagePath = imagePathDao.findLastImage();

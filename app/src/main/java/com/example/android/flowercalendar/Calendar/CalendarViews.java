@@ -58,19 +58,19 @@ class CalendarViews {
         return mImageResourceId;
     }
 
-    public LocalDate getmPeriodStart(){
+    public LocalDate getmPeriodStart() {
         return mPeriodStart;
     }
 
-    public LocalDate getmPeriodEnd(){
+    public LocalDate getmPeriodEnd() {
         return mPeriodEnd;
     }
 
-    LocalDate getmHeaderDate(){
+    LocalDate getmHeaderDate() {
         return mHeaderDate;
     }
 
-    int getmColorSettings(){
+    int getmColorSettings() {
         return mColorSettings;
     }
 
@@ -78,7 +78,7 @@ class CalendarViews {
         return mImageResourceId != NO_IMAGE_PROVIDED;
     }
 
-    public void setmColorSettings (int colorSettings){
+    public void setmColorSettings(int colorSettings) {
         mColorSettings = colorSettings;
     }
 }

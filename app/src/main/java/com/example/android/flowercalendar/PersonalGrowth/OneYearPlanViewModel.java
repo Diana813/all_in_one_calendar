@@ -40,7 +40,7 @@ public class OneYearPlanViewModel extends AndroidViewModel {
     }
 
     public void deleteAll() {
-        bigPlanDao.deleteAll();
+        bigPlanDao.deleteAll(2);
     }
 
 }

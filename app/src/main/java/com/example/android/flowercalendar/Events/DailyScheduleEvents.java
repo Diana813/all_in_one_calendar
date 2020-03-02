@@ -8,25 +8,21 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class EventsListTesting extends Fragment {
+public class DailyScheduleEvents extends Fragment {
 
     private FloatingActionButton fab;
     private EventsListHoursAdapter testingListAdapter;
@@ -40,13 +36,18 @@ public class EventsListTesting extends Fragment {
     private ArrayList<Event> hoursArrayList;
     TextView hourTextView;
     private RecyclerView recyclerView;
+    private int layout;
 
-    public EventsListTesting() {
+    public DailyScheduleEvents() {
         // Required empty public constructor
     }
 
-    public static EventsListTesting newInstance() {
-        return new EventsListTesting();
+    public static DailyScheduleEvents newInstance() {
+        return new DailyScheduleEvents();
+    }
+
+    public void setContent(int layout) {
+        this.layout = layout;
     }
 
     @Override
@@ -75,7 +76,7 @@ public class EventsListTesting extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.activity_expanded_day_view, container, false);
+        View rootView = inflater.inflate(layout, container, false);
 
         fab = rootView.findViewById(R.id.fab);
         empty_view = rootView.findViewById(R.id.empty_view_events);
@@ -88,17 +89,17 @@ public class EventsListTesting extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(testingListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-        assert getArguments() != null;
-        pickedDay = getArguments().getString("pickedDay");
-        TextView date = rootView.findViewById(R.id.expandedDayDate);
-        date.setText(pickedDay);
-        onFabClick();
+        //assert getArguments() != null;
+//        pickedDay = getArguments().getString("pickedDay");
+        //TextView date = rootView.findViewById(R.id.expandedDayDate);
+       // date.setText(pickedDay);
+        //onFabClick();
         //initData();
-        CalendarFragment calendarFragment = new CalendarFragment();
-        calendarFragment.saveEventsNumberToPickedDate();
+        //CalendarFragment calendarFragment = new CalendarFragment();
+        //calendarFragment.saveEventsNumberToPickedDate();
 
-        hourTextView = rootView.findViewById(R.id.hour);
-        addingHoursToThePlanner();
+       // hourTextView = rootView.findViewById(R.id.hour);
+      //  addingHoursToThePlanner();
 
 
         return rootView;

@@ -15,11 +15,11 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.flowercalendar.BuildConfig;
+import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
@@ -27,7 +27,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,7 +36,6 @@ import java.util.Date;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
@@ -57,7 +55,7 @@ public class LifeAims extends Fragment {
     private String absolutePath;
     private ImagePathDao imagePathDao;
     private int layout;
-    private PersonalGrowthUtils personalGrowthUtils = new PersonalGrowthUtils();
+    private AppUtils appUtils = new AppUtils();
 
     public LifeAims() {
         // Required empty public constructor
@@ -83,7 +81,7 @@ public class LifeAims extends Fragment {
         addPhoto = rootView.findViewById(R.id.addPhoto);
         searchImage = rootView.findViewById(R.id.searchPhoto);
 
-        personalGrowthUtils.displayImageFromDB(aimImage);
+        appUtils.displayImageFromDB(aimImage);
         askPermissions();
         checkCameraHardware(getActivity());
         setAddImageClickListener();

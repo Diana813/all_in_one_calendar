@@ -26,13 +26,13 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
     private List<Shift> shiftList;
     private Context context;
 
-    public BottomLayoutShiftsAdapter(Context requireNonNull, Context context) {
+    BottomLayoutShiftsAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
     }
 
 
-    public void setShiftList(List<Shift> shiftList) {
+    void setShiftList(List<Shift> shiftList) {
         this.shiftList = shiftList;
         notifyDataSetChanged();
     }
@@ -71,15 +71,13 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
         ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
         Colors colorToUpdate = colorsDao.findLastColor1();
 
-  
 
-        if(colorToUpdate == null){
+        if (colorToUpdate == null) {
             colorSettings = 0;
-        }else{
+        } else {
             colorSettings = colorToUpdate.getColor_number();
 
         }
-
 
 
         if (colorSettings == 1) {

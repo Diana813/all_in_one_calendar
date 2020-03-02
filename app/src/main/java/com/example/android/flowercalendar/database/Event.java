@@ -23,14 +23,18 @@ public class Event{
     @ColumnInfo(name = "picked_day")
     private String pickedDay;
 
+    @ColumnInfo(name = "eventKind")
+    private int eventKind;
 
-    public Event(int position, String event_name, String schedule, String alarm, int event_length, String pickedDay) {
+
+    public Event(int position, String event_name, String schedule, String alarm, int event_length, String pickedDay, int eventKind) {
         this.position = position;
         this.event_name = event_name;
         this.schedule = schedule;
         this.alarm = alarm;
         this.event_length = event_length;
         this.pickedDay = pickedDay;
+        this.eventKind = eventKind;
     }
 
     public int getId() {
@@ -84,6 +88,14 @@ public class Event{
 
     public void setPickedDay(String pickedDay) {
         this.pickedDay = pickedDay;
+    }
+
+    public int getEventKind() {
+        return eventKind;
+    }
+
+    public void setEventKind(int eventKind) {
+        this.eventKind = eventKind;
     }
 }
 

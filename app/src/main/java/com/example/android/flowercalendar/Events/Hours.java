@@ -3,11 +3,11 @@ package com.example.android.flowercalendar.Events;
 public class Hours {
 
     private String hour;
-    private String eventName;
+    private String eventText;
 
-    Hours(String hour, String eventName) {
+    Hours(String hour, String eventText) {
         this.hour = hour;
-        this.eventName = eventName;
+        this.eventText = eventText;
     }
 
     public String getHour() {
@@ -18,11 +18,11 @@ public class Hours {
         this.hour = hour;
     }
 
-    public String getEventName() {
-        return eventName;
+    public String getEventText() {
+        return eventText;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setEventText(String eventText) {
+        this.eventText = eventText;
     }
 }

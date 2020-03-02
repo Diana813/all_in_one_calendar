@@ -2,6 +2,7 @@ package com.example.android.flowercalendar.Events;
 
 import android.app.Application;
 
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -12,14 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-public class FrequentActivitiesViewModel extends AndroidViewModel {
+public class CyclicalEventsViewModel extends AndroidViewModel {
     private EventsDao eventsDao;
     private LiveData<List<Event>> eventsLiveData;
 
-    public FrequentActivitiesViewModel(@NonNull Application application) {
+    public CyclicalEventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.findByEventKind(1);
+        eventsLiveData = eventsDao.findByEventDay("");
+
     }
 
     LiveData<List<Event>> getEventsList() {

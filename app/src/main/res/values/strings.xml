@@ -40,8 +40,8 @@
     <string name="keep_editing">Keep Editing</string>
 
     <string name="No_start_date">No start day provided</string>
-    <string name="No_period_lenght">No period lenght provided</string>
-    <string name="No_cycle_lenght">No cycle lenght provided</string>
+    <string name="No_period_lenght">No period length provided</string>
+    <string name="No_cycle_lenght">No cycle length provided</string>
     <string name="No_message">No message provided</string>
     <string name="No_reminder">No reminder provided</string>
     <string name="No_end">No end provided</string>
@@ -74,13 +74,14 @@
     <string name="fiveYearsPlan">What will you do to achieve this?</string>
     <string name="thisYearsPlan">What will you do this year?</string>
     <string name="thisMonthPlan">What will you do this month?</string>
-    <string name="OneDayPlan">What will you do today?</string>
+    <string name="OneDayPlan">Make plans for:</string>
     <string name="lifeAims">Life aims</string>
     <string name="bigPlan">Big plan</string>
     <string name="thisYear">This year</string>
     <string name="thisMonth">This month</string>
     <string name="dayPlan">One day plan</string>
     <string name="tasks">Add your task</string>
+    <string name="weather">Current weather:</string>
 
 
 
@@ -134,5 +135,9 @@
     <string name="freqActiv">Add frequent activities</string>
     <string name="emptyViewBigPlan">Add your aims</string>
     <string name="AimDeletedSnackBar">Aim deleted</string>
+    <string name="ToDo">To do list</string>
+    <string name="dailySchedule">Daily schedule</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
 
 </resources>

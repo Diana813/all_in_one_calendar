@@ -40,7 +40,7 @@ public class OneDayViewModel extends AndroidViewModel {
     }
 
     public void deleteAll() {
-        bigPlanDao.deleteAll();
+        bigPlanDao.deleteAll(4);
     }
 
 }

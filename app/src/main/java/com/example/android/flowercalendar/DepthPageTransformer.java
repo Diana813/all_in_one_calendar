@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.PersonalGrowth;
+package com.example.android.flowercalendar;
 
 import android.content.Context;
 import android.view.View;
@@ -11,7 +11,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
 
-class DepthPageTransformer implements ViewPager.PageTransformer {
+public class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 
     public void transformPage(View view, float position) {
@@ -31,10 +31,14 @@ class DepthPageTransformer implements ViewPager.PageTransformer {
             view.setScaleY(1f);
 
             //Hide keyboard
-            final InputMethodManager imm = (InputMethodManager)getContext().getSystemService(
-                    Context.INPUT_METHOD_SERVICE);
-            assert imm != null;
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (getContext() != null) {
+                final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+
 
         } else if (position <= 1) { // (0,1]
             // Fade the page out.
@@ -48,7 +52,6 @@ class DepthPageTransformer implements ViewPager.PageTransformer {
                     + (1 - MIN_SCALE) * (1 - Math.abs(position));
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
-
 
 
         } else { // (1,+Infinity]

@@ -12,6 +12,7 @@ import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Event;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private ArrayList<String> aimNumbers = new ArrayList<>();
 
 
-    BigPlanAdapter(Context requireNonNull, Context context) {
+    public BigPlanAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         BigPlanAdapter.context = context;
 
@@ -52,7 +53,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     @NonNull
     @Override
     public BigPlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.big_plan_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.personal_growth_plans_item, parent, false);
         return new BigPlanViewHolder(itemView);
     }
 
@@ -141,7 +142,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
     }
 
-    void setIndexInDatabase() {
+    public void setIndexInDatabase() {
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
         int i = 1;
         for (BigPlanData bigPlanData : aimsList) {

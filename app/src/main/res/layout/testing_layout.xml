@@ -18,13 +18,13 @@
         android:textSize="25sp" />
 
 
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/expandedDayDate"
         android:padding="5dp">
-    </GridView>
+    </androidx.recyclerview.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/empty_view_events"
