@@ -140,4 +140,16 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
 
+    <string name="Monday">MON</string>
+    <string name="Tuesday">TUE</string>
+    <string name="Wednesday">WED</string>
+    <string name="Thursday">THR</string>
+    <string name="Friday">FRI</string>
+    <string name="Saturday">SAT</string>
+    <string name="Sunday">SUN</string>
+    <string name="_hours">10</string>
+    <string name="minutes">minutes</string>
+    <string name="numberOfHours">10</string>
+    <string name="espandedListViewTitles">expandedListViewTitle</string>
+
 </resources>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/BackgroundLayout"
     android:background="@color/lightGrey">
 
     <RelativeLayout
@@ -15,84 +13,36 @@
             android:id="@+id/imageBackground"
             android:layout_width="match_parent"
             android:layout_height="800dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <LinearLayout style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                style="@style/textViewHeaders"
                 android:gravity="center"
                 android:padding="15dp"
                 android:textColor="@color/colorWhite"
-                android:textSize="25sp"
                 tools:text="@string/fiveYearsPlan" />
 
             <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/checkboxToday"
+                style="@style/personalGrowthCheckBoxStyle"
                 android:text="@string/today"
-                android:layout_marginStart="10dp"
-                android:visibility="gone"
-                android:textColor="@color/colorWhite"
-                android:textSize="20sp">
+                android:visibility="gone">
 
             </CheckBox>
 
             <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/checkboxTomorrow"
+                style="@style/personalGrowthCheckBoxStyle"
                 android:text="@string/tomorrow"
-                android:textColor="@color/colorWhite"
-                android:layout_marginStart="10dp"
-                android:visibility="gone"
-                android:textSize="20sp">
+                android:visibility="gone">
 
             </CheckBox>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/aimsList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/aimText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="3"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="20sp"
-                    app:backgroundTint = "#fff"
-                    android:hint="@string/tasks"
-                    android:textColorHint="@color/colorWhite"
-                    tools:ignore="Autofill,LabelFor">
-
-                </EditText>
-
-                <ImageButton
-                    android:id="@+id/confirm_button"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/baseline_navigate_next_black_18" />
-            </LinearLayout>
+            <include layout="@layout/recycleview_and_edittext" />
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

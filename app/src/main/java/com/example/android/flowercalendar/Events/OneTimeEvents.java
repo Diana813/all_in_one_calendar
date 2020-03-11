@@ -3,13 +3,10 @@ package com.example.android.flowercalendar.Events;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.room.Dao;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,18 +20,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEvents;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.Shifts.ShiftsEditor;
-import com.example.android.flowercalendar.Shifts.ShiftsFragment;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
-import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.database.ShiftsDao;
 
 import java.util.Objects;
 
-import static com.example.android.flowercalendar.Events.EventsList.newId;
+import static com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList.newId;
 
 
 public class OneTimeEvents extends Fragment {
@@ -65,7 +60,7 @@ public class OneTimeEvents extends Fragment {
         // Required empty public constructor
     }
 
-    static OneTimeEvents newInstance(int id, String eventName, String event_start, String alarm, Integer event_length_hours, String pickedDay) {
+    public static OneTimeEvents newInstance(int id, String eventName, String event_start, String alarm, Integer event_length_hours, String pickedDay) {
 
         OneTimeEvents fragment = new OneTimeEvents();
         Bundle eventData = new Bundle();
@@ -151,7 +146,7 @@ public class OneTimeEvents extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.for_girls_save_menu, menu);
+        inflater.inflate(R.menu.save_delete_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -167,12 +162,12 @@ public class OneTimeEvents extends Fragment {
                 inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getView()).getWindowToken(), 0);
 
                 if(!pickedDay.equals("")){
-                    EventsList eventsList = new EventsList();
+                    ToDoList toDoList = new ToDoList();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
-                    eventsList.setArguments(args);
+                    toDoList.setArguments(args);
                     assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.flContent, toDoList).commit();
                 }else{
                     CyclicalEvents cyclicalEvents = new CyclicalEvents();
                     Bundle args = new Bundle();

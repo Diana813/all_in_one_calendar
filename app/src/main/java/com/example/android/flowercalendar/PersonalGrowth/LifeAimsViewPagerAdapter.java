@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class LifeAimsAdapter extends FragmentPagerAdapter {
+public class LifeAimsViewPagerAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
     private int[] layouts;
 
-    LifeAimsAdapter(Context context, FragmentManager fm) {
+    LifeAimsViewPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
         layouts = new int[]{R.layout.activity_life_aims, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout,R.layout.personal_growth_plans_layout};

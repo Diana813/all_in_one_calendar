@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 
@@ -20,11 +21,10 @@ public class EventsViewModel extends AndroidViewModel {
     public EventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        String pickedDay = CalendarFragment.pickedDay;
-        eventsLiveData = eventsDao.sortByOrder(pickedDay);
+        eventsLiveData = eventsDao.sortByOrder(CalendarFragment.pickedDay);
     }
 
-    LiveData<List<Event>> getEventsList() {
+    public LiveData<List<Event>> getEventsList() {
         return eventsLiveData;
     }
 

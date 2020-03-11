@@ -12,18 +12,6 @@
         <item name="colorSecondary">@color/yellow</item>
     </style>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme.Green" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#616161</item>
-        <item name="colorPrimaryDark">#331107</item>
-        <item name="colorAccent">#B71C1C</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:ambientShadowAlpha">0.6</item>
-        <item name="android:spotShadowAlpha">0.6</item>
-        <item name="colorSecondary">@color/green</item>
-    </style>
-
-
     <style name="colorPickerBigPart">
         <item name="android:layout_width">70dp</item>
         <item name="android:layout_height">50dp</item>
@@ -61,6 +49,15 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textSize">30sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="EmptyViewTextStyle.subtitle">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_margin">20dp</item>
     </style>
 
     <!-- Style for the table's text views in table_item.xml-->
@@ -95,26 +92,210 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <!-- Style for a category in events -->
-    <style name="OverviewStyleEvents">
+    <style name="OverviewStyle.Events">
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:gravity">center_horizontal</item>
+
+    </style>
+
+    <style name="textViewStylePlansList">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="textViewStyleCalendarDayOfWeek">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="textViewHeaders">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="textViewDateStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="textViewDateStyle.schedule">
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="forGirlsTextStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_margin">6dp</item>
+    </style>
+
+    <style name="forGirlsSeekBarStyle">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="forGirlsSeekBatValueStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="textViewOneTimeEventsStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+    <style name="textViewShift">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">60dp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+    <style name="textViewCalendarDayNumber">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">7dp</item>
+    </style>
+
+    <style name="textViewCalendarShiftNumber">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">sans-serif</item>
+    </style>
+
+    <style name="textViewScheduleHours">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="textViewShiftItemBottomLayout">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+
+    <style name="EditTextScheduleHours">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
     <!-- Style for an EditText field in the editor -->
     <style name="EditTextFieldStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textAppearance">?android:textAppearanceMedium</item>
-        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">3</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20sp</item>
+        <item name="backgroundTint">@color/colorWhite</item>
+        <item name="android:hint">@string/tasks</item>
+    </style>
 
+    <style name="EditTextEventsOverview">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="EditTextShiftEditorStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="EditTextNumberStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:inputType">number</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="confirmImageButtonStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:src">@drawable/baseline_navigate_next_black_18</item>
+
+    </style>
+
+    <style name="recyclerViewTasksListStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="recyclerViewShiftsBottomLayoutStyle">
+        <item name="android:layout_height">70dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">5dp</item>
     </style>
 
     <style name="Table" parent="Widget.Design.TabLayout">
@@ -130,9 +311,138 @@
         <item name="android:textColor">#A8A19E</item>
     </style>
 
+    <style name="tableLayoutShiftsEditorStyle">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">vertical</item>
+        <item name="backgroundColor">@color/lightGrey</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 
+    <style name="tableLayoutViewStyle">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="background">@android:color/darker_gray</item>
+    </style>
 
+    <style name="cardViewPlansList">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="elevation">0dp</item>
+        <item name="cardBackgroundColor">@color/semiTransparentColor</item>
 
+    </style>
 
+    <style name="cardViewCalendar">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">12dp</item>
+        <item name="elevation">20dp</item>
+        <item name="cardElevation">30dp</item>
+    </style>
+
+    <style name="cardViewColorSettingsAndOverviewStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <style name="cardViewShiftsEditor">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="cardElevation">20dp</item>
+    </style>
+
+    <style name="cardViewSingleHourItem">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">2</item>
+
+    </style>
+
+    <style name="nextPrevButtons">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="lifeAimsImageButtonStyle">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="ImageScheduleButtonStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+    </style>
+
+    <style name="ImageDownArrowStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <style name="ImageViewEditStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">0.75</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_margin">7dp</item>
+
+    </style>
+
+    <style name="periodImage">
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_margin">7dp</item>
+    </style>
+
+    <style name="personalGrowthCheckBoxStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="floatingActionButtonStyle">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_margin">30dp</item>
+        <item name="backgroundTint">#fff</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="BackgroundLayout.LinearLayoutVerticalStyle">
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BackgroundLayout.LinearLayoutHorizontalStyle">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BackgroundLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
 
 </resources>

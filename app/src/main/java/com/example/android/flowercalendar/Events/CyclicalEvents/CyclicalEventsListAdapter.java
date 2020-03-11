@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.CyclicalEvents;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,9 +6,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Events.OneTimeEvents;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Colors;
 import com.example.android.flowercalendar.database.ColorsDao;
@@ -83,7 +83,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
             String event_start_time = event.getSchedule();
 
-            String shift_finish;
+           /* String shift_finish;
             if (event_start_time.equals("")) {
                 shift_finish = "";
             } else {
@@ -108,9 +108,9 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
                 shift_finish = String.format("%02d:%02d", finishHour, startminute);
             }
-
-            holder.eventName.setText(event.getEvent_name());
-            holder.eventSchedule.setText(event.getSchedule() + " - " + shift_finish);
+*/
+           /* holder.eventName.setText(event.getEvent_name());
+            holder.eventSchedule.setText(event.getSchedule() + " - " + shift_finish);*/
             if (event.getSchedule().isEmpty()) {
                 holder.eventSchedule.setText("");
 
@@ -127,33 +127,6 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
             });
         }
 
-        ColorsDao colorsDao = getDatabase(context).colorsDao();
-        Colors colorToUpdate = colorsDao.findLastColor1();
-
-        if(colorToUpdate == null){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightRed));
-        }else if(colorToUpdate.getColor_number() == 1){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightRed));
-        }else if(colorToUpdate.getColor_number() == 2){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightYellow));
-            holder.eventName.setTextColor(getContext().getResources().getColor(R.color.grey));
-            holder.eventSchedule.setTextColor(getContext().getResources().getColor(R.color.grey));
-        }else if(colorToUpdate.getColor_number() == 3){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightGreen));
-        }else if(colorToUpdate.getColor_number() == 4){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightBlue));
-        }else if(colorToUpdate.getColor_number() == 5){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightViolet));
-        }else if(colorToUpdate.getColor_number() == 6){
-            holder.listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightGrey));
-        }
 
     }
 
@@ -167,6 +140,36 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         notifyItemRemoved(position);
         showUndoSnackbar();
 
+    }
+
+    private void setBackgroundColorItem(View listOfItems, EventsViewHolder holder) {
+        ColorsDao colorsDao = getDatabase(context).colorsDao();
+        Colors colorToUpdate = colorsDao.findLastColor1();
+
+        if (colorToUpdate == null) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightRed));
+        } else if (colorToUpdate.getColor_number() == 1) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightRed));
+        } else if (colorToUpdate.getColor_number() == 2) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightYellow));
+            holder.eventName.setTextColor(getContext().getResources().getColor(R.color.grey));
+            holder.eventSchedule.setTextColor(getContext().getResources().getColor(R.color.grey));
+        } else if (colorToUpdate.getColor_number() == 3) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightGreen));
+        } else if (colorToUpdate.getColor_number() == 4) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightBlue));
+        } else if (colorToUpdate.getColor_number() == 5) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightViolet));
+        } else if (colorToUpdate.getColor_number() == 6) {
+            listOfItems.setBackgroundColor(getContext().getResources()
+                    .getColor(R.color.lightGrey));
+        }
     }
 
     void deleteFromDatabase() {
@@ -244,15 +247,15 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         private TextView eventName;
         private TextView eventSchedule;
         private TextView eventAlarm;
-        private LinearLayout listOfItems;
+        // private LinearLayout listOfItems;
 
 
         EventsViewHolder(View itemView) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.event);
-            eventSchedule = itemView.findViewById(R.id.eventNumber);
+            eventName = itemView.findViewById(R.id.contents);
+            eventSchedule = itemView.findViewById(R.id.number);
             //eventAlarm = itemView.findViewById(R.id.event_alarm);
-            listOfItems = itemView.findViewById(R.id.list_of_items);
+            //listOfItems = itemView.findViewById(R.id.list_of_items);
 
         }
     }

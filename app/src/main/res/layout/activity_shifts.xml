@@ -1,45 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/lightGrey"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout"
+    android:background="@color/lightGrey">
 
     <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height= "wrap_content"
         android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/grey"
         android:padding="8dp">
 
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="1dp"
-            android:id="@+id/row">
+            android:id="@+id/row"
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:paddingTop="1dp">
 
             <TextView
-                style="@style/ShiftsTextViewLabelStyle"
                 android:id="@+id/title_label"
-                android:text="@string/shift_name"
-                />
-            <TextView
                 style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/shift_name" />
+
+            <TextView
                 android:id="@+id/price_label"
-                android:text="@string/schedule"
-                />
-            <TextView
                 style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/schedule" />
+
+            <TextView
                 android:id="@+id/quantity_label"
-                android:text="@string/alarm"
-                />
-            <TextView
                 style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/alarm" />
+
+            <TextView
                 android:id="@+id/sale_label"
-                android:text="@string/edit"
-                />
+                style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/edit" />
         </LinearLayout>
     </TableLayout>
 
@@ -54,17 +51,14 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/baseline_access_time_black_48" />
+            android:src="@drawable/baseline_access_time_black_48"
+            tools:ignore="ContentDescription" />
 
         <TextView
-            style="@style/EmptyViewTextStyle"
-            android:textColor="@color/grey"
             android:id="@+id/empty_title_text"
+            style="@style/EmptyViewTextStyle"
             android:layout_below="@id/empty_shelf_image"
-            android:fontFamily="sans-serif-medium"
-            android:paddingTop="16dp"
-            android:text="@string/empty_view_title"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/empty_view_title" />
 
     </RelativeLayout>
 
@@ -73,23 +67,21 @@
         android:id="@+id/fab"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
-        app:backgroundTint="#fff"
         android:src="@drawable/baseline_control_point_black_36"
-        />
+        app:backgroundTint="#fff" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_shifts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:layout_below="@+id/label"
         android:orientation="vertical"
-        android:layout_below="@+id/label">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:padding="5dp" />
 
 
 </RelativeLayout>

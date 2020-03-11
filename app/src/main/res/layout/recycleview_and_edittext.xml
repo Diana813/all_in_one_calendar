@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        style="@style/recyclerViewTasksListStyle" />
+
+    <LinearLayout
+        android:id="@+id/editTextLinearLayout"
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+        android:layout_margin="10dp">
+
+        <EditText
+            android:id="@+id/editText"
+            style="@style/EditTextFieldStyle"
+            tools:ignore="Autofill,LabelFor">
+
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/confirm_button"
+            style="@style/confirmImageButtonStyle"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+</LinearLayout>

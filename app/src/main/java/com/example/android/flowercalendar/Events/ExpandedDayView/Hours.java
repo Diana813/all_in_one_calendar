@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 public class Hours {
 

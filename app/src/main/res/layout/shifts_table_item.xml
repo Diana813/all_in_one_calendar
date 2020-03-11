@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,82 +8,64 @@
     android:layout_margin="10dp"
     app:cardElevation="3dp">
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:descendantFocusability="blocksDescendants"
+    <LinearLayout
+        android:id="@+id/list_of_items"
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
         android:padding="8dp">
 
-        <LinearLayout
-            android:id="@+id/list_of_items"
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#000"
-                android:padding="1dp">
+            android:background="#000"
+            android:padding="1dp">
 
             <TextView
                 android:id="@+id/shift"
-                android:layout_width="60dp"
-                android:layout_height="80dp"
+                style="@style/textViewShift"
                 android:background="@drawable/weekend_frame"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="#000"
                 tools:text="2" />
 
-            </FrameLayout>
+        </FrameLayout>
 
 
-            <TextView
-                android:id="@+id/shift_schedule"
-                style="@style/TableTextViews"
-                android:textSize="15sp"
-                android:layout_marginStart="10dp"
-                tools:text="12:00 - 18:00" />
+        <TextView
+            android:id="@+id/shift_schedule"
+            style="@style/TableTextViews"
+            android:layout_marginStart="10dp"
+            android:textSize="15sp"
+            tools:text="12:00 - 18:00" />
 
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.75"
-                android:gravity="center"
-                android:layout_marginStart="20dp"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="8dp"
-                    android:src="@drawable/baseline_alarm_black_48"
-                    android:id="@+id/alarmClock">
-
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/shift_alarm"
-                    android:layout_width="wrap_content"
-                    tools:text="11:00"
-                    android:textSize="15sp"
-                    style="@style/TableTextViews"
-              />
-            </LinearLayout>
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+            android:layout_width="0dp"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.75"
+            android:gravity="center"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.75"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="7dp"
-                android:src="@drawable/baseline_create_black_36" />
+                android:id="@+id/alarmClock"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:src="@drawable/baseline_alarm_black_48"
+                tools:ignore="ContentDescription">
 
+            </ImageView>
+
+            <TextView
+                android:id="@+id/shift_alarm"
+                style="@style/TableTextViews"
+                android:layout_width="wrap_content"
+                android:textSize="15sp"
+                tools:text="11:00" />
         </LinearLayout>
 
-    </TableLayout>
+        <ImageView
+            style="@style/ImageViewEditStyle"
+            android:src="@drawable/baseline_create_black_36"
+            tools:ignore="ContentDescription" />
 
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

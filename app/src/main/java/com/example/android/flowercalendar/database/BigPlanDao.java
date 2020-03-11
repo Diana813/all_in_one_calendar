@@ -21,8 +21,11 @@ public interface BigPlanDao {
     @Query("SELECT * FROM big_plan_data WHERE aimNumber = :aimNumber")
     BigPlanData findByAimNumber(String aimNumber);
 
-    @Query("DELETE FROM big_plan_data WHERE aimNumber =:aimNumber")
-    void deleteByAimNumber(String aimNumber);
+    @Query("DELETE FROM big_plan_data WHERE aimContents =:aimContent")
+    void deleteByAimContent(String aimContent);
+
+    @Query("DELETE FROM big_plan_data WHERE position =:position")
+    void deleteByPosition(int position);
 
     @Query("UPDATE big_plan_data SET aimNumber = :aimNumber")
     void updateAimNumber(String aimNumber);
@@ -39,7 +42,7 @@ public interface BigPlanDao {
     @Query("SELECT * FROM big_plan_data ORDER BY position ASC")
     LiveData<List<BigPlanData>> sortByOrder();
 
-    @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime")
+    @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime ORDER BY position ASC")
     LiveData<List<BigPlanData>> findByAimTime(int aimTime);
 
 }

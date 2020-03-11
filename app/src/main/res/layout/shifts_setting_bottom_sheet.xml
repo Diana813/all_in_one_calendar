@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shiftsSettings"
-    android:layout_width="match_parent"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
     android:layout_height="100dp"
-    android:orientation="vertical"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shifts_list_recycler"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:padding="5dp">
-    </androidx.recyclerview.widget.RecyclerView>
+        style="@style/recyclerViewShiftsBottomLayoutStyle" />
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:id="@+id/shiftsDownArrow"
+        style="@style/ImageDownArrowStyle"
         android:src="@drawable/baseline_keyboard_arrow_down_black_48"
-        android:id="@+id/shiftsDownArrow">
-    </ImageView>
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>
 

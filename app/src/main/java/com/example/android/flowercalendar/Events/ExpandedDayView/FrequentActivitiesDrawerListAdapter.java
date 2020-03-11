@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

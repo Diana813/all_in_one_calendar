@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/colorSettings"
+    style="@style/cardViewColorSettingsAndOverviewStyle"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    card_view:cardElevation="20dp">
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/lightGrey"
-        android:orientation="vertical">
+        style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+        android:background="@color/lightGrey">
 
         <TextView
             android:id="@+id/text"
@@ -33,11 +29,7 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/red"
@@ -58,17 +50,14 @@
 
                             <ImageView
                                 style="@style/wheelStyle"
-                                android:src="@drawable/wheel" />
+                                android:src="@drawable/wheel"
+                                tools:ignore="ContentDescription" />
                         </FrameLayout>
 
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/yellow"
@@ -89,17 +78,14 @@
 
                             <ImageView
                                 style="@style/wheelStyle"
-                                android:src="@drawable/wheel" />
+                                android:src="@drawable/wheel"
+                                tools:ignore="ContentDescription" />
                         </FrameLayout>
 
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/green"
@@ -126,11 +112,7 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/blue"
@@ -155,11 +137,7 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/violet"
@@ -186,11 +164,7 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    card_view:cardElevation="20dp">
+                <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
                     <RelativeLayout
                         android:id="@+id/grey"
@@ -220,10 +194,11 @@
         </HorizontalScrollView>
 
         <ImageView
+            android:id="@+id/colorSettingsDownArrow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/colorSettingsDownArrow"
-            android:src="@drawable/baseline_keyboard_arrow_down_black_48">
+            android:src="@drawable/baseline_keyboard_arrow_down_black_48"
+            tools:ignore="ContentDescription">
 
         </ImageView>
     </LinearLayout>

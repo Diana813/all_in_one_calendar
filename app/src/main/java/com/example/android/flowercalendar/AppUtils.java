@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.FrequentActivitiesListAdapter;
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
@@ -37,14 +37,14 @@ import static com.example.android.flowercalendar.database.CalendarDatabase.getDa
 
 public class AppUtils {
 
-    public void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context){
+    public void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context) {
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
     }
 
-    public void setItemTouchHelperPersonalGrowth(BigPlanAdapter adapter, RecyclerView recyclerView){
+    public void setItemTouchHelperPersonalGrowth(BigPlanAdapter adapter, RecyclerView recyclerView) {
 
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new GestureInteractionsRecyclerView(adapter));
@@ -90,18 +90,18 @@ public class AppUtils {
             @Override
             public void onClick(View v) {
                 saveData(textView, i, newId);
-                adapter.setIndexInDatabase();
+                adapter.setAimNumbersInDB();
                 textView.setText("");
             }
         });
 
     }
 
-    public void setConfirmButtonFreqAct(ImageButton confirm, final FrequentActivitiesListAdapter adapter, final TextView textView, final int i, final int newId) {
+    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final int newId, final String pickedDay) {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDataFreqAct(textView, i, newId);
+                saveDataEvents(textView, i, newId, pickedDay);
                 adapter.setIndexInDatabase();
                 textView.setText("");
             }
@@ -115,14 +115,14 @@ public class AppUtils {
         String aimTextString = textView.getText().toString();
 
         BigPlanDao bigPlanDao = (BigPlanDao) CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-        bigPlanDao.insert(new BigPlanData(i,String.valueOf((newId + 1) + "."), aimTextString));
+        bigPlanDao.insert(new BigPlanData(i, (newId + 1), ".", aimTextString));
 
     }
 
-    private void saveDataFreqAct(TextView textView, int i, int newId){
+    private void saveDataEvents(TextView textView, int i, int newId, String pickedDay) {
         String eventTextString = textView.getText().toString();
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        eventsDao.insert(new Event(newId,eventTextString, String.valueOf(newId + 1), null, 0,null,1));
+        eventsDao.insert(new Event(newId, eventTextString, String.valueOf(newId + 1), null, 0, pickedDay, 1));
     }
 
 
@@ -133,12 +133,13 @@ public class AppUtils {
         if (imagePath != null) {
             String aimImagePath = imagePath.getImagePath();
             if (aimImagePath.contains("imageDir")) {
-                loadImageFromStorage(aimImagePath,view);
+                loadImageFromStorage(aimImagePath, view);
             } else if (aimImagePath.contains("JPEG_")) {
                 view.setImageURI(Uri.parse(aimImagePath));
             }
         }
     }
+
     private void loadImageFromStorage(String path, ImageView view) {
 
         try {

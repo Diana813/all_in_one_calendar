@@ -60,27 +60,16 @@ public class ShiftsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
-    public void onDestroyView(){
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
         adapter.setIndexInDatabase();
         adapter.deleteFromDatabase();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        adapter.setIndexInDatabase();
-        adapter.deleteFromDatabase();
-    }
-
-    public void onDetach(){
+    public void onDetach() {
         super.onDetach();
-
-//        FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-//        tx.replace(R.id.flContent, new CalendarFragment());
-//        tx.commit();
-
     }
 
     @Nullable
@@ -186,11 +175,6 @@ public class ShiftsFragment extends Fragment {
         if (shiftsViewModel != null) {
             shiftsViewModel.deleteAll();
         }
-    }
-
-
-    private void reCreateDatabase() {
-        CalendarDatabase.getDatabase(getContext()).clearDb();
     }
 
 }

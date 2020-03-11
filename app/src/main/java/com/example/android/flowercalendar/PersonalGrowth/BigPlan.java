@@ -57,19 +57,15 @@ public class BigPlan extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        adapter.setIndexInDatabase();
+    public void onPause() {
+        super.onPause();
+        adapter.setAimNumbersInDB();
         adapter.deleteFromDatabase();
-        initData(this,adapter);
+        initData(this, adapter);
         appUtils.hideKeyboard(getView());
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void onDetach() {
         super.onDetach();
     }
@@ -85,8 +81,8 @@ public class BigPlan extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(layout, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.aimsList);
-        EditText aimText = rootView.findViewById(R.id.aimText);
+        RecyclerView recyclerView = rootView.findViewById(R.id.list);
+        EditText aimText = rootView.findViewById(R.id.editText);
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.fiveYearsPlan);
@@ -94,10 +90,10 @@ public class BigPlan extends Fragment {
 
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
-        appUtils.setRecyclerViewPersonalGrowth(recyclerView,adapter,context);
+        appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
-        initData(this,adapter);
-        appUtils.setConfirmButton(confirm,adapter,aimText, 1, newId);
+        initData(this, adapter);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 1, newId);
         return rootView;
     }
 
@@ -133,9 +129,5 @@ public class BigPlan extends Fragment {
         });
 
     }
-
-
-
-
 }
 

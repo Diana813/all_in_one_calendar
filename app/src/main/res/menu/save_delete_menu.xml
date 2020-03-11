@@ -3,10 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ForGirls.ForGirlsFragment">
-
     <item
         android:id="@+id/save"
-        android:icon="@drawable/baseline_done_white_48"
         android:title="@string/save"
         app:showAsAction="never" />
     <item

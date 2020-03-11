@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.Calendar;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.R;
 
 import java.time.LocalDate;

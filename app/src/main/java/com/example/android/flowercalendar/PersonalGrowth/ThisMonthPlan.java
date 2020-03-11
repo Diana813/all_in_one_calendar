@@ -57,18 +57,14 @@ public class ThisMonthPlan extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        adapter.setIndexInDatabase();
+    public void onPause() {
+        super.onPause();
+        adapter.setAimNumbersInDB();
         adapter.deleteFromDatabase();
         appUtils.hideKeyboard(getView());
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void onDetach() {
         super.onDetach();
     }
@@ -84,8 +80,8 @@ public class ThisMonthPlan extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(layout, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.aimsList);
-        EditText aimText = rootView.findViewById(R.id.aimText);
+        RecyclerView recyclerView = rootView.findViewById(R.id.list);
+        EditText aimText = rootView.findViewById(R.id.editText);
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.thisMonthPlan);

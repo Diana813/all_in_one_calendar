@@ -25,6 +25,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
     private LayoutInflater layoutInflater;
     private List<Shift> shiftList;
     private Context context;
+    private int shiftMarked = -1;
 
     BottomLayoutShiftsAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -45,7 +46,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ShiftsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ShiftsViewHolder holder, final int position) {
 
         if (shiftList == null) {
             return;
@@ -54,18 +55,25 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
         final Shift shift = shiftList.get(position);
 
         holder.shift.setText(shift.getShift_name());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                ClipboardManager clipboard = (ClipboardManager)
-                        context.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData shiftNumber = ClipData.newPlainText("shiftNumber", shift.getShift_name());
-                assert clipboard != null;
-                clipboard.setPrimaryClip(shiftNumber);
+                shiftMarked = position;
+                notifyDataSetChanged();
             }
         });
+        if (shiftMarked == position) {
+            copyShiftNumber(shift);
+            holder.shift.setBackgroundResource(R.drawable.frame2);
 
+        } else {
+            setShiftsLayoutColor(holder);
+        }
+
+    }
+
+    private void setShiftsLayoutColor(ShiftsViewHolder holder) {
         int colorSettings;
 
         ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
@@ -76,9 +84,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             colorSettings = 0;
         } else {
             colorSettings = colorToUpdate.getColor_number();
-
         }
-
 
         if (colorSettings == 1) {
             //red
@@ -102,6 +108,14 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             //red
             holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
         }
+    }
+
+    private void copyShiftNumber(Shift shift) {
+        ClipboardManager clipboard = (ClipboardManager)
+                context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData shiftNumber = ClipData.newPlainText("shiftNumber", shift.getShift_name());
+        assert clipboard != null;
+        clipboard.setPrimaryClip(shiftNumber);
     }
 
 

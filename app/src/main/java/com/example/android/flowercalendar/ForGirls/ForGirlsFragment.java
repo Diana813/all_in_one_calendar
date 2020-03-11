@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.ForGirls;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import android.widget.CalendarView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.MainActivity;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.PeriodData;
@@ -56,6 +54,12 @@ public class ForGirlsFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveData();
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -87,7 +91,9 @@ public class ForGirlsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.for_girls_save_menu, menu);
+        inflater.inflate(R.menu.save_delete_menu, menu);
+        MenuItem item = menu.findItem(R.id.save);
+        item.setVisible(false);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -95,39 +101,14 @@ public class ForGirlsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.save:
-                saveData();
-                return true;
-
-            case R.id.action_delete_all_entries:
-                showDeleteConfirmationDialog();
-                return true;
-
-            //TODO pokazać showUnsavedChangesDialog przy przechodzeniu do innego fragmentu,
-            //jeżeli dane zostały zmienione, ale nie zapisane
-
-        /*        if (!periodDataHasChanged) {
-                    NavUtils.navigateUpFromSameTask(Objects.requireNonNull(getActivity()));
-                    Intent i = new Intent(getActivity(), MainActivity.class);
-                    startActivity(i);
-                    return true;
-                }
-                DialogInterface.OnClickListener discardButtonClickListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                NavUtils.navigateUpFromSameTask(Objects.requireNonNull(getActivity()));
-                            }
-                        };
-
-                showUnsavedChangesDialog(discardButtonClickListener);
-                return true;*/
+        if (item.getItemId() == R.id.action_delete_all_entries) {
+            showDeleteConfirmationDialog();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setPeriodStartDate(){
+    private void setPeriodStartDate() {
         mCalendarView
                 .setOnDateChangeListener(
                         new CalendarView
@@ -145,14 +126,16 @@ public class ForGirlsFragment extends Fragment {
 
     }
 
-    private void setPeriodTimeValue(){
+    private void setPeriodTimeValue() {
 
         periodTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
                 periodTimeValue.setText("" + progress);
+                //noinspection IntegerDivisionInFloatingPointContext
                 periodTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
                 periodTimeChosenValue = progress;
             }
@@ -168,15 +151,17 @@ public class ForGirlsFragment extends Fragment {
 
     }
 
-    private void setCycleTimeValue(){
+    private void setCycleTimeValue() {
 
         cycleTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
                 cycleTimeValue.setText("" + progress);
+                //noinspection IntegerDivisionInFloatingPointContext
                 cycleTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
                 cycleTimeChosenValue = progress;
 
@@ -190,45 +175,8 @@ public class ForGirlsFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
 
 
-
             }
         });
-    }
-
-    //TODO pokazać showUnsavedChangesDialog po naciśnięciu Back buttona
-   /* @Override
-    public void onBackPressed() {
-        if (!periodDataHasChanged) {
-            super.getActivity().onBackPressed();
-            return;
-        } else {
-            DialogInterface.OnClickListener discardButtonClickListener =
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            NavUtils.navigateUpFromSameTask(Objects.requireNonNull(getActivity()));
-                        }
-                    };
-
-            showUnsavedChangesDialog(discardButtonClickListener);
-        }
-    }*/
-
-    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.unsaved_changes_dialog_message);
-        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
-        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
     private void deleteLastPeriod() {
@@ -275,9 +223,9 @@ public class ForGirlsFragment extends Fragment {
 
         if (periodToUpdate != null) {
             if (!periodToUpdate.getPeriodStartDate().equals(startPeriodDate)) {
-                if(startPeriodDate == null){
+                if (startPeriodDate == null) {
                     periodToUpdate.setPeriodStartDate(periodToUpdate.getPeriodStartDate());
-                }else{
+                } else {
                     periodToUpdate.setPeriodStartDate(startPeriodDate);
 
                 }
@@ -290,10 +238,6 @@ public class ForGirlsFragment extends Fragment {
         } else {
             periodDataDao.insert(new PeriodData(startPeriodDate, periodTimeChosenValue, cycleTimeChosenValue));
         }
-
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
-        getActivity().finish();
     }
 
     private void initData() {

@@ -1,67 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/singleItem"
     android:layout_width="52dp"
     android:layout_height="80dp"
-    android:layout_marginEnd="5dp"
     android:layout_marginStart="5dp"
-    android:id="@+id/singleItemLayout"
-   >
+    android:layout_marginEnd="5dp"
+    android:background="@drawable/frame">
 
-    <RelativeLayout
-        android:id="@+id/singleItem"
-        android:layout_width="58dp"
-        android:layout_height="80dp"
-        android:background="@drawable/frame">
-
-        <TextView
-            android:id="@+id/dayNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:textSize="12sp"
-            android:textColor="#000"
-            android:textStyle="bold"
-            android:layout_margin="7dp"
-            tools:text="8" />
+    <TextView
+        android:id="@+id/dayNumber"
+        style="@style/textViewCalendarDayNumber"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        tools:ignore="RelativeOverlap"
+        tools:text="8" />
 
 
-        <ImageView
-            android:id="@+id/periodImage"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="7dp"
-            />
+    <ImageView
+        android:id="@+id/periodImage"
+        style="@style/periodImage"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        tools:ignore="ContentDescription" />
 
 
-        <TextView
-            android:id="@+id/eventName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_margin="7dp"
-            android:layout_marginStart="4dp"
-            android:textSize="16sp"
-            tools:text="2"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            />
+    <TextView
+        android:id="@+id/eventName"
+        style="@style/textViewCalendarDayNumber"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="4dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/red"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap"
+        tools:text="2" />
 
-        <TextView
-            android:id="@+id/shiftNumber"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/colorPrimaryDark"
-            android:gravity="center"
-            android:textSize="20sp"
-            tools:text="4" />
-
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/shiftNumber"
+        style="@style/textViewCalendarShiftNumber"
+        tools:text="4" />
 </RelativeLayout>
 

@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/BackgroundLayout"
     android:background="@mipmap/baletnica"
     tools:context=".ForGirls.ForGirlsFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#98FFFFFF"
-        android:orientation="vertical">
+        style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+        android:background="#98FFFFFF">
 
         <TextView
             android:id="@+id/periodStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="6dp"
-            android:text="@string/periodStart"
-            android:textColor="#000"
-            android:textSize="20sp" />
+            style="@style/forGirlsTextStyle"
+            android:text="@string/periodStart" />
 
         <CalendarView
             android:id="@+id/girlsCalendar"
@@ -32,54 +24,32 @@
 
         <TextView
             android:id="@+id/periodLenght"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="6dp"
-            android:text="@string/periodLenght"
-            android:textColor="#000"
-            android:textSize="20sp" />
+            style="@style/forGirlsTextStyle"
+            android:text="@string/periodLenght" />
 
         <TextView
             android:id="@+id/periodTimeValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            style="@style/forGirlsSeekBatValueStyle" />
 
         <SeekBar
             android:id="@+id/periodTime"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
+            style="@style/forGirlsSeekBarStyle"
             android:max="10" />
 
 
         <TextView
             android:id="@+id/cycleLenght"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="6dp"
-            android:text="@string/cycleLenght"
-            android:textColor="#000"
-            android:textSize="20sp" />
+            style="@style/forGirlsTextStyle"
+            android:text="@string/cycleLenght" />
 
         <TextView
             android:id="@+id/cycleTimeValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:textSize="12sp" />
+            style="@style/forGirlsSeekBatValueStyle" />
 
         <SeekBar
             android:id="@+id/cycleTime"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
+            style="@style/forGirlsSeekBarStyle"
             android:max="40" />
-
-
     </LinearLayout>
 </RelativeLayout>
 

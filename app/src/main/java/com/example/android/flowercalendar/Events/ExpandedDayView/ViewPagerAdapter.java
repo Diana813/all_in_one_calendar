@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.content.Context;
 
@@ -17,7 +17,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     ViewPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-        layouts = new int[]{R.layout.testing_layout, R.layout.activity_expanded_day_view};
+        layouts = new int[]{R.layout.testing_layout, R.layout.todo_list};
     }
 
 
@@ -30,7 +30,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             fragment.setContent(layouts[position]);
             return fragment;
         } else {
-            EventsList fragment = new EventsList();
+            ToDoList fragment = new ToDoList();
             fragment.setContent(layouts[position]);
             return fragment;
 

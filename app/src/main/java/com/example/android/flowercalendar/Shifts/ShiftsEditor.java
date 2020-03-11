@@ -210,7 +210,7 @@ public class ShiftsEditor extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.for_girls_save_menu, menu);
+        inflater.inflate(R.menu.save_delete_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

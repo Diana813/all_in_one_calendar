@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.CyclicalEvents;
 
 import android.app.Application;
 
@@ -20,7 +20,7 @@ public class CyclicalEventsViewModel extends AndroidViewModel {
     public CyclicalEventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.findByEventDay("");
+        eventsLiveData = eventsDao.sortByOrder("0");
 
     }
 

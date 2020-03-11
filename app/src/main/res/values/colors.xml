@@ -26,4 +26,5 @@
     <color name="eventBackgroundGrey">#eeeeee</color>
     <color name="semiTransparentColor">#90FFFFFF</color>
     <color name="semiTransparentColorGrey">#98BDBDBD</color>
+    <color name="semiTransparentColorWhite">#98FFFFFF</color>
 </resources>

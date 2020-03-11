@@ -11,8 +11,10 @@ public class BigPlanData {
     private int position;
 
     @ColumnInfo(name = "aimNumber")
-    private String aimNumber;
+    private int aimNumber;
 
+    @ColumnInfo(name = "dot")
+    private String dot;
 
     @ColumnInfo(name = "aimTime")
     private int aimTime;
@@ -20,20 +22,13 @@ public class BigPlanData {
     @ColumnInfo(name = "aimContents")
     private String aimContents;
 
-    public BigPlanData(int aimTime, String aimNumber, String aimContents) {
+    public BigPlanData(int aimTime, int aimNumber, String dot, String aimContents) {
         this.aimTime = aimTime;
         this.aimNumber = aimNumber;
+        this.dot = dot;
         this.aimContents = aimContents;
     }
 
-
-    public String getAimNumber() {
-        return aimNumber;
-    }
-
-    public void setAimNumber(String aimNumber) {
-        this.aimNumber = aimNumber;
-    }
 
     public String getAimContents() {
         return aimContents;
@@ -57,5 +52,21 @@ public class BigPlanData {
 
     public void setAimTime(int aimTime) {
         this.aimTime = aimTime;
+    }
+
+    public int getAimNumber() {
+        return aimNumber;
+    }
+
+    public void setAimNumber(int aimNumber) {
+        this.aimNumber = aimNumber;
+    }
+
+    public String getDot() {
+        return dot;
+    }
+
+    public void setDot(String dot) {
+        this.dot = dot;
     }
 }

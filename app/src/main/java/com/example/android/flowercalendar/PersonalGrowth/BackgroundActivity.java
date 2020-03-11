@@ -35,7 +35,7 @@ public class BackgroundActivity extends Fragment {
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
 
         // Create an adapter that knows which fragment should be shown on each page
-        LifeAimsAdapter adapter = new LifeAimsAdapter(getContext(), getChildFragmentManager()) {
+        LifeAimsViewPagerAdapter adapter = new LifeAimsViewPagerAdapter(getContext(), getChildFragmentManager()) {
         };
 
 

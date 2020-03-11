@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.FrequentActivities;
 
 import android.app.Application;
 
@@ -19,10 +19,10 @@ public class FrequentActivitiesViewModel extends AndroidViewModel {
     public FrequentActivitiesViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.findByEventKind(1);
+        eventsLiveData = eventsDao.sortByOrder("");
     }
 
-    LiveData<List<Event>> getEventsList() {
+    public LiveData<List<Event>> getEventsList() {
         return eventsLiveData;
     }
 

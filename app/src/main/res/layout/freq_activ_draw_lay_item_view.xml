@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:id="@+id/singleFreqActItem"
-    android:background="@color/lightGrey"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+    android:background="@color/lightGrey">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/eventName"
-        android:textSize="20sp"
-        tools:text="kino"
-        android:layout_margin="10dp"
-        android:textColor="#000"/>
+        style="@style/textViewStylePlansList"
+        android:layout_width="match_parent"
+        tools:text="kino" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#000"/>
+        android:background="#000" />
 
 </LinearLayout>

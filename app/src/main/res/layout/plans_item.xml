@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/cardViewPlansList">
+
+    <LinearLayout style="@style/BackgroundLayout.LinearLayoutHorizontalStyle">
+
+        <TextView
+            android:id="@+id/number"
+            style="@style/textViewStylePlansList"
+            tools:text="1." />
+
+        <TextView
+            android:id="@+id/contents"
+            style="@style/textViewStylePlansList"
+            tools:text="Zostać Android developerem" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

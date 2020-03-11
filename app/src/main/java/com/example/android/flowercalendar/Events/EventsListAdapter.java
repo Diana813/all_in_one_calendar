@@ -6,7 +6,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
@@ -23,7 +22,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<FrequentActivitiesListAdapter.FrequentActivitiesViewHolder> {
+public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.FrequentActivitiesViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
@@ -35,9 +34,9 @@ public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<Frequent
     private ArrayList<String> eventNumbers = new ArrayList<>();
 
 
-    FrequentActivitiesListAdapter(Context requireNonNull, Context context) {
+    public EventsListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        FrequentActivitiesListAdapter.context = context;
+        EventsListAdapter.context = context;
 
     }
 
@@ -46,7 +45,7 @@ public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<Frequent
     }
 
 
-    void setEventsList(List<Event> eventsList) {
+    public void setEventsList(List<Event> eventsList) {
         this.eventsList = eventsList;
         notifyDataSetChanged();
     }
@@ -65,7 +64,6 @@ public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<Frequent
         if (eventsList == null) {
             return;
         }
-
         final Event event = eventsList.get(position);
 
         if (event != null) {
@@ -89,14 +87,14 @@ public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<Frequent
 
     }
 
-    void deleteFromDatabase() {
+    public void deleteFromDatabase() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
 
         if (eventNumbers != null) {
             for (int i = 0; i < eventNumbers.size(); i++) {
 
-                bigPlanDao.deleteByAimNumber(eventNumbers.get(i));
+                bigPlanDao.deleteByAimContent(eventNumbers.get(i));
 
             }
         }
@@ -182,10 +180,9 @@ public class FrequentActivitiesListAdapter extends RecyclerView.Adapter<Frequent
 
         FrequentActivitiesViewHolder(View itemView) {
             super(itemView);
-            eventNumber = itemView.findViewById(R.id.eventNumber);
-            eventContents = itemView.findViewById(R.id.event);
-            ImageView editImage = itemView.findViewById(R.id.editImage);
-            editImage.setVisibility(View.GONE);
+            eventNumber = itemView.findViewById(R.id.number);
+            eventContents = itemView.findViewById(R.id.contents);
+
         }
     }
 }

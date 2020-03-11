@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Events;
+package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,9 +16,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-public class BackgroundActivityEvents extends Fragment {
+public class BackgroundActivityExpandedDayView extends Fragment {
 
-    public BackgroundActivityEvents() {
+    private String pickedDay;
+
+    public BackgroundActivityExpandedDayView() {
         // Required empty public constructor
     }
 
@@ -32,22 +34,32 @@ public class BackgroundActivityEvents extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.background_viewpager, container, false);
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.events));
+        pickedDay = pickedDate();
+        Objects.requireNonNull(getActivity()).setTitle(pickedDay);
 
         // Create an adapter that knows which fragment should be shown on each page
         ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager()) {
         };
-
-
         ViewPager viewPager = rootView.findViewById(R.id.viewpager);
         TabLayout tabs = rootView.findViewById(R.id.tabs);
-
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
         // Connect the tab layout with the view pager.
         tabs.setupWithViewPager(viewPager);
         viewPager.setPageTransformer(true, new DepthPageTransformer());
         return rootView;
+    }
+
+    private String pickedDate() {
+        assert getArguments() != null;
+        return getArguments().getString("pickedDay");
 
     }
+
+
+    public String getPickedDate() {
+        return pickedDay;
+    }
+
+
 }

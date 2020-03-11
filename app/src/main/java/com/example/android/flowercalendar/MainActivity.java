@@ -7,21 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Coworkers.CoworkerFragment;
-import com.example.android.flowercalendar.Events.CyclicalEvents;
-import com.example.android.flowercalendar.Events.FrequentActivities;
-import com.example.android.flowercalendar.Events.OneTimeEvents;
+import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEvents;
+import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivities;
 import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity;
 import com.example.android.flowercalendar.PersonalGrowth.LifeAims;
 import com.example.android.flowercalendar.Shifts.ShiftsFragment;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        mDrawer = findViewById(R.id.drawer_layout);
+        mDrawer = findViewById(R.id.activity_expanded_day_view);
         addListData();
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_expanded_day_view);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

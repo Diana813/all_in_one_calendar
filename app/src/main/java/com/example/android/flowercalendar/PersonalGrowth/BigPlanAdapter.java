@@ -12,7 +12,6 @@ import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -30,11 +29,11 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private List<BigPlanData> aimsList;
     private BigPlanData bigPlanData;
     private int aimPosition;
-    private String aimNumber;
-    private ArrayList<String> aimNumbers = new ArrayList<>();
+    private int pos;
+    private ArrayList<Integer> aimNumbers = new ArrayList<Integer>();
 
 
-    public BigPlanAdapter(Context requireNonNull, Context context) {
+    BigPlanAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         BigPlanAdapter.context = context;
 
@@ -53,7 +52,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     @NonNull
     @Override
     public BigPlanViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.personal_growth_plans_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.plans_item, parent, false);
         return new BigPlanViewHolder(itemView);
     }
 
@@ -69,7 +68,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         if (bigPlanData != null) {
 
-            holder.aimNumber.setText(bigPlanData.getAimNumber());
+            holder.aimNumber.setText(String.valueOf(bigPlanData.getAimNumber()));
             holder.aimContents.setText(bigPlanData.getAimContents());
 
         }
@@ -79,9 +78,9 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     public void deleteItem(int position) {
 
         bigPlanData = aimsList.get(position);
-        aimPosition = position;
-        aimNumber = bigPlanData.getAimNumber();
-        aimNumbers.add(aimNumber);
+        pos = position;
+        aimPosition = bigPlanData.getPosition();
+        aimNumbers.add(aimPosition);
         aimsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
@@ -95,7 +94,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         if (aimNumbers != null) {
             for (int i = 0; i < aimNumbers.size(); i++) {
 
-                bigPlanDao.deleteByAimNumber(aimNumbers.get(i));
+                bigPlanDao.deleteByPosition(aimNumbers.get(i));
 
             }
         }
@@ -117,10 +116,10 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     }
 
     private void undoDelete() {
-        aimsList.add(aimPosition,
+        aimsList.add(pos,
                 bigPlanData);
-        aimNumbers.remove(aimNumber);
-        notifyItemInserted(aimPosition);
+        aimNumbers.remove(aimPosition);
+        notifyItemInserted(pos);
     }
 
     public void onItemMove(int fromPosition, int toPosition) {
@@ -142,24 +141,24 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
     }
 
-    public void setIndexInDatabase() {
+   /* public void setIndexInDatabase() {
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
         int i = 1;
         for (BigPlanData bigPlanData : aimsList) {
             bigPlanData.setPosition(aimsList.indexOf(bigPlanData));
-            bigPlanData.setAimNumber(String.valueOf(i));
+            bigPlanData.setAimNumber(i);
             bigPlanDao.update(bigPlanData);
             i++;
         }
     }
-
-    private void setAimNumbersInDB() {
+*/
+    public void setAimNumbersInDB() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
         int i = 1;
         for (BigPlanData bigPlanData : aimsList) {
 
-            bigPlanData.setAimNumber(String.valueOf(i));
+            bigPlanData.setAimNumber(i);
             bigPlanDao.update(bigPlanData);
 
             i++;
@@ -181,8 +180,8 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         BigPlanViewHolder(View itemView) {
             super(itemView);
-            aimNumber = itemView.findViewById(R.id.aimNumber);
-            aimContents = itemView.findViewById(R.id.aimContents);
+            aimNumber = itemView.findViewById(R.id.number);
+            aimContents = itemView.findViewById(R.id.contents);
         }
     }
 }
