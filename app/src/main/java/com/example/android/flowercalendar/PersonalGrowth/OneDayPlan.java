@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static androidx.lifecycle.ViewModelProviders.*;
 
 public class OneDayPlan extends Fragment {
 
@@ -61,7 +64,7 @@ public class OneDayPlan extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        adapter.setAimNumbersInDB();
+        adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
         appUtils.hideKeyboard(getView());
     }
@@ -100,7 +103,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, newId);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4);
         return rootView;
     }
 
@@ -121,8 +124,9 @@ public class OneDayPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
-        OneDayViewModel oneDayViewModel = ViewModelProviders.of(fragment).get(OneDayViewModel.class);
+        OneDayViewModel oneDayViewModel = of(fragment).get(OneDayViewModel.class);
         oneDayViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
             @Override
             public void onChanged(@Nullable List<BigPlanData> aims) {

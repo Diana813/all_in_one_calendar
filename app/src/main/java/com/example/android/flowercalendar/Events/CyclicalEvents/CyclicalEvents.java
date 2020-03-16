@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static androidx.lifecycle.ViewModelProviders.*;
+
 public class CyclicalEvents extends Fragment {
     private Context context;
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
@@ -87,6 +89,8 @@ public class CyclicalEvents extends Fragment {
         LinearLayout editText = rootView.findViewById(R.id.editTextLinearLayout);
         editText.setVisibility(View.GONE);
         empty_view = rootView.findViewById(R.id.empty_view);
+        ImageView image = rootView.findViewById(R.id.imageAims);
+        image.setVisibility(View.GONE);
         TextView eventsLabel = rootView.findViewById(R.id.eventsLabel);
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
@@ -112,8 +116,8 @@ public class CyclicalEvents extends Fragment {
 
     private void initData() {
 
-        CyclicalEventsViewModel eventsViewModel = ViewModelProviders.of(this).get(CyclicalEventsViewModel.class);
-        eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+        CyclicalEventsViewModel eventsViewModel = of(this).get(CyclicalEventsViewModel.class);
+        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 assert events != null;

@@ -5,7 +5,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        style="@style/recyclerViewTasksListStyle" />
+        style="@style/recyclerViewTasksListStyle"
+        />
 
     <LinearLayout
         android:id="@+id/editTextLinearLayout"

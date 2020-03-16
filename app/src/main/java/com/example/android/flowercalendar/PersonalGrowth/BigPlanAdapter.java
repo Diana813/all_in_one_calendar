@@ -28,12 +28,14 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private LayoutInflater layoutInflater;
     private List<BigPlanData> aimsList;
     private BigPlanData bigPlanData;
-    private int aimPosition;
+    private String aimIndex;
     private int pos;
-    private ArrayList<Integer> aimNumbers = new ArrayList<Integer>();
+    private ArrayList<StringsAims> aimStrings = new ArrayList<>();
+    private int aimTime;
+    private String aimContent;
 
 
-    BigPlanAdapter(Context requireNonNull, Context context) {
+    public BigPlanAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         BigPlanAdapter.context = context;
 
@@ -65,41 +67,35 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         }
 
         final BigPlanData bigPlanData = aimsList.get(position);
+        aimTime = bigPlanData.getAimTime();
 
-        if (bigPlanData != null) {
-
-            holder.aimNumber.setText(String.valueOf(bigPlanData.getAimNumber()));
-            holder.aimContents.setText(bigPlanData.getAimContents());
-
-        }
-
+        holder.aimNumber.setText((position + 1) + ".");
+        holder.aimContents.setText(bigPlanData.getAimContents());
     }
 
     public void deleteItem(int position) {
 
         bigPlanData = aimsList.get(position);
         pos = position;
-        aimPosition = bigPlanData.getPosition();
-        aimNumbers.add(aimPosition);
+        aimIndex = bigPlanData.getAimIndex();
+        aimContent = bigPlanData.getAimContents();
+        aimStrings.add(new StringsAims(aimIndex, aimContent));
         aimsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
-
     }
 
-    void deleteFromDatabase() {
+    public void deleteFromDatabase() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
 
-        if (aimNumbers != null) {
-            for (int i = 0; i < aimNumbers.size(); i++) {
-
-                bigPlanDao.deleteByPosition(aimNumbers.get(i));
-
+        if (aimStrings != null) {
+            for (int i = 0; i < aimStrings.size(); i++) {
+                String aimIndex = aimStrings.get(i).getAimNumber();
+                String aimContent = aimStrings.get(i).getAimContent();
+                bigPlanDao.deleteItemFromPlans(aimIndex, aimTime, aimContent);
             }
         }
-
-        setAimNumbersInDB();
     }
 
     private void showUndoSnackbar() {
@@ -118,8 +114,10 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private void undoDelete() {
         aimsList.add(pos,
                 bigPlanData);
-        aimNumbers.remove(aimPosition);
+        aimStrings.remove(new StringsAims(aimIndex, aimContent));
+        aimStrings = new ArrayList<>();
         notifyItemInserted(pos);
+
     }
 
     public void onItemMove(int fromPosition, int toPosition) {
@@ -141,28 +139,18 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
     }
 
-   /* public void setIndexInDatabase() {
-        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
-        int i = 1;
-        for (BigPlanData bigPlanData : aimsList) {
-            bigPlanData.setPosition(aimsList.indexOf(bigPlanData));
-            bigPlanData.setAimNumber(i);
-            bigPlanDao.update(bigPlanData);
-            i++;
-        }
-    }
-*/
-    public void setAimNumbersInDB() {
+    public void setAimIndexInDB() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
-        int i = 1;
-        for (BigPlanData bigPlanData : aimsList) {
+        if (bigPlanData != null) {
+            for (BigPlanData bigPlanData : aimsList) {
 
-            bigPlanData.setAimNumber(i);
-            bigPlanDao.update(bigPlanData);
+                bigPlanData.setAimIndex(aimsList.indexOf(bigPlanData) + ".");
+                bigPlanDao.update(bigPlanData);
 
-            i++;
+            }
         }
+
     }
 
     @Override

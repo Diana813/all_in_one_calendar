@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
+import com.example.android.flowercalendar.PersonalGrowth.BigPlan;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
@@ -21,6 +23,8 @@ import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +40,7 @@ import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.g
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class AppUtils {
+
 
     public void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context) {
 
@@ -59,7 +64,7 @@ public class AppUtils {
         builder.setMessage(R.string.delete_all_dialog_message);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                BigPlanDao bigPlanDao = (BigPlanDao) CalendarDatabase.getDatabase(getContext()).bigPlanDao();
+                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
                 bigPlanDao.deleteAll(i);
             }
         });
@@ -85,13 +90,14 @@ public class AppUtils {
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView textView, final int i, final int newId) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i) {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData(textView, i, newId);
-                adapter.setAimNumbersInDB();
-                textView.setText("");
+                saveDataPersonalGrowth(adapter, aim, i);
+                adapter.deleteFromDatabase();
+                adapter.setAimIndexInDB();
+                aim.setText("");
             }
         });
 
@@ -110,12 +116,13 @@ public class AppUtils {
     }
 
 
-    private void saveData(TextView textView, int i, int newId) {
+    private void saveDataPersonalGrowth(BigPlanAdapter bigPlanAdapter, TextView aim, int i) {
 
-        String aimTextString = textView.getText().toString();
+        String aimTextString = aim.getText().toString();
+        int index = bigPlanAdapter.getItemCount();
 
-        BigPlanDao bigPlanDao = (BigPlanDao) CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-        bigPlanDao.insert(new BigPlanData(i, (newId + 1), ".", aimTextString));
+        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
+        bigPlanDao.insert(new BigPlanData(i, String.valueOf(index), aimTextString));
 
     }
 

@@ -117,7 +117,7 @@ public class LifeAims extends Fragment {
     }
 
     private void checkCameraHardware(Context context) {
-        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
             addPhoto.setVisibility(View.VISIBLE);
         } else {
             addPhoto.setVisibility(View.GONE);

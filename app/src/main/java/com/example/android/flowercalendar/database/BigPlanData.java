@@ -10,11 +10,8 @@ public class BigPlanData {
     @PrimaryKey(autoGenerate = true)
     private int position;
 
-    @ColumnInfo(name = "aimNumber")
-    private int aimNumber;
-
-    @ColumnInfo(name = "dot")
-    private String dot;
+    @ColumnInfo(name = "aimIndex")
+    private String aimIndex;
 
     @ColumnInfo(name = "aimTime")
     private int aimTime;
@@ -22,10 +19,9 @@ public class BigPlanData {
     @ColumnInfo(name = "aimContents")
     private String aimContents;
 
-    public BigPlanData(int aimTime, int aimNumber, String dot, String aimContents) {
+    public BigPlanData(int aimTime, String aimIndex, String aimContents) {
         this.aimTime = aimTime;
-        this.aimNumber = aimNumber;
-        this.dot = dot;
+        this.aimIndex = aimIndex;
         this.aimContents = aimContents;
     }
 
@@ -54,19 +50,11 @@ public class BigPlanData {
         this.aimTime = aimTime;
     }
 
-    public int getAimNumber() {
-        return aimNumber;
+    public String getAimIndex() {
+        return aimIndex;
     }
 
-    public void setAimNumber(int aimNumber) {
-        this.aimNumber = aimNumber;
-    }
-
-    public String getDot() {
-        return dot;
-    }
-
-    public void setDot(String dot) {
-        this.dot = dot;
+    public void setAimIndex(String aimIndex) {
+        this.aimIndex = aimIndex;
     }
 }

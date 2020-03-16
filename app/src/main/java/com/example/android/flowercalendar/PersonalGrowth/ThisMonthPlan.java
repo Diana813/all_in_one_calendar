@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static androidx.lifecycle.ViewModelProviders.*;
 
 public class ThisMonthPlan extends Fragment {
 
@@ -59,7 +62,7 @@ public class ThisMonthPlan extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        adapter.setAimNumbersInDB();
+        adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
         appUtils.hideKeyboard(getView());
     }
@@ -89,10 +92,10 @@ public class ThisMonthPlan extends Fragment {
 
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
-        appUtils.setRecyclerViewPersonalGrowth(recyclerView,adapter,context);
+        appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
-        initData(this,adapter);
-        appUtils.setConfirmButton(confirm,adapter,aimText, 3, newId);
+        initData(this, adapter);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 3);
 
         return rootView;
     }
@@ -114,8 +117,9 @@ public class ThisMonthPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
-        ThisMonthViewModel thisMonthViewModel = ViewModelProviders.of(fragment).get(ThisMonthViewModel.class);
+        ThisMonthViewModel thisMonthViewModel = of(fragment).get(ThisMonthViewModel.class);
         thisMonthViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
             @Override
             public void onChanged(@Nullable List<BigPlanData> aims) {

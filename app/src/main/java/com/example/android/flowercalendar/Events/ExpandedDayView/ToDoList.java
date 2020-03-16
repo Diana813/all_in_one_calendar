@@ -37,6 +37,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static androidx.lifecycle.ViewModelProviders.*;
+
 public class ToDoList extends Fragment {
 
     private EventsListAdapter toDoListAdapter;
@@ -96,7 +98,6 @@ public class ToDoList extends Fragment {
         View rootView = inflater.inflate(layout, container, false);
         findViews(rootView);
         eventsLabel.setVisibility(View.GONE);
-        addEventsToTheList.setBackgroundResource(R.mipmap.sun);
         editText.setTextColor(Color.BLACK);
         setAdapters();
         setHasOptionsMenu(true);
@@ -129,7 +130,7 @@ public class ToDoList extends Fragment {
     }
 
     private String findWhatDateItIs() {
-        Fragment parentFragment = (Fragment) getParentFragment();
+        Fragment parentFragment = getParentFragment();
         if (parentFragment instanceof BackgroundActivityExpandedDayView) {
             pickedDay = ((BackgroundActivityExpandedDayView) parentFragment).getPickedDate();
         }
@@ -162,8 +163,8 @@ public class ToDoList extends Fragment {
 
     private void initData() {
 
-        EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
-        eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+        EventsViewModel eventsViewModel = of(this).get(EventsViewModel.class);
+        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 assert events != null;
@@ -176,8 +177,8 @@ public class ToDoList extends Fragment {
 
     private void addFreqActivList() {
 
-        FrequentActivitiesViewModel frequentActivitiesViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
-        frequentActivitiesViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+        FrequentActivitiesViewModel frequentActivitiesViewModel = of(this).get(FrequentActivitiesViewModel.class);
+        frequentActivitiesViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
                 assert events != null;

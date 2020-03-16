@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.Events.FrequentActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static androidx.lifecycle.ViewModelProviders.*;
 
 public class FrequentActivities extends Fragment {
 
@@ -82,6 +85,8 @@ public class FrequentActivities extends Fragment {
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
         ImageView imageView = rootView.findViewById(R.id.empty_view_image);
+        ImageView image = rootView.findViewById(R.id.imageAims);
+        image.setVisibility(View.GONE);
         emptyViewTitle.setText(R.string.addFrequentActivities);
         emptyViewSubtitle.setText(R.string.descriptionFrequentActivities);
         imageView.setImageResource(R.drawable.baseline_date_range_black_48);
@@ -101,8 +106,9 @@ public class FrequentActivities extends Fragment {
         return rootView;
     }
 
+    @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final EventsListAdapter adapter) {
-        FrequentActivitiesViewModel frequentActivitiesViewModel = ViewModelProviders.of(fragment).get(FrequentActivitiesViewModel.class);
+        FrequentActivitiesViewModel frequentActivitiesViewModel = of(fragment).get(FrequentActivitiesViewModel.class);
         frequentActivitiesViewModel.getEventsList().observe(fragment, new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
