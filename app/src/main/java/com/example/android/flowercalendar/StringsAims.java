@@ -1,11 +1,11 @@
-package com.example.android.flowercalendar.PersonalGrowth;
+package com.example.android.flowercalendar;
 
 public class StringsAims {
 
     private String aimNumber;
     private String aimContent;
 
-    StringsAims(String aimNumber, String aimContent) {
+    public StringsAims(String aimNumber, String aimContent) {
         this.aimNumber = aimNumber;
         this.aimContent = aimContent;
     }
@@ -18,7 +18,7 @@ public class StringsAims {
         this.aimNumber = aimNumber;
     }
 
-    String getAimContent() {
+    public String getAimContent() {
         return aimContent;
     }
 

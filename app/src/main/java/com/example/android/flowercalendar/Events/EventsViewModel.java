@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/singleFreqActItem"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
-    android:background="@color/lightGrey">
+    android:background="@color/colorWhite">
 
     <TextView
         android:id="@+id/eventName"

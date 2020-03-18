@@ -6,15 +6,16 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.PersonalGrowth.BigPlan;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
@@ -23,8 +24,6 @@ import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +39,6 @@ import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.g
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class AppUtils {
-
 
     public void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context) {
 
@@ -103,12 +101,13 @@ public class AppUtils {
 
     }
 
-    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final int newId, final String pickedDay) {
+    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final String pickedDay, final String newEvent) {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDataEvents(textView, i, newId, pickedDay);
-                adapter.setIndexInDatabase();
+                saveDataEvents(adapter, textView, i, pickedDay, newEvent);
+                adapter.deleteFromDatabase();
+                adapter.setIndexInDB();
                 textView.setText("");
             }
         });
@@ -126,12 +125,21 @@ public class AppUtils {
 
     }
 
-    private void saveDataEvents(TextView textView, int i, int newId, String pickedDay) {
-        String eventTextString = textView.getText().toString();
-        EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        eventsDao.insert(new Event(newId, eventTextString, String.valueOf(newId + 1), null, 0, pickedDay, 1));
-    }
+    public void saveDataEvents(EventsListAdapter eventsListAdapter, TextView plan, int i, String pickedDay, String newEvent) {
 
+        String eventTextString;
+        if (newEvent != null) {
+            eventTextString = newEvent;
+        } else {
+            eventTextString = plan.getText().toString();
+        }
+
+
+        int index = ToDoList.newId;
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
+        eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1));
+    }
 
     public void displayImageFromDB(ImageView view) {
 

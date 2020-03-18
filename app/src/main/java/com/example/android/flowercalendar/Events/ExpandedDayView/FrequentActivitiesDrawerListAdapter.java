@@ -1,12 +1,18 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
+import android.app.VoiceInteractor;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Event;
 
@@ -21,11 +27,16 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
     private static Context context;
     private LayoutInflater layoutInflater;
     private List<Event> eventsList;
+    private int freqActMarked = -1;
+    private AppUtils appUtils = new AppUtils();
+    private EventsListAdapter eventsListAdapter;
+    private ToDoList toDoList = new ToDoList();
+    private BackgroundActivityExpandedDayView backgroundActivityExpandedDayView = new BackgroundActivityExpandedDayView();
 
     FrequentActivitiesDrawerListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         FrequentActivitiesDrawerListAdapter.context = context;
-
+        eventsListAdapter = new EventsListAdapter(getContext(), getContext());
     }
 
     public static Context getContext() {
@@ -46,17 +57,35 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FrequentActivitiesDrawerListAdapter.FreqEventsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final FrequentActivitiesDrawerListAdapter.FreqEventsViewHolder holder, final int position) {
+
 
         if (eventsList == null) {
             return;
         }
         final Event event = eventsList.get(position);
-
         if (event != null) {
             holder.eventName.setText(event.getEvent_name());
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                freqActMarked = position;
+                notifyDataSetChanged();
+            }
+        });
 
+        if (freqActMarked == position) {
+            assert event != null;
+            String newEvent = event.getEvent_name();
+            String pickedDay = CalendarFragment.pickedDay;
+            toDoList.getFreqActivString(newEvent, eventsListAdapter, pickedDay);
+            holder.backgroundLayout.setBackgroundResource(R.color.colorAccent);
+            freqActMarked = -2;
+
+        } else {
+            holder.backgroundLayout.setBackgroundColor(Color.WHITE);
+        }
     }
 
     @Override
@@ -71,10 +100,14 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
     static class FreqEventsViewHolder extends RecyclerView.ViewHolder {
 
         private TextView eventName;
+        private LinearLayout backgroundLayout;
 
         FreqEventsViewHolder(@NonNull View itemView) {
             super(itemView);
             eventName = itemView.findViewById(R.id.eventName);
+            backgroundLayout = itemView.findViewById(R.id.singleFreqActItem);
         }
     }
+
+
 }

@@ -8,23 +8,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentStateAdapter {
 
     private Context mContext;
     private int[] layouts;
 
-    ViewPagerAdapter(Context context, FragmentManager fm) {
-        super(fm);
-        mContext = context;
+    ViewPagerAdapter(BackgroundActivityExpandedDayView backgroundActivityExpandedDayView) {
+        super(backgroundActivityExpandedDayView);
         layouts = new int[]{R.layout.testing_layout, R.layout.todo_list};
     }
 
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
-
+    public Fragment createFragment(int position) {
         if (position == 0) {
             DailyScheduleEvents fragment = new DailyScheduleEvents();
             fragment.setContent(layouts[position]);
@@ -37,18 +36,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-
-    public int getCount() {
+    @Override
+    public int getItemCount() {
         return 2;
     }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return mContext.getString(R.string.dailySchedule);
-        } else {
-            return mContext.getString(R.string.ToDo);
-        }
-    }
-
 }

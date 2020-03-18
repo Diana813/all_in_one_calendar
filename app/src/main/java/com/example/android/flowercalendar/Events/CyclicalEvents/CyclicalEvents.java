@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,12 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.lifecycle.ViewModelProviders.*;
+import static androidx.lifecycle.ViewModelProviders.of;
 
 public class CyclicalEvents extends Fragment {
     private Context context;
@@ -89,8 +87,6 @@ public class CyclicalEvents extends Fragment {
         LinearLayout editText = rootView.findViewById(R.id.editTextLinearLayout);
         editText.setVisibility(View.GONE);
         empty_view = rootView.findViewById(R.id.empty_view);
-        ImageView image = rootView.findViewById(R.id.imageAims);
-        image.setVisibility(View.GONE);
         TextView eventsLabel = rootView.findViewById(R.id.eventsLabel);
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);

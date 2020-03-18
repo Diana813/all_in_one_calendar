@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+    android:layout_marginTop="15dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        style="@style/recyclerViewTasksListStyle"
-        />
+        style="@style/recyclerViewTasksListStyle" />
 
     <LinearLayout
         android:id="@+id/editTextLinearLayout"
@@ -23,6 +23,7 @@
         <ImageButton
             android:id="@+id/confirm_button"
             style="@style/confirmImageButtonStyle"
+            android:background="@color/colorAccent"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>

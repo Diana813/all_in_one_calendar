@@ -121,6 +121,11 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
             });
         }
 
+        setshiftsColor(holder);
+    }
+
+    private void setshiftsColor(ShiftsViewHolder holder) {
+
         ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
         Colors newColor = colorsDao.findLastColor1();
         if (newColor != null) {

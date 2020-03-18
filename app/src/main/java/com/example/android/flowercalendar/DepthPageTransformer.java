@@ -4,15 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
 
-public class DepthPageTransformer implements ViewPager.PageTransformer {
+public class DepthPageTransformer implements ViewPager2.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
     private BigPlanAdapter bigPlanAdapter;
 
@@ -28,10 +27,6 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
         if (position < -1) { // [-Infinity,-1)
             // This page is screen to the left.
             view.setAlpha(0f);
-            if (bigPlanAdapter != null) {
-                bigPlanAdapter.deleteFromDatabase();
-                bigPlanAdapter.setAimIndexInDB();
-            }
 
 
         } else if (position <= 0) { // [-1,0]
@@ -48,10 +43,6 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                if (bigPlanAdapter != null) {
-                    bigPlanAdapter.deleteFromDatabase();
-                    bigPlanAdapter.setAimIndexInDB();
-                }
             }
 
 
@@ -67,18 +58,12 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
                     + (1 - MIN_SCALE) * (1 - Math.abs(position));
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
-            if (bigPlanAdapter != null) {
-                bigPlanAdapter.deleteFromDatabase();
-                bigPlanAdapter.setAimIndexInDB();
-            }
 
         } else { // (1,+Infinity]
             // This page is way off-screen to the right.
             view.setAlpha(0f);
-            if (bigPlanAdapter != null) {
-                bigPlanAdapter.deleteFromDatabase();
-                bigPlanAdapter.setAimIndexInDB();
-            }
+
         }
+
     }
 }

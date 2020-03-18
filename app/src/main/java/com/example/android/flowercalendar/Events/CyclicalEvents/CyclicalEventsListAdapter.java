@@ -227,7 +227,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
     public void setIndexInDatabase() {
         EventsDao eventsDao = getDatabase(context).eventsDao();
         for (Event event : eventsList) {
-            event.setPosition(eventsList.indexOf(event));
+            event.setPosition(String.valueOf(eventsList.indexOf(event)));
             eventsDao.update(event);
         }
 

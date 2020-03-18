@@ -19,7 +19,7 @@ public class Event{
     @ColumnInfo (name = "event_length")
     private int event_length;
     @ColumnInfo(name = "position")
-    private int position;
+    private String position;
     @ColumnInfo(name = "picked_day")
     private String pickedDay;
 
@@ -27,7 +27,7 @@ public class Event{
     private int eventKind;
 
 
-    public Event(int position, String event_name, String schedule, String alarm, int event_length, String pickedDay, int eventKind) {
+    public Event(String position, String event_name, String schedule, String alarm, int event_length, String pickedDay, int eventKind) {
         this.position = position;
         this.event_name = event_name;
         this.schedule = schedule;
@@ -59,10 +59,10 @@ public class Event{
         this.alarm = new_alarm;
     }
 
-    public int getPosition() {
+    public String getPosition() {
         return position;
     }
-    public void setPosition(int position) {
+    public void setPosition(String position) {
         this.position = position;
     }
 

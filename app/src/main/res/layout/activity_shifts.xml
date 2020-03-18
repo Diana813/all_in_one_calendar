@@ -9,7 +9,7 @@
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
+        android:background="#5e92f3"
         android:padding="8dp">
 
 

@@ -6,12 +6,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEvents;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -71,6 +75,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         holder.aimNumber.setText((position + 1) + ".");
         holder.aimContents.setText(bigPlanData.getAimContents());
+
     }
 
     public void deleteItem(int position) {
@@ -142,14 +147,13 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     public void setAimIndexInDB() {
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
-        if (bigPlanData != null) {
-            for (BigPlanData bigPlanData : aimsList) {
 
-                bigPlanData.setAimIndex(aimsList.indexOf(bigPlanData) + ".");
-                bigPlanDao.update(bigPlanData);
+        for (BigPlanData bigPlanData : aimsList) {
 
-            }
+            bigPlanData.setAimIndex(aimsList.indexOf(bigPlanData) + ".");
+            bigPlanDao.update(bigPlanData);
         }
+
 
     }
 

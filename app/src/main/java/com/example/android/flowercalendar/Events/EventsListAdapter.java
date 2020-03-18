@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
+import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -30,8 +32,10 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private List<Event> eventsList;
     private Event events;
     private int eventPosition;
-    private int eventNumber;
-    private ArrayList<String> eventNumbers = new ArrayList<>();
+    private String eventNumber;
+    private ArrayList<StringsAims> eventNumbers = new ArrayList<>();
+    private String eventContent;
+    private String aimTime;
 
 
     public EventsListAdapter(Context requireNonNull, Context context) {
@@ -65,13 +69,10 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
             return;
         }
         final Event event = eventsList.get(position);
+        aimTime = event.getPickedDay();
 
-        if (event != null) {
-
-            holder.eventNumber.setText(event.getSchedule());
-            holder.eventContents.setText(event.getEvent_name());
-
-        }
+        holder.eventNumber.setText((position + 1) + ".");
+        holder.eventContents.setText(event.getEvent_name());
 
     }
 
@@ -80,7 +81,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
         events = eventsList.get(position);
         eventPosition = position;
         eventNumber = events.getPosition();
-        eventNumbers.add(String.valueOf(eventNumber));
+        eventContent = events.getEvent_name();
+        eventNumbers.add(new StringsAims(String.valueOf(eventNumber), eventContent));
         eventsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
@@ -89,17 +91,18 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
     public void deleteFromDatabase() {
 
-        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
 
         if (eventNumbers != null) {
             for (int i = 0; i < eventNumbers.size(); i++) {
 
-                bigPlanDao.deleteByAimContent(eventNumbers.get(i));
+                String index = eventNumbers.get(i).getAimNumber();
+                String content = eventNumbers.get(i).getAimContent();
+
+                eventsDao.deleteEvents(index, aimTime, content);
 
             }
         }
-
-        setAimNumbersInDB();
     }
 
     private void showUndoSnackbar() {
@@ -118,7 +121,8 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private void undoDelete() {
         eventsList.add(eventPosition,
                 events);
-        eventNumbers.remove(eventNumber);
+        eventNumbers.remove(new StringsAims(String.valueOf(eventNumber), eventContent));
+        eventNumbers = new ArrayList<>();
         notifyItemInserted(eventPosition);
     }
 
@@ -141,27 +145,15 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
     }
 
-    public void setIndexInDatabase() {
-        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        int i = 1;
-        for (Event event : eventsList) {
-            event.setPosition(eventsList.indexOf(event));
-            event.setPosition(i);
-            eventsDao.update(event);
-            i++;
-        }
-    }
-
-    private void setAimNumbersInDB() {
+    public void setIndexInDB() {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        int i = 1;
-        for (Event event : eventsList) {
+        if (eventsDao != null) {
+            for (Event event : eventsList) {
+                event.setPosition(eventsList.indexOf(event) + ".");
+                eventsDao.update(event);
 
-            event.setPosition(i);
-            eventsDao.update(event);
-
-            i++;
+            }
         }
     }
 

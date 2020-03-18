@@ -133,7 +133,7 @@ public class OneTimeEvents extends Fragment {
 
         assert getArguments() != null;
         pickedDay = getArguments().getString("pickedDay");
-        if(pickedDay == null){
+        if (pickedDay == null) {
             pickedDay = "";
         }
 
@@ -161,14 +161,14 @@ public class OneTimeEvents extends Fragment {
                 assert inputMethodManager != null;
                 inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(getView()).getWindowToken(), 0);
 
-                if(!pickedDay.equals("")){
+                if (!pickedDay.equals("")) {
                     ToDoList toDoList = new ToDoList();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
                     toDoList.setArguments(args);
                     assert getFragmentManager() != null;
                     getFragmentManager().beginTransaction().replace(R.id.flContent, toDoList).commit();
-                }else{
+                } else {
                     CyclicalEvents cyclicalEvents = new CyclicalEvents();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
@@ -252,7 +252,7 @@ public class OneTimeEvents extends Fragment {
             }
         } else {
 
-            eventsDao.insert(new Event(newId, newEventName, newEventStart, newAlarm, newEventLength, pickedDay, 0));
+            eventsDao.insert(new Event(String.valueOf(newId), newEventName, newEventStart, newAlarm, newEventLength, pickedDay, 0));
 
         }
     }

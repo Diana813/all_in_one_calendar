@@ -1,5 +1,8 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
+import android.app.VoiceInteractor;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,7 +24,9 @@ import com.example.android.flowercalendar.Events.EventsViewModel;
 import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivitiesViewModel;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -37,7 +42,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.lifecycle.ViewModelProviders.*;
+import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 
 public class ToDoList extends Fragment {
 
@@ -54,7 +59,7 @@ public class ToDoList extends Fragment {
     private ImageButton confirm;
     private EditText editText;
     private TextView eventsLabel;
-    private ScrollView addEventsToTheList;
+
 
 
     public ToDoList() {
@@ -87,7 +92,7 @@ public class ToDoList extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        toDoListAdapter.setIndexInDatabase();
+        toDoListAdapter.setIndexInDB();
         toDoListAdapter.deleteFromDatabase();
         setNumberOfEventsToPickedDate();
     }
@@ -101,9 +106,10 @@ public class ToDoList extends Fragment {
         editText.setTextColor(Color.BLACK);
         setAdapters();
         setHasOptionsMenu(true);
+        pickedDay = findWhatDateItIs();
         initData();
         addFreqActivList();
-        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, 1, newId, findWhatDateItIs());
+        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, 1, pickedDay, null);
         return rootView;
     }
 
@@ -114,7 +120,6 @@ public class ToDoList extends Fragment {
         confirm = rootView.findViewById(R.id.confirm_button);
         editText = rootView.findViewById(R.id.editText);
         eventsLabel = rootView.findViewById(R.id.eventsLabel);
-        addEventsToTheList = rootView.findViewById(R.id.addEventToTheList);
     }
 
     private void setAdapters() {
@@ -129,13 +134,18 @@ public class ToDoList extends Fragment {
 
     }
 
+    void getFreqActivString(String newEvent, EventsListAdapter toDoListAdapter, String pickedDate) {
+        appUtils.saveDataEvents(toDoListAdapter, null, 1, pickedDate, newEvent);
+    }
+
     private String findWhatDateItIs() {
-        Fragment parentFragment = getParentFragment();
+        Fragment parentFragment = (Fragment) getParentFragment();
         if (parentFragment instanceof BackgroundActivityExpandedDayView) {
             pickedDay = ((BackgroundActivityExpandedDayView) parentFragment).getPickedDate();
         }
         return pickedDay;
     }
+
 
     private void setNumberOfEventsToPickedDate() {
         CalendarFragment calendarFragment = new CalendarFragment();
@@ -163,7 +173,7 @@ public class ToDoList extends Fragment {
 
     private void initData() {
 
-        EventsViewModel eventsViewModel = of(this).get(EventsViewModel.class);
+        EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
         eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
@@ -177,7 +187,7 @@ public class ToDoList extends Fragment {
 
     private void addFreqActivList() {
 
-        FrequentActivitiesViewModel frequentActivitiesViewModel = of(this).get(FrequentActivitiesViewModel.class);
+        FrequentActivitiesViewModel frequentActivitiesViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
         frequentActivitiesViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
             @Override
             public void onChanged(@Nullable List<Event> events) {
@@ -186,4 +196,5 @@ public class ToDoList extends Fragment {
             }
         });
     }
+
 }

@@ -16,7 +16,9 @@ import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,12 +27,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.lifecycle.ViewModelProviders.*;
+import static androidx.lifecycle.ViewModelProviders.of;
 
 public class FrequentActivities extends Fragment {
 
@@ -60,7 +61,7 @@ public class FrequentActivities extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        eventsListAdapter.setIndexInDatabase();
+        eventsListAdapter.setIndexInDB();
         eventsListAdapter.deleteFromDatabase();
     }
 
@@ -85,14 +86,12 @@ public class FrequentActivities extends Fragment {
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
         ImageView imageView = rootView.findViewById(R.id.empty_view_image);
-        ImageView image = rootView.findViewById(R.id.imageAims);
-        image.setVisibility(View.GONE);
         emptyViewTitle.setText(R.string.addFrequentActivities);
         emptyViewSubtitle.setText(R.string.descriptionFrequentActivities);
         imageView.setImageResource(R.drawable.baseline_date_range_black_48);
         eventsLabel.setText(R.string.activitiesList);
 
-        EditText eventText = rootView.findViewById(R.id .editText);
+        EditText eventText = rootView.findViewById(R.id.editText);
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.list);
@@ -102,7 +101,7 @@ public class FrequentActivities extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
         initData(this, eventsListAdapter);
-        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, 1, newId, "");
+        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, 1, "", null);
         return rootView;
     }
 
@@ -123,4 +122,5 @@ public class FrequentActivities extends Fragment {
             }
         });
     }
+
 }

@@ -41,28 +41,14 @@
         </RelativeLayout>
 
 
-
         <FrameLayout
+            android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recycler"
             android:layout_below="@+id/eventsLabel">
 
             <include layout="@layout/recycleview_and_edittext" />
         </FrameLayout>
-
-        <ImageView
-            android:id="@+id/imageAims"
-            android:layout_width="wrap_content"
-            android:layout_height="300dp"
-            android:scaleType="centerCrop"
-            android:layout_below="@id/recycler"
-            android:layout_alignParentEnd="true"
-            android:src="@mipmap/zegar"
-            tools:ignore="ContentDescription">
-
-        </ImageView>
-
     </RelativeLayout>
 
 </ScrollView>

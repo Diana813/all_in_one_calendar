@@ -11,7 +11,7 @@
         android:paddingLeft="40dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textColor="@color/grey"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="17sp"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="@string/espandedListViewTitles" />

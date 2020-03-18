@@ -2,14 +2,14 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">#616161</item>
-        <item name="colorPrimaryDark">#331107</item>
-        <item name="colorAccent">#B71C1C</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:ambientShadowAlpha">0.6</item>
         <item name="android:spotShadowAlpha">0.6</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/yellow</item>
+        <item name="colorSecondary">#5e92f3</item>
     </style>
 
     <style name="colorPickerBigPart">
@@ -29,6 +29,7 @@
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginStart">35dp</item>
         <item name="android:layout_marginTop">15dp</item>
+        <item name="backgroundColor">#BDBDBD</item>
     </style>
 
     <!-- Style for the table labels text views in shift activity-->
@@ -299,16 +300,16 @@
     </style>
 
     <style name="Table" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="tabIndicatorColor">@color/colorWhite</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
         <item name="tabTextAppearance">@style/TableTextAppearance</item>
-        <item name="tabBackground">@color/colorPrimaryDark</item>
+        <item name="tabBackground">@color/colorSecondary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="TableTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#A8A19E</item>
+        <item name="android:textColor">#fff</item>
     </style>
 
     <style name="tableLayoutShiftsEditorStyle">

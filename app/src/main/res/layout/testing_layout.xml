@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
-    android:background="@color/lightGrey"
     tools:context=".Events.ExpandedDayView.ToDoList">
 
     <TextView

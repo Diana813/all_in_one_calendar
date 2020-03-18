@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.android.flowercalendar.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 public class BackgroundActivityExpandedDayView extends Fragment {
 
@@ -38,15 +40,20 @@ public class BackgroundActivityExpandedDayView extends Fragment {
         Objects.requireNonNull(getActivity()).setTitle(pickedDay);
 
         // Create an adapter that knows which fragment should be shown on each page
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getContext(), getChildFragmentManager()) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(this) {
         };
-        ViewPager viewPager = rootView.findViewById(R.id.viewpager);
+        ViewPager2 viewPager = rootView.findViewById(R.id.viewpager);
         TabLayout tabs = rootView.findViewById(R.id.tabs);
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
+
         // Connect the tab layout with the view pager.
-        tabs.setupWithViewPager(viewPager);
-        viewPager.setPageTransformer(true, new DepthPageTransformer());
+        String[] titles = new String[]{getString(R.string.dailySchedule), getString(R.string.ToDo)};
+
+        new TabLayoutMediator(tabs, viewPager,
+                (tab, position) -> tab.setText(titles[position])).attach();
+
+        viewPager.setPageTransformer(new DepthPageTransformer());
         return rootView;
     }
 

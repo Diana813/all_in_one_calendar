@@ -14,7 +14,7 @@
         android:layout_width="150dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/lightGrey"
+        android:background="@color/colorWhite"
         app:itemTextColor="@color/colorPrimary">
 
         <androidx.recyclerview.widget.RecyclerView

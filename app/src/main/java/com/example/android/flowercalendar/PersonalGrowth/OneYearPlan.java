@@ -9,15 +9,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanData;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,10 +29,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.lifecycle.ViewModelProviders.*;
+import static androidx.lifecycle.ViewModelProviders.of;
 
 public class OneYearPlan extends Fragment {
 
@@ -37,6 +40,12 @@ public class OneYearPlan extends Fragment {
     private Context context;
     private AppUtils appUtils = new AppUtils();
     private int newId;
+    private LocalDate today;
+    private LocalDate tomorrow;
+    private EventsListAdapter eventsListAdapter;
+    private CheckBox todayCheckbox;
+    private CheckBox tomorrowCheckbox;
+    private LocalDate pickedDay;
 
     public OneYearPlan() {
         // Required empty public constructor
@@ -51,6 +60,7 @@ public class OneYearPlan extends Fragment {
         super.onAttach(context);
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
+        eventsListAdapter = new EventsListAdapter(context, context);
     }
 
     @Override
@@ -89,7 +99,11 @@ public class OneYearPlan extends Fragment {
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.thisYearsPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
+        todayCheckbox = rootView.findViewById(R.id.checkboxToday);
+        tomorrowCheckbox = rootView.findViewById(R.id.checkboxTomorrow);
 
+        todayCheckbox.setOnCheckedChangeListener(myCheckboxListener);
+        tomorrowCheckbox.setOnCheckedChangeListener(myCheckboxListener);
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
@@ -116,6 +130,15 @@ public class OneYearPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private LocalDate findTodaysDate() {
+        return LocalDate.now();
+    }
+
+    private LocalDate findTomorrowsDate() {
+        tomorrow = findTodaysDate().plusDays(1);
+        return tomorrow;
+    }
+
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
         OneYearPlanViewModel oneYearPlanViewModel = of(fragment).get(OneYearPlanViewModel.class);
@@ -133,6 +156,51 @@ public class OneYearPlan extends Fragment {
 
     }
 
+
+   /* private void setTodayCheckbox() {
+
+        todayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+
+                    pickedDay = findTodaysDate();
+
+                }
+            }
+        });
+    }
+
+
+    private void setTomorrowCheckbox() {
+
+        tomorrowCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+
+                    pickedDay = findTodaysDate();
+
+                }
+            }
+        });
+    }
+*/
+    private CompoundButton.OnCheckedChangeListener myCheckboxListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            switch (buttonView.getId()){
+                case R.id.checkboxToday:
+                    pickedDay = findTodaysDate();
+                    break;
+                case R.id.checkboxTomorrow:
+                    pickedDay = findTomorrowsDate();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
 }
 
