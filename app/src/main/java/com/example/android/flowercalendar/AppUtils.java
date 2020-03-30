@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
@@ -88,13 +89,15 @@ public class AppUtils {
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay) {
+
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveDataPersonalGrowth(adapter, aim, i);
                 adapter.deleteFromDatabase();
                 adapter.setAimIndexInDB();
+                saveDataEvents(aim, 1, pickedDay, null);
                 aim.setText("");
             }
         });
@@ -105,8 +108,8 @@ public class AppUtils {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDataEvents(adapter, textView, i, pickedDay, newEvent);
-                adapter.deleteFromDatabase();
+                saveDataEvents(textView, i, pickedDay, newEvent);
+                adapter.deleteFromDatabase(null);
                 adapter.setIndexInDB();
                 textView.setText("");
             }
@@ -125,7 +128,7 @@ public class AppUtils {
 
     }
 
-    public void saveDataEvents(EventsListAdapter eventsListAdapter, TextView plan, int i, String pickedDay, String newEvent) {
+    public void saveDataEvents(TextView plan, int i, String pickedDay, String newEvent) {
 
         String eventTextString;
         if (newEvent != null) {

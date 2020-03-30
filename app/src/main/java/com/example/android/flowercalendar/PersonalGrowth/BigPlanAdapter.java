@@ -6,16 +6,16 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.CalendarEvents;
-import com.example.android.flowercalendar.database.CalendarEventsDao;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -37,6 +37,9 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private ArrayList<StringsAims> aimStrings = new ArrayList<>();
     private int aimTime;
     private String aimContent;
+    private ArrayList<StringsAims> toDoListStrings = new ArrayList<>();
+    private String currentString;
+    private String aimToDelete;
 
 
     public BigPlanAdapter(Context requireNonNull, Context context) {
@@ -88,7 +91,22 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         aimsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
+        findDeletedAimPositionInToDoList(aimContent);
+        toDoListStrings.add(new StringsAims(currentString, aimToDelete));
+
     }
+
+    private void findDeletedAimPositionInToDoList(String toDelete) {
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
+        Event eventToDelete = eventsDao.findByEventName(toDelete);
+        if (eventToDelete != null) {
+            currentString = eventToDelete.getPosition();
+            aimToDelete = eventToDelete.getEvent_name();
+        }
+
+    }
+
 
     public void deleteFromDatabase() {
 
@@ -101,6 +119,9 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
                 bigPlanDao.deleteItemFromPlans(aimIndex, aimTime, aimContent);
             }
         }
+
+        EventsListAdapter eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext(), EventsListAdapter.getContext());
+        eventsListAdapter.deleteFromDatabase(toDoListStrings);
     }
 
     private void showUndoSnackbar() {
@@ -120,7 +141,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         aimsList.add(pos,
                 bigPlanData);
         aimStrings.remove(new StringsAims(aimIndex, aimContent));
-        aimStrings = new ArrayList<>();
+        toDoListStrings.remove(new StringsAims(currentString, aimToDelete));
         notifyItemInserted(pos);
 
     }

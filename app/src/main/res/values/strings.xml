@@ -151,5 +151,9 @@
     <string name="minutes">minutes</string>
     <string name="numberOfHours">10</string>
     <string name="espandedListViewTitles">expandedListViewTitle</string>
+    <string name="good_morning">Good morning!</string>
+    <string name="have_a_nice_day">Have a nice day!</string>
+    <string name="its_time">It\'s 8:00 o\'clock</string>
+    <string name="turn_of_alarm">Silence</string>
 
 </resources>

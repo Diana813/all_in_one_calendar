@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.PersonalGrowth.OneDayPlan;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
@@ -17,6 +18,7 @@ import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +38,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private ArrayList<StringsAims> eventNumbers = new ArrayList<>();
     private String eventContent;
     private String aimTime;
-
+    private OneDayPlan oneDayPlan = new OneDayPlan();
 
     public EventsListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -82,18 +84,31 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
         eventPosition = position;
         eventNumber = events.getPosition();
         eventContent = events.getEvent_name();
-        eventNumbers.add(new StringsAims(String.valueOf(eventNumber), eventContent));
+        eventNumbers.add(new StringsAims(eventNumber, eventContent));
         eventsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
 
     }
 
-    public void deleteFromDatabase() {
+    public void deleteFromDatabase(ArrayList<StringsAims> stringsAims) {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+        String date = String.valueOf(LocalDate.now().plusDays(1));
 
-        if (eventNumbers != null) {
+        if (stringsAims != null) {
+
+            for (int i = 0; i < stringsAims.size(); i++) {
+
+                String index = stringsAims.get(i).getAimNumber();
+                String content = stringsAims.get(i).getAimContent();
+
+                eventsDao.deleteEvents(index, date, content);
+
+            }
+
+        } else if (eventNumbers != null) {
+
             for (int i = 0; i < eventNumbers.size(); i++) {
 
                 String index = eventNumbers.get(i).getAimNumber();
@@ -104,6 +119,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
             }
         }
     }
+
 
     private void showUndoSnackbar() {
 

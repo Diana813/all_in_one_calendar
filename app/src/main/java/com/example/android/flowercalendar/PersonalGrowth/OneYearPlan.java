@@ -40,12 +40,8 @@ public class OneYearPlan extends Fragment {
     private Context context;
     private AppUtils appUtils = new AppUtils();
     private int newId;
-    private LocalDate today;
-    private LocalDate tomorrow;
     private EventsListAdapter eventsListAdapter;
-    private CheckBox todayCheckbox;
-    private CheckBox tomorrowCheckbox;
-    private LocalDate pickedDay;
+
 
     public OneYearPlan() {
         // Required empty public constructor
@@ -99,17 +95,13 @@ public class OneYearPlan extends Fragment {
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.thisYearsPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
-        todayCheckbox = rootView.findViewById(R.id.checkboxToday);
-        tomorrowCheckbox = rootView.findViewById(R.id.checkboxTomorrow);
 
-        todayCheckbox.setOnCheckedChangeListener(myCheckboxListener);
-        tomorrowCheckbox.setOnCheckedChangeListener(myCheckboxListener);
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 2);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null);
         return rootView;
     }
 
@@ -130,14 +122,7 @@ public class OneYearPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private LocalDate findTodaysDate() {
-        return LocalDate.now();
-    }
 
-    private LocalDate findTomorrowsDate() {
-        tomorrow = findTodaysDate().plusDays(1);
-        return tomorrow;
-    }
 
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
@@ -157,50 +142,7 @@ public class OneYearPlan extends Fragment {
     }
 
 
-   /* private void setTodayCheckbox() {
 
-        todayCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-
-                    pickedDay = findTodaysDate();
-
-                }
-            }
-        });
-    }
-
-
-    private void setTomorrowCheckbox() {
-
-        tomorrowCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-
-                    pickedDay = findTodaysDate();
-
-                }
-            }
-        });
-    }
-*/
-    private CompoundButton.OnCheckedChangeListener myCheckboxListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            switch (buttonView.getId()){
-                case R.id.checkboxToday:
-                    pickedDay = findTodaysDate();
-                    break;
-                case R.id.checkboxTomorrow:
-                    pickedDay = findTomorrowsDate();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
 }
 

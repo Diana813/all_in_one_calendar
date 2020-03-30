@@ -26,6 +26,9 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
     private List<Shift> shiftList;
     private Context context;
     private int shiftMarked = -1;
+    private String alarmHour;
+    private String alarmMinute;
+    private CalendarFragment calendarFragment = new CalendarFragment();
 
     BottomLayoutShiftsAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -53,8 +56,8 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
         }
 
         final Shift shift = shiftList.get(position);
-
         holder.shift.setText(shift.getShift_name());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +112,7 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
         }
     }
+
 
     private void copyShiftNumber(Shift shift) {
         ClipboardManager clipboard = (ClipboardManager)

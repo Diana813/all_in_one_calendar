@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.PersonalGrowth;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,15 +11,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Events.EventsListAdapter;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanData;
+import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +46,15 @@ public class OneDayPlan extends Fragment {
     private BigPlanAdapter adapter;
     private Context context;
     private AppUtils appUtils = new AppUtils();
-    private int newId;
+    private LocalDate pickedDay;
+    private ToDoList toDoList;
+    private RecyclerView recyclerView;
+    private EditText aimText;
+    private ImageButton confirm;
+    private TextView question;
+    private ImageView imageView;
+    private CheckBox todayCheckbox;
+    private CheckBox tomorrowCheckbox;
 
 
     public OneDayPlan() {
@@ -52,6 +70,7 @@ public class OneDayPlan extends Fragment {
         super.onAttach(context);
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
+        toDoList = new ToDoList();
     }
 
     @Override
@@ -66,6 +85,7 @@ public class OneDayPlan extends Fragment {
         adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
         appUtils.hideKeyboard(getView());
+        toDoList.setNumberOfEventsToPickedDate(String.valueOf(pickedDay));
     }
 
     @Override
@@ -84,26 +104,28 @@ public class OneDayPlan extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(layout, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.list);
-        EditText aimText = rootView.findViewById(R.id.editText);
-        ImageButton confirm = rootView.findViewById(R.id.confirm_button);
-        TextView question = rootView.findViewById(R.id.title);
+        findViews(rootView);
         question.setText(R.string.OneDayPlan);
-        ImageView imageView = rootView.findViewById(R.id.imageBackground);
-
-        CheckBox today = rootView.findViewById(R.id.checkboxToday);
-        CheckBox tomorrow = rootView.findViewById(R.id.checkboxTomorrow);
-
-        today.setVisibility(View.VISIBLE);
-        tomorrow.setVisibility(View.VISIBLE);
-
+        todayCheckbox.setVisibility(View.VISIBLE);
+        tomorrowCheckbox.setVisibility(View.VISIBLE);
         setHasOptionsMenu(true);
+        pickedDay = LocalDate.now().plusDays(1);
         appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay));
         return rootView;
+    }
+
+    private void findViews(View rootView) {
+        recyclerView = rootView.findViewById(R.id.list);
+        aimText = rootView.findViewById(R.id.editText);
+        confirm = rootView.findViewById(R.id.confirm_button);
+        question = rootView.findViewById(R.id.title);
+        imageView = rootView.findViewById(R.id.imageBackground);
+        todayCheckbox = rootView.findViewById(R.id.checkboxToday);
+        tomorrowCheckbox = rootView.findViewById(R.id.checkboxTomorrow);
     }
 
     @Override
@@ -134,6 +156,7 @@ public class OneDayPlan extends Fragment {
         });
 
     }
+
 
 }
 

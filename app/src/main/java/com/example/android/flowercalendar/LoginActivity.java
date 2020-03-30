@@ -1,11 +1,15 @@
 package com.example.android.flowercalendar;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CancellationSignal;
 import android.widget.Toast;
@@ -15,6 +19,8 @@ import androidx.core.app.ActivityCompat;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String CHANNEL_ID = "id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
         checkBiometricSupport();
         authenticateUser();
+        createNotificationChannel();
     }
 
     //Metoda służąca do komunikacji z użytkownikiem za pomocą toasta
@@ -128,5 +135,23 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @SuppressLint("ObsoleteSdkInt")
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "alarmClock";
+            String description = "wakeUpCall";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

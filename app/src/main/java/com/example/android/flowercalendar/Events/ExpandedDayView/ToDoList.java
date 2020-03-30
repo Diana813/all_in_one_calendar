@@ -93,8 +93,8 @@ public class ToDoList extends Fragment {
     public void onPause() {
         super.onPause();
         toDoListAdapter.setIndexInDB();
-        toDoListAdapter.deleteFromDatabase();
-        setNumberOfEventsToPickedDate();
+        toDoListAdapter.deleteFromDatabase(null);
+        setNumberOfEventsToPickedDate(pickedDay);
     }
 
     @Override
@@ -134,8 +134,8 @@ public class ToDoList extends Fragment {
 
     }
 
-    void getFreqActivString(String newEvent, EventsListAdapter toDoListAdapter, String pickedDate) {
-        appUtils.saveDataEvents(toDoListAdapter, null, 1, pickedDate, newEvent);
+    void saveEvent(String newEvent, String pickedDate) {
+        appUtils.saveDataEvents(null, 1, pickedDate, newEvent);
     }
 
     private String findWhatDateItIs() {
@@ -147,9 +147,9 @@ public class ToDoList extends Fragment {
     }
 
 
-    private void setNumberOfEventsToPickedDate() {
+    public void setNumberOfEventsToPickedDate(String pickedDay) {
         CalendarFragment calendarFragment = new CalendarFragment();
-        calendarFragment.saveEventsNumberToPickedDate();
+        calendarFragment.saveEventsNumberToPickedDate(pickedDay);
     }
 
     @Override

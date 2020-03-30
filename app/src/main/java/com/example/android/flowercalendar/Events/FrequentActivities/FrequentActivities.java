@@ -62,7 +62,7 @@ public class FrequentActivities extends Fragment {
     public void onPause() {
         super.onPause();
         eventsListAdapter.setIndexInDB();
-        eventsListAdapter.deleteFromDatabase();
+        eventsListAdapter.deleteFromDatabase(null);
     }
 
 

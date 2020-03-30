@@ -27,6 +27,7 @@
                 android:textColor="@color/colorWhite"
                 tools:text="@string/fiveYearsPlan" />
 
+
             <CheckBox
                 android:id="@+id/checkboxToday"
                 style="@style/personalGrowthCheckBoxStyle"

@@ -6,7 +6,7 @@
     android:background="@color/colorWhite">
 
     <TextView
-        android:id="@+id/eventName"
+        android:id="@+id/numberOfEvents"
         style="@style/textViewStylePlansList"
         android:layout_width="match_parent"
         tools:text="kino" />

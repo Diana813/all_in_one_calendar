@@ -94,7 +94,7 @@ public class ThisMonthPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 3);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null);
 
         return rootView;
     }

@@ -1,6 +1,8 @@
 package com.example.android.flowercalendar.Calendar;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -30,10 +32,15 @@ import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.PeriodDataDao;
+import com.example.android.flowercalendar.database.Shift;
+import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +98,8 @@ public class CalendarFragment extends Fragment {
     private CardView bottom_sheet_colors;
     private LinearLayout shifts_bottom_sheet;
     private RecyclerView shifts_recycler_view;
+    private String alarmHour;
+    private String alarmMinute;
 
 
     @Override
@@ -121,6 +130,7 @@ public class CalendarFragment extends Fragment {
         return rootView;
     }
 
+
     private void findViews(View rootView) {
 
         bottom_sheet_colors = rootView.findViewById(R.id.colorSettings);
@@ -142,6 +152,7 @@ public class CalendarFragment extends Fragment {
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
     }
 
+
     private void setBottomSheetsBehavior() {
 
         sheetBehavior = BottomSheetBehavior.from(bottom_sheet_colors);
@@ -152,6 +163,7 @@ public class CalendarFragment extends Fragment {
         shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
+
     private void setBottomLayoutShiftsAdapter() {
 
         shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
@@ -160,12 +172,14 @@ public class CalendarFragment extends Fragment {
         shifts_recycler_view.setAdapter(shiftsAdapter);
     }
 
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 
         inflater.inflate(R.menu.calendar_fragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -205,6 +219,7 @@ public class CalendarFragment extends Fragment {
         startActivity(intent);
     }
 
+
     void fillTheCalendar(Context context, TextView date, LinearLayout backgroundDrawing, GridView gridView) {
 
         calendarViewsArrayList = new ArrayList<>();
@@ -217,12 +232,14 @@ public class CalendarFragment extends Fragment {
 
     }
 
+
     private void displayEmptyEvents() {
 
         if (event == null) {
             event = "";
         }
     }
+
 
     private void displayHeaderDate(TextView date) {
 
@@ -239,6 +256,7 @@ public class CalendarFragment extends Fragment {
         //potrzebna do prawidłowego działania buttonów i kolorowania kalendarza
         headerDate = LocalDate.of(year, month, day);
     }
+
 
     private void displayCalendarWithData() {
 
@@ -263,6 +281,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
+
     private LocalDate setDateAtFirstDayOfAMonth() {
 
         int year = calendarFill.getYear();
@@ -273,6 +292,7 @@ public class CalendarFragment extends Fragment {
 
         return calendarFill;
     }
+
 
     private LocalDate lastMondayOfCurrentMonth(LocalDate localeDate) {
 
@@ -300,6 +320,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+
     private LocalDate findWhatDateIsInTheFirstCellOfTheCalendar() {
 
         //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
@@ -310,6 +331,7 @@ public class CalendarFragment extends Fragment {
         calendarFill = calendarFill.minusDays(monthBeginningCell);
         return calendarFill;
     }
+
 
     private void displayEventsAndShiftsIfEmpty() {
 
@@ -330,6 +352,7 @@ public class CalendarFragment extends Fragment {
             }
         }
     }
+
 
     private void displayCalendarWithPeriodData() {
 
@@ -373,6 +396,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
+
     private void onGridViewItemClickListener() {
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -393,6 +417,7 @@ public class CalendarFragment extends Fragment {
 
         });
     }
+
 
     private void pasteShiftNumber(View view, int position) {
 
@@ -433,7 +458,15 @@ public class CalendarFragment extends Fragment {
         pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
         pickedDay = String.valueOf(pickedDate);
         saveShiftToPickedDate();
+
+        ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
+        Shift shift = shiftsDao.findByShiftName(newShiftNumber);
+        getAlarmTime(shift);
+        if (alarmHour != null) {
+            setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate);
+        }
     }
+
 
     private void saveShiftToPickedDate() {
 
@@ -458,6 +491,61 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+
+    private void getAlarmTime(Shift shift) {
+        String alarm = shift.getAlarm();
+        if (!alarm.equals("")) {
+            String[] split = alarm.split(":");
+            alarmHour = split[0];
+            alarmMinute = split[1];
+        }
+    }
+
+
+    private int uniqueRequestCodeForEachAlarm(LocalDate pickedDate) {
+
+        int day = pickedDate.getDayOfMonth();
+        int month = pickedDate.getMonthValue();
+        int year = pickedDate.getYear();
+
+        String findId = day + "" + month + "" + year;
+        return Integer.parseInt(findId);
+    }
+
+
+    private void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate) {
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getContext(), uniqueRequestCodeForEachAlarm(pickedDate), intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        assert alarmManager != null;
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate),
+                pendingIntent);
+    }
+
+
+    private void deleteAlarmFromAPickedDay(LocalDate pickedDate) {
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, uniqueRequestCodeForEachAlarm(pickedDate), intent,
+                0);
+
+        assert alarmManager != null;
+        alarmManager.cancel(pendingIntent);
+    }
+
+
+    private long pickedDateToMilis(String hour, String minutes, LocalDate pickedDate) {
+
+        LocalDateTime ldt = LocalDateTime.of(pickedDate.getYear(), pickedDate.getMonthValue(), pickedDate.getDayOfMonth(), Integer.parseInt(hour), Integer.parseInt(minutes), 0);
+        ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
+    }
+
+
     private void goToExpandedDayView(int position) {
 
         pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
@@ -471,7 +559,8 @@ public class CalendarFragment extends Fragment {
         getFragmentManager().beginTransaction().replace(R.id.flContent, eventsList).addToBackStack("tag").commit();
     }
 
-    public void saveEventsNumberToPickedDate() {
+
+    public void saveEventsNumberToPickedDate(String pickedDay) {
 
         EventsDao eventsDao = getDatabase(context).eventsDao();
         List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay);
@@ -492,6 +581,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+
     private void deleteShiftFromPickedDate() {
 
         gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -501,6 +591,8 @@ public class CalendarFragment extends Fragment {
                 TextView shiftNumber1 = childView.findViewById(R.id.shiftNumber);
                 shiftNumber1.setText("");
                 pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
+                deleteAlarmFromAPickedDay(pickedDate);
+
                 pickedDay = String.valueOf(pickedDate);
 
                 CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
@@ -509,10 +601,12 @@ public class CalendarFragment extends Fragment {
                     calendarEventsDao.deleteBypickedDate(pickedDay);
                 }
 
+
                 return true;
             }
         });
     }
+
 
     private void setPreviousButtonClickEvent() {
         previousButton.setOnClickListener(new View.OnClickListener() {
@@ -523,6 +617,7 @@ public class CalendarFragment extends Fragment {
         });
     }
 
+
     private void setPreviousMonthView() {
         calendarUtils.flipAnimation(calendarCardView);
         //Odejmowanie miesiąca
@@ -530,6 +625,7 @@ public class CalendarFragment extends Fragment {
         displayPrewiousMonthPeriod();
         fillTheCalendar(context, date, backgroundDrawing, gridView);
     }
+
 
     private LocalDate previousMonthPeriodStartDate() {
 
@@ -558,6 +654,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
+
     private void setNextButtonClickEvent() {
 
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -569,11 +666,13 @@ public class CalendarFragment extends Fragment {
         });
     }
 
+
     private void setNextMonthView() {
         calendarUtils.flipAnimation(calendarCardView);
         calendarFill = headerDate.plusMonths(1);
         fillTheCalendar(context, date, backgroundDrawing, gridView);
     }
+
 
     private void displayPrewiousMonthPeriod() {
         if (periodStartDate != null) {
@@ -583,6 +682,7 @@ public class CalendarFragment extends Fragment {
 
         }
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void swipeTheCalendar() {
@@ -605,6 +705,7 @@ public class CalendarFragment extends Fragment {
 
         });
     }
+
 
     private void loadPeriodData() {
 
@@ -638,6 +739,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+
     void saveColor(int clickedOn) {
 
         colorsDao = getDatabase(context).colorsDao();
@@ -660,6 +762,7 @@ public class CalendarFragment extends Fragment {
 
     }
 
+
     void deleteAllShifts(LocalDate date) {
 
         CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
@@ -670,6 +773,7 @@ public class CalendarFragment extends Fragment {
             periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
         }
     }
+
 
     private int setCalendarColor() {
 

@@ -1,7 +1,6 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
-import android.app.VoiceInteractor;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -79,7 +78,7 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
             assert event != null;
             String newEvent = event.getEvent_name();
             String pickedDay = CalendarFragment.pickedDay;
-            toDoList.getFreqActivString(newEvent, eventsListAdapter, pickedDay);
+            toDoList.saveEvent(newEvent, pickedDay);
             holder.backgroundLayout.setBackgroundResource(R.color.colorAccent);
             freqActMarked = -2;
 
@@ -104,7 +103,7 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
 
         FreqEventsViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.eventName);
+            eventName = itemView.findViewById(R.id.numberOfEvents);
             backgroundLayout = itemView.findViewById(R.id.singleFreqActItem);
         }
     }

@@ -56,7 +56,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
 
         dayNumberTextView = (TextView) gridItemView.findViewById(R.id.dayNumber);
         shiftNumberTextView = (TextView) gridItemView.findViewById(R.id.shiftNumber);
-        eventNameTextView = (TextView) gridItemView.findViewById(R.id.eventName);
+        eventNameTextView = (TextView) gridItemView.findViewById(R.id.numberOfEvents);
         ImageView periodImage = (ImageView) gridItemView.findViewById(R.id.periodImage);
         layout = (RelativeLayout) gridItemView.findViewById(R.id.singleItem);
         assert views != null;
@@ -66,6 +66,22 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         year = headerDate.getYear();
         headerDateDayOfWeek = calendarFill.getDayOfWeek();
 
+        setCalendarColor(views);
+
+        if (views.hasPeriod()) {
+            periodImage.setImageResource(views.getmImageResourceId());
+            periodImage.setVisibility(View.VISIBLE);
+        } else {
+            periodImage.setVisibility(View.GONE);
+        }
+
+        dayNumberTextView.setText(String.valueOf(views.getmDayNumber()));
+        shiftNumberTextView.setText(String.valueOf(views.getmShiftNumber()));
+        eventNameTextView.setText(views.getmEventName());
+        return gridItemView;
+    }
+
+    private void setCalendarColor(CalendarViews views){
         if (views.getmColorSettings() == 1) {
             setCalendarColor(R.drawable.weekend_frame,
                     Color.BLACK,
@@ -116,18 +132,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
                     R.drawable.frame_for_current_day_at_weekend,
                     R.drawable.frame_for_other_months_weekend);
         }
-
-        if (views.hasPeriod()) {
-            periodImage.setImageResource(views.getmImageResourceId());
-            periodImage.setVisibility(View.VISIBLE);
-        } else {
-            periodImage.setVisibility(View.GONE);
-        }
-
-        dayNumberTextView.setText(String.valueOf(views.getmDayNumber()));
-        shiftNumberTextView.setText(String.valueOf(views.getmShiftNumber()));
-        eventNameTextView.setText(views.getmEventName());
-        return gridItemView;
     }
 
 
