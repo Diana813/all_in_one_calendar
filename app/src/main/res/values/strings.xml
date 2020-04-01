@@ -155,5 +155,7 @@
     <string name="have_a_nice_day">Have a nice day!</string>
     <string name="its_time">It\'s 8:00 o\'clock</string>
     <string name="turn_of_alarm">Silence</string>
+    <string name="dialog_title_auth">Authentication is required to continue</string>
+    <string name="dialog_msg_auth">This app uses authentication to protect your data.</string>
 
 </resources>

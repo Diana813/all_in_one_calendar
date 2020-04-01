@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.example.android.flowercalendar"
-        minSdkVersion 28
+        minSdkVersion 26
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -42,7 +42,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-runtime:2.3.0-alpha01"
-    annotationProcessor "androidx.lifecycle:lifecycle-compiler:2.3.0-alpha01"
+    annotationProcessor "android.arch.lifecycle:common-java8:1.1.1"
 //Room
     implementation "androidx.room:room-runtime:2.2.5"
     annotationProcessor "androidx.room:room-compiler:2.2.5"

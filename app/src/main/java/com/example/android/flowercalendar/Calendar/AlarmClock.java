@@ -4,12 +4,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 
 import com.example.android.flowercalendar.R;
+
+import java.io.IOException;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -18,11 +22,11 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class AlarmClock extends Service {
 
-    private Ringtone ringtone;
+    private MediaPlayer mediaPlayer;
     private static final String URI_BASE = AlarmClock.class.getName() + ".";
     public static final String ACTION_DISMISS = "Silence";
 
-    public void startAlarmClock() {
+    public void startAlarmClock() throws IOException {
 
         setTheNotificationTapAction(this);
 
@@ -30,8 +34,19 @@ public class AlarmClock extends Service {
         if (alarmUri == null) {
             alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
-        ringtone = RingtoneManager.getRingtone(this, alarmUri);
-        ringtone.play();
+
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                .setLegacyStreamType(AudioManager.STREAM_ALARM)
+                .setUsage(AudioAttributes.USAGE_ALARM)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build());
+        mediaPlayer.setDataSource(this, alarmUri);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.prepare();
+        mediaPlayer.start();
+
     }
 
     private void setTheNotificationTapAction(Context context) {
@@ -70,7 +85,11 @@ public class AlarmClock extends Service {
             return START_REDELIVER_INTENT;
         }
 
-        startAlarmClock();
+        try {
+            startAlarmClock();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return START_STICKY;
     }
 
@@ -83,8 +102,7 @@ public class AlarmClock extends Service {
 
     @Override
     public void onDestroy() {
-        ringtone.stop();
-
+        mediaPlayer.release();
     }
 
 

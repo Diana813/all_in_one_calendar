@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -21,8 +22,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PersonalGrowth.BigPlan"></activity>
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity
+            android:name=".PersonalGrowth.BigPlan"
+            tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -49,8 +52,12 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity android:name=".Calendar.CalendarAdapter" />
-        <activity android:name=".PersonalGrowth.BackgroundActivity" />
+        <activity
+            android:name=".Calendar.CalendarAdapter"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".PersonalGrowth.BackgroundActivity"
+            tools:ignore="InnerclassSeparator" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -65,16 +72,18 @@
         </provider>
 
         <receiver
-
             android:name=".Calendar.AlarmReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
-                <action android:name="quit_action" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".Calendar.AlarmClock" />
+        <service
+            android:name=".Calendar.AlarmClock"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>
