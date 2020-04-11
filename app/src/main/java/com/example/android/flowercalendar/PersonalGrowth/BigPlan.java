@@ -15,19 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.BigPlanData;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static androidx.lifecycle.ViewModelProviders.of;
 
 public class BigPlan extends Fragment {
 
@@ -36,6 +33,7 @@ public class BigPlan extends Fragment {
     private Context context;
     private AppUtils appUtils = new AppUtils();
     private int newId;
+    private EventsListAdapter eventsListAdapter;
 
     public BigPlan() {
         // Required empty public constructor
@@ -50,6 +48,7 @@ public class BigPlan extends Fragment {
         super.onAttach(context);
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
+        eventsListAdapter = new EventsListAdapter(context, context);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class BigPlan extends Fragment {
         super.onPause();
         adapter.deleteFromDatabase();
         adapter.setAimIndexInDB();
-        appUtils.hideKeyboard(getView());
+        appUtils.hideKeyboard(getView(), context);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class BigPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, eventsListAdapter);
         return rootView;
     }
 
@@ -117,16 +116,13 @@ public class BigPlan extends Fragment {
 
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
-        BigPlanViewModel bigPlanViewModel = of(fragment).get(BigPlanViewModel.class);
-        bigPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
+        BigPlanViewModel bigPlanViewModel = new ViewModelProvider(fragment).get(BigPlanViewModel.class);
+        bigPlanViewModel.getAimsList().observe(fragment, aims -> {
+            adapter.setAimsList(aims);
+            if (aims == null) {
+                newId = 0;
+            } else {
+                newId = aims.size();
             }
         });
 

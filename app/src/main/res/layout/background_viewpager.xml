@@ -8,6 +8,17 @@
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
         tools:context="com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity">
 
+        <Switch
+            android:id="@+id/alarmClockCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textSize="20sp"
+            android:visibility="gone"
+            android:layout_gravity="end">
+
+        </Switch>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             style="@style/Table" />

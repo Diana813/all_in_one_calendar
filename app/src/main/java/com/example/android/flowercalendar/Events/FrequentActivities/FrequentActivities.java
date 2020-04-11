@@ -2,6 +2,7 @@ package com.example.android.flowercalendar.Events.FrequentActivities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,22 +17,15 @@ import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static androidx.lifecycle.ViewModelProviders.of;
 
 public class FrequentActivities extends Fragment {
 
@@ -92,6 +86,7 @@ public class FrequentActivities extends Fragment {
         eventsLabel.setText(R.string.activitiesList);
 
         EditText eventText = rootView.findViewById(R.id.editText);
+        eventText.setTextColor(Color.BLACK);
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
 
         RecyclerView recyclerView = rootView.findViewById(R.id.list);
@@ -107,18 +102,15 @@ public class FrequentActivities extends Fragment {
 
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final EventsListAdapter adapter) {
-        FrequentActivitiesViewModel frequentActivitiesViewModel = of(fragment).get(FrequentActivitiesViewModel.class);
-        frequentActivitiesViewModel.getEventsList().observe(fragment, new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                adapter.setEventsList(events);
-                if (events == null) {
-                    newId = 0;
-                    empty_view.setVisibility(View.VISIBLE);
-                } else {
-                    newId = events.size();
-                    empty_view.setVisibility(View.GONE);
-                }
+        FrequentActivitiesViewModel frequentActivitiesViewModel = new ViewModelProvider(fragment).get(FrequentActivitiesViewModel.class);
+        frequentActivitiesViewModel.getEventsList().observe(fragment, events -> {
+            adapter.setEventsList(events);
+            if (events == null) {
+                newId = 0;
+                empty_view.setVisibility(View.VISIBLE);
+            } else {
+                newId = events.size();
+                empty_view.setVisibility(View.GONE);
             }
         });
     }

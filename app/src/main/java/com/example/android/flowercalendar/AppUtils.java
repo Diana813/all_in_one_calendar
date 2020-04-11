@@ -1,23 +1,23 @@
 package com.example.android.flowercalendar;
 
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
+import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
+import static com.example.android.flowercalendar.Widget.CalendarWidgetUpdateService.ACTION_UPDATE_GRID_VIEW;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class AppUtils {
@@ -61,18 +62,14 @@ public class AppUtils {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.delete_all_dialog_message);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-                bigPlanDao.deleteAll(i);
-            }
+        builder.setPositiveButton(R.string.delete, (dialog, id) -> {
+            BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
+            bigPlanDao.deleteAll(i);
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+            if (dialog != null) {
+                dialog.dismiss();
             }
         });
 
@@ -80,39 +77,33 @@ public class AppUtils {
         alertDialog.show();
     }
 
-    public void hideKeyboard(View view) {
+    public void hideKeyboard(View view, Context context) {
 
-        final InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
+        final InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
 
         if (inputMethodManager != null) {
             inputMethodManager.hideSoftInputFromWindow(Objects.requireNonNull(view).getWindowToken(), 0);
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, EventsListAdapter eventsListAdapter) {
 
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveDataPersonalGrowth(adapter, aim, i);
-                adapter.deleteFromDatabase();
-                adapter.setAimIndexInDB();
-                saveDataEvents(aim, 1, pickedDay, null);
-                aim.setText("");
-            }
+        confirm.setOnClickListener(v -> {
+            saveDataPersonalGrowth(adapter, aim, i);
+            adapter.deleteFromDatabase();
+            adapter.setAimIndexInDB();
+            saveDataEvents(eventsListAdapter, aim, 1, pickedDay, null);
+            aim.setText("");
         });
 
     }
 
     public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final String pickedDay, final String newEvent) {
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveDataEvents(textView, i, pickedDay, newEvent);
-                adapter.deleteFromDatabase(null);
-                adapter.setIndexInDB();
-                textView.setText("");
-            }
+        confirm.setOnClickListener(v -> {
+            saveDataEvents(adapter, textView, i, pickedDay, newEvent);
+            adapter.deleteFromDatabase(null);
+            adapter.setIndexInDB();
+            textView.setText("");
         });
 
     }
@@ -128,7 +119,7 @@ public class AppUtils {
 
     }
 
-    public void saveDataEvents(TextView plan, int i, String pickedDay, String newEvent) {
+    public void saveDataEvents(EventsListAdapter adapter, TextView plan, int i, String pickedDay, String newEvent) {
 
         String eventTextString;
         if (newEvent != null) {
@@ -138,7 +129,7 @@ public class AppUtils {
         }
 
 
-        int index = ToDoList.newId;
+        int index = adapter.getItemCount();
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
         eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1));
@@ -168,5 +159,15 @@ public class AppUtils {
             e.printStackTrace();
         }
 
+    }
+
+    public static void updateWidget(Context context) {
+
+        Intent intent = new Intent(context, CalendarWidgetProvider.class);
+        intent.setAction(ACTION_UPDATE_GRID_VIEW);
+        int[] ids = AppWidgetManager.getInstance(context)
+                .getAppWidgetIds(new ComponentName(context, CalendarWidgetProvider.class));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intent);
     }
 }

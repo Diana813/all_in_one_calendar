@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.PersonalGrowth;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,24 +19,15 @@ import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.StringsAims;
-import com.example.android.flowercalendar.database.BigPlanData;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static androidx.lifecycle.ViewModelProviders.of;
 
 public class OneDayPlan extends Fragment {
 
@@ -55,6 +44,7 @@ public class OneDayPlan extends Fragment {
     private ImageView imageView;
     private CheckBox todayCheckbox;
     private CheckBox tomorrowCheckbox;
+    private EventsListAdapter eventsListAdapter;
 
 
     public OneDayPlan() {
@@ -71,6 +61,7 @@ public class OneDayPlan extends Fragment {
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
         toDoList = new ToDoList();
+        eventsListAdapter = new EventsListAdapter(context, context);
     }
 
     @Override
@@ -84,7 +75,7 @@ public class OneDayPlan extends Fragment {
         super.onPause();
         adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
-        appUtils.hideKeyboard(getView());
+        appUtils.hideKeyboard(getView(), context);
         toDoList.setNumberOfEventsToPickedDate(String.valueOf(pickedDay));
     }
 
@@ -114,7 +105,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay));
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), eventsListAdapter);
         return rootView;
     }
 
@@ -147,13 +138,8 @@ public class OneDayPlan extends Fragment {
 
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
-        OneDayViewModel oneDayViewModel = of(fragment).get(OneDayViewModel.class);
-        oneDayViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-            }
-        });
+        OneDayViewModel oneDayViewModel = new ViewModelProvider(fragment).get(OneDayViewModel.class);
+        oneDayViewModel.getAimsList().observe(fragment, adapter::setAimsList);
 
     }
 

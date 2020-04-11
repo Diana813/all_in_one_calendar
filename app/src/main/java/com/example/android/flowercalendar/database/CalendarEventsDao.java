@@ -20,11 +20,14 @@ public interface CalendarEventsDao {
     @Query("SELECT * FROM calendar_events WHERE pickedDate = :pickedDate")
     CalendarEvents findBypickedDate(String pickedDate);
 
+    @Query("SELECT * FROM calendar_events")
+    List<CalendarEvents> findAllEvents();
+
     @Query("UPDATE calendar_events SET shiftNumber = '' WHERE pickedDate = :pickedDate")
     void deleteBypickedDate(String pickedDate);
 
     @Query("SELECT * FROM calendar_events WHERE id = (SELECT MAX(ID) FROM calendar_events)")
-    CalendarEvents findLastCalendarEvent ();
+    CalendarEvents findLastCalendarEvent();
 
     @Query("DELETE FROM calendar_events")
     void deleteAll();

@@ -66,19 +66,16 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
         if (event != null) {
             holder.eventName.setText(event.getEvent_name());
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                freqActMarked = position;
-                notifyDataSetChanged();
-            }
+        holder.itemView.setOnClickListener(v -> {
+            freqActMarked = position;
+            notifyDataSetChanged();
         });
 
         if (freqActMarked == position) {
             assert event != null;
             String newEvent = event.getEvent_name();
             String pickedDay = CalendarFragment.pickedDay;
-            toDoList.saveEvent(newEvent, pickedDay);
+            toDoList.saveEvent(newEvent, pickedDay, eventsListAdapter);
             holder.backgroundLayout.setBackgroundResource(R.color.colorAccent);
             freqActMarked = -2;
 

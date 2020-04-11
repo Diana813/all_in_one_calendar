@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,19 +17,14 @@ import android.widget.TextView;
 import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.BigPlanData;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static androidx.lifecycle.ViewModelProviders.of;
 
 public class OneYearPlan extends Fragment {
 
@@ -70,7 +63,7 @@ public class OneYearPlan extends Fragment {
         super.onPause();
         adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
-        appUtils.hideKeyboard(getView());
+        appUtils.hideKeyboard(getView(),context);
     }
 
     @Override
@@ -101,7 +94,7 @@ public class OneYearPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null, eventsListAdapter);
         return rootView;
     }
 
@@ -126,16 +119,13 @@ public class OneYearPlan extends Fragment {
 
     @SuppressLint("FragmentLiveDataObserve")
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
-        OneYearPlanViewModel oneYearPlanViewModel = of(fragment).get(OneYearPlanViewModel.class);
-        oneYearPlanViewModel.getAimsList().observe(fragment, new Observer<List<BigPlanData>>() {
-            @Override
-            public void onChanged(@Nullable List<BigPlanData> aims) {
-                adapter.setAimsList(aims);
-                if (aims == null) {
-                    newId = 0;
-                } else {
-                    newId = aims.size();
-                }
+        OneYearPlanViewModel oneYearPlanViewModel = new ViewModelProvider(fragment).get(OneYearPlanViewModel.class);
+        oneYearPlanViewModel.getAimsList().observe(fragment, aims -> {
+            adapter.setAimsList(aims);
+            if (aims == null) {
+                newId = 0;
+            } else {
+                newId = aims.size();
             }
         });
 

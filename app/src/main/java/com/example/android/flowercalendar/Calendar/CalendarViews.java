@@ -2,7 +2,7 @@ package com.example.android.flowercalendar.Calendar;
 
 import java.time.LocalDate;
 
-class CalendarViews {
+public class CalendarViews {
 
     private int mImageResourceId = NO_IMAGE_PROVIDED;
     private static final int NO_IMAGE_PROVIDED = -1;

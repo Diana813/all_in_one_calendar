@@ -4,10 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ForGirls.ForGirlsFragment">
     <item
-        android:id="@+id/save"
-        android:title="@string/save"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_delete_all_entries"
         android:title="@string/delete_all"
         app:showAsAction="never" />

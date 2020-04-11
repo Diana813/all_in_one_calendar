@@ -17,7 +17,8 @@ public class Shift {
     private String schedule;
     @ColumnInfo(name = "alarm")
     private String alarm;
-    @ColumnInfo (name = "shift_length")
+
+    @ColumnInfo(name = "shift_length")
     private int shift_length;
     @ColumnInfo(name = "position")
     private int position;
@@ -33,37 +34,49 @@ public class Shift {
     public int getId() {
         return id;
     }
+
     public String getShift_name() {
         return shift_name;
     }
+
     public String getAlarm() {
         return alarm;
     }
+
     public String getSchedule() {
         return schedule;
     }
-    public int getShift_length(){
+
+    public int getShift_length() {
         return shift_length;
     }
-    public void setId(int newId){
+
+    public void setId(int newId) {
         this.id = newId;
     }
-    public void setShift_name(String new_shift_name){
-       this.shift_name = new_shift_name;
+
+    public void setShift_name(String new_shift_name) {
+        this.shift_name = new_shift_name;
     }
-    public void setSchedule(String new_schedule){
+
+    public void setSchedule(String new_schedule) {
         this.schedule = new_schedule;
     }
-    public void setAlarm(String new_alarm){
+
+    public void setAlarm(String new_alarm) {
         this.alarm = new_alarm;
     }
-    public void setShift_length( int new_shift_length){
+
+    public void setShift_length(int new_shift_length) {
         this.shift_length = new_shift_length;
     }
+
     public int getPosition() {
         return position;
     }
+
     public void setPosition(int position) {
         this.position = position;
     }
+
 }

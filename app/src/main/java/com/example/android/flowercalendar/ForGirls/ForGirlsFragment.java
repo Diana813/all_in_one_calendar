@@ -44,14 +44,10 @@ public class ForGirlsFragment extends Fragment {
     private SeekBar cycleTimeSeekBar;
     private PeriodDataDao periodDataDao;
 
-
-    private View.OnTouchListener touchListener = new View.OnTouchListener() {
-        @SuppressLint("ClickableViewAccessibility")
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            boolean periodDataHasChanged = true;
-            return false;
-        }
+    @SuppressLint("ClickableViewAccessibility")
+    private View.OnTouchListener touchListener = (view, motionEvent) -> {
+        boolean periodDataHasChanged = true;
+        return false;
     };
 
     @Override
@@ -71,15 +67,14 @@ public class ForGirlsFragment extends Fragment {
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.edit_period_data_activity_label));
 
 
-        mCalendarView = (CalendarView)
-                rootView.findViewById(R.id.girlsCalendar);
-        periodTimeSeekBar = (SeekBar) rootView.findViewById(R.id.periodTime);
-        cycleTimeSeekBar = (SeekBar) rootView.findViewById(R.id.cycleTime);
+        mCalendarView = rootView.findViewById(R.id.girlsCalendar);
+        periodTimeSeekBar = rootView.findViewById(R.id.periodTime);
+        cycleTimeSeekBar = rootView.findViewById(R.id.cycleTime);
         mCalendarView.setOnTouchListener(touchListener);
         periodTimeSeekBar.setOnTouchListener(touchListener);
         cycleTimeSeekBar.setOnTouchListener(touchListener);
-        periodTimeValue = (TextView) rootView.findViewById(R.id.periodTimeValue);
-        cycleTimeValue = (TextView) rootView.findViewById(R.id.cycleTimeValue);
+        periodTimeValue = rootView.findViewById(R.id.periodTimeValue);
+        cycleTimeValue = rootView.findViewById(R.id.cycleTimeValue);
 
         setPeriodStartDate();
         setPeriodTimeValue();
@@ -91,9 +86,7 @@ public class ForGirlsFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.save_delete_menu, menu);
-        MenuItem item = menu.findItem(R.id.save);
-        item.setVisible(false);
+        inflater.inflate(R.menu.delete_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -111,18 +104,7 @@ public class ForGirlsFragment extends Fragment {
     private void setPeriodStartDate() {
         mCalendarView
                 .setOnDateChangeListener(
-                        new CalendarView
-                                .OnDateChangeListener() {
-                            @Override
-                            public void onSelectedDayChange(
-                                    @NonNull CalendarView view,
-                                    int year,
-                                    int month,
-                                    int dayOfMonth) {
-                                startPeriodDate = year + ":" + (month + 1) + ":" + dayOfMonth;
-
-                            }
-                        });
+                        (view, year, month, dayOfMonth) -> startPeriodDate = year + ":" + (month + 1) + ":" + dayOfMonth);
 
     }
 
@@ -180,6 +162,7 @@ public class ForGirlsFragment extends Fragment {
     }
 
     private void deleteLastPeriod() {
+
         periodDataDao = CalendarDatabase.getDatabase(getContext()).periodDataDao();
         PeriodData periodToDelete = periodDataDao.findLastPeriod();
         if (periodToDelete != null) {
@@ -197,17 +180,11 @@ public class ForGirlsFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.delete_all_dialog_message);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                deleteLastPeriod();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        builder.setPositiveButton(R.string.delete, (dialog, id) -> deleteLastPeriod());
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+            if (dialog != null) {
+                dialog.dismiss();
             }
         });
 

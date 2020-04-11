@@ -23,6 +23,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         } else if (action == null) {
             openAlarmClass(context);
+
         }
 
     }

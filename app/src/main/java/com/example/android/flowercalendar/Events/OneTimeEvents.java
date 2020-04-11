@@ -4,10 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +14,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEvents;
 import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
@@ -28,6 +23,9 @@ import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 
 import java.util.Objects;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import static com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList.newId;
 
@@ -52,7 +50,6 @@ public class OneTimeEvents extends Fragment {
     private TextView alarmTextView;
     private EditText eventNameEditText;
     private EditText eventLengthEditTextHours;
-    private EditText eventLengthEditTextMinutes;
     private int newEventLength;
     private String pickedDay;
 
@@ -120,7 +117,7 @@ public class OneTimeEvents extends Fragment {
         alarmTextView = rootView.findViewById(R.id.alarm);
         eventNameEditText = rootView.findViewById(R.id.event_name_edit_text);
         eventLengthEditTextHours = rootView.findViewById(R.id.how_long_edit_text_hours);
-        eventLengthEditTextMinutes = rootView.findViewById(R.id.how_long_edit_text_minutes);
+        EditText eventLengthEditTextMinutes = rootView.findViewById(R.id.how_long_edit_text_minutes);
 
         if (!event_name_extra.equals("-1")) {
             eventNameEditText.setText(event_name_extra);
@@ -146,7 +143,7 @@ public class OneTimeEvents extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.save_delete_menu, menu);
+        inflater.inflate(R.menu.delete_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -166,15 +163,13 @@ public class OneTimeEvents extends Fragment {
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
                     toDoList.setArguments(args);
-                    assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.flContent, toDoList).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.flContent, toDoList).commit();
                 } else {
                     CyclicalEvents cyclicalEvents = new CyclicalEvents();
                     Bundle args = new Bundle();
                     args.putString("pickedDay", pickedDay);
                     cyclicalEvents.setArguments(args);
-                    assert getFragmentManager() != null;
-                    getFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEvents).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEvents).commit();
 
                 }
 
@@ -189,28 +184,13 @@ public class OneTimeEvents extends Fragment {
 
     private void eventTimeSettingDialog() {
 
-        TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
-                new TimePickerDialog.OnTimeSetListener() {
-
-                    @SuppressLint("DefaultLocale")
-                    @Override
-                    public void onTimeSet(TimePicker view, int hour,
-                                          int minute) {
-
-                        eventStart.setText(String.format("%02d:%02d", hour, minute));
-
-                    }
-                }, 0, 0, true);
+        @SuppressLint("DefaultLocale") TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+                (view, hour, minute) -> eventStart.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
         timePickerDialog.show();
     }
 
     private void setScheduleButton() {
-        scheduleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                eventTimeSettingDialog();
-            }
-        });
+        scheduleButton.setOnClickListener(v -> eventTimeSettingDialog());
     }
 
     private void saveEvent() {

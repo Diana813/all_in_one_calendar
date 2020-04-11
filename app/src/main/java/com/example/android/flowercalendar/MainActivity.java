@@ -1,10 +1,14 @@
 package com.example.android.flowercalendar;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -17,6 +21,7 @@ import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity;
 import com.example.android.flowercalendar.PersonalGrowth.LifeAims;
 import com.example.android.flowercalendar.Shifts.ShiftsFragment;
+import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private ExpandableListView expandableListView;
     private CustomExpandableListAdapter expandableListAdapter;
+    private static double screenHeight;
 
 
     @Override
@@ -54,16 +60,18 @@ public class MainActivity extends AppCompatActivity {
         tx.commit();
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar1);
+        toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+        expandableListView = findViewById(R.id.expandableListView);
         mDrawer = findViewById(R.id.activity_expanded_day_view);
         addListData();
         drawerToggle = setupDrawerToggle();
         mDrawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         showMyAppOnTheShareListOfApps();
+        setUsableScreenDimensions();
+
 
     }
 
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         if ("android.intent.action.SEND".equals(action) && "text/".equals(type)) {
             Log.println(Log.ASSERT, "shareablTextExtra", Objects.requireNonNull(intent.getStringExtra("android.intent.extra.TEXT")));
         } else if (("android.intent.action.SEND".equals(action) && "image/jpeg".equals(type))) {
-            Uri receivedUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            Uri receivedUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
             if (receivedUri != null) {
                 Fragment lifeAims = new LifeAims();
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_expanded_day_view);
+        DrawerLayout drawer = findViewById(R.id.activity_expanded_day_view);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -137,19 +145,19 @@ public class MainActivity extends AppCompatActivity {
 
     public static LinkedHashMap<String, List<String>> getData() {
 
-        LinkedHashMap<String, List<String>> expandableListDetail = new LinkedHashMap<String, List<String>>();
+        LinkedHashMap<String, List<String>> expandableListDetail = new LinkedHashMap<>();
 
-        List<String> calendar = new ArrayList<String>();
+        List<String> calendar = new ArrayList<>();
 
-        List<String> forGirls = new ArrayList<String>();
+        List<String> forGirls = new ArrayList<>();
 
-        List<String> shifts = new ArrayList<String>();
+        List<String> shifts = new ArrayList<>();
 
-        List<String> coworkers = new ArrayList<String>();
+        List<String> coworkers = new ArrayList<>();
 
-        List<String> personalGrowth = new ArrayList<String>();
+        List<String> personalGrowth = new ArrayList<>();
 
-        List<String> events = new ArrayList<String>();
+        List<String> events = new ArrayList<>();
         events.add("Cyclical Events");
         events.add("Frequent activities");
 
@@ -166,92 +174,110 @@ public class MainActivity extends AppCompatActivity {
 
     private void addListData() {
 
-        HashMap<String, List<String>> expandableListDetail = getData();
-        List<String> expandableListTitle = new ArrayList<String>(expandableListDetail.keySet());
-        expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, (LinkedHashMap<String, List<String>>) expandableListDetail);
+        LinkedHashMap<String, List<String>> expandableListDetail = getData();
+        List<String> expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
+        expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
 
-        expandableListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+        expandableListView.setOnGroupClickListener((parent, v, groupPosition, id) -> {
 
-                Fragment fragment = null;
-                Class fragmentClass = null;
+            Fragment fragment = null;
+            Class fragmentClass = null;
 
-                if (expandableListAdapter.getChildrenCount(groupPosition) > 0) {
-                    return false;
-                }
-
-                if (id == 0) {
-                    fragmentClass = CalendarFragment.class;
-
-                }
-
-                if (id == 2) {
-                    fragmentClass = ForGirlsFragment.class;
-                }
-
-                if (id == 3) {
-                    fragmentClass = ShiftsFragment.class;
-                }
-                if (id == 4) {
-                    fragmentClass = CoworkerFragment.class;
-                }
-                if (id == 5) {
-                    fragmentClass = BackgroundActivity.class;
-
-                }
-
-                try {
-                    assert fragmentClass != null;
-                    fragment = (Fragment) fragmentClass.newInstance();
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                assert fragment != null;
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(null).commit();
-
-                mDrawer.closeDrawers();
-
-                return true;
+            if (expandableListAdapter.getChildrenCount(groupPosition) > 0) {
+                return false;
             }
+
+            if (id == 0) {
+                fragmentClass = CalendarFragment.class;
+
+            }
+
+            if (id == 2) {
+                fragmentClass = ForGirlsFragment.class;
+            }
+
+            if (id == 3) {
+                fragmentClass = ShiftsFragment.class;
+            }
+            if (id == 4) {
+                fragmentClass = CoworkerFragment.class;
+            }
+            if (id == 5) {
+                fragmentClass = BackgroundActivity.class;
+
+            }
+
+            try {
+                assert fragmentClass != null;
+                fragment = (Fragment) fragmentClass.newInstance();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            assert fragment != null;
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack(null).commit();
+
+            mDrawer.closeDrawers();
+
+            return true;
         });
 
 
-        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v,
-                                        int groupPosition, int childPosition, long id) {
+        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
 
-                Fragment fragment = null;
-                Class fragmentClass;
-                if (id == 1) {
-                    fragmentClass = FrequentActivities.class;
-                } else if (id == 0) {
-                    fragmentClass = CyclicalEvents.class;
-                } else {
-                    fragmentClass = CalendarFragment.class;
-                }
-
-                try {
-                    fragment = (Fragment) fragmentClass.newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                assert fragment != null;
-                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack("tag").commit();
-
-                mDrawer.closeDrawers();
-                return true;
+            Fragment fragment = null;
+            Class fragmentClass;
+            if (id == 1) {
+                fragmentClass = FrequentActivities.class;
+            } else if (id == 0) {
+                fragmentClass = CyclicalEvents.class;
+            } else {
+                fragmentClass = CalendarFragment.class;
             }
+
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            assert fragment != null;
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack("tag").commit();
+
+            mDrawer.closeDrawers();
+            return true;
         });
+    }
+
+    private void setUsableScreenDimensions() {
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        float screen_w = dm.widthPixels;
+        float screen_h = dm.heightPixels;
+
+        int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) {
+            screen_h -= getResources().getDimensionPixelSize(resId);
+        }
+        TypedValue typedValue = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
+            screen_h -= getResources().getDimensionPixelSize(typedValue.resourceId);
+        }
+        screenHeight = screen_h;
+    }
+
+    public static double getScreenHeight() {
+        return screenHeight;
+    }
+
+    public void setScreenHeight(double screenHeight) {
+        MainActivity.screenHeight = screenHeight;
     }
 
 }

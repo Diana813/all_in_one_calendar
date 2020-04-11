@@ -10,23 +10,28 @@ public class CalendarEvents {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @ColumnInfo(name = "shiftNumber")
-    private String shiftNumber;
-
     @ColumnInfo(name = "currentMonth")
     private String currentMonth;
 
-    @ColumnInfo(name = "eventsNumber")
-    private String eventsNumber;
+    @ColumnInfo(name = "isAlarmOn")
+    private boolean isAlarmOn;
 
     @ColumnInfo(name = "pickedDate")
     private String pickedDate;
 
-    public CalendarEvents(String shiftNumber, String eventsNumber, String pickedDate, String currentMonth) {
-        this.shiftNumber = shiftNumber;
-        this.eventsNumber = eventsNumber;
-        this.pickedDate = pickedDate;
+    @ColumnInfo(name = "eventsNumber")
+    private String eventsNumber;
+
+    @ColumnInfo(name = "shiftNumber")
+    private String shiftNumber;
+
+
+    public CalendarEvents(String currentMonth, boolean isAlarmOn, String pickedDate, String eventsNumber, String shiftNumber) {
         this.currentMonth = currentMonth;
+        this.isAlarmOn = isAlarmOn;
+        this.pickedDate = pickedDate;
+        this.eventsNumber = eventsNumber;
+        this.shiftNumber = shiftNumber;
     }
 
     public int getId() {
@@ -46,7 +51,7 @@ public class CalendarEvents {
         this.shiftNumber = shiftNumber;
     }
 
-    String getPickedDate() {
+    public String getPickedDate() {
         return pickedDate;
     }
 
@@ -68,5 +73,13 @@ public class CalendarEvents {
 
     public void setEventsNumber(String eventsNamber) {
         this.eventsNumber = eventsNamber;
+    }
+
+    public boolean isAlarmOn() {
+        return isAlarmOn;
+    }
+
+    public void setAlarmOn(boolean alarmOn) {
+        isAlarmOn = alarmOn;
     }
 }

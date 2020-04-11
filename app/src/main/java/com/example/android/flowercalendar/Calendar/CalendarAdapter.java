@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.Calendar;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.MainActivity;
 import com.example.android.flowercalendar.R;
 
 import java.time.DayOfWeek;
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+
+import static android.provider.SyncStateContract.*;
 
 
 public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
@@ -53,12 +57,18 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
                     R.layout.single_calendar_item, parent, false);
         }
 
+        double keypadParentHeight = (MainActivity.getScreenHeight() * 0.8);
+        double rowHeight = keypadParentHeight / 7;
 
-        dayNumberTextView = (TextView) gridItemView.findViewById(R.id.dayNumber);
-        shiftNumberTextView = (TextView) gridItemView.findViewById(R.id.shiftNumber);
-        eventNameTextView = (TextView) gridItemView.findViewById(R.id.numberOfEvents);
-        ImageView periodImage = (ImageView) gridItemView.findViewById(R.id.periodImage);
-        layout = (RelativeLayout) gridItemView.findViewById(R.id.singleItem);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) rowHeight);
+
+
+        dayNumberTextView = gridItemView.findViewById(R.id.dayNumber);
+        shiftNumberTextView = gridItemView.findViewById(R.id.shiftNumber);
+        eventNameTextView = gridItemView.findViewById(R.id.numberOfEvents);
+        ImageView periodImage = gridItemView.findViewById(R.id.periodImage);
+        layout = gridItemView.findViewById(R.id.singleItem);
+        layout.setLayoutParams(params);
         assert views != null;
         calendarFill = views.getmCalendarFill();
         headerDate = views.getmHeaderDate();
@@ -81,7 +91,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         return gridItemView;
     }
 
-    private void setCalendarColor(CalendarViews views){
+    private void setCalendarColor(CalendarViews views) {
         if (views.getmColorSettings() == 1) {
             setCalendarColor(R.drawable.weekend_frame,
                     Color.BLACK,

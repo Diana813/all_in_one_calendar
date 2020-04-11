@@ -81,9 +81,37 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
         <service
             android:name=".Calendar.AlarmClock"
             tools:ignore="InnerclassSeparator" />
+        <service
+            android:name=".Widget.CalendarWidgetUpdateService"
+            android:exported="false"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="com.example.android.flowercalendar.Widget.CalendarWidgetUpdateService.update_app_widget_list" />
+                <action android:name="com.example.android.flowercalendar.Widget.CalendarWidgetUpdateService.update_app_widget_at_midnight" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".Widget.GridViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            tools:ignore="InnerclassSeparator" />
+
+        <receiver
+            android:name=".Widget.CalendarWidgetProvider"
+            tools:ignore="InnerclassSeparator">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

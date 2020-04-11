@@ -1,8 +1,5 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
-import android.app.VoiceInteractor;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
@@ -24,25 +20,18 @@ import com.example.android.flowercalendar.Events.EventsViewModel;
 import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivitiesViewModel;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 
 public class ToDoList extends Fragment {
 
@@ -59,7 +48,6 @@ public class ToDoList extends Fragment {
     private ImageButton confirm;
     private EditText editText;
     private TextView eventsLabel;
-
 
 
     public ToDoList() {
@@ -114,7 +102,7 @@ public class ToDoList extends Fragment {
     }
 
     private void findViews(View rootView) {
-        freqActDrawList = rootView.findViewById(R.id.listView);
+        freqActDrawList = rootView.findViewById(R.id.widgetGridView);
         toDoListRecyclerView = rootView.findViewById(R.id.list);
         mDrawer = rootView.findViewById(R.id.activity_expanded_day_view);
         confirm = rootView.findViewById(R.id.confirm_button);
@@ -134,12 +122,12 @@ public class ToDoList extends Fragment {
 
     }
 
-    void saveEvent(String newEvent, String pickedDate) {
-        appUtils.saveDataEvents(null, 1, pickedDate, newEvent);
+    void saveEvent(String newEvent, String pickedDate, EventsListAdapter toDoListAdapter) {
+        appUtils.saveDataEvents(toDoListAdapter, null, 1, pickedDate, newEvent);
     }
 
     private String findWhatDateItIs() {
-        Fragment parentFragment = (Fragment) getParentFragment();
+        Fragment parentFragment = getParentFragment();
         if (parentFragment instanceof BackgroundActivityExpandedDayView) {
             pickedDay = ((BackgroundActivityExpandedDayView) parentFragment).getPickedDate();
         }
@@ -173,27 +161,21 @@ public class ToDoList extends Fragment {
 
     private void initData() {
 
-        EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
-        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                assert events != null;
-                toDoListAdapter.setEventsList(events);
-                newId = events.size();
-
-            }
+        EventsViewModel eventsViewModel = new ViewModelProvider(this).get(EventsViewModel.class);
+        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), events -> {
+            assert events != null;
+            toDoListAdapter.setEventsList(events);
+            newId = events.size();
+            AppUtils.updateWidget(context);
         });
     }
 
     private void addFreqActivList() {
 
-        FrequentActivitiesViewModel frequentActivitiesViewModel = ViewModelProviders.of(this).get(FrequentActivitiesViewModel.class);
-        frequentActivitiesViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                assert events != null;
-                frequentActivitiesDrawerListAdapter.setEventsList(events);
-            }
+        FrequentActivitiesViewModel frequentActivitiesViewModel = new ViewModelProvider(this).get(FrequentActivitiesViewModel.class);
+        frequentActivitiesViewModel.getEventsList().observe(getViewLifecycleOwner(), events -> {
+            assert events != null;
+            frequentActivitiesDrawerListAdapter.setEventsList(events);
         });
     }
 

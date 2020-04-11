@@ -8,9 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 11)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 12)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -31,7 +32,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
-                            .fallbackToDestructiveMigration()
+                            //.fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -47,11 +48,17 @@ public abstract class CalendarDatabase extends RoomDatabase {
     }
 
     public abstract CalendarEventsDao calendarEventsDao();
+
     public abstract ColorsDao colorsDao();
+
     public abstract ShiftsDao shiftsDao();
+
     public abstract PeriodDataDao periodDataDao();
+
     public abstract EventsDao eventsDao();
+
     public abstract ImagePathDao imagePathDao();
+
     public abstract BigPlanDao bigPlanDao();
 
 
@@ -85,5 +92,4 @@ public abstract class CalendarDatabase extends RoomDatabase {
             return null;
         }
     }
-
 }

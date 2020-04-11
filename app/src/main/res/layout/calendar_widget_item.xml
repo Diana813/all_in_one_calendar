@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/singleDay"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dayOfAWeek"
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/Monday"
+        tools:background="@drawable/widget_text_frame" />
+
+    <RelativeLayout
+        android:id="@+id/singleItem"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        tools:background="@drawable/widget_frame2">
+
+        <TextView
+            android:id="@+id/dayNumber"
+            style="@style/textViewCalendarDayNumberWidget"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            tools:ignore="RelativeOverlap"
+            tools:text="8" />
+
+
+        <ImageView
+            android:id="@+id/periodImage"
+            style="@style/periodImage"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            tools:ignore="ContentDescription" />
+
+
+        <TextView
+            android:id="@+id/numberOfEvents"
+            style="@style/textViewCalendarDayNumberWidget.textViewCalendarNumberOfEventsWidget"
+            tools:ignore="RelativeOverlap"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/shiftNumber"
+            style="@style/textViewCalendarShiftNumber"
+            tools:text="4" />
+    </RelativeLayout>
+</LinearLayout>

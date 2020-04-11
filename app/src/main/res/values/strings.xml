@@ -1,23 +1,6 @@
 <resources>
     <string name="app_name">All in One Calendar</string>
-
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
-    <string name="FACEBOOK_APP_ID">355690028461527</string>
-    <string name="ACCOUNT_KIT_CLIENT_TOKEN">ff09ded8f236224d4dd0ac08477eedc8</string>
-    <string name="ak_login_protocol_scheme">ak355690028461527</string>
-    <string name="fb_login_protocol_scheme">fb355690028461527</string>
-
+    
     <string name="periodStart">Mark the beginning of your period</string>
     <string name="periodLenght">How long does your period last?</string>
     <string name="cycleLenght">How long does your menstrual cycle last?</string>
@@ -157,5 +140,7 @@
     <string name="turn_of_alarm">Silence</string>
     <string name="dialog_title_auth">Authentication is required to continue</string>
     <string name="dialog_msg_auth">This app uses authentication to protect your data.</string>
+    <string name="alarmClockOff">Alarm clock off </string>
+    <string name="alarmClockOn">Alarm clock on: </string>
 
 </resources>

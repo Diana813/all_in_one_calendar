@@ -123,7 +123,7 @@
         <item name="android:textColor">#000</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="textViewDateStyle">
@@ -188,6 +188,24 @@
         <item name="android:textColor">#000</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_margin">7dp</item>
+    </style>
+
+    <style name="textViewCalendarDayNumberWidget">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="textViewCalendarDayNumberWidget.textViewCalendarNumberOfEventsWidget">
+       <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="textViewCalendarShiftNumber">
