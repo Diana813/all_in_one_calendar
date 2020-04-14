@@ -47,7 +47,7 @@
                     android:layout_weight="2">
 
                     <ImageView
-                        android:id="@+id/schedule_button"
+                        android:id="@+id/event_time_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"

@@ -3,17 +3,22 @@ package com.example.android.flowercalendar.Events.CyclicalEvents;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.OneTimeEvents;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
+import com.example.android.flowercalendar.Shifts.ShiftsEditor;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Colors;
 import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.database.Shift;
+import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -27,25 +32,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
-public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEventsListAdapter.EventsViewHolder> {
+public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEventsListAdapter.CyclicalEventsViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
     private static Context context;
     private LayoutInflater layoutInflater;
     private List<Event> eventsList;
-    private int startHour;
-    private int startminute;
     private Event event;
     private int eventPosition;
     private String eventName;
-    private ArrayList<String> eventsNames = new ArrayList<>();
-    private String pickedDate;
-    private String shiftNumber;
-    private String shiftFinish;
-    private String shiftStart;
+    private ArrayList<String> eventNames = new ArrayList<>();
 
 
-    CyclicalEventsListAdapter(Context requireNonNull, Context context) {
+    CyclicalEventsListAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         CyclicalEventsListAdapter.context = context;
 
@@ -63,70 +62,36 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
     @NonNull
     @Override
-    public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CyclicalEventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.event_single_item, parent, false);
-        return new EventsViewHolder(itemView);
+        return new CyclicalEventsViewHolder(itemView);
     }
 
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
-    public void onBindViewHolder(@NonNull EventsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CyclicalEventsViewHolder holder, int position) {
+
         if (eventsList == null) {
             return;
         }
 
         final Event event = eventsList.get(position);
-        pickedDate = eventsList.get(position).getPickedDay();
 
         if (event != null) {
 
-            String event_start_time = event.getSchedule();
+            holder.number.setText(position + 1 + ".");
+            holder.contents.setText(event.getEvent_name());
+            holder.nextEventPlanned.setText("0");
+            holder.nextEventPlanned.setVisibility(View.VISIBLE);
 
-           /* String shift_finish;
-            if (event_start_time.equals("")) {
-                shift_finish = "";
-            } else {
-
-                String[] parts = event_start_time.split(":");
-
-                try {
-                    startHour = Integer.parseInt(parts[0]);
-                    startminute = Integer.parseInt(parts[1]);
-                } catch (NumberFormatException ex) {
-                    ex.printStackTrace();
-
-                }
-
-                int finishHour = startHour + event.getEvent_length();
-                if (finishHour == 24) {
-                    finishHour = 0;
-                }
-                if (finishHour > 24) {
-                    finishHour = finishHour - 24;
-                }
-
-                shift_finish = String.format("%02d:%02d", finishHour, startminute);
-            }
-*/
-           /* holder.eventName.setText(event.getEvent_name());
-            holder.eventSchedule.setText(event.getSchedule() + " - " + shift_finish);*/
-            if (event.getSchedule().isEmpty()) {
-                holder.eventSchedule.setText("");
-
-            }
-            // holder.eventAlarm.setText(event.getAlarm());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment oneTimeEvents = OneTimeEvents.newInstance(event.getId(), event.getEvent_name(),
-                            event.getSchedule(), event.getAlarm(), event.getEvent_length(), event.getPickedDay());
-                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, oneTimeEvents).addToBackStack(null).commit();
-                }
+            holder.itemView.setOnClickListener(v -> {
+                Fragment editorFragment = CyclicalEventsDetails.newInstance(event.getId(), event.getEvent_name(), event.getPickedDay(), event.getFrequency(), event.getSchedule(), 0, event.getEvent_length(), event.getAlarm(), event.getTerm());
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, editorFragment).addToBackStack(null).commit();
             });
-        }
 
+        }
 
     }
 
@@ -135,51 +100,21 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         event = eventsList.get(position);
         eventPosition = position;
         eventName = event.getEvent_name();
-        eventsNames.add(eventName);
+        eventNames.add(eventName);
         eventsList.remove(position);
         notifyItemRemoved(position);
         showUndoSnackbar();
 
     }
 
-    private void setBackgroundColorItem(View listOfItems, EventsViewHolder holder) {
-        ColorsDao colorsDao = getDatabase(context).colorsDao();
-        Colors colorToUpdate = colorsDao.findLastColor1();
-
-        if (colorToUpdate == null) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightRed));
-        } else if (colorToUpdate.getColor_number() == 1) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightRed));
-        } else if (colorToUpdate.getColor_number() == 2) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightYellow));
-            holder.eventName.setTextColor(getContext().getResources().getColor(R.color.grey));
-            holder.eventSchedule.setTextColor(getContext().getResources().getColor(R.color.grey));
-        } else if (colorToUpdate.getColor_number() == 3) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightGreen));
-        } else if (colorToUpdate.getColor_number() == 4) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightBlue));
-        } else if (colorToUpdate.getColor_number() == 5) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightViolet));
-        } else if (colorToUpdate.getColor_number() == 6) {
-            listOfItems.setBackgroundColor(getContext().getResources()
-                    .getColor(R.color.lightGrey));
-        }
-    }
-
     void deleteFromDatabase() {
 
-        EventsDao eventsDao = getDatabase(context).eventsDao();
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
 
-        if (eventsNames != null) {
-            for (int i = 0; i < eventsNames.size(); i++) {
+        if (eventNames != null) {
+            for (int i = 0; i < eventNames.size(); i++) {
 
-                eventsDao.deleteByEventName(eventsNames.get(i));
+                eventsDao.deleteByEventName(eventNames.get(i));
 
             }
         }
@@ -189,19 +124,14 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoDelete();
-            }
-        });
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
         snackbar.show();
     }
 
     private void undoDelete() {
         eventsList.add(eventPosition,
                 event);
-        eventsNames.remove(eventName);
+        eventNames.remove(eventName);
         notifyItemInserted(eventPosition);
     }
 
@@ -224,8 +154,9 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
     }
 
-    public void setIndexInDatabase() {
-        EventsDao eventsDao = getDatabase(context).eventsDao();
+    void setIndexInDatabase() {
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
         for (Event event : eventsList) {
             event.setPosition(String.valueOf(eventsList.indexOf(event)));
             eventsDao.update(event);
@@ -243,22 +174,18 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         }
     }
 
-    static class EventsViewHolder extends RecyclerView.ViewHolder {
-        private TextView eventName;
-        private TextView eventSchedule;
-        private TextView eventAlarm;
-        // private LinearLayout listOfItems;
+    static class CyclicalEventsViewHolder extends RecyclerView.ViewHolder {
+        private TextView number;
+        private TextView contents;
+        private TextView nextEventPlanned;
 
-
-        EventsViewHolder(View itemView) {
+        CyclicalEventsViewHolder(View itemView) {
             super(itemView);
-            eventName = itemView.findViewById(R.id.contents);
-            eventSchedule = itemView.findViewById(R.id.number);
-            //eventAlarm = itemView.findViewById(R.id.event_alarm);
-            //listOfItems = itemView.findViewById(R.id.list_of_items);
+            number = itemView.findViewById(R.id.number);
+            contents = itemView.findViewById(R.id.contents);
+            nextEventPlanned = itemView.findViewById(R.id.nextEventPlanned);
 
         }
     }
-
 }
 

@@ -1,20 +1,29 @@
-<?xml version="1.0" encoding="utf-8"?><!--<androidx.cardview.widget.CardView style="@style/cardViewPlansList">-->
+<?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/semiTransparentColorWhite"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
     android:layout_height="wrap_content"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle">
+    android:background="@color/semiTransparentColorWhite">
 
     <TextView
         android:id="@+id/number"
         style="@style/textViewStylePlansList"
-        tools:text="1." />
+        tools:text="1."
+        android:layout_weight="0.5"/>
 
     <TextView
         android:id="@+id/contents"
         style="@style/textViewStylePlansList"
-        tools:text="Zostać Android developerem" />
+        tools:text="Zostać Android developerem"
+        android:layout_weight="5"/>
 
-</LinearLayout><!--
-</androidx.cardview.widget.CardView>-->
+    <TextView
+        android:id="@+id/nextEventPlanned"
+        style="@style/textViewStylePlansList"
+        tools:text="Wtorek 20:00"
+        android:layout_weight="2"/>
+
+
+</LinearLayout>
+

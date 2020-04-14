@@ -80,20 +80,18 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
         views.setTextViewText(R.id.numberOfEvents, dataList.get(position).getNumberOfEvents());
         views.setTextColor(R.id.numberOfEvents, Color.parseColor("#002171"));
 
-        if (dataList.get(position).getPeriodStartDate() != null) {
+        if (dataList.get(position).isHasPeriod()) {
 
-            if (LocalDate.now().plusDays(position).isEqual(dataList.get(position).getPeriodStartDate()) || (LocalDate.now().plusDays(position).isAfter(dataList.get(position).getPeriodStartDate()) && LocalDate.now().plusDays(position).isBefore(dataList.get(position).getPeriodFinishDate()))) {
-
-                views.setImageViewResource(R.id.periodImage, R.mipmap.period_icon_v2);
-            } else {
-                views.setViewVisibility(R.id.periodImage, View.GONE);
-            }
+            views.setImageViewResource(R.id.periodImage, R.mipmap.period_icon_v2);
         } else {
             views.setViewVisibility(R.id.periodImage, View.GONE);
         }
 
-
         Intent fillInIntent = new Intent();
+        fillInIntent.putExtra("dayNumber", dataList.get(position).getDayNumber());
+        fillInIntent.putExtra("shiftNumber", dataList.get(position).getShiftNumber());
+        fillInIntent.putExtra("numberOfEvents", dataList.get(position).getNumberOfEvents());
+        fillInIntent.putExtra("hasPeriod", dataList.get(position).isHasPeriod());
         views.setOnClickFillInIntent(R.id.singleItem, fillInIntent);
         return views;
     }

@@ -97,7 +97,7 @@ public class ToDoList extends Fragment {
         pickedDay = findWhatDateItIs();
         initData();
         addFreqActivList();
-        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, 1, pickedDay, null);
+        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, 1, pickedDay, null, "0");
         return rootView;
     }
 
@@ -123,7 +123,7 @@ public class ToDoList extends Fragment {
     }
 
     void saveEvent(String newEvent, String pickedDate, EventsListAdapter toDoListAdapter) {
-        appUtils.saveDataEvents(toDoListAdapter, null, 1, pickedDate, newEvent);
+        appUtils.saveDataEvents(toDoListAdapter, null, pickedDate, newEvent, "0");
     }
 
     private String findWhatDateItIs() {

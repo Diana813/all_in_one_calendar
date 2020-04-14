@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.OneTimeEvents;
+import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEventsDetails;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Event;
@@ -35,7 +36,7 @@ public class DailyScheduleEvents extends Fragment {
     private String shiftStart;
     private int shiftLength;
     private ArrayList<Event> hoursArrayList;
-    TextView hourTextView;
+    private TextView hourTextView;
     private RecyclerView recyclerView;
     private int layout;
 
@@ -93,58 +94,55 @@ public class DailyScheduleEvents extends Fragment {
         //assert getArguments() != null;
 //        pickedDay = getArguments().getString("pickedDay");
         //TextView date = rootView.findViewById(R.id.expandedDayDate);
-       // date.setText(pickedDay);
+        // date.setText(pickedDay);
         //onFabClick();
         //initData();
         //CalendarFragment calendarFragment = new CalendarFragment();
         //calendarFragment.saveEventsNumberToPickedDate();
 
-       // hourTextView = rootView.findViewById(R.id.hour);
-      //  addingHoursToThePlanner();
+        // hourTextView = rootView.findViewById(R.id.hour);
+        //  addingHoursToThePlanner();
 
 
         return rootView;
     }
 
     private void onFabClick() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OneTimeEvents oneTimeEvents = new OneTimeEvents();
-                Bundle args = new Bundle();
-                args.putString("pickedDay", pickedDay);
-                oneTimeEvents.setArguments(args);
-                assert getFragmentManager() != null;
-                getFragmentManager().beginTransaction().replace(R.id.flContent, oneTimeEvents).commit();
-            }
+        fab.setOnClickListener(view -> {
+            CyclicalEventsDetails cyclicalEventsDetails = new CyclicalEventsDetails();
+            Bundle args = new Bundle();
+            args.putString("pickedDay", pickedDay);
+            cyclicalEventsDetails.setArguments(args);
+            getChildFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEventsDetails).commit();
         });
     }
 
-   /* private void initData() {
+    /* private void initData() {
 
-        EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
-        eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                assert events != null;
-                testingListAdapter.setEventsList(events);
-                newId = events.size();
-                if (events.isEmpty()) {
-                    empty_view.setVisibility(View.VISIBLE);
-                } else {
-                    empty_view.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-*/
+         EventsViewModel eventsViewModel = ViewModelProviders.of(this).get(EventsViewModel.class);
+         eventsViewModel.getEventsList().observe(this, new Observer<List<Event>>() {
+             @Override
+             public void onChanged(@Nullable List<Event> events) {
+                 assert events != null;
+                 testingListAdapter.setEventsList(events);
+                 newId = events.size();
+                 if (events.isEmpty()) {
+                     empty_view.setVisibility(View.VISIBLE);
+                 } else {
+                     empty_view.setVisibility(View.GONE);
+                 }
+             }
+         });
+     }
+ */
+    @SuppressLint("DefaultLocale")
     private void addingHoursToThePlanner() {
         hoursArrayList = new ArrayList<>();
 
-        EventsListHoursAdapter planerAdapter = new EventsListHoursAdapter(context,context);
+        EventsListHoursAdapter planerAdapter = new EventsListHoursAdapter(context, context);
         int hour = 0;
         int minute = 0;
-        for(int i = 0; i<24; i ++){
+        for (int i = 0; i < 24; i++) {
             hourTextView.setText(String.format("%02d:%02d", hour, minute));
             hour++;
         }

@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 12)
+@Database(entities = {CalendarEvents.class, Colors.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class}, version = 14)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -32,6 +32,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
+                            .addMigrations(MIGRATION_12_13, MIGRATION_13_14)
                             //.fallbackToDestructiveMigration()
                             .build();
                 }
@@ -92,4 +93,20 @@ public abstract class CalendarDatabase extends RoomDatabase {
             return null;
         }
     }
+
+    private static final Migration MIGRATION_12_13 = new Migration(12, 13) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE EVENT ADD COLUMN frequency TEXT");
+        }
+    };
+
+    private static final Migration MIGRATION_13_14 = new Migration(13, 14) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE EVENT ADD COLUMN term TEXT");
+        }
+    };
 }

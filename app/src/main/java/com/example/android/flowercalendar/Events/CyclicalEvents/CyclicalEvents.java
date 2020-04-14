@@ -3,15 +3,15 @@ package com.example.android.flowercalendar.Events.CyclicalEvents;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivities;
-import com.example.android.flowercalendar.Events.OneTimeEvents;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.Event;
@@ -23,14 +23,15 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.lifecycle.ViewModelProviders.of;
-
 public class CyclicalEvents extends Fragment {
+
     private Context context;
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
     private FloatingActionButton fab;
@@ -46,7 +47,7 @@ public class CyclicalEvents extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        cyclicalEventsListAdapter = new CyclicalEventsListAdapter(context, context);
+        cyclicalEventsListAdapter = new CyclicalEventsListAdapter(getContext());
     }
 
     @Override
@@ -55,21 +56,14 @@ public class CyclicalEvents extends Fragment {
     }
 
     @Override
-    public void onDestroyView(){
-        super.onDestroyView();
+    public void onPause() {
+        super.onPause();
         cyclicalEventsListAdapter.setIndexInDatabase();
         cyclicalEventsListAdapter.deleteFromDatabase();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        cyclicalEventsListAdapter.setIndexInDatabase();
-        cyclicalEventsListAdapter.deleteFromDatabase();
-    }
-
-    public static FrequentActivities newInstance() {
-        return new FrequentActivities();
+    public static CyclicalEvents newInstance() {
+        return new CyclicalEvents();
     }
 
     @Override
@@ -83,7 +77,8 @@ public class CyclicalEvents extends Fragment {
         View rootView = inflater.inflate(R.layout.add_events, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
 
-        /*fab = rootView.findViewById(R.id.fab);*/
+        fab = rootView.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
         LinearLayout editText = rootView.findViewById(R.id.editTextLinearLayout);
         editText.setVisibility(View.GONE);
         empty_view = rootView.findViewById(R.id.empty_view);
@@ -96,52 +91,41 @@ public class CyclicalEvents extends Fragment {
         emptyViewSubtitle.setText(R.string.descriptionCyclicalEvents);
         imageView.setImageResource(R.mipmap.cycle_event_icon);
 
-       /* LinearLayout editTextPlan = rootView.findViewById(R.id.editTextPlans);
-        editTextPlan.setVisibility(View.GONE);*/
-
         RecyclerView recyclerView = rootView.findViewById(R.id.list);
         recyclerView.setAdapter(cyclicalEventsListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new GestureInteractionsRecyclerView(cyclicalEventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
-        //onFabClick();
+        onFabClick();
         initData();
         return rootView;
     }
 
+
     private void initData() {
 
-        CyclicalEventsViewModel eventsViewModel = of(this).get(CyclicalEventsViewModel.class);
-        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), new Observer<List<Event>>() {
-            @Override
-            public void onChanged(@Nullable List<Event> events) {
-                assert events != null;
-                cyclicalEventsListAdapter.setEventsList(events);
-                newId = events.size();
-                if (events.isEmpty()) {
-                    empty_view.setVisibility(View.VISIBLE);
-                } else {
-                    empty_view.setVisibility(View.GONE);
-                }
+        CyclicalEventsViewModel eventsViewModel = new ViewModelProvider(this).get(CyclicalEventsViewModel.class);
+        eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), events -> {
+            assert events != null;
+            cyclicalEventsListAdapter.setEventsList(events);
+            newId = events.size();
+            if (events.isEmpty()) {
+                empty_view.setVisibility(View.VISIBLE);
+            } else {
+                empty_view.setVisibility(View.GONE);
             }
         });
     }
 
     private void onFabClick() {
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OneTimeEvents oneTimeEvents = new OneTimeEvents();
-                Bundle args = new Bundle();
-                args.putString("pickedDay", null);
-                oneTimeEvents.setArguments(args);
-                assert getFragmentManager() != null;
-                getFragmentManager().beginTransaction().replace(R.id.flContent, oneTimeEvents).commit();
-            }
-        });
+        fab.setOnClickListener(view1 -> showFragment(CyclicalEventsDetails.newInstance(-1, "-1", null, null, null, 0, 0, null, null)));
     }
 
-
+    private void showFragment(final Fragment fragment) {
+        FragmentTransaction fragmentTransaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flContent, fragment);
+        fragmentTransaction.commitNow();
+    }
 
 }

@@ -94,7 +94,7 @@ public class OneYearPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null, eventsListAdapter);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null, eventsListAdapter, "0");
         return rootView;
     }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/calendarHeader"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+    android:layout_height="40dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Monday"
+        android:id="@+id/mon" />
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Tuesday"
+        android:id="@+id/tue"/>
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Wednesday"
+        android:id="@+id/wed"/>
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Thursday"
+        android:id="@+id/thr"/>
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Friday"
+        android:id="@+id/fri"/>
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Saturday"
+        android:id="@+id/sat"/>
+
+    <TextView
+        style="@style/textViewStyleCalendarDayOfWeek"
+        android:text="@string/Sunday"
+        android:id="@+id/sun"/>
+</LinearLayout>

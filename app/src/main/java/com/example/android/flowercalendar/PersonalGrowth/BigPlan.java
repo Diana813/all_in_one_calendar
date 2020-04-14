@@ -93,7 +93,7 @@ public class BigPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, eventsListAdapter);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, eventsListAdapter, "0");
         return rootView;
     }
 

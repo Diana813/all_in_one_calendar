@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/on_and_on"
+        android:title="@string/on_and_on"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/to_date"
+        android:title="@string/to_date"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/up_to_number"
+        android:title="@string/up_to_the_selected_number_of_occurrences"
+        app:showAsAction="never" />
+
+
+</menu>

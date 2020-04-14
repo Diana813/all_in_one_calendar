@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
@@ -98,7 +97,7 @@ public class ShiftsEditor extends Fragment {
 
         shiftNameEditText = view.findViewById(R.id.shift_name_edit_text);
         shiftStartTextView = view.findViewById(R.id.shiftStart);
-        ImageView shiftStartSettingButton = view.findViewById(R.id.schedule_button);
+        ImageView shiftStartSettingButton = view.findViewById(R.id.event_time_button);
         shiftStartSettingButton.setOnClickListener(v -> shiftSettingDialog());
 
         alarmTextView = view.findViewById(R.id.alarmStart);

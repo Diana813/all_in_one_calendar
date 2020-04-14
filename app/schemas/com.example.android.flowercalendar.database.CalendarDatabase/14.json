@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 12,
-    "identityHash": "8564f4677f46bde2d12407184c253169",
+    "version": 14,
+    "identityHash": "871f9e94e30e4442d4367f69b39de97e",
     "entities": [
       {
         "tableName": "calendar_events",
@@ -179,7 +179,7 @@
       },
       {
         "tableName": "event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_name` TEXT, `schedule` TEXT, `alarm` TEXT, `event_length` INTEGER NOT NULL, `position` TEXT, `picked_day` TEXT, `eventKind` INTEGER NOT NULL, `frequency` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `event_name` TEXT, `schedule` TEXT, `alarm` TEXT, `event_length` INTEGER NOT NULL, `position` TEXT, `picked_day` TEXT, `eventKind` INTEGER NOT NULL, `frequency` TEXT, `term` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -232,6 +232,12 @@
           {
             "fieldPath": "frequency",
             "columnName": "frequency",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "term",
+            "columnName": "term",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -328,7 +334,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8564f4677f46bde2d12407184c253169')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '871f9e94e30e4442d4367f69b39de97e')"
     ]
   }
 }

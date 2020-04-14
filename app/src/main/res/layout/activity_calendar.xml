@@ -11,9 +11,9 @@
 
         <LinearLayout
             android:id="@+id/dateView"
-            android:layout_weight="0.5"
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
             android:layout_margin="5dp"
+            android:layout_weight="0.5"
             android:background="#98FFFFFF"
             android:gravity="center">
 
@@ -40,47 +40,14 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/calendarCardView"
-            android:layout_weight="5"
-            style="@style/cardViewCalendar">
+            style="@style/cardViewCalendar"
+            android:layout_weight="5">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/calendarHeader"
-                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
-                    android:layout_height="40dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Monday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Tuesday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Wednesday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Thursday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Friday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Saturday" />
-
-                    <TextView
-                        style="@style/textViewStyleCalendarDayOfWeek"
-                        android:text="@string/Sunday" />
-                </LinearLayout>
+                <include layout="@layout/day_of_week_table" />
 
                 <GridView
                     android:id="@+id/widgetGridView"

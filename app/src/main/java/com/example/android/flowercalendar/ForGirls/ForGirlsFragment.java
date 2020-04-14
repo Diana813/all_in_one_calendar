@@ -45,10 +45,7 @@ public class ForGirlsFragment extends Fragment {
     private PeriodDataDao periodDataDao;
 
     @SuppressLint("ClickableViewAccessibility")
-    private View.OnTouchListener touchListener = (view, motionEvent) -> {
-        boolean periodDataHasChanged = true;
-        return false;
-    };
+    private View.OnTouchListener touchListener = (view, motionEvent) -> false;
 
     @Override
     public void onPause() {

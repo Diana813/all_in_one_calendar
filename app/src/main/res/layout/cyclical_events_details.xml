@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+        android:background="@color/lightGrey"
+        tools:context=".Events.CyclicalEvents.CyclicalEventsDetails">
+
+        <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
+
+            <RelativeLayout
+                android:id="@+id/numberOfEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/event_name"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/eventName" />
+
+                <EditText
+                    android:id="@+id/event_name_edit_text"
+                    style="@style/EditTextEventsOverview"
+                    android:layout_below="@+id/event_name"
+                    android:hint="@string/birthday"
+                    android:importantForAutofill="no" />
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/cardViewColorSettingsAndOverviewStyle"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/dateOfTheEvent"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/startDate" />
+
+                <CalendarView
+                    android:id="@+id/cyclicalEventsCalendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                </CalendarView>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
+
+            <RelativeLayout
+                android:id="@+id/howOften"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/howOftenText"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/how_often" />
+
+                <LinearLayout
+                    android:id="@+id/chooseHowOften"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/howOftenText"
+                    android:layout_marginStart="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/howOftenHeader"
+                        style="@style/textViewHeaders"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        tools:text="Co rok" />
+
+                    <ImageButton
+                        android:id="@+id/howOftenButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@color/colorAccent"
+                        android:src="@drawable/baseline_keyboard_arrow_down_black_24"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/chooseHowOften"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:id="@+id/howOftenEditLayout"
+                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+                    android:layout_below="@+id/view"
+                    android:layout_margin="10dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/textViewHeaders.small"
+                        android:layout_width="wrap_content"
+                        android:text="@string/every" />
+
+                    <EditText
+                        android:id="@+id/howOftenEditText"
+                        style="@style/textViewHeaders.small"
+                        android:layout_width="wrap_content"
+                        android:hint="@string/questionMark"
+                        android:inputType="number"
+                        tools:ignore="Autofill" />
+
+                    <TextView
+                        android:id="@+id/timeTextView"
+                        style="@style/textViewHeaders.small"
+                        android:layout_width="wrap_content"
+                        android:text="@string/years" />
+                </LinearLayout>
+
+                <include
+                    layout="@layout/day_of_week_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/howOftenEditLayout"
+                    android:layout_margin="15dp"
+                    android:visibility="gone" />
+
+                <RadioGroup
+                    android:id="@+id/monthRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/calendarHeader"
+                    android:layout_margin="10dp"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/same_day_every_month"
+                        android:id="@+id/everyMonth"
+                        android:textSize="18sp" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/every"
+                        android:id="@+id/everyFourWeeks"
+                        android:textSize="18sp" />
+
+                </RadioGroup>
+
+                <LinearLayout
+                    android:id="@+id/chooseHowLong"
+                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+                    android:layout_below="@id/monthRadioButton"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/howLongHeader"
+                        style="@style/textViewHeaders.small"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:text="@string/on_and_on" />
+
+                    <EditText
+                        android:id="@+id/howLongEditText"
+                        style="@style/textViewHeaders.small"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="4"
+                        android:hint="@string/two"
+                        android:inputType="number"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        tools:ignore="Autofill" />
+
+
+                    <ImageButton
+                        android:id="@+id/howLongButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@color/colorAccent"
+                        android:gravity="center"
+                        android:src="@drawable/baseline_keyboard_arrow_down_black_24"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/chooseHowLong"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/colorPrimary"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/cardViewColorSettingsAndOverviewStyle"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:layout_margin="10dp">
+
+                <TextView
+
+                    android:id="@+id/timeOfTheEvent"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/what_time" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_horizontal">
+
+                    <ImageView
+                        android:id="@+id/event_time_button"
+                        style="@style/ImageScheduleButtonStyle"
+                        android:layout_toEndOf="@+id/eventStart"
+                        android:src="@drawable/baseline_access_time_black_48"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/eventStart"
+                        style="@style/textViewOneTimeEventsStyle"
+                        android:hint="@string/hintAlarm" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/cardViewColorSettingsAndOverviewStyle"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/howLong"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/period" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_horizontal">
+
+                    <EditText
+                        android:id="@+id/how_long_edit_text_hours"
+                        style="@style/EditTextEventsOverview"
+                        android:layout_width="wrap_content"
+                        android:hint="@string/numberOfHours"
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:id="@+id/hours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="20dp"
+                        android:layout_toEndOf="@+id/how_long_edit_text_hours"
+                        android:text="@string/hours"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+
+
+                    <EditText
+                        android:id="@+id/how_long_edit_text_minutes"
+                        style="@style/EditTextEventsOverview"
+                        android:layout_width="wrap_content"
+                        android:layout_toEndOf="@+id/hours"
+                        android:hint="@string/_hours"
+                        android:importantForAutofill="no"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/how_long_edit_text_minutes"
+                        android:text="@string/minutes"
+                        android:textColor="#000"
+                        android:textSize="20sp" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/cardViewColorSettingsAndOverviewStyle"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/alarmOfTheEvent"
+                    style="@style/OverviewStyle.Events"
+                    android:text="@string/alarm" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center_horizontal">
+
+                    <ImageView
+                        android:id="@+id/alarm_button"
+                        style="@style/ImageScheduleButtonStyle"
+                        android:layout_toEndOf="@+id/alarm"
+                        android:src="@drawable/baseline_access_time_black_48"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/alarm"
+                        style="@style/textViewOneTimeEventsStyle"
+                        android:hint="@string/hintAlarm" />
+
+                </RelativeLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

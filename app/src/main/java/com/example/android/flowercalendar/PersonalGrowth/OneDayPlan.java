@@ -105,7 +105,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), eventsListAdapter);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), eventsListAdapter, "0");
         return rootView;
     }
 

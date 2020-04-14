@@ -40,7 +40,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
     private ArrayList<String> shiftsNames = new ArrayList<>();
 
 
-    ShiftsAdapter(Context requireNonNull, Context context) {
+    ShiftsAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         ShiftsAdapter.context = context;
 
@@ -110,14 +110,11 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
             }
             holder.shiftAlarm.setText(shift.getAlarm());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment editorFragment = ShiftsEditor.newInstance(shift.getId(), shift.getShift_name(),
-                            shift.getSchedule(), shift.getAlarm(), shift.getShift_length());
-                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, editorFragment).addToBackStack(null).commit();
-                }
+            holder.itemView.setOnClickListener(v -> {
+                Fragment editorFragment = ShiftsEditor.newInstance(shift.getId(), shift.getShift_name(),
+                        shift.getSchedule(), shift.getAlarm(), shift.getShift_length());
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, editorFragment).addToBackStack(null).commit();
             });
         }
 
@@ -185,12 +182,7 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoDelete();
-            }
-        });
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
         snackbar.show();
     }
 

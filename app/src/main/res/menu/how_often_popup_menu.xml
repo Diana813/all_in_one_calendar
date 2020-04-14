@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/days"
+        android:title="@string/days"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/weeks"
+        android:title="@string/weeks"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/months"
+        android:title="@string/months"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/years"
+        android:title="@string/Years"
+        app:showAsAction="never" />
+
+
+</menu>

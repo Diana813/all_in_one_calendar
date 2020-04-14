@@ -38,7 +38,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private ArrayList<StringsAims> eventNumbers = new ArrayList<>();
     private String eventContent;
     private String aimTime;
-    private OneDayPlan oneDayPlan = new OneDayPlan();
 
     public EventsListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
@@ -125,12 +124,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.AimDeletedSnackBar,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoDelete();
-            }
-        });
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
         snackbar.show();
     }
 

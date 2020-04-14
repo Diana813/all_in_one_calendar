@@ -1,10 +1,11 @@
 package com.example.android.flowercalendar;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +30,13 @@ import com.example.android.flowercalendar.database.ImagePathDao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -86,21 +94,21 @@ public class AppUtils {
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, EventsListAdapter eventsListAdapter) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, EventsListAdapter eventsListAdapter, String frequency) {
 
         confirm.setOnClickListener(v -> {
             saveDataPersonalGrowth(adapter, aim, i);
             adapter.deleteFromDatabase();
             adapter.setAimIndexInDB();
-            saveDataEvents(eventsListAdapter, aim, 1, pickedDay, null);
+            saveDataEvents(eventsListAdapter, aim, pickedDay, null, frequency);
             aim.setText("");
         });
 
     }
 
-    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final String pickedDay, final String newEvent) {
+    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final String pickedDay, final String newEvent, String frequency) {
         confirm.setOnClickListener(v -> {
-            saveDataEvents(adapter, textView, i, pickedDay, newEvent);
+            saveDataEvents(adapter, textView, pickedDay, newEvent, frequency);
             adapter.deleteFromDatabase(null);
             adapter.setIndexInDB();
             textView.setText("");
@@ -119,7 +127,7 @@ public class AppUtils {
 
     }
 
-    public void saveDataEvents(EventsListAdapter adapter, TextView plan, int i, String pickedDay, String newEvent) {
+    public void saveDataEvents(EventsListAdapter adapter, TextView plan, String pickedDay, String newEvent, String frequency) {
 
         String eventTextString;
         if (newEvent != null) {
@@ -132,7 +140,7 @@ public class AppUtils {
         int index = adapter.getItemCount();
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1));
+        eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1, frequency, "0"));
     }
 
     public void displayImageFromDB(ImageView view) {
@@ -170,4 +178,44 @@ public class AppUtils {
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(intent);
     }
+
+    public static LocalDate refactorStringIntoDate(String stringDate) {
+
+        LocalDate searchedDate;
+        if (stringDate == null) {
+            searchedDate = null;
+        } else {
+            String[] split = stringDate.split("-");
+            searchedDate = LocalDate.of(Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+        }
+
+        return searchedDate;
+    }
+
+    public long eventStartDayToMilis(String dateString) {
+
+        String[] parts = dateString.split("-");
+        int year = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]);
+        int day = Integer.parseInt(parts[2]);
+        LocalDateTime periodStartDate = LocalDateTime.now().withYear(year).withMonth(month).withDayOfMonth(day);
+        ZonedDateTime zdt = periodStartDate.atZone(ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
+
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void eventTimeSettingDialog(TextView textView, Context context) {
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context,
+                (view, hour, minute) -> textView.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
+        timePickerDialog.show();
+    }
+
+    public String displayDateInAProperFormat(Calendar calendar) {
+        String myFormat = "dd MMMM, yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+        return sdf.format(calendar.getTime());
+    }
+
 }

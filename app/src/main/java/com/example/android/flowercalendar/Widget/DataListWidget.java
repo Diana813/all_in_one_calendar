@@ -1,22 +1,18 @@
 package com.example.android.flowercalendar.Widget;
 
-import java.time.LocalDate;
-
 public class DataListWidget {
 
     private int dayNumber;
     private String shiftNumber;
     private String numberOfEvents;
-    private LocalDate periodStartDate;
-    private LocalDate periodFinishDate;
+    private boolean hasPeriod;
 
 
-    DataListWidget(int dayNumber, String shiftNumber, String numberOfEvents, LocalDate periodStartDate, LocalDate periodFinishDate) {
+    DataListWidget(int dayNumber, String shiftNumber, String numberOfEvents, boolean hasPeriod) {
         this.dayNumber = dayNumber;
         this.shiftNumber = shiftNumber;
         this.numberOfEvents = numberOfEvents;
-        this.periodStartDate = periodStartDate;
-        this.periodFinishDate = periodFinishDate;
+        this.hasPeriod = hasPeriod;
     }
 
     int getDayNumber() {
@@ -43,19 +39,11 @@ public class DataListWidget {
         this.numberOfEvents = numberOfEvents;
     }
 
-    public LocalDate getPeriodStartDate() {
-        return periodStartDate;
+    boolean isHasPeriod() {
+        return hasPeriod;
     }
 
-    public void setPeriodStartDate(LocalDate periodStartDate) {
-        this.periodStartDate = periodStartDate;
-    }
-
-    LocalDate getPeriodFinishDate() {
-        return periodFinishDate;
-    }
-
-    public void setPeriodFinishDate(LocalDate periodFinishDate) {
-        this.periodFinishDate = periodFinishDate;
+    public void setHasPeriod(boolean hasPeriod) {
+        this.hasPeriod = hasPeriod;
     }
 }

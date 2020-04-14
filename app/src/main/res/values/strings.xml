@@ -100,7 +100,7 @@
     <string name="events">Events</string>
     <string name="cyclicalEvents">Cyclical events</string>
     <string name="frequentActivities">Frequent activities</string>
-    <string name="oneTimeEvents">One-time events</string>
+    <string name="cyclicalEventsDetails">One-time events</string>
     <string name="activitiesList">Frequent activities list:</string>
     <string name="addFrequentActivities">Add frequent activities</string>
     <string name="descriptionFrequentActivities">Add all the events that happen often and
@@ -142,5 +142,26 @@
     <string name="dialog_msg_auth">This app uses authentication to protect your data.</string>
     <string name="alarmClockOff">Alarm clock off </string>
     <string name="alarmClockOn">Alarm clock on: </string>
+    <string name="timeOfTheCyclicEvent">When</string>
+    <string name="startDate">Start date</string>
+    <string name="how_often">How often</string>
+    <string name="what_time">What time</string>
+    <string name="birthday">Urodziny</string>
+    <string name="every">Every</string>
+    <string name="two">2</string>
+    <string name="years">year(s)</string>
+    <string name="same_day_every_month">Same day of month</string>
+    <string name="ok">OK</string>
+    <string name="days">Days</string>
+    <string name="months">Months</string>
+    <string name="Years">Years</string>
+    <string name="weeks">Weeks</string>
+    <string name="questionMark">\?</string>
+    <string name="day">day(s)</string>
+    <string name="week">week(s)</string>
+    <string name="month">month(s)</string>
+    <string name="up_to_the_selected_number_of_occurrences">How many times?</string>
+    <string name="to_date">To date:</string>
+    <string name="on_and_on">On and on</string>
 
 </resources>
