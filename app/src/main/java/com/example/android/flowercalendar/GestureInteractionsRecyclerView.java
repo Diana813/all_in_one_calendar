@@ -36,7 +36,7 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
     }
 
     public GestureInteractionsRecyclerView(CyclicalEventsListAdapter adapter) {
-        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        super(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         cyclicalEventsListAdapter = adapter;
         icon = ContextCompat.getDrawable(CyclicalEventsListAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
@@ -52,7 +52,7 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
     }
 
-    public GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
+    GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         bigPlanAdapter = adapter;
         icon = ContextCompat.getDrawable(BigPlanAdapter.getContext(),
@@ -70,10 +70,7 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if (shiftsAdapter == null && testingListAdapter == null && bigPlanAdapter == null && eventsListAdapter == null) {
-            cyclicalEventsListAdapter.onItemMove(viewHolder.getAdapterPosition(),
-                    target.getAdapterPosition());
-        } else if (testingListAdapter == null && cyclicalEventsListAdapter == null && bigPlanAdapter == null && eventsListAdapter == null) {
+        if (testingListAdapter == null && cyclicalEventsListAdapter == null && bigPlanAdapter == null && eventsListAdapter == null) {
             shiftsAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
         } else if (testingListAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {

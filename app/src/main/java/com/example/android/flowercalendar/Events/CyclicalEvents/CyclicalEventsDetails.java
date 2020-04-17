@@ -19,6 +19,7 @@ import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
@@ -44,7 +45,6 @@ public class CyclicalEventsDetails extends Fragment {
     private String event_name_extra;
     private String event_start_date_extra;
     private String event_alarm_extra;
-    private String event_length_hours_extra;
     private String event_length_minutes_extra;
     private String how_often_extra;
     private String what_time_extra;
@@ -102,7 +102,7 @@ public class CyclicalEventsDetails extends Fragment {
     private int sn;
     private List<String> arrayOfpickedDaysOfAWeek;
 
-    private int frequency;
+    private int frequency = -1;
     private int radioButtonMonthsOrWeeks;
 
     private AppUtils appUtils;
@@ -164,7 +164,6 @@ public class CyclicalEventsDetails extends Fragment {
         event_name_extra = eventData.getString(EXTRA_EVENT_NAME);
         event_start_date_extra = eventData.getString(EXTRA_EVENT_START_DATE);
         event_alarm_extra = eventData.getString(EXTRA_EVENT_ALARM);
-        event_length_hours_extra = eventData.getString(EXTRA_EVENT_LENGHT_HOURS);
         event_length_minutes_extra = eventData.getString(EXTRA_EVENT_LENGHT_MINUTES);
         how_often_extra = eventData.getString(EXTRA_EVENT_HOW_OFTEN);
         what_time_extra = eventData.getString(EXTRA_EVENT_WHAT_TIME);
@@ -193,6 +192,16 @@ public class CyclicalEventsDetails extends Fragment {
         setHowLongButtonOnClickListener();
         setRadioGroupClickListener();
         setDayOfWeekOnClickListener();
+
+        arrayOfpickedDaysOfAWeek = new ArrayList<>();
+        if (arrayOfpickedDaysOfAWeek.isEmpty()) {
+            if (how_often_extra != null) {
+                String[] parts = how_often_extra.split("-");
+                String whichDaysOfWeek = parts[3];
+                arrayOfpickedDaysOfAWeek.add(whichDaysOfWeek);
+            }
+
+        }
 
         return rootView;
     }
@@ -260,8 +269,11 @@ public class CyclicalEventsDetails extends Fragment {
         if (!event_name_extra.equals("-1")) {
             eventNameEditText.setText(event_name_extra);
             eventStartTimeTextView.setText(what_time_extra);
-            eventLengthEditTextHours.setText(event_length_hours_extra);
-            eventLengthEditTextMinutes.setText(event_length_minutes_extra);
+            int eventDuration = Integer.parseInt(event_length_minutes_extra);
+            int eventDurationInHours = eventDuration / 60;
+            int eventDurationMinutes = eventDuration - eventDurationInHours * 60;
+            eventLengthEditTextHours.setText(String.valueOf(eventDurationInHours));
+            eventLengthEditTextMinutes.setText(String.valueOf(eventDurationMinutes));
             alarmTextView.setText(event_alarm_extra);
             calendarView.setDate(appUtils.eventStartDayToMilis(event_start_date_extra));
             displayHowOftenEditText();
@@ -298,8 +310,10 @@ public class CyclicalEventsDetails extends Fragment {
                         monthRadioButton,
                         chooseHowLong,
                         view2);
-                String howManyDays = parts[2];
-                howOftenEditText.setText(howManyDays);
+                String howManyWeeks = parts[2];
+                String whichDaysOfWeek = parts[3];
+                displayChoosenDaysOfTheWeek(whichDaysOfWeek);
+                howOftenEditText.setText(howManyWeeks);
                 frequency = 1;
 
             } else if (!how_often_extra.substring(0, 6).equals("0-0-0-")
@@ -316,8 +330,8 @@ public class CyclicalEventsDetails extends Fragment {
                         startDate,
                         event_start_date_extra,
                         everyFourWeeks);
-                String howManyDays = parts[1];
-                howOftenEditText.setText(howManyDays);
+                String howManyMonths = parts[1];
+                howOftenEditText.setText(howManyMonths);
 
                 if (how_often_extra.contains("*months")) {
                     everyMonth.setChecked(true);
@@ -338,8 +352,8 @@ public class CyclicalEventsDetails extends Fragment {
                         monthRadioButton,
                         chooseHowLong,
                         view2);
-                String howManyDays = parts[0];
-                howOftenEditText.setText(howManyDays);
+                String howManyYears = parts[0];
+                howOftenEditText.setText(howManyYears);
                 frequency = 3;
             }
 
@@ -347,6 +361,31 @@ public class CyclicalEventsDetails extends Fragment {
             howOftenEditText.setText("");
         }
 
+    }
+
+    private void displayChoosenDaysOfTheWeek(String whichDaysOfWeek) {
+
+        if (whichDaysOfWeek.contains("mon")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "mon", mon);
+        }
+        if (whichDaysOfWeek.contains("tue")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "tue", tue);
+        }
+        if (whichDaysOfWeek.contains("wed")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "wed", wed);
+        }
+        if (whichDaysOfWeek.contains("thr")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "thr", thr);
+        }
+        if (whichDaysOfWeek.contains("fri")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "fri", fri);
+        }
+        if (whichDaysOfWeek.contains("sat")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "sat", sat);
+        }
+        if (whichDaysOfWeek.contains("sun")) {
+            settingsWeeks.highlightDaysOfWeekIfChoosen(whichDaysOfWeek, "sun", sun);
+        }
     }
 
 
@@ -453,7 +492,6 @@ public class CyclicalEventsDetails extends Fragment {
 
     private void setDayOfWeekOnClickListener() {
 
-        arrayOfpickedDaysOfAWeek = new ArrayList<>();
 
         mon.setOnClickListener(v -> {
             m++;
@@ -567,6 +605,7 @@ public class CyclicalEventsDetails extends Fragment {
     }
 
 
+    @SuppressLint("ShowToast")
     private void saveEvent() {
 
         collectDataFromUserInput();
@@ -574,7 +613,8 @@ public class CyclicalEventsDetails extends Fragment {
         if (newEventName.isEmpty() ||
                 newEventStartDate.isEmpty() || newHowOften.isEmpty()) {
 
-            //ToDo toast
+            Toast.makeText(context, "Fill in name of the event, it's start date and freqency", Toast.LENGTH_LONG).show();
+
             return;
         }
 
@@ -632,13 +672,18 @@ public class CyclicalEventsDetails extends Fragment {
 
     private void findFrequency() {
 
+        if (frequency == -1) {
+            newHowOften = how_often_extra;
+        }
+
         if (frequency == 0) {
 
             newHowOften = "0" + "-" + "0" + "-" + "0" + "-" + howOftenEditText.getText().toString();
 
         } else if (frequency == 1) {
 
-            newHowOften = "0" + "-" + "0" + "-" + howOftenEditText.getText().toString() + "-" + "0";
+            newHowOften = "0" + "-" + "0" + "-" + howOftenEditText.getText().toString() + "-" + arrayOfpickedDaysOfAWeek + "-" + "0";
+
 
         } else if (frequency == 2) {
 
@@ -650,7 +695,7 @@ public class CyclicalEventsDetails extends Fragment {
             }
             newHowOften = "0" + "-" + howOftenEditText.getText().toString() + "-" + weeksOrMonths + "-" + "0" + "-" + "0";
 
-        } else {
+        } else if (frequency == 3) {
             newHowOften = howOftenEditText.getText().toString() + "-" + "0" + "-" + "0" + "-" + "0";
         }
 

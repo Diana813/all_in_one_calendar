@@ -9,20 +9,22 @@
     <TextView
         android:id="@+id/number"
         style="@style/textViewStylePlansList"
-        tools:text="1."
-        android:layout_weight="0.5"/>
+        android:layout_weight="0.5"
+        tools:text="1." />
 
     <TextView
         android:id="@+id/contents"
         style="@style/textViewStylePlansList"
-        tools:text="Zostać Android developerem"
-        android:layout_weight="5"/>
+        android:layout_weight="5"
+        tools:text="Zostać Android developerem" />
 
     <TextView
         android:id="@+id/nextEventPlanned"
         style="@style/textViewStylePlansList"
-        tools:text="Wtorek 20:00"
-        android:layout_weight="2"/>
+        android:layout_weight="3"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:text="Wtorek 20:00" />
 
 
 </LinearLayout>

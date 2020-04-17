@@ -3,24 +3,19 @@ package com.example.android.flowercalendar.Events.CyclicalEvents;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
-import com.example.android.flowercalendar.Shifts.ShiftsEditor;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Colors;
-import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
-import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEventsListAdapter.CyclicalEventsViewHolder> {
 
@@ -42,6 +35,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
     private int eventPosition;
     private String eventName;
     private ArrayList<String> eventNames = new ArrayList<>();
+    private UpcomingCyclicalEvent upcomingCyclicalEvent = new UpcomingCyclicalEvent();
 
 
     CyclicalEventsListAdapter(Context context) {
@@ -80,9 +74,33 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
         if (event != null) {
 
-            holder.number.setText(position + 1 + ".");
+
+            holder.number.setVisibility(View.GONE);
             holder.contents.setText(event.getEvent_name());
-            holder.nextEventPlanned.setText("0");
+            String[] parts = event.getFrequency().split("-");
+            String pickedDaysOfWeek = parts[3];
+
+            String term;
+            if (event.getTerm() == null) {
+                term = "on_and_on";
+            } else {
+                term = event.getTerm();
+            }
+
+            LocalDate upcomingEvent = upcomingCyclicalEvent.displayNextEvent(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, term);
+
+            LocalDate today = LocalDate.now();
+
+            if (upcomingEvent == null) {
+                holder.nextEventPlanned.setText("Finished");
+
+            } else if (String.valueOf(upcomingEvent).equals(String.valueOf(today))) {
+                holder.nextEventPlanned.setText("Today");
+
+            } else {
+                holder.nextEventPlanned.setText(upcomingEvent.format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")));
+            }
+
             holder.nextEventPlanned.setVisibility(View.VISIBLE);
 
             holder.itemView.setOnClickListener(v -> {
@@ -122,7 +140,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
     private void showUndoSnackbar() {
 
-        Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.snack_bar_text,
+        Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), "Event deleted",
                 Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
         snackbar.show();
@@ -135,35 +153,6 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         notifyItemInserted(eventPosition);
     }
 
-    public void onItemMove(int fromPosition, int toPosition) {
-
-
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(eventsList, i, i + 1);
-            }
-
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(eventsList, i, i - 1);
-            }
-
-        }
-
-        notifyItemMoved(fromPosition, toPosition);
-
-    }
-
-    void setIndexInDatabase() {
-
-        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        for (Event event : eventsList) {
-            event.setPosition(String.valueOf(eventsList.indexOf(event)));
-            eventsDao.update(event);
-        }
-
-
-    }
 
     @Override
     public int getItemCount() {
@@ -173,6 +162,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
             return eventsList.size();
         }
     }
+
 
     static class CyclicalEventsViewHolder extends RecyclerView.ViewHolder {
         private TextView number;

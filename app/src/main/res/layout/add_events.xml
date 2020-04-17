@@ -12,20 +12,53 @@
             android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
+            android:paddingTop="40dp">
 
             <TextView
                 android:id="@+id/eventsLabel"
                 style="@style/textViewHeaders"
                 android:gravity="center_horizontal" />
 
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/eventsLabel"
+                android:background="@color/colorPrimaryDark"
+                android:padding="8dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/row"
+                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                    android:paddingTop="1dp">
+
+                    <TextView
+                        android:id="@+id/content"
+                        style="@style/ShiftsTextViewLabelStyle"
+                        android:layout_weight="1"
+                        android:text="@string/cyclicalEventsList"
+                        android:gravity="start"
+                        android:layout_marginStart="10dp"/>
+
+                    <TextView
+                        android:id="@+id/date"
+                        style="@style/ShiftsTextViewLabelStyle"
+                        android:layout_weight="2"
+                        android:text="@string/upcoming_occurance"
+                        android:gravity="start"/>
+
+                </LinearLayout>
+            </TableLayout>
+
+
             <RelativeLayout
                 android:id="@+id/empty_view"
-                android:layout_marginTop="80dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/eventsLabel"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:layout_marginTop="80dp">
 
                 <ImageView
                     android:id="@+id/empty_view_image"
@@ -51,7 +84,7 @@
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/eventsLabel">
+                android:layout_below="@+id/table">
 
                 <include layout="@layout/recycleview_and_edittext" />
             </FrameLayout>
@@ -61,13 +94,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="35dp"
-        android:src="@drawable/baseline_control_point_black_48">
+        android:src="@drawable/baseline_control_point_black_48"
+        android:visibility="gone">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 </RelativeLayout>

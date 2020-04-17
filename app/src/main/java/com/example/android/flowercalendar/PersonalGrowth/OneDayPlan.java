@@ -61,7 +61,7 @@ public class OneDayPlan extends Fragment {
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
         toDoList = new ToDoList();
-        eventsListAdapter = new EventsListAdapter(context, context);
+        eventsListAdapter = new EventsListAdapter(context);
     }
 
     @Override

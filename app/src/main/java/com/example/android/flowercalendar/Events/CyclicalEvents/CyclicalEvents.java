@@ -3,28 +3,24 @@ package com.example.android.flowercalendar.Events.CyclicalEvents;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +33,7 @@ public class CyclicalEvents extends Fragment {
     private FloatingActionButton fab;
     private RelativeLayout empty_view;
     public static int newId;
-
+    private TableLayout headerTable;
 
     public CyclicalEvents() {
         // Required empty public constructor
@@ -58,7 +54,6 @@ public class CyclicalEvents extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        cyclicalEventsListAdapter.setIndexInDatabase();
         cyclicalEventsListAdapter.deleteFromDatabase();
     }
 
@@ -83,10 +78,13 @@ public class CyclicalEvents extends Fragment {
         editText.setVisibility(View.GONE);
         empty_view = rootView.findViewById(R.id.empty_view);
         TextView eventsLabel = rootView.findViewById(R.id.eventsLabel);
+        eventsLabel.setVisibility(View.GONE);
+        headerTable = rootView.findViewById(R.id.table);
+        RelativeLayout mainLayout = rootView.findViewById(R.id.mainLayout);
+        mainLayout.setPadding(0, 20, 0, 0);
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
         ImageView imageView = rootView.findViewById(R.id.empty_view_image);
-        eventsLabel.setText(R.string.cyclicalEventsList);
         emptyViewTitle.setText(R.string.addCyclicalEvents);
         emptyViewSubtitle.setText(R.string.descriptionCyclicalEvents);
         imageView.setImageResource(R.mipmap.cycle_event_icon);
@@ -112,8 +110,10 @@ public class CyclicalEvents extends Fragment {
             newId = events.size();
             if (events.isEmpty()) {
                 empty_view.setVisibility(View.VISIBLE);
+                headerTable.setVisibility(View.GONE);
             } else {
                 empty_view.setVisibility(View.GONE);
+                headerTable.setVisibility(View.VISIBLE);
             }
         });
     }

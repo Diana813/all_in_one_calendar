@@ -48,7 +48,7 @@ public class BigPlan extends Fragment {
         super.onAttach(context);
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
-        eventsListAdapter = new EventsListAdapter(context, context);
+        eventsListAdapter = new EventsListAdapter(context);
     }
 
     @Override

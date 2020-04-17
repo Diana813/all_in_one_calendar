@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.Events.CyclicalEvents;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -28,7 +27,9 @@ class CyclicalEventsFrequencySettingsWeeks {
     private void highlightDayOfAWeek(TextView textView, String dayOfAWeek, List<String> arrayOfpickedDaysOfAWeek) {
         textView.setTextColor(Color.WHITE);
         textView.setBackgroundResource(R.color.colorAccent);
-        arrayOfpickedDaysOfAWeek.add(dayOfAWeek);
+        if (arrayOfpickedDaysOfAWeek != null) {
+            arrayOfpickedDaysOfAWeek.add(dayOfAWeek);
+        }
     }
 
     private void disableDayOfAWeek(TextView textView, String dayOfAWeek, List<String> arrayOfpickedDaysOfAWeek) {
@@ -43,5 +44,12 @@ class CyclicalEventsFrequencySettingsWeeks {
         } else {
             highlightDayOfAWeek(textView, dayOfAWeek, arrayOfpickedDaysOfAWeek);
         }
+    }
+
+    void highlightDaysOfWeekIfChoosen(String whichDaysOfWeek, String nameOfTheDay, TextView textView) {
+        if (whichDaysOfWeek.contains(nameOfTheDay)) {
+            highlightDayOfAWeek(textView, nameOfTheDay, null);
+        }
+
     }
 }

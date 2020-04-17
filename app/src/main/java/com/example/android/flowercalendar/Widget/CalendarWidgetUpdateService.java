@@ -48,6 +48,6 @@ public class CalendarWidgetUpdateService extends IntentService {
         if (gridView) {
             intent.setAction(ACTION_UPDATE_GRID_VIEW);
         }
-        context.startService(intent);
+     //   context.startService(intent);
     }
 }

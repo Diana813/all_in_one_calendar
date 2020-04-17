@@ -120,7 +120,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
             }
         }
 
-        EventsListAdapter eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext(), EventsListAdapter.getContext());
+        EventsListAdapter eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext());
         eventsListAdapter.deleteFromDatabase(toDoListStrings);
     }
 
@@ -128,12 +128,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.AimDeletedSnackBar,
                 Snackbar.LENGTH_LONG);
-        snackbar.setAction(R.string.snack_bar_undo, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                undoDelete();
-            }
-        });
+        snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
         snackbar.show();
     }
 

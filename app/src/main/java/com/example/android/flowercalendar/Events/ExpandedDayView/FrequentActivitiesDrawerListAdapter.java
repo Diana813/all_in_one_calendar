@@ -35,7 +35,7 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
     FrequentActivitiesDrawerListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         FrequentActivitiesDrawerListAdapter.context = context;
-        eventsListAdapter = new EventsListAdapter(getContext(), getContext());
+        eventsListAdapter = new EventsListAdapter(getContext());
     }
 
     public static Context getContext() {

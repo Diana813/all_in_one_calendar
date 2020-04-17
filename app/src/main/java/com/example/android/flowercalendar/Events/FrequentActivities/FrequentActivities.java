@@ -44,7 +44,7 @@ public class FrequentActivities extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        eventsListAdapter = new EventsListAdapter(context, context);
+        eventsListAdapter = new EventsListAdapter(context);
     }
 
     @Override

@@ -25,8 +25,15 @@ class CyclicalEventsFrequencySettingsMonths {
         chooseHowLong.setVisibility(View.VISIBLE);
         view2.setVisibility(View.VISIBLE);
 
-        double dayOfMonth = findStartDate(startDate, event_start_date_extra).getDayOfMonth();
-        everyFourWeeks.setText("Every " + findWhichDayOfWeekOccurence(dayOfMonth) + " " + findDayOfWeek(findStartDate(startDate, event_start_date_extra)) + " of the  month");
+        double dayOfMonth;
+        if (findStartDate(startDate, event_start_date_extra) != null) {
+            dayOfMonth = findStartDate(startDate, event_start_date_extra).getDayOfMonth();
+        } else {
+            dayOfMonth = -1;
+        }
+
+
+        everyFourWeeks.setText("Every " + findDayOfWeekOccurence(dayOfMonth) + " " + findDayOfWeek(findStartDate(startDate, event_start_date_extra)) + " of the  month");
 
     }
 
@@ -44,13 +51,18 @@ class CyclicalEventsFrequencySettingsMonths {
 
     private String findDayOfWeek(LocalDate pickedStartDate) {
 
-        String pickedDayOfWeek = pickedStartDate.getDayOfWeek().toString().toLowerCase();
-        String firstLetter = pickedDayOfWeek.substring(0, 1).toUpperCase();
-        String restLetters = pickedDayOfWeek.substring(1);
-        return firstLetter + restLetters;
+        if (pickedStartDate != null) {
+            String pickedDayOfWeek = pickedStartDate.getDayOfWeek().toString().toLowerCase();
+            String firstLetter = pickedDayOfWeek.substring(0, 1).toUpperCase();
+            String restLetters = pickedDayOfWeek.substring(1);
+            return firstLetter + restLetters;
+        } else {
+            return "?";
+        }
+
     }
 
-    private String findWhichDayOfWeekOccurence(Double dayOfMonth) {
+    String findDayOfWeekOccurence(Double dayOfMonth) {
 
         String numberOfPickedDayOfWeekOccurance;
         if (dayOfMonth / 7 <= 1) {

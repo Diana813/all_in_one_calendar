@@ -9,7 +9,7 @@
         <item name="android:ambientShadowAlpha">0.6</item>
         <item name="android:spotShadowAlpha">0.6</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">#5e92f3</item>
+        <item name="colorSecondary">@color/colorAccent</item>
     </style>
 
     <style name="colorPickerBigPart">
@@ -275,7 +275,7 @@
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_marginBottom">20dp</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:inputType">text</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
     </style>
@@ -311,7 +311,9 @@
     <style name="recyclerViewTasksListStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:textSize">20sp</item>
     </style>
 

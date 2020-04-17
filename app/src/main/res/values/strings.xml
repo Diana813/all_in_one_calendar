@@ -105,7 +105,7 @@
     <string name="addFrequentActivities">Add frequent activities</string>
     <string name="descriptionFrequentActivities">Add all the events that happen often and
         which you would like to easily add from the list to your calendar</string>
-    <string name="cyclicalEventsList">Cyclical events list:</string>
+    <string name="cyclicalEventsList">Cyclical events list</string>
     <string name="addCyclicalEvents">Add cyclical events</string>
     <string name="descriptionCyclicalEvents">Add all events that occur periodically
         and you want them to be marked on the calendar automatically</string>
@@ -163,5 +163,6 @@
     <string name="up_to_the_selected_number_of_occurrences">How many times?</string>
     <string name="to_date">To date:</string>
     <string name="on_and_on">On and on</string>
+    <string name="upcoming_occurance">Upcoming occurrence</string>
 
 </resources>

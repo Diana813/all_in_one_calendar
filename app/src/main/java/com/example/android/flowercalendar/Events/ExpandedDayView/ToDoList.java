@@ -66,7 +66,7 @@ public class ToDoList extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        toDoListAdapter = new EventsListAdapter(context, context);
+        toDoListAdapter = new EventsListAdapter(context);
         frequentActivitiesDrawerListAdapter = new FrequentActivitiesDrawerListAdapter(context, context);
     }
 

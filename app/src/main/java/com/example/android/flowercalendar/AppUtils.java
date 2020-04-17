@@ -30,12 +30,17 @@ import com.example.android.flowercalendar.database.ImagePathDao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -218,4 +223,17 @@ public class AppUtils {
         return sdf.format(calendar.getTime());
     }
 
+    @SuppressLint("SimpleDateFormat")
+    public String changeSimpleDateFormat(String dateStr) {
+
+        String formattedDate;
+        DateTimeFormatter f = new DateTimeFormatterBuilder().appendPattern("dd MMMM, yyyy")
+                .toFormatter();
+
+        LocalDate parsedDate = LocalDate.parse(dateStr, f);
+        DateTimeFormatter f2 = DateTimeFormatter.ofPattern("MM/d/yyyy");
+
+        formattedDate = parsedDate.format(f2);
+        return formattedDate;
+    }
 }

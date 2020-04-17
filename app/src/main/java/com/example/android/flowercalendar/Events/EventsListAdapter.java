@@ -39,7 +39,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private String eventContent;
     private String aimTime;
 
-    public EventsListAdapter(Context requireNonNull, Context context) {
+    public EventsListAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         EventsListAdapter.context = context;
 
