@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lifeAims"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-    android:background="@color/lightGrey">
+    android:background="@color/colorWhite">
 
     <TextView
         style="@style/textViewHeaders"
         android:layout_weight="0.2"
         android:gravity="center"
+        android:textColor="#000"
         android:padding="15dp"
         android:text="@string/lifePurpose" />
 
@@ -26,7 +27,8 @@
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
         android:layout_weight="0.5"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_margin="10dp">
 
         <ImageView
             android:id="@+id/addImage"

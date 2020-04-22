@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,6 +35,7 @@ public class CyclicalEvents extends Fragment {
     private RelativeLayout empty_view;
     public static int newId;
     private TableLayout headerTable;
+    private EventsListAdapter eventsListAdapter;
 
     public CyclicalEvents() {
         // Required empty public constructor
@@ -44,6 +46,7 @@ public class CyclicalEvents extends Fragment {
         super.onAttach(context);
         this.context = context;
         cyclicalEventsListAdapter = new CyclicalEventsListAdapter(getContext());
+        eventsListAdapter = new EventsListAdapter(getContext());
     }
 
     @Override
@@ -55,6 +58,7 @@ public class CyclicalEvents extends Fragment {
     public void onPause() {
         super.onPause();
         cyclicalEventsListAdapter.deleteFromDatabase();
+
     }
 
     public static CyclicalEvents newInstance() {
@@ -81,7 +85,7 @@ public class CyclicalEvents extends Fragment {
         eventsLabel.setVisibility(View.GONE);
         headerTable = rootView.findViewById(R.id.table);
         RelativeLayout mainLayout = rootView.findViewById(R.id.mainLayout);
-        mainLayout.setPadding(0, 20, 0, 0);
+        mainLayout.setPadding(0, 4, 0, 0);
         TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
         TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
         ImageView imageView = rootView.findViewById(R.id.empty_view_image);
@@ -107,6 +111,7 @@ public class CyclicalEvents extends Fragment {
         eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), events -> {
             assert events != null;
             cyclicalEventsListAdapter.setEventsList(events);
+            eventsListAdapter.setEventsList(events);
             newId = events.size();
             if (events.isEmpty()) {
                 empty_view.setVisibility(View.VISIBLE);

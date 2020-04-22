@@ -16,15 +16,22 @@ public class ThisMonthViewModel extends AndroidViewModel {
 
     private BigPlanDao bigPlanDao;
     private LiveData<List<BigPlanData>> bigPlanLiveData;
+    private LiveData<List<BigPlanData>> bigPlanLiveDataIsChecked;
+
 
     public ThisMonthViewModel(@NonNull Application application) {
         super(application);
         bigPlanDao = CalendarDatabase.getDatabase(application).bigPlanDao();
         bigPlanLiveData = bigPlanDao.findByAimTime(3);
+        bigPlanLiveDataIsChecked = bigPlanDao.findByisChecked(3, 1);
     }
 
     LiveData<List<BigPlanData>> getAimsList() {
         return bigPlanLiveData;
+    }
+
+    LiveData<List<BigPlanData>> getAimsListIsChecked() {
+        return bigPlanLiveDataIsChecked;
     }
 
     public void insert(BigPlanData... aims) {

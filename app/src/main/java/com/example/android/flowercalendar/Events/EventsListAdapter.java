@@ -8,11 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.PersonalGrowth.OneDayPlan;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.StringsAims;
-import com.example.android.flowercalendar.database.BigPlanDao;
-import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -54,6 +51,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
         this.eventsList = eventsList;
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override

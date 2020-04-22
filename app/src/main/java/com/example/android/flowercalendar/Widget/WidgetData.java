@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-class WidgetData {
+public class WidgetData {
 
     private static List<PeriodData> widgetPeriodData(Context context) {
 
@@ -90,7 +90,11 @@ class WidgetData {
 
 
             CalendarEvents event = calendarEventsDao.findBypickedDate(String.valueOf(today.plusDays(i)));
-            hasPeriod = LocalDate.now().plusDays(i).isEqual(periodStart) || (LocalDate.now().plusDays(i).isAfter(periodStart) && LocalDate.now().plusDays(i).isBefore(periodFinish));
+            if (periodStart != null) {
+                hasPeriod = LocalDate.now().plusDays(i).isEqual(periodStart) || (LocalDate.now().plusDays(i).isAfter(periodStart) && LocalDate.now().plusDays(i).isBefore(periodFinish));
+            } else {
+                hasPeriod = false;
+            }
 
 
             if (event != null) {

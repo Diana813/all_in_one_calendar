@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
     android:layout_height="wrap_content"
-    android:background="@color/semiTransparentColorWhite">
+    android:layout_marginTop="0dp"
+    android:background="@color/semiTransparentColorWhite"
+   >
 
     <TextView
         android:id="@+id/number"
@@ -26,6 +28,12 @@
         android:visibility="gone"
         tools:text="Wtorek 20:00" />
 
+    <CheckBox
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
 

@@ -39,7 +39,7 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-
+        dataList = WidgetData.widgetData(context.getApplicationContext());
     }
 
     @Override

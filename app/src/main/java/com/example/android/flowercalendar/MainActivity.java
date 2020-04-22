@@ -1,7 +1,5 @@
 package com.example.android.flowercalendar;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -10,7 +8,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ExpandableListView;
 
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
@@ -21,10 +18,8 @@ import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity;
 import com.example.android.flowercalendar.PersonalGrowth.LifeAims;
 import com.example.android.flowercalendar.Shifts.ShiftsFragment;
-import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -48,6 +43,13 @@ public class MainActivity extends AppCompatActivity {
     private ExpandableListView expandableListView;
     private CustomExpandableListAdapter expandableListAdapter;
     private static double screenHeight;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppUtils.updateWidget(this);
+        AppUtils.updateWidgetAtMidnight(this);
+    }
 
 
     @Override

@@ -21,6 +21,7 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
+            android:layout_marginTop="2dp"
             style="@style/Table" />
 
         <androidx.viewpager2.widget.ViewPager2

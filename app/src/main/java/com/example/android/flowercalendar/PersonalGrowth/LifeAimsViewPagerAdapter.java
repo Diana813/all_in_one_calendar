@@ -20,21 +20,6 @@ public class LifeAimsViewPagerAdapter extends FragmentStateAdapter {
         layouts = new int[]{R.layout.activity_life_aims, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout, R.layout.personal_growth_plans_layout};
     }
 
-    /*@Override
-    public CharSequence getPageTitle(int position) {
-        if (position == 0) {
-            return mContext.getString(R.string.lifeAims);
-        } else if (position == 1) {
-            return mContext.getString(R.string.bigPlan);
-
-        } else if (position == 2) {
-            return mContext.getString(R.string.thisYear);
-        } else if (position == 3) {
-            return mContext.getString(R.string.thisMonth);
-        } else {
-            return mContext.getString(R.string.dayPlan);
-        }
-    }*/
 
     @NonNull
     @Override

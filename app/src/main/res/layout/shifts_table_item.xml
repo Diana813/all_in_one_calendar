@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     app:cardElevation="3dp">
 
     <LinearLayout
@@ -68,4 +69,11 @@
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/list_of_items"
+        android:background="@color/colorPrimaryDark" />
+
+</RelativeLayout>

@@ -19,8 +19,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 public class BackgroundActivity extends Fragment {
 
-    private LifeAimsViewPagerAdapter adapter;
-
     public BackgroundActivity() {
         // Required empty public constructor
     }
@@ -40,7 +38,7 @@ public class BackgroundActivity extends Fragment {
 
 
         // Create an adapter that knows which fragment should be shown on each page
-        adapter = new LifeAimsViewPagerAdapter(this) {
+        LifeAimsViewPagerAdapter adapter = new LifeAimsViewPagerAdapter(this) {
         };
 
 

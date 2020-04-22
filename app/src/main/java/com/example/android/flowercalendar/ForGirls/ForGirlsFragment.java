@@ -2,6 +2,7 @@ package com.example.android.flowercalendar.ForGirls;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.CalendarView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.PeriodData;
@@ -51,6 +53,9 @@ public class ForGirlsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         saveData();
+
+        AppUtils.updateWidget(getContext());
+
     }
 
     @SuppressLint("ClickableViewAccessibility")

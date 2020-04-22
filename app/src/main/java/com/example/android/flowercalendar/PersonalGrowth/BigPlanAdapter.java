@@ -6,6 +6,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
@@ -32,11 +34,9 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private LayoutInflater layoutInflater;
     private List<BigPlanData> aimsList;
     private BigPlanData bigPlanData;
-    private String aimIndex;
     private int pos;
     private ArrayList<StringsAims> aimStrings = new ArrayList<>();
     private int aimTime;
-    private String aimContent;
     private ArrayList<StringsAims> toDoListStrings = new ArrayList<>();
     private String currentString;
     private String aimToDelete;
@@ -73,20 +73,42 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
             return;
         }
 
+
         final BigPlanData bigPlanData = aimsList.get(position);
         aimTime = bigPlanData.getAimTime();
 
         holder.aimNumber.setText((position + 1) + ".");
         holder.aimContents.setText(bigPlanData.getAimContents());
+        holder.checkBox.setVisibility(View.VISIBLE);
+        if (bigPlanData.getIsChecked() == 0) {
+            holder.checkBox.setChecked(false);
+        } else {
+            holder.checkBox.setChecked(true);
+        }
+
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+
+                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+                bigPlanData.setIsChecked(1);
+                bigPlanDao.update(bigPlanData);
+            } else {
+
+                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+                bigPlanData.setIsChecked(0);
+                bigPlanDao.update(bigPlanData);
+            }
+        });
 
     }
+
 
     public void deleteItem(int position) {
 
         bigPlanData = aimsList.get(position);
         pos = position;
-        aimIndex = bigPlanData.getAimIndex();
-        aimContent = bigPlanData.getAimContents();
+        String aimIndex = bigPlanData.getAimIndex();
+        String aimContent = bigPlanData.getAimContents();
         aimStrings.add(new StringsAims(aimIndex, aimContent));
         aimsList.remove(position);
         notifyItemRemoved(position);
@@ -135,8 +157,8 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private void undoDelete() {
         aimsList.add(pos,
                 bigPlanData);
-        aimStrings.remove(new StringsAims(aimIndex, aimContent));
-        toDoListStrings.remove(new StringsAims(currentString, aimToDelete));
+        aimStrings.remove(aimStrings.size() - 1);
+        toDoListStrings.remove(toDoListStrings.size() - 1);
         notifyItemInserted(pos);
 
     }
@@ -185,11 +207,13 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     static class BigPlanViewHolder extends RecyclerView.ViewHolder {
         private TextView aimNumber;
         private TextView aimContents;
+        private CheckBox checkBox;
 
         BigPlanViewHolder(View itemView) {
             super(itemView);
             aimNumber = itemView.findViewById(R.id.number);
             aimContents = itemView.findViewById(R.id.contents);
+            checkBox = itemView.findViewById(R.id.done);
         }
     }
 }

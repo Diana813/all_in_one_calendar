@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
@@ -32,8 +33,10 @@ public class BigPlan extends Fragment {
     private BigPlanAdapter adapter;
     private Context context;
     private AppUtils appUtils = new AppUtils();
-    private int newId;
     private EventsListAdapter eventsListAdapter;
+    private ProgressBar determinateBar;
+    private TextView effectiveness;
+
 
     public BigPlan() {
         // Required empty public constructor
@@ -87,15 +90,18 @@ public class BigPlan extends Fragment {
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.fiveYearsPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
+        determinateBar = rootView.findViewById(R.id.determinateBar);
+        effectiveness = rootView.findViewById(R.id.effectiveness);
 
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
-        initData(this, adapter);
+        initData(this);
         appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, eventsListAdapter, "0");
         return rootView;
     }
+
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
@@ -114,18 +120,30 @@ public class BigPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("FragmentLiveDataObserve")
-    private void initData(Fragment fragment, final BigPlanAdapter adapter) {
+
+    @SuppressLint({"FragmentLiveDataObserve", "SetTextI18n"})
+    private void initData(Fragment fragment) {
         BigPlanViewModel bigPlanViewModel = new ViewModelProvider(fragment).get(BigPlanViewModel.class);
+
         bigPlanViewModel.getAimsList().observe(fragment, aims -> {
             adapter.setAimsList(aims);
-            if (aims == null) {
-                newId = 0;
-            } else {
+            int newId;
+            if (aims != null) {
                 newId = aims.size();
+                bigPlanViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
+                    if (aimsList.size() != 0 && newId != 0) {
+                        int progress = aimsList.size() * 100 / newId;
+                        determinateBar.setProgress(progress);
+                        effectiveness.setVisibility(View.VISIBLE);
+                        effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else {
+                        determinateBar.setProgress(0);
+                        effectiveness.setVisibility(View.GONE);
+                    }
+                });
             }
-        });
 
+        });
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.MediaRouteButton;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
@@ -32,8 +35,9 @@ public class ThisMonthPlan extends Fragment {
     private BigPlanAdapter adapter;
     private Context context;
     private AppUtils appUtils = new AppUtils();
-    private int newId;
     private EventsListAdapter eventsListAdapter;
+    private ProgressBar determinateBar;
+    private TextView effectiveness;
 
     public ThisMonthPlan() {
         // Required empty public constructor
@@ -87,6 +91,8 @@ public class ThisMonthPlan extends Fragment {
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.thisMonthPlan);
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
+        determinateBar = rootView.findViewById(R.id.determinateBar);
+        effectiveness = rootView.findViewById(R.id.effectiveness);
 
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
@@ -115,15 +121,26 @@ public class ThisMonthPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("FragmentLiveDataObserve")
+    @SuppressLint({"FragmentLiveDataObserve", "SetTextI18n"})
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
         ThisMonthViewModel thisMonthViewModel = new ViewModelProvider(fragment).get(ThisMonthViewModel.class);
         thisMonthViewModel.getAimsList().observe(fragment, aims -> {
             adapter.setAimsList(aims);
-            if (aims == null) {
-                newId = 0;
-            } else {
+            int newId;
+            if (aims != null) {
                 newId = aims.size();
+                thisMonthViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
+                    if (aimsList.size() != 0 && newId != 0) {
+                        int progress = aimsList.size() * 100 / newId;
+                        determinateBar.setProgress(progress);
+                        effectiveness.setVisibility(View.VISIBLE);
+                        effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else {
+                        determinateBar.setProgress(0);
+                        effectiveness.setVisibility(View.GONE);
+                    }
+
+                });
             }
         });
 

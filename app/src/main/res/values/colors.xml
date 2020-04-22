@@ -6,6 +6,8 @@
     <color name="semiTransparentColorAccent">#90ef6c00</color>
     <color name="colorSecondary">#5472d3</color>
     <color name="semiTransparentColorSecondary">#905472d3</color>
+    <color name="semiTransparentColorPrimaryDark">#90002171</color>
+    <color name="semiTransparentColorBlack">#90000000</color>
     <color name="colorWhite">#fff</color>
     <color name="red">#b71c1c</color>
     <color name="lightRed">#f05545</color>

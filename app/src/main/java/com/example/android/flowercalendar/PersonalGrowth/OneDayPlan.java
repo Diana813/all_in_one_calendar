@@ -1,6 +1,7 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
 import android.annotation.SuppressLint;
+import android.app.MediaRouteButton;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
@@ -26,6 +28,7 @@ import java.util.Objects;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +48,8 @@ public class OneDayPlan extends Fragment {
     private CheckBox todayCheckbox;
     private CheckBox tomorrowCheckbox;
     private EventsListAdapter eventsListAdapter;
+    private ProgressBar determinateBar;
+    private TextView effectiveness;
 
 
     public OneDayPlan() {
@@ -105,7 +110,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), eventsListAdapter, "0");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), eventsListAdapter, "-1");
         return rootView;
     }
 
@@ -117,6 +122,8 @@ public class OneDayPlan extends Fragment {
         imageView = rootView.findViewById(R.id.imageBackground);
         todayCheckbox = rootView.findViewById(R.id.checkboxToday);
         tomorrowCheckbox = rootView.findViewById(R.id.checkboxTomorrow);
+        determinateBar = rootView.findViewById(R.id.determinateBar);
+        effectiveness = rootView.findViewById(R.id.effectiveness);
     }
 
     @Override
@@ -136,11 +143,29 @@ public class OneDayPlan extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("FragmentLiveDataObserve")
+    @SuppressLint({"FragmentLiveDataObserve", "SetTextI18n"})
     private void initData(Fragment fragment, final BigPlanAdapter adapter) {
         OneDayViewModel oneDayViewModel = new ViewModelProvider(fragment).get(OneDayViewModel.class);
-        oneDayViewModel.getAimsList().observe(fragment, adapter::setAimsList);
+        oneDayViewModel.getAimsList().observe(fragment, aims -> {
+            adapter.setAimsList(aims);
+            int newId;
+            if (aims != null) {
+                newId = aims.size();
+                oneDayViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
+                    if (aimsList.size() != 0 && newId != 0) {
+                        int progress = aimsList.size() * 100 / newId;
+                        determinateBar.setProgress(progress);
+                        effectiveness.setVisibility(View.VISIBLE);
+                        effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else {
+                        determinateBar.setProgress(0);
+                        effectiveness.setVisibility(View.GONE);
+                    }
 
+
+                });
+            }
+        });
     }
 
 

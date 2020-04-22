@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
-    android:background="@color/lightGrey">
+    android:background="@color/colorWhite">
 
     <TableLayout
         android:id="@+id/label"
+        android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#5e92f3"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp">
 
 
@@ -72,7 +73,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
         android:src="@drawable/baseline_control_point_black_36"
-        app:backgroundTint="#fff" />
+        app:backgroundTint="@color/colorAccent" />
 
 
     <androidx.recyclerview.widget.RecyclerView

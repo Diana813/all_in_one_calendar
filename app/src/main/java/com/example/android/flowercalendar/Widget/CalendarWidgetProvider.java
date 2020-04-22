@@ -10,18 +10,12 @@ import android.widget.RemoteViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
 
+import java.util.Objects;
+
 public class CalendarWidgetProvider extends AppWidgetProvider {
 
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
-        RemoteViews remoteView = getView(context);
-        appWidgetManager.updateAppWidget(appWidgetId, remoteView);
-
-    }
-
-    private static RemoteViews getView(Context context) {
+    public static RemoteViews getView(Context context) {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.calendar_widget);
         Intent i = new Intent(context, GridViewWidgetService.class);
@@ -38,27 +32,38 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
         return views;
     }
 
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 
-    public static void updateAllAppWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+
+            RemoteViews remoteView = getView(context);
+            WidgetData.widgetData(context.getApplicationContext());
+            appWidgetManager.updateAppWidget(appWidgetId, remoteView);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetGridView);
         }
     }
 
 
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        CalendarWidgetUpdateService.startActionUpdateAppWidgets(context, true);
-
-    }
-
-    @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)) {
-            CalendarWidgetUpdateService.startActionUpdateAppWidgets(context, true);
-        } else super.onReceive(context, intent);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews views = getView(context);
+
+        if (Objects.equals(intent.getAction(), "UPDATE_WIDGET_AT_MIDNIGHT")) {
+            appWidgetManager.updateAppWidget(
+                    intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS), views);
+
+            appWidgetManager.notifyAppWidgetViewDataChanged(intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS), R.id.widgetGridView);
+
+        } else if (Objects.equals(intent.getAction(), "UPDATE_WIDGET_IF_DATA_CHANGED")) {
+            appWidgetManager.updateAppWidget(
+                    intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS), views);
+
+            appWidgetManager.notifyAppWidgetViewDataChanged(intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS), R.id.widgetGridView);
+        }
+
     }
 
 

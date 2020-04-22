@@ -22,11 +22,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -82,6 +85,7 @@ public class CyclicalEventsDetails extends Fragment {
     private EditText howOftenEditText;
     private String dateString;
     private String startDate;
+    private String startDateProperFormat;
     private EditText howLongEditText;
     private int term = -1;
     private RadioButton everyFourWeeks;
@@ -110,6 +114,7 @@ public class CyclicalEventsDetails extends Fragment {
     private CyclicalEventsFrequencySettingsWeeks settingsWeeks;
     private CyclicalEventsFrequencySettingsMonths settingsMonths;
     private CyclicalEventsFrequencySettingsYears settingsYears;
+    private CalendarFragment calendarFragment;
 
     private String newEventName;
     private String newAlarm;
@@ -150,7 +155,13 @@ public class CyclicalEventsDetails extends Fragment {
         settingsWeeks = new CyclicalEventsFrequencySettingsWeeks();
         settingsMonths = new CyclicalEventsFrequencySettingsMonths();
         settingsYears = new CyclicalEventsFrequencySettingsYears();
+        calendarFragment = new CalendarFragment();
 
+    }
+
+    public void onPause() {
+        super.onPause();
+        calendarFragment.saveEventsNumberToPickedDate(startDateProperFormat);
     }
 
 
@@ -252,7 +263,7 @@ public class CyclicalEventsDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.save) {
-            saveEvent();
+            saveEvent(findStartTime());
             appUtils.hideKeyboard(getView(), context);
 
             CyclicalEvents cyclicalEvents = new CyclicalEvents();
@@ -275,7 +286,7 @@ public class CyclicalEventsDetails extends Fragment {
             eventLengthEditTextHours.setText(String.valueOf(eventDurationInHours));
             eventLengthEditTextMinutes.setText(String.valueOf(eventDurationMinutes));
             alarmTextView.setText(event_alarm_extra);
-            calendarView.setDate(appUtils.eventStartDayToMilis(event_start_date_extra));
+            calendarView.setDate(AppUtils.eventStartDayToMilis(event_start_date_extra));
             displayHowOftenEditText();
             displayHowLongHeader();
         }
@@ -606,12 +617,12 @@ public class CyclicalEventsDetails extends Fragment {
 
 
     @SuppressLint("ShowToast")
-    private void saveEvent() {
+    void saveEvent(String startTime) {
 
         collectDataFromUserInput();
 
         if (newEventName.isEmpty() ||
-                newEventStartDate.isEmpty() || newHowOften.isEmpty()) {
+                startTime.isEmpty() || newHowOften.isEmpty()) {
 
             Toast.makeText(context, "Fill in name of the event, it's start date and freqency", Toast.LENGTH_LONG).show();
 
@@ -627,7 +638,7 @@ public class CyclicalEventsDetails extends Fragment {
                 if ((!eventToUpdate.getEvent_name().equals(newEventName)) ||
                         (!eventToUpdate.getSchedule().equals(newWhatTime)) ||
                         (!eventToUpdate.getAlarm().equals(newAlarm)) ||
-                        (!eventToUpdate.getPickedDay().equals(newEventStartDate)) ||
+                        (!eventToUpdate.getPickedDay().equals(startTime)) ||
                         (eventToUpdate.getEvent_length() != newHowLong) ||
                         !eventToUpdate.getFrequency().equals(newHowOften) ||
                         !eventToUpdate.getTerm().equals(howLongTerm)) {
@@ -635,7 +646,7 @@ public class CyclicalEventsDetails extends Fragment {
                     eventToUpdate.setSchedule(newWhatTime);
                     eventToUpdate.setAlarm(newAlarm);
                     eventToUpdate.setEvent_length(newHowLong);
-                    eventToUpdate.setPickedDay(newEventStartDate);
+                    eventToUpdate.setPickedDay(startTime);
                     eventToUpdate.setFrequency(newHowOften);
                     eventToUpdate.setTerm(howLongTerm);
                     eventsDao.update(eventToUpdate);
@@ -643,7 +654,7 @@ public class CyclicalEventsDetails extends Fragment {
             }
         } else {
 
-            eventsDao.insert(new Event(String.valueOf(newId), newEventName, newWhatTime, newAlarm, newHowLong, newEventStartDate, 0, newHowOften, howLongTerm));
+            eventsDao.insert(new Event(String.valueOf(newId), newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm));
 
         }
     }
@@ -654,20 +665,24 @@ public class CyclicalEventsDetails extends Fragment {
         newEventName = eventNameEditText.getText().toString();
         newAlarm = alarmTextView.getText().toString();
         newWhatTime = eventStartTimeTextView.getText().toString();
-        findStartTime();
         findFrequency();
         findDuration();
         findTerm();
 
     }
 
-    private void findStartTime() {
+    @SuppressLint({"SimpleDateFormat", "DefaultLocale"})
+    private String findStartTime() {
 
         if (startDate != null) {
-            newEventStartDate = startDate;
+
+            String[] parts = startDate.split("-");
+            startDateProperFormat = parts[0] + "-" + String.format("%02d", Integer.parseInt(parts[1])) + "-" + parts[2];
+            newEventStartDate = startDateProperFormat;
         } else {
             newEventStartDate = event_start_date_extra;
         }
+        return newEventStartDate;
     }
 
     private void findFrequency() {
@@ -724,16 +739,22 @@ public class CyclicalEventsDetails extends Fragment {
 
     private void findTerm() {
 
-        if (term != -1) {
-            if (term == 0) {
-                howLongTerm = "on_and_on";
-            } else if (term == 1) {
-                howLongTerm = dateString;
-            } else {
-                howLongTerm = howLongEditText.getText().toString();
-            }
+        if (howLongTerm == null) {
+            howLongTerm = "on_and_on";
         } else {
-            howLongTerm = how_long_term_extra;
+            if (term != -1) {
+                if (term == 0) {
+                    howLongTerm = "on_and_on";
+                } else if (term == 1) {
+                    howLongTerm = dateString;
+                } else {
+                    howLongTerm = howLongEditText.getText().toString();
+                }
+            } else {
+                howLongTerm = how_long_term_extra;
+            }
         }
+
+
     }
 }

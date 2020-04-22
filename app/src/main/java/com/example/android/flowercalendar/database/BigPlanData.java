@@ -19,10 +19,14 @@ public class BigPlanData {
     @ColumnInfo(name = "aimContents")
     private String aimContents;
 
-    public BigPlanData(int aimTime, String aimIndex, String aimContents) {
+    @ColumnInfo(name = "isChecked")
+    private int isChecked;
+
+    public BigPlanData(int aimTime, String aimIndex, String aimContents, int isChecked) {
         this.aimTime = aimTime;
         this.aimIndex = aimIndex;
         this.aimContents = aimContents;
+        this.isChecked = isChecked;
     }
 
 
@@ -56,5 +60,14 @@ public class BigPlanData {
 
     public void setAimIndex(String aimIndex) {
         this.aimIndex = aimIndex;
+    }
+
+
+    public int getIsChecked() {
+        return isChecked;
+    }
+
+    public void setIsChecked(int isChecked) {
+        this.isChecked = isChecked;
     }
 }

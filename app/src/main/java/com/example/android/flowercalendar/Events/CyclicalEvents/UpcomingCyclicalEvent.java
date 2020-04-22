@@ -47,21 +47,21 @@ class UpcomingCyclicalEvent {
         int howManyTimesLoop = howManyTimesRepeatEvent(term);
         for (int i = 0; i < howManyTimesLoop; i++) {
 
-            if (pickedStartDate.plusDays(Integer.parseInt(howManyDays)).
-                    isBefore(LocalDate.now())) {
+                if (pickedStartDate.plusDays(Integer.parseInt(howManyDays)).
+                        isBefore(LocalDate.now())) {
 
-                pickedStartDate = pickedStartDate.plusDays(Integer.parseInt(howManyDays));
+                    pickedStartDate = pickedStartDate.plusDays(Integer.parseInt(howManyDays));
 
-                LocalDate pickedFinishDate = pickedFinishDate(term);
-                if (pickedFinishDate != null) {
-                    if (pickedStartDate.isAfter(pickedFinishDate) || pickedStartDate.isEqual(pickedFinishDate)) {
-                        pickedStartDate = null;
+                    LocalDate pickedFinishDate = pickedFinishDate(term);
+                    if (pickedFinishDate != null) {
+                        if (pickedStartDate.isAfter(pickedFinishDate) || pickedStartDate.isEqual(pickedFinishDate)) {
+                            pickedStartDate = null;
+                            break;
+                        }
+                    } else {
                         break;
                     }
-                } else {
-                    break;
                 }
-            }
         }
 
         if (pickedStartDate == null) {

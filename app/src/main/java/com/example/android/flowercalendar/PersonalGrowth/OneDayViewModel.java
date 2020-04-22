@@ -16,15 +16,21 @@ public class OneDayViewModel extends AndroidViewModel {
 
     private BigPlanDao bigPlanDao;
     private LiveData<List<BigPlanData>> bigPlanLiveData;
+    private LiveData<List<BigPlanData>> bigPlanLiveDataIsChecked;
 
     public OneDayViewModel(@NonNull Application application) {
         super(application);
         bigPlanDao = CalendarDatabase.getDatabase(application).bigPlanDao();
         bigPlanLiveData = bigPlanDao.findByAimTime(4);
+        bigPlanLiveDataIsChecked = bigPlanDao.findByisChecked(4, 1);
     }
 
     LiveData<List<BigPlanData>> getAimsList() {
         return bigPlanLiveData;
+    }
+
+    LiveData<List<BigPlanData>> getAimsListIsChecked() {
+        return bigPlanLiveDataIsChecked;
     }
 
     public void insert(BigPlanData... aims) {

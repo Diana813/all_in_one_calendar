@@ -112,8 +112,10 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        AppUtils.updateWidget(context);
+
+
     }
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -519,6 +521,7 @@ public class CalendarFragment extends Fragment {
 
 
     public void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate, Context context) {
+
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, (int) uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes), intent, 0);

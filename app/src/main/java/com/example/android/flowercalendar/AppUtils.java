@@ -1,7 +1,9 @@
 package com.example.android.flowercalendar;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -16,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Calendar.AlarmReceiver;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
@@ -30,17 +33,15 @@ import com.example.android.flowercalendar.database.ImagePathDao;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -50,7 +51,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
-import static com.example.android.flowercalendar.Widget.CalendarWidgetUpdateService.ACTION_UPDATE_GRID_VIEW;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class AppUtils {
@@ -128,7 +128,7 @@ public class AppUtils {
         int index = bigPlanAdapter.getItemCount();
 
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-        bigPlanDao.insert(new BigPlanData(i, String.valueOf(index), aimTextString));
+        bigPlanDao.insert(new BigPlanData(i, String.valueOf(index), aimTextString, 0));
 
     }
 
@@ -148,6 +148,7 @@ public class AppUtils {
         eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1, frequency, "0"));
     }
 
+
     public void displayImageFromDB(ImageView view) {
 
         ImagePathDao imagePathDao = getDatabase(getContext()).imagePathDao();
@@ -162,6 +163,7 @@ public class AppUtils {
         }
     }
 
+
     private void loadImageFromStorage(String path, ImageView view) {
 
         try {
@@ -174,15 +176,51 @@ public class AppUtils {
 
     }
 
+
     public static void updateWidget(Context context) {
 
         Intent intent = new Intent(context, CalendarWidgetProvider.class);
-        intent.setAction(ACTION_UPDATE_GRID_VIEW);
-        int[] ids = AppWidgetManager.getInstance(context)
-                .getAppWidgetIds(new ComponentName(context, CalendarWidgetProvider.class));
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        context.sendBroadcast(intent);
+        intent.setAction("UPDATE_WIDGET_IF_DATA_CHANGED");
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisAppWidget = new ComponentName(context, CalendarWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 432, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        assert alarmManager != null;
+
+        LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime zdt = now.atZone(ZoneId.systemDefault());
+        long millis = zdt.toInstant().toEpochMilli();
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, millis,
+                pendingIntent);
+
     }
+
+    static void updateWidgetAtMidnight(Context context) {
+
+        Intent intent = new Intent(context, CalendarWidgetProvider.class);
+        intent.setAction("UPDATE_WIDGET_AT_MIDNIGHT");
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName thisAppWidget = new ComponentName(context, CalendarWidgetProvider.class);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context, 234, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        assert alarmManager != null;
+
+        LocalDate todayMidn = LocalDate.now().plusDays(1);
+        LocalTime midnight = LocalTime.MIDNIGHT;
+        LocalDateTime todayMidnight = LocalDateTime.of(todayMidn, midnight);
+        ZonedDateTime zdt = todayMidnight.atZone(ZoneId.systemDefault());
+        long millis = zdt.toInstant().toEpochMilli();
+        alarmManager.setRepeating(AlarmManager.RTC, millis, 86400000,
+                pendingIntent);
+    }
+
 
     public static LocalDate refactorStringIntoDate(String stringDate) {
 
@@ -197,7 +235,8 @@ public class AppUtils {
         return searchedDate;
     }
 
-    public long eventStartDayToMilis(String dateString) {
+
+    public static long eventStartDayToMilis(String dateString) {
 
         String[] parts = dateString.split("-");
         int year = Integer.parseInt(parts[0]);
@@ -208,6 +247,7 @@ public class AppUtils {
         return zdt.toInstant().toEpochMilli();
 
     }
+
 
     @SuppressLint("DefaultLocale")
     public void eventTimeSettingDialog(TextView textView, Context context) {
@@ -222,6 +262,7 @@ public class AppUtils {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
         return sdf.format(calendar.getTime());
     }
+
 
     @SuppressLint("SimpleDateFormat")
     public String changeSimpleDateFormat(String dateStr) {
