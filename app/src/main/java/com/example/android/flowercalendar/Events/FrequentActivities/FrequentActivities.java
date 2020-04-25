@@ -32,7 +32,7 @@ public class FrequentActivities extends Fragment {
     private Context context;
     private EventsListAdapter eventsListAdapter;
     private AppUtils appUtils = new AppUtils();
-    private int newId;
+    private static int freqActSize;
     private RelativeLayout empty_view;
 
 
@@ -96,7 +96,7 @@ public class FrequentActivities extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
         initData(this, eventsListAdapter);
-        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, 1, "", null, "0");
+        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, "", null, "0");
         return rootView;
     }
 
@@ -106,13 +106,17 @@ public class FrequentActivities extends Fragment {
         frequentActivitiesViewModel.getEventsList().observe(fragment, events -> {
             adapter.setEventsList(events);
             if (events == null) {
-                newId = 0;
+                freqActSize = 0;
                 empty_view.setVisibility(View.VISIBLE);
             } else {
-                newId = events.size();
+                freqActSize = events.size();
                 empty_view.setVisibility(View.GONE);
             }
         });
+    }
+
+    public static int getFreqActSize() {
+        return freqActSize + 1;
     }
 
 }

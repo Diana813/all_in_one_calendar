@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,6 +22,8 @@ import com.example.android.flowercalendar.Events.EventsViewModel;
 import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivitiesViewModel;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
@@ -35,19 +39,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ToDoList extends Fragment {
 
+    private static int eventsListSize;
     private EventsListAdapter toDoListAdapter;
     private FrequentActivitiesDrawerListAdapter frequentActivitiesDrawerListAdapter;
     private Context context;
-    public static int newId;
     private String pickedDay;
     private DrawerLayout mDrawer;
     private int layout;
     private RecyclerView freqActDrawList;
     private RecyclerView toDoListRecyclerView;
-    private AppUtils appUtils = new AppUtils();
+    private AppUtils appUtils;
     private ImageButton confirm;
     private EditText editText;
     private TextView eventsLabel;
+    private Button freqActButton;
+    private NavigationView navigationView;
 
 
     public ToDoList() {
@@ -68,6 +74,7 @@ public class ToDoList extends Fragment {
         this.context = context;
         toDoListAdapter = new EventsListAdapter(context);
         frequentActivitiesDrawerListAdapter = new FrequentActivitiesDrawerListAdapter(context, context);
+        appUtils = new AppUtils();
     }
 
 
@@ -89,15 +96,18 @@ public class ToDoList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(layout, container, false);
+
         findViews(rootView);
         eventsLabel.setVisibility(View.GONE);
         editText.setTextColor(Color.BLACK);
+        freqActButton.setVisibility(View.VISIBLE);
+        setFreqActButton();
         setAdapters();
         setHasOptionsMenu(true);
         pickedDay = findWhatDateItIs();
         initData();
         addFreqActivList();
-        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, 1, pickedDay, null, "0");
+        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, pickedDay, null, "0");
         return rootView;
     }
 
@@ -108,6 +118,9 @@ public class ToDoList extends Fragment {
         confirm = rootView.findViewById(R.id.confirm_button);
         editText = rootView.findViewById(R.id.editText);
         eventsLabel = rootView.findViewById(R.id.eventsLabel);
+        freqActButton = rootView.findViewById(R.id.freqActButton);
+        mDrawer = rootView.findViewById(R.id.activity_expanded_day_view);
+        navigationView = rootView.findViewById(R.id.nvView);
     }
 
     private void setAdapters() {
@@ -122,8 +135,9 @@ public class ToDoList extends Fragment {
 
     }
 
-    void saveEvent(String newEvent, String pickedDate, EventsListAdapter toDoListAdapter) {
-        appUtils.saveDataEvents(toDoListAdapter, null, pickedDate, newEvent, "-1");
+    void saveEvent(String newEvent, String pickedDate) {
+        AppUtils appUtils = new AppUtils();
+        appUtils.saveDataEvents(null, pickedDate, newEvent, "-1");
     }
 
     private String findWhatDateItIs() {
@@ -142,22 +156,49 @@ public class ToDoList extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.expanded_day_menu, menu);
+        inflater.inflate(R.menu.delete_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.freqAct) {
-            mDrawer = Objects.requireNonNull(getActivity()).findViewById(R.id.activity_expanded_day_view);
-            NavigationView navigationView = getActivity().findViewById(R.id.nvView);
-            mDrawer.openDrawer(navigationView);
+        if (item.getItemId() == R.id.action_delete_all_entries) {
+            showDeleteConfirmationDialog();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void showDeleteConfirmationDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.delete_all_dialog_message);
+        builder.setPositiveButton(R.string.delete, (dialog, id) -> removeData());
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
+
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+    private void removeData() {
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+        eventsDao.deleteByPickedDate(pickedDay);
+    }
+
+    private void setFreqActButton() {
+
+        freqActButton.setOnClickListener(v -> {
+            mDrawer.openDrawer(navigationView);
+            toDoListAdapter.deleteFromDatabase(null);
+        });
+    }
 
     private void initData() {
 
@@ -165,7 +206,8 @@ public class ToDoList extends Fragment {
         eventsViewModel.getEventsList().observe(getViewLifecycleOwner(), events -> {
             assert events != null;
             toDoListAdapter.setEventsList(events);
-            newId = events.size();
+            eventsListSize = events.size();
+
         });
     }
 
@@ -179,4 +221,7 @@ public class ToDoList extends Fragment {
         });
     }
 
+    public static int positionOfTheNextEventOnTheList() {
+        return eventsListSize + 1;
+    }
 }

@@ -29,7 +29,6 @@ import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,8 +37,6 @@ import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import static com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList.newId;
 
 
 public class CyclicalEventsDetails extends Fragment {
@@ -118,7 +115,6 @@ public class CyclicalEventsDetails extends Fragment {
 
     private String newEventName;
     private String newAlarm;
-    private String newEventStartDate;
     private String newWhatTime;
     private String newHowOften;
     private int newHowLong;
@@ -654,7 +650,7 @@ public class CyclicalEventsDetails extends Fragment {
             }
         } else {
 
-            eventsDao.insert(new Event(String.valueOf(newId), newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm));
+            eventsDao.insert(new Event(-56, newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm));
 
         }
     }
@@ -674,6 +670,7 @@ public class CyclicalEventsDetails extends Fragment {
     @SuppressLint({"SimpleDateFormat", "DefaultLocale"})
     private String findStartTime() {
 
+        String newEventStartDate;
         if (startDate != null) {
 
             String[] parts = startDate.split("-");

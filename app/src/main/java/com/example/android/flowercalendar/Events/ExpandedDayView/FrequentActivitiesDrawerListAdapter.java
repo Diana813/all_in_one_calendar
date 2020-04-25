@@ -28,14 +28,12 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
     private List<Event> eventsList;
     private int freqActMarked = -1;
     private AppUtils appUtils = new AppUtils();
-    private EventsListAdapter eventsListAdapter;
     private ToDoList toDoList = new ToDoList();
     private BackgroundActivityExpandedDayView backgroundActivityExpandedDayView = new BackgroundActivityExpandedDayView();
 
     FrequentActivitiesDrawerListAdapter(Context requireNonNull, Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         FrequentActivitiesDrawerListAdapter.context = context;
-        eventsListAdapter = new EventsListAdapter(getContext());
     }
 
     public static Context getContext() {
@@ -75,7 +73,7 @@ class FrequentActivitiesDrawerListAdapter extends RecyclerView.Adapter<FrequentA
             assert event != null;
             String newEvent = event.getEvent_name();
             String pickedDay = CalendarFragment.pickedDay;
-            toDoList.saveEvent(newEvent, pickedDay, eventsListAdapter);
+            toDoList.saveEvent(newEvent, pickedDay);
             holder.backgroundLayout.setBackgroundResource(R.color.colorAccent);
             freqActMarked = -2;
 

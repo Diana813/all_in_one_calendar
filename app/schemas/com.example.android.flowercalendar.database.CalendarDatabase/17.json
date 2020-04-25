@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 16,
-    "identityHash": "ab309780c136d2384a2d5e655cde1250",
+    "version": 17,
+    "identityHash": "ce2bc74fc69a461a085b14969ba0ea66",
     "entities": [
       {
         "tableName": "calendar_events",
@@ -294,7 +294,7 @@
       },
       {
         "tableName": "big_plan_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `aimIndex` TEXT, `aimTime` INTEGER NOT NULL, `aimContents` TEXT, `isChecked` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`position` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `aimIndex` TEXT, `aimTime` INTEGER NOT NULL, `aimContents` TEXT, `isChecked` INTEGER NOT NULL, `startDate` TEXT)",
         "fields": [
           {
             "fieldPath": "position",
@@ -325,6 +325,12 @@
             "columnName": "isChecked",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -335,12 +341,44 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "statistics_personal_growth",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `aim_time` INTEGER NOT NULL, `effectiveness` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "aimTime",
+            "columnName": "aim_time",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effectiveness",
+            "columnName": "effectiveness",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ab309780c136d2384a2d5e655cde1250')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ce2bc74fc69a461a085b14969ba0ea66')"
     ]
   }
 }

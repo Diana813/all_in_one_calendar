@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.ExpandedDayView.BackgroundActivityExpandedDayView;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
@@ -115,7 +114,6 @@ public class CalendarFragment extends Fragment {
 
 
     }
-
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -412,6 +410,7 @@ public class CalendarFragment extends Fragment {
             } else {
 
                 goToExpandedDayView(position);
+
             }
 
         });
@@ -560,7 +559,6 @@ public class CalendarFragment extends Fragment {
 
         pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
         pickedDay = String.valueOf(pickedDate);
-
         BackgroundActivityExpandedDayView eventsList = new BackgroundActivityExpandedDayView();
         Bundle args = new Bundle();
         args.putString("pickedDay", pickedDay);

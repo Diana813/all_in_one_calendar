@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
-    android:layout_marginTop="0dp">
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
@@ -10,8 +9,7 @@
 
     <LinearLayout
         android:id="@+id/editTextLinearLayout"
-        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-        android:layout_margin="10dp">
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
 
         <EditText
             android:id="@+id/editText"

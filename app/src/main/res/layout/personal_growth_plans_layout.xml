@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout"
-
-    >
+    style="@style/BackgroundLayout">
 
     <ImageView
         android:id="@+id/imageBackground"
@@ -12,14 +10,17 @@
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
 
-   <!-- <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/semiTransparentColorWhite" />-->
+    <TextView
+        android:id="@+id/timeOut"
+        style="@style/textViewHeaders.small"
+        android:layout_margin="10dp"
+        android:textColor="#000"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/effectiveness"
         style="@style/textViewHeaders.small"
+        android:layout_below="@+id/timeOut"
         android:layout_margin="10dp"
         android:textColor="#000"
         android:textStyle="bold"
@@ -35,49 +36,27 @@
         android:progress="0"
         android:progressDrawable="@drawable/custom_progressbar" />
 
-    <LinearLayout
-        android:id="@+id/mainLayout"
-        style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/determinateBar"
-        android:background="@color/semiTransparentColorWhite"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/semiTransparentColorWhite"
+        android:gravity="center"
+        android:padding="15dp"
+        android:textColor="#000"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:text="@string/fiveYearsPlan" />
 
-        <TextView
-            android:id="@+id/title"
-            style="@style/textViewHeaders"
-            android:gravity="center"
-            android:padding="15dp"
-            android:textStyle="bold"
-            tools:text="@string/fiveYearsPlan" />
-
-
-        <CheckBox
-            android:id="@+id/checkboxToday"
-            style="@style/personalGrowthCheckBoxStyle"
-            android:text="@string/today"
-            android:textStyle="bold"
-            android:visibility="gone">
-
-        </CheckBox>
-
-        <CheckBox
-            android:id="@+id/checkboxTomorrow"
-            style="@style/personalGrowthCheckBoxStyle"
-            android:text="@string/tomorrow"
-            android:textStyle="bold"
-            android:visibility="gone">
-
-        </CheckBox>
-    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
         style="@style/BackgroundLayout"
-        android:layout_marginTop="0dp"
-        android:layout_below="@id/mainLayout"
-        >
+        android:layout_below="@id/title">
 
         <include layout="@layout/recycleview_and_edittext" />
 

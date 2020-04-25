@@ -58,6 +58,9 @@
         <activity
             android:name=".PersonalGrowth.BackgroundActivity"
             tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Statistics.StatisticsOfEffectiveness"
+            tools:ignore="InnerclassSeparator" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

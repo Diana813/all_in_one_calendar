@@ -40,10 +40,16 @@ public interface EventsDao {
     LiveData<List<Event>> findByEventKind(int eventKind);
 
     @Query("DELETE FROM event WHERE (event_name = :event_name AND position = :position AND picked_day = :picked_day)")
-    void deleteEvents(String position, String picked_day, String event_name);
+    void deleteEvents(int position, String picked_day, String event_name);
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay ORDER BY position ASC")
     LiveData<List<Event>> sortByOrder(String pickedDay);
+
+    @Query("DELETE FROM event WHERE picked_day = :pickedDay")
+    void deleteByPickedDate(String pickedDay);
+
+    @Query("SELECT * FROM event WHERE picked_day = :pickedDay ORDER BY position ASC")
+    List<Event> sortByPickedDay(String pickedDay);
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay")
     LiveData<List<Event>> findByEventDay(String pickedDay);

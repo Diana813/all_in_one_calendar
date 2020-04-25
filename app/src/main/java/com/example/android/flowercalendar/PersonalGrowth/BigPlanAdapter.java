@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
@@ -38,7 +37,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private ArrayList<StringsAims> aimStrings = new ArrayList<>();
     private int aimTime;
     private ArrayList<StringsAims> toDoListStrings = new ArrayList<>();
-    private String currentString;
+    private int currentString;
     private String aimToDelete;
 
 
@@ -77,7 +76,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         final BigPlanData bigPlanData = aimsList.get(position);
         aimTime = bigPlanData.getAimTime();
 
-        holder.aimNumber.setText((position + 1) + ".");
+        holder.aimNumber.setText(Integer.parseInt(bigPlanData.getAimIndex()) + 1 + ".");
         holder.aimContents.setText(bigPlanData.getAimContents());
         holder.checkBox.setVisibility(View.VISIBLE);
         if (bigPlanData.getIsChecked() == 0) {
@@ -107,7 +106,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         bigPlanData = aimsList.get(position);
         pos = position;
-        String aimIndex = bigPlanData.getAimIndex();
+        int aimIndex = Integer.parseInt(bigPlanData.getAimIndex());
         String aimContent = bigPlanData.getAimContents();
         aimStrings.add(new StringsAims(aimIndex, aimContent));
         aimsList.remove(position);
@@ -136,7 +135,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         if (aimStrings != null) {
             for (int i = 0; i < aimStrings.size(); i++) {
-                String aimIndex = aimStrings.get(i).getAimNumber();
+                int aimIndex = aimStrings.get(i).getAimNumber();
                 String aimContent = aimStrings.get(i).getAimContent();
                 bigPlanDao.deleteItemFromPlans(aimIndex, aimTime, aimContent);
             }
@@ -188,7 +187,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         for (BigPlanData bigPlanData : aimsList) {
 
-            bigPlanData.setAimIndex(aimsList.indexOf(bigPlanData) + ".");
+            bigPlanData.setAimIndex(String.valueOf(aimsList.indexOf(bigPlanData)));
             bigPlanDao.update(bigPlanData);
         }
 

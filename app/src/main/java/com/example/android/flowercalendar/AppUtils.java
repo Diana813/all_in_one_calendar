@@ -18,8 +18,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.AlarmReceiver;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
+import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivities;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
 import com.example.android.flowercalendar.database.BigPlanDao;
@@ -29,19 +30,24 @@ import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
+import com.example.android.flowercalendar.database.StatisticsPersonalGrowth;
+import com.example.android.flowercalendar.database.StatisticsPersonalGrowthDao;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -99,21 +105,24 @@ public class AppUtils {
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, EventsListAdapter eventsListAdapter, String frequency) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, String frequency) {
 
         confirm.setOnClickListener(v -> {
             saveDataPersonalGrowth(adapter, aim, i);
             adapter.deleteFromDatabase();
             adapter.setAimIndexInDB();
-            saveDataEvents(eventsListAdapter, aim, pickedDay, null, frequency);
+            if (pickedDay != null) {
+                saveDataEvents(aim, pickedDay, null, frequency);
+
+            }
             aim.setText("");
         });
 
     }
 
-    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final int i, final String pickedDay, final String newEvent, String frequency) {
+    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final String pickedDay, final String newEvent, String frequency) {
         confirm.setOnClickListener(v -> {
-            saveDataEvents(adapter, textView, pickedDay, newEvent, frequency);
+            saveDataEvents(textView, pickedDay, newEvent, frequency);
             adapter.deleteFromDatabase(null);
             adapter.setIndexInDB();
             textView.setText("");
@@ -127,12 +136,14 @@ public class AppUtils {
         String aimTextString = aim.getText().toString();
         int index = bigPlanAdapter.getItemCount();
 
+        LocalDate now = LocalDate.now();
+
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(getContext()).bigPlanDao();
-        bigPlanDao.insert(new BigPlanData(i, String.valueOf(index), aimTextString, 0));
+        bigPlanDao.insert(new BigPlanData(i, String.valueOf(index), aimTextString, 0, String.valueOf(now)));
 
     }
 
-    public void saveDataEvents(EventsListAdapter adapter, TextView plan, String pickedDay, String newEvent, String frequency) {
+    public void saveDataEvents(TextView plan, String pickedDay, String newEvent, String frequency) {
 
         String eventTextString;
         if (newEvent != null) {
@@ -142,10 +153,16 @@ public class AppUtils {
         }
 
 
-        int index = adapter.getItemCount();
+        int index;
+        if (pickedDay.equals("")) {
+            index = FrequentActivities.getFreqActSize();
+        } else {
+            index = ToDoList.positionOfTheNextEventOnTheList();
+        }
+
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        eventsDao.insert(new Event(String.valueOf(index), eventTextString, String.valueOf(index + 1), null, 0, pickedDay, 1, frequency, "0"));
+        eventsDao.insert(new Event(index, eventTextString, null, null, 0, pickedDay, 1, frequency, "0"));
     }
 
 
@@ -276,5 +293,105 @@ public class AppUtils {
 
         formattedDate = parsedDate.format(f2);
         return formattedDate;
+    }
+
+    public void deleteIfTimeIsOut(int i, Context context) {
+
+        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+        bigPlanDao.deleteAll(i);
+    }
+
+    public int isTheTimeOut(List<BigPlanData> aims, int i) {
+
+        String startDate = aims.get(0).getStartDate();
+        String[] parts = startDate.split("-");
+        int isTimeOut = 0;
+        if (i == 1 || i == 2) {
+            String yearString = parts[0];
+            isTimeOut = Integer.parseInt(yearString);
+        } else if (i == 3) {
+            String monthString = parts[1];
+            isTimeOut = Month.of(Integer.parseInt(monthString)).getValue();
+        } else if (i == 4) {
+            String dayString = parts[2];
+            isTimeOut = Integer.parseInt(dayString);
+        }
+        return isTimeOut;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public Duration howMuchTimeLeft(LocalDate timeOutDate) {
+
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime now = ZonedDateTime.now(zoneId);
+        ZonedDateTime timeout = ZonedDateTime.of(timeOutDate, LocalTime.of(0, 0, 0), zoneId);
+        return Duration.between(now, timeout);
+    }
+
+    public void addEffectivenesToDB(Context context, int i, LocalDate dateOfAddingFirstItem, int newEffectiveness) {
+
+        StatisticsPersonalGrowthDao statisticsPersonalGrowthDao = CalendarDatabase.getDatabase(context).statisticsPersonalGrowthDao();
+        StatisticsPersonalGrowth currentStatistic = statisticsPersonalGrowthDao.findfirstItem(i);
+
+        int year = 0;
+        int month = 0;
+        int day = 0;
+
+        if (currentStatistic != null) {
+            String addingDate = currentStatistic.getDateOfAdding();
+            String[] parts = addingDate.split("-");
+            year = Integer.parseInt(parts[0]);
+            month = Integer.parseInt(parts[1]);
+            day = Integer.parseInt(parts[2]);
+        }
+
+        if (i == 1) {
+            if (currentStatistic != null) {
+                if (year + 5 >= LocalDate.now().getYear()) {
+                    currentStatistic.setEffectiveness(newEffectiveness);
+                    statisticsPersonalGrowthDao.update(currentStatistic);
+                }
+            } else {
+                statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
+            }
+        } else if (i == 2) {
+
+            if (currentStatistic != null) {
+                if (year + 1 >= LocalDate.now().getYear()) {
+                    currentStatistic.setEffectiveness(newEffectiveness);
+                    statisticsPersonalGrowthDao.update(currentStatistic);
+                } else {
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                }
+            } else {
+                statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
+            }
+
+        } else if (i == 3) {
+
+            if (currentStatistic != null) {
+                if (month + 1 >= LocalDate.now().getMonthValue()) {
+                    currentStatistic.setEffectiveness(newEffectiveness);
+                    statisticsPersonalGrowthDao.update(currentStatistic);
+                } else {
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                }
+            } else {
+                statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
+            }
+        } else if (i == 4) {
+
+            if (currentStatistic != null) {
+                if (day + 1 >= LocalDate.now().getDayOfMonth()) {
+                    currentStatistic.setEffectiveness(newEffectiveness);
+                    statisticsPersonalGrowthDao.update(currentStatistic);
+                } else {
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                }
+            } else {
+                statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
+            }
+        }
+
     }
 }

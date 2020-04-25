@@ -9,4 +9,9 @@
         android:title="@string/delete_all"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/statistics"
+        android:title="@string/show_statistics"
+        app:showAsAction="never" />
+
 </menu>

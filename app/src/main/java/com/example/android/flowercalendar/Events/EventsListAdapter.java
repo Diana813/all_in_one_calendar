@@ -31,15 +31,16 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private List<Event> eventsList;
     private Event events;
     private int eventPosition;
-    private String eventNumber;
+    private int eventNumber;
     private ArrayList<StringsAims> eventNumbers = new ArrayList<>();
     private String eventContent;
     private String aimTime;
 
     public EventsListAdapter(Context context) {
-        this.layoutInflater = LayoutInflater.from(context);
-        EventsListAdapter.context = context;
-
+        if (context != null) {
+            this.layoutInflater = LayoutInflater.from(context);
+            EventsListAdapter.context = context;
+        }
     }
 
     public static Context getContext() {
@@ -70,7 +71,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
         final Event event = eventsList.get(position);
         aimTime = event.getPickedDay();
 
-        holder.eventNumber.setText((position + 1) + ".");
+        holder.eventNumber.setText(event.getPosition() + ".");
         holder.eventContents.setText(event.getEvent_name());
 
     }
@@ -91,13 +92,13 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     public void deleteFromDatabase(ArrayList<StringsAims> stringsAims) {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        String date = String.valueOf(LocalDate.now().plusDays(1));
+        String date = String.valueOf(LocalDate.now());
 
         if (stringsAims != null) {
 
             for (int i = 0; i < stringsAims.size(); i++) {
 
-                String index = stringsAims.get(i).getAimNumber();
+                int index = stringsAims.get(i).getAimNumber();
                 String content = stringsAims.get(i).getAimContent();
 
                 eventsDao.deleteEvents(index, date, content);
@@ -108,7 +109,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
             for (int i = 0; i < eventNumbers.size(); i++) {
 
-                String index = eventNumbers.get(i).getAimNumber();
+                int index = eventNumbers.get(i).getAimNumber();
                 String content = eventNumbers.get(i).getAimContent();
 
                 eventsDao.deleteEvents(index, aimTime, content);
@@ -129,7 +130,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private void undoDelete() {
         eventsList.add(eventPosition,
                 events);
-        eventNumbers.remove(new StringsAims(String.valueOf(eventNumber), eventContent));
+        eventNumbers.remove(new StringsAims(eventNumber, eventContent));
         eventNumbers = new ArrayList<>();
         notifyItemInserted(eventPosition);
     }
@@ -156,12 +157,13 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     public void setIndexInDB() {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+
         if (eventsDao != null) {
             for (Event event : eventsList) {
-                event.setPosition(eventsList.indexOf(event) + ".");
+                event.setPosition(eventsList.indexOf(event) + 1);
                 eventsDao.update(event);
-
             }
+
         }
     }
 

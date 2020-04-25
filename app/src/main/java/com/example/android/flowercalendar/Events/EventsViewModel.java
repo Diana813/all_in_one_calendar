@@ -7,6 +7,7 @@ import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -16,15 +17,21 @@ import androidx.lifecycle.LiveData;
 public class EventsViewModel extends AndroidViewModel {
     private EventsDao eventsDao;
     private LiveData<List<Event>> eventsLiveData;
+    private LiveData<List<Event>> eventsLiveDataForAims;
 
     public EventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
         eventsLiveData = eventsDao.sortByOrder(CalendarFragment.pickedDay);
+        eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()));
     }
 
     public LiveData<List<Event>> getEventsList() {
         return eventsLiveData;
+    }
+
+    public LiveData<List<Event>> getEventsListForAims() {
+        return eventsLiveDataForAims;
     }
 
     public void insert(Event... events) {

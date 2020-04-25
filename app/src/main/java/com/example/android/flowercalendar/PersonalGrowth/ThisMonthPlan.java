@@ -1,9 +1,8 @@
 package com.example.android.flowercalendar.PersonalGrowth;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.MediaRouteButton;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,9 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.Statistics.StatisticsOfEffectiveness;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -35,9 +35,12 @@ public class ThisMonthPlan extends Fragment {
     private BigPlanAdapter adapter;
     private Context context;
     private AppUtils appUtils = new AppUtils();
-    private EventsListAdapter eventsListAdapter;
     private ProgressBar determinateBar;
     private TextView effectiveness;
+    private LocalDate timeOutDate;
+    private TextView timeOut;
+    private int progress;
+    private LocalDate firstItemDate;
 
     public ThisMonthPlan() {
         // Required empty public constructor
@@ -52,7 +55,6 @@ public class ThisMonthPlan extends Fragment {
         super.onAttach(context);
         this.context = context;
         adapter = new BigPlanAdapter(context, context);
-        eventsListAdapter = new EventsListAdapter(context);
     }
 
     @Override
@@ -67,6 +69,7 @@ public class ThisMonthPlan extends Fragment {
         adapter.setAimIndexInDB();
         adapter.deleteFromDatabase();
         appUtils.hideKeyboard(getView(), context);
+        appUtils.addEffectivenesToDB(context, 3, firstItemDate, progress);
     }
 
     @Override
@@ -93,20 +96,22 @@ public class ThisMonthPlan extends Fragment {
         ImageView imageView = rootView.findViewById(R.id.imageBackground);
         determinateBar = rootView.findViewById(R.id.determinateBar);
         effectiveness = rootView.findViewById(R.id.effectiveness);
+        timeOut = rootView.findViewById(R.id.timeOut);
+
 
         setHasOptionsMenu(true);
         appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, eventsListAdapter, "0");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0");
 
         return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.big_plan_save_menu, menu);
+        inflater.inflate(R.menu.big_plan_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -117,6 +122,9 @@ public class ThisMonthPlan extends Fragment {
             appUtils.showDeleteConfirmationDialog(3);
             return true;
 
+        } else if (item.getItemId() == R.id.statistics) {
+            Intent intent = new Intent(getActivity(), StatisticsOfEffectiveness.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -131,16 +139,46 @@ public class ThisMonthPlan extends Fragment {
                 newId = aims.size();
                 thisMonthViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
                     if (aimsList.size() != 0 && newId != 0) {
-                        int progress = aimsList.size() * 100 / newId;
+                        progress = aimsList.size() * 100 / newId;
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText("Effectiveness: " + progress + "%");
                     } else {
+                        progress = 0;
                         determinateBar.setProgress(0);
                         effectiveness.setVisibility(View.GONE);
                     }
 
                 });
+
+                if (aims.size() != 0) {
+
+                    int month = appUtils.isTheTimeOut(aims, 3);
+                    int year = LocalDate.now().getYear();
+
+                    String firstItemDateString = aims.get(0).getStartDate();
+                    firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+
+                    timeOutDate = LocalDate.of(year, month + 1, 1);
+                    long howManyDaysLeft = appUtils.howMuchTimeLeft(timeOutDate).toDays();
+                    if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
+                        howManyDaysLeft = appUtils.howMuchTimeLeft(timeOutDate).toHours();
+                        timeOut.setText("Time left: " + howManyDaysLeft + " hours");
+                    } else {
+                        timeOut.setText("Time left: " + howManyDaysLeft + " days");
+                    }
+
+                    if (timeOutDate.isBefore(LocalDate.now()) ||
+                            timeOutDate.isEqual(LocalDate.now())) {
+                        appUtils.deleteIfTimeIsOut(3, context);
+                    }
+                    if (newId == 0) {
+                        timeOut.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    timeOut.setVisibility(View.GONE);
+                }
             }
         });
 

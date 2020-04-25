@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">All in One Calendar</string>
-    
+
     <string name="periodStart">Mark the beginning of your period</string>
     <string name="periodLenght">How long does your period last?</string>
     <string name="cycleLenght">How long does your menstrual cycle last?</string>
@@ -57,16 +57,14 @@
     <string name="fiveYearsPlan">What will you do to achieve this?</string>
     <string name="thisYearsPlan">What will you do this year?</string>
     <string name="thisMonthPlan">What will you do this month?</string>
-    <string name="OneDayPlan">Make plans for:</string>
+    <string name="OneDayPlan">What will you do today?</string>
     <string name="lifeAims">Life aims</string>
     <string name="bigPlan">Big plan</string>
     <string name="thisYear">This year</string>
     <string name="thisMonth">This month</string>
-    <string name="dayPlan">One day plan</string>
+    <string name="dayPlan">Daily plan</string>
     <string name="tasks">Add your task</string>
     <string name="weather">Current weather:</string>
-
-
 
     <string name="current_date"> Current date</string>
     <string name="add_event">Add event</string>
@@ -164,5 +162,7 @@
     <string name="to_date">To date:</string>
     <string name="on_and_on">On and on</string>
     <string name="upcoming_occurance">Upcoming occurrence</string>
+    <string name="show_statistics">Show statistics</string>
+    <string name="your_average_effectiveness">Your average effectiveness:</string>
 
 </resources>

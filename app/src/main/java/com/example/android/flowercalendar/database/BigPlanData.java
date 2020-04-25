@@ -22,11 +22,15 @@ public class BigPlanData {
     @ColumnInfo(name = "isChecked")
     private int isChecked;
 
-    public BigPlanData(int aimTime, String aimIndex, String aimContents, int isChecked) {
+    @ColumnInfo(name = "startDate")
+    private String startDate;
+
+    public BigPlanData(int aimTime, String aimIndex, String aimContents, int isChecked, String startDate) {
         this.aimTime = aimTime;
         this.aimIndex = aimIndex;
         this.aimContents = aimContents;
         this.isChecked = isChecked;
+        this.startDate = startDate;
     }
 
 
@@ -69,5 +73,13 @@ public class BigPlanData {
 
     public void setIsChecked(int isChecked) {
         this.isChecked = isChecked;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
     }
 }
