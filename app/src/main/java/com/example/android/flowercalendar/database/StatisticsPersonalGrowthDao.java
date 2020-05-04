@@ -35,4 +35,7 @@ public interface StatisticsPersonalGrowthDao {
 
     @Query("SELECT * FROM statistics_personal_growth WHERE aim_time = :aimTime limit 1")
     StatisticsPersonalGrowth findfirstItem(int aimTime);
+
+    @Query("SELECT * FROM statistics_personal_growth WHERE aim_time = :aimTime ORDER BY dateOfAdding = :dateOfAdding DESC limit 1")
+    StatisticsPersonalGrowth findLastItem(int aimTime, String dateOfAdding);
 }

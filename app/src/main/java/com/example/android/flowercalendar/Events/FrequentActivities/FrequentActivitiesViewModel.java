@@ -19,7 +19,7 @@ public class FrequentActivitiesViewModel extends AndroidViewModel {
     public FrequentActivitiesViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.sortByOrder("");
+        eventsLiveData = eventsDao.sortByOrder("", 2);
     }
 
     public LiveData<List<Event>> getEventsList() {

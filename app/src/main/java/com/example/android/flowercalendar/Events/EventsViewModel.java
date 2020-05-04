@@ -16,18 +16,19 @@ import androidx.lifecycle.LiveData;
 
 public class EventsViewModel extends AndroidViewModel {
     private EventsDao eventsDao;
-    private LiveData<List<Event>> eventsLiveData;
+    private LiveData<List<Event>> eventsLiveDataToDoList;
     private LiveData<List<Event>> eventsLiveDataForAims;
+
 
     public EventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.sortByOrder(CalendarFragment.pickedDay);
-        eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()));
+        eventsLiveDataToDoList = eventsDao.sortByOrder(CalendarFragment.pickedDay, 1);
+        eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()), 1);
     }
 
     public LiveData<List<Event>> getEventsList() {
-        return eventsLiveData;
+        return eventsLiveDataToDoList;
     }
 
     public LiveData<List<Event>> getEventsListForAims() {

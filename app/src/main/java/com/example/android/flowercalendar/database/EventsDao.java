@@ -15,6 +15,12 @@ public interface EventsDao {
     @Query("SELECT * FROM event WHERE event_name = :eventName")
     Event findByEventName(String eventName);
 
+    @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
+    Event findBySchedule(String pickedDay, String schedule);
+
+    @Query("DELETE FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
+    void deleteBySchedule(String pickedDay, String schedule);
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Event event);
 
@@ -42,14 +48,14 @@ public interface EventsDao {
     @Query("DELETE FROM event WHERE (event_name = :event_name AND position = :position AND picked_day = :picked_day)")
     void deleteEvents(int position, String picked_day, String event_name);
 
-    @Query("SELECT * FROM event WHERE picked_day = :pickedDay ORDER BY position ASC")
-    LiveData<List<Event>> sortByOrder(String pickedDay);
+    @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind ORDER BY position ASC")
+    LiveData<List<Event>> sortByOrder(String pickedDay, int eventKind);
 
     @Query("DELETE FROM event WHERE picked_day = :pickedDay")
     void deleteByPickedDate(String pickedDay);
 
-    @Query("SELECT * FROM event WHERE picked_day = :pickedDay ORDER BY position ASC")
-    List<Event> sortByPickedDay(String pickedDay);
+    @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind ORDER BY position ASC")
+    List<Event> sortByPickedDay(String pickedDay, int eventKind);
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay")
     LiveData<List<Event>> findByEventDay(String pickedDay);

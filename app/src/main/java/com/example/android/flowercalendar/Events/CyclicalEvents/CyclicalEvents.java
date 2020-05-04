@@ -33,7 +33,6 @@ public class CyclicalEvents extends Fragment {
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
     private FloatingActionButton fab;
     private RelativeLayout empty_view;
-    public static int newId;
     private TableLayout headerTable;
     private EventsListAdapter eventsListAdapter;
 
@@ -112,7 +111,6 @@ public class CyclicalEvents extends Fragment {
             assert events != null;
             cyclicalEventsListAdapter.setEventsList(events);
             eventsListAdapter.setEventsList(events);
-            newId = events.size();
             if (events.isEmpty()) {
                 empty_view.setVisibility(View.VISIBLE);
                 headerTable.setVisibility(View.GONE);

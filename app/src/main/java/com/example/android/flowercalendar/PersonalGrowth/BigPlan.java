@@ -108,7 +108,7 @@ public class BigPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, "0");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 1, null, "0", null, 1);
 
         return rootView;
     }
@@ -144,8 +144,10 @@ public class BigPlan extends Fragment {
 
             int newId;
             if (aims != null) {
-                String firstItemDateString = aims.get(0).getStartDate();
-                firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+                if (!aims.isEmpty()) {
+                    String firstItemDateString = aims.get(0).getStartDate();
+                    firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+                }
                 newId = aims.size();
                 bigPlanViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
                     if (aimsList.size() != 0 && newId != 0) {
@@ -153,6 +155,8 @@ public class BigPlan extends Fragment {
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else if (aims.size() == 0) {
+                        progress = -1;
                     } else {
                         progress = 0;
                         determinateBar.setProgress(0);

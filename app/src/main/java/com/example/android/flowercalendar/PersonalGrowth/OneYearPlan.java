@@ -106,7 +106,7 @@ public class OneYearPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null, "0");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 2, null, "0", null,1);
         return rootView;
     }
 
@@ -145,6 +145,8 @@ public class OneYearPlan extends Fragment {
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else if (aims.size() == 0) {
+                        progress = -1;
                     } else {
                         progress = 0;
                         determinateBar.setProgress(0);

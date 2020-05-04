@@ -115,7 +115,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
         initDataEvents();
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), "-1");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), "-1", null, 1);
         return rootView;
     }
 
@@ -157,7 +157,14 @@ public class OneDayPlan extends Fragment {
         oneDayViewModel.getAimsList().observe(fragment, aims -> {
             adapter.setAimsList(aims);
             int newId;
+
             if (aims != null) {
+                if (!aims.isEmpty()) {
+                    String firstItemDateString = aims.get(0).getStartDate();
+                    firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+                }
+
+
                 newId = aims.size();
                 oneDayViewModel.getAimsListIsChecked().observe(fragment, aimsList -> {
                     if (aimsList.size() != 0 && newId != 0) {
@@ -165,6 +172,8 @@ public class OneDayPlan extends Fragment {
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else if (aims.size() == 0) {
+                        progress = -1;
                     } else {
                         progress = 0;
                         determinateBar.setProgress(0);
@@ -178,9 +187,6 @@ public class OneDayPlan extends Fragment {
                     int month = LocalDate.now().getMonthValue();
                     int year = LocalDate.now().getYear();
                     int dayOfMonth = appUtils.isTheTimeOut(aims, 4);
-
-                    String firstItemDateString = aims.get(0).getStartDate();
-                    firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
 
                     timeOutDate = LocalDate.of(year, month, dayOfMonth + 1);
                     long howManyHoursLeft = appUtils.howMuchTimeLeft(timeOutDate).toHours();

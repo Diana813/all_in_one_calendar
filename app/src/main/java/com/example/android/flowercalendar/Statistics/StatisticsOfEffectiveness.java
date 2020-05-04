@@ -25,9 +25,10 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_personal_growth);
 
-      /*  StatisticsPersonalGrowthDao statisticsPersonalGrowthDao = CalendarDatabase.getDatabase(getBaseContext()).statisticsPersonalGrowthDao();
+       /* StatisticsPersonalGrowthDao statisticsPersonalGrowthDao = CalendarDatabase.getDatabase(getBaseContext()).statisticsPersonalGrowthDao();
 
         statisticsPersonalGrowthDao.deleteAll();*/
+
 
         findViews();
         setSupportActionBar(toolbar);
@@ -53,6 +54,7 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
 
                 if (itemCount != 0) {
                     int x = 0;
+
                     for (int i = 0; i < itemCount; i++) {
                         x = x + fiveYearsList.get(i).getEffectiveness();
                     }

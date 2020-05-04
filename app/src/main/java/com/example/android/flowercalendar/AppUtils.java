@@ -105,24 +105,23 @@ public class AppUtils {
         }
     }
 
-    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, String frequency) {
+    public void setConfirmButton(ImageButton confirm, final BigPlanAdapter adapter, final TextView aim, final int i, String pickedDay, String frequency, String schedule, int eventKind) {
 
         confirm.setOnClickListener(v -> {
             saveDataPersonalGrowth(adapter, aim, i);
             adapter.deleteFromDatabase();
             adapter.setAimIndexInDB();
             if (pickedDay != null) {
-                saveDataEvents(aim, pickedDay, null, frequency);
-
+                saveDataEvents(aim, pickedDay, null, frequency, schedule, eventKind);
             }
             aim.setText("");
         });
 
     }
 
-    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final String pickedDay, final String newEvent, String frequency) {
+    public void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final String pickedDay, final String newEvent, String frequency, String schedule, int eventKind) {
         confirm.setOnClickListener(v -> {
-            saveDataEvents(textView, pickedDay, newEvent, frequency);
+            saveDataEvents(textView, pickedDay, newEvent, frequency, schedule, eventKind);
             adapter.deleteFromDatabase(null);
             adapter.setIndexInDB();
             textView.setText("");
@@ -143,7 +142,7 @@ public class AppUtils {
 
     }
 
-    public void saveDataEvents(TextView plan, String pickedDay, String newEvent, String frequency) {
+    public void saveDataEvents(TextView plan, String pickedDay, String newEvent, String frequency, String schedule, int eventKind) {
 
         String eventTextString;
         if (newEvent != null) {
@@ -162,7 +161,21 @@ public class AppUtils {
 
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        eventsDao.insert(new Event(index, eventTextString, null, null, 0, pickedDay, 1, frequency, "0"));
+        if (schedule != null) {
+            Event eventToUpdate = eventsDao.findBySchedule(pickedDay, schedule);
+
+            if (eventToUpdate != null) {
+                if (eventToUpdate.getSchedule().equals(schedule) &&
+                        !eventToUpdate.getEvent_name().equals(eventTextString)) {
+                    eventToUpdate.setEvent_name(eventTextString);
+                    eventsDao.update(eventToUpdate);
+                }
+
+            }
+        }
+
+
+        eventsDao.insert(new Event(index, eventTextString, schedule, null, 0, pickedDay, eventKind, frequency, "0"));
     }
 
 
@@ -330,8 +343,13 @@ public class AppUtils {
 
     public void addEffectivenesToDB(Context context, int i, LocalDate dateOfAddingFirstItem, int newEffectiveness) {
 
+        if (newEffectiveness == -1) {
+            return;
+        }
+
         StatisticsPersonalGrowthDao statisticsPersonalGrowthDao = CalendarDatabase.getDatabase(context).statisticsPersonalGrowthDao();
-        StatisticsPersonalGrowth currentStatistic = statisticsPersonalGrowthDao.findfirstItem(i);
+        StatisticsPersonalGrowth currentStatistic = statisticsPersonalGrowthDao.findLastItem(i, String.valueOf(dateOfAddingFirstItem));
+
 
         int year = 0;
         int month = 0;
@@ -357,11 +375,11 @@ public class AppUtils {
         } else if (i == 2) {
 
             if (currentStatistic != null) {
-                if (year + 1 >= LocalDate.now().getYear()) {
+                if (year == LocalDate.now().getYear()) {
                     currentStatistic.setEffectiveness(newEffectiveness);
                     statisticsPersonalGrowthDao.update(currentStatistic);
                 } else {
-                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
                 }
             } else {
                 statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
@@ -370,11 +388,11 @@ public class AppUtils {
         } else if (i == 3) {
 
             if (currentStatistic != null) {
-                if (month + 1 >= LocalDate.now().getMonthValue()) {
+                if (month == LocalDate.now().getMonthValue()) {
                     currentStatistic.setEffectiveness(newEffectiveness);
                     statisticsPersonalGrowthDao.update(currentStatistic);
                 } else {
-                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
                 }
             } else {
                 statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
@@ -382,11 +400,11 @@ public class AppUtils {
         } else if (i == 4) {
 
             if (currentStatistic != null) {
-                if (day + 1 >= LocalDate.now().getDayOfMonth()) {
+                if (day == LocalDate.now().getDayOfMonth()) {
                     currentStatistic.setEffectiveness(newEffectiveness);
                     statisticsPersonalGrowthDao.update(currentStatistic);
                 } else {
-                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(LocalDate.now())));
+                    statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
                 }
             } else {
                 statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));

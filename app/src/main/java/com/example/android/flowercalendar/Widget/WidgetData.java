@@ -77,7 +77,7 @@ public class WidgetData {
     static List<DataListWidget> widgetData(Context context) {
 
         LocalDate today = LocalDate.now();
-        int dayOfAMonth = today.getDayOfMonth();
+
         CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
 
         List<DataListWidget> widgetData = new ArrayList<>();
@@ -117,9 +117,9 @@ public class WidgetData {
                 }
 
 
-                widgetData.add(new DataListWidget((dayOfAMonth + i), shiftNumber, eventNumber, hasPeriod));
+                widgetData.add(new DataListWidget((today.plusDays(i).getDayOfMonth()), shiftNumber, eventNumber, hasPeriod));
             } else {
-                widgetData.add(new DataListWidget((dayOfAMonth + i), "", "", hasPeriod));
+                widgetData.add(new DataListWidget((today.plusDays(i).getDayOfMonth()), "", "", hasPeriod));
             }
         }
 

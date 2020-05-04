@@ -96,7 +96,7 @@ public class FrequentActivities extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
         initData(this, eventsListAdapter);
-        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, "", null, "0");
+        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, "", null, "0", null, 2);
         return rootView;
     }
 

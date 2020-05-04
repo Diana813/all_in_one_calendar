@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle">
+
+    <LinearLayout
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+        android:layout_margin="2dp"
+        android:baselineAligned="false">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <TextView
+                android:id="@+id/hour"
+                style="@style/textViewScheduleHours.item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorWhite"
+                tools:text="01:00" />
+
+            <ImageView
+                android:id="@+id/downArrow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="2dp"
+                android:background="#00000000"
+                android:src="@drawable/baseline_keyboard_arrow_down_black_18"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/event"
+            style="@style/textViewScheduleHours.item"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="3"
+            android:background="@color/colorWhite">
+
+            <EditText
+                android:id="@+id/editText"
+                style="@style/EditTextScheduleHours"
+                android:imeOptions="actionDone"
+                tools:ignore="Autofill,LabelFor"
+                tools:text="Cinema" />
+
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark" />
+</LinearLayout>

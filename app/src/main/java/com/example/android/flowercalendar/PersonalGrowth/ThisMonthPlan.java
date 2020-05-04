@@ -104,7 +104,7 @@ public class ThisMonthPlan extends Fragment {
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0");
+        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0", null,1);
 
         return rootView;
     }
@@ -143,6 +143,8 @@ public class ThisMonthPlan extends Fragment {
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText("Effectiveness: " + progress + "%");
+                    } else if (aims.size() == 0) {
+                        progress = -1;
                     } else {
                         progress = 0;
                         determinateBar.setProgress(0);

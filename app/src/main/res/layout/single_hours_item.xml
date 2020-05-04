@@ -2,25 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-    android:layout_margin="2dp"
-    android:background="@color/colorPrimary"
-    android:padding="1dp">
+   >
 
     <TextView
         android:id="@+id/hour"
-        style="@style/textViewScheduleHours"
+        style="@style/textViewScheduleHours.item"
+        android:textSize="18sp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="@color/colorWhite"
         tools:text="01:00" />
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:id="@+id/event"
-        style="@style/cardViewSingleHourItem">
+        style="@style/textViewScheduleHours.item"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_weight="3"
+        android:background="@color/colorWhite">
 
         <EditText
+            android:id="@+id/editText"
             style="@style/EditTextScheduleHours"
+            android:imeOptions="actionDone"
             tools:ignore="Autofill,LabelFor"
             tools:text="Cinema" />
 
-    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 </LinearLayout>

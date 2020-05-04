@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEventsListAdapter;
-import com.example.android.flowercalendar.Events.ExpandedDayView.EventsListHoursAdapter;
+import com.example.android.flowercalendar.Events.ExpandedDayView.ExpandableListHoursAdapter;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
-    private EventsListHoursAdapter testingListAdapter;
+    private ExpandableListHoursAdapter testingListAdapter;
     private ShiftsAdapter shiftsAdapter;
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
     private BigPlanAdapter bigPlanAdapter;
@@ -44,13 +44,13 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
     }
 
 
-    public GestureInteractionsRecyclerView(EventsListHoursAdapter adapter) {
+    /*public GestureInteractionsRecyclerView(ExpandableListHoursAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         testingListAdapter = adapter;
-        icon = ContextCompat.getDrawable(EventsListHoursAdapter.getContext(),
+        icon = ContextCompat.getDrawable(ExpandableListHoursAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
         background = new ColorDrawable(Color.parseColor("#BDBDBD"));
-    }
+    }*/
 
     GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
@@ -76,10 +76,10 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
         } else if (testingListAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {
             bigPlanAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        } else if (bigPlanAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {
+        } /*else if (bigPlanAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {
             testingListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        } else {
+        } */else {
             eventsListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
         }

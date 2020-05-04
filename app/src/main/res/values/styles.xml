@@ -244,11 +244,16 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">80dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginStart">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="textViewScheduleHours.item">
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="textViewShiftItemBottomLayout">
@@ -267,9 +272,9 @@
     <style name="EditTextScheduleHours">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:gravity">center</item>
-        <item name="android:inputType">text</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <!-- Style for an EditText field in the editor -->

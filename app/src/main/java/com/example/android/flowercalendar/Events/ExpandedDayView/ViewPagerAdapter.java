@@ -6,8 +6,6 @@ import com.example.android.flowercalendar.R;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
@@ -17,7 +15,7 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     ViewPagerAdapter(BackgroundActivityExpandedDayView backgroundActivityExpandedDayView) {
         super(backgroundActivityExpandedDayView);
-        layouts = new int[]{R.layout.testing_layout, R.layout.todo_list};
+        layouts = new int[]{R.layout.scheduled_events_layout, R.layout.todo_list};
     }
 
 
