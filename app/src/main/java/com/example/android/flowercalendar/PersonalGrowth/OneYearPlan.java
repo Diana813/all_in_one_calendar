@@ -102,7 +102,7 @@ public class OneYearPlan extends Fragment {
         timeOut = rootView.findViewById(R.id.timeOut);
 
         setHasOptionsMenu(true);
-        appUtils.displayImageFromDB(imageView);
+        //appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);

@@ -57,7 +57,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
     @NonNull
     @Override
     public CyclicalEventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.event_single_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.plans_item, parent, false);
         return new CyclicalEventsViewHolder(itemView);
     }
 

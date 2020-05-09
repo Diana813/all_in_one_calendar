@@ -6,7 +6,8 @@
     <ScrollView
         android:id="@+id/addEventToTheList"
         style="@style/BackgroundLayout"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        tools:ignore="InefficientWeight">
 
         <RelativeLayout
             android:id="@+id/mainLayout"

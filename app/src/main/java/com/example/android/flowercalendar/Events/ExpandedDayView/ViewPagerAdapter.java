@@ -15,14 +15,14 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
 
     ViewPagerAdapter(BackgroundActivityExpandedDayView backgroundActivityExpandedDayView) {
         super(backgroundActivityExpandedDayView);
-        layouts = new int[]{R.layout.scheduled_events_layout, R.layout.todo_list};
+        layouts = new int[]{R.layout.todo_list, R.layout.scheduled_events_layout};
     }
 
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        if (position == 0) {
+        if (position == 1) {
             DailyScheduleEvents fragment = new DailyScheduleEvents();
             fragment.setContent(layouts[position]);
             return fragment;

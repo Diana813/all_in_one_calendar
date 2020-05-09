@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.Events;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     @NonNull
     @Override
     public FrequentActivitiesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.event_single_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.plans_item, parent, false);
         return new FrequentActivitiesViewHolder(itemView);
     }
 

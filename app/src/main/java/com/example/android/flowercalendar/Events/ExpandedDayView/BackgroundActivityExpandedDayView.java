@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.example.android.flowercalendar.Calendar.AlarmReceiver;
+import com.example.android.flowercalendar.Calendar.AlarmUtils;
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
@@ -37,11 +38,11 @@ import static com.example.android.flowercalendar.database.CalendarDatabase.getDa
 public class BackgroundActivityExpandedDayView extends Fragment {
 
     private String pickedDay;
-    private CalendarFragment calendarFragment = new CalendarFragment();
     private String alarmHour;
     private String alarmMinutes;
     private boolean isAlarmOn;
     private String shiftNumber;
+    private AlarmUtils alarmUtils = new AlarmUtils();
 
     public BackgroundActivityExpandedDayView() {
         // Required empty public constructor
@@ -71,7 +72,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
         viewPager.setAdapter(adapter);
 
         // Connect the tab layout with the view pager.
-        String[] titles = new String[]{getString(R.string.dailySchedule), getString(R.string.ToDo)};
+        String[] titles = new String[]{getString(R.string.ToDo), getString(R.string.dailySchedule)};
 
         new TabLayoutMediator(tabs, viewPager,
                 (tab, position) -> tab.setText(titles[position])).attach();
@@ -115,7 +116,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
                     alarmClockSwitch1.setText("Alarm clock on: " + findAlarmTime());
 
                     if (alarmHour != null) {
-                        calendarFragment.setAlarmToPickedDay(alarmHour, alarmMinutes, pickedAlarmDate(), getContext());
+                        alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinutes, pickedAlarmDate(), getContext());
                     }
 
                     CalendarEventsDao calendarEventsDao = getDatabase(getContext()).calendarEventsDao();
@@ -128,7 +129,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
 
                 } else {
                     alarmClockSwitch1.setText(R.string.alarmClockOff);
-                    calendarFragment.deleteAlarmFromAPickedDay(pickedAlarmDate(), alarmHour, alarmMinutes, Objects.requireNonNull(getContext()));
+                    alarmUtils.deleteAlarmFromAPickedDay(pickedAlarmDate(), alarmHour, alarmMinutes, Objects.requireNonNull(getContext()));
                     CalendarEventsDao calendarEventsDao = getDatabase(getContext()).calendarEventsDao();
                     CalendarEvents shiftTofind = calendarEventsDao.findBypickedDate(pickedDay);
                     shiftTofind.setAlarmOn(false);

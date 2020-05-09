@@ -118,7 +118,8 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
             });
         }
 
-        holder.shiftName.setBackgroundColor(Color.parseColor("#ef6c00"));
+        holder.shiftName.setBackgroundColor(Color.parseColor("#33691E"));
+        holder.shiftName.setTextColor(Color.WHITE);
 
         //setshiftsColor(holder);
     }

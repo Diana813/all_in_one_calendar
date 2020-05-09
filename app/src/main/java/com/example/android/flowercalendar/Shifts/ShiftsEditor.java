@@ -15,11 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Calendar.AlarmUtils;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEvents;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -33,6 +38,7 @@ import static com.example.android.flowercalendar.Shifts.ShiftsFragment.newId;
 public class ShiftsEditor extends Fragment {
 
     private AppUtils appUtils = new AppUtils();
+    private AlarmUtils alarmUtils = new AlarmUtils();
     private Context context;
     private String shift_name_extra;
     private String shift_schedule_extra;
@@ -145,6 +151,30 @@ public class ShiftsEditor extends Fragment {
 
             Shift shiftToUpdate = shiftsDao.findByShiftName(shift_name_extra);
             if (shiftToUpdate != null) {
+                if (shiftToUpdate.getAlarm() != null && !shiftToUpdate.getAlarm().equals(newAlarm)) {
+                    CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+                    List<CalendarEvents> changedAlarmShiftsList = calendarEventsDao.findByShiftNumber(shiftToUpdate.getShift_name());
+
+                    String[] parts = shiftToUpdate.getAlarm().split(":");
+                    String alarmHour = parts[0];
+                    String alarmMinute = parts[1];
+
+                    String[] parts2 = newAlarm.split(":");
+                    String newAlarmHour = parts2[0];
+                    String newAlarmMinute = parts2[1];
+
+                    CalendarFragment calendarFragment = new CalendarFragment();
+
+                    if (changedAlarmShiftsList != null) {
+                        for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
+                            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context);
+
+                            alarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context);
+                        }
+                    }
+                }
+
+
                 if ((!shiftToUpdate.getShift_name().equals(newShiftName)) ||
                         (!shiftToUpdate.getSchedule().equals(newShiftStart)) ||
                         (!shiftToUpdate.getAlarm().equals(newAlarm)) ||

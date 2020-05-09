@@ -76,7 +76,13 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         year = headerDate.getYear();
         headerDateDayOfWeek = calendarFill.getDayOfWeek();
 
-        setCalendarColor(views);
+        //setCalendarColor(views);
+        setCalendarColor(R.drawable.weekend_frame,
+                Color.BLACK,
+                Color.parseColor("#000000"),
+                Color.BLACK,
+                R.drawable.frame_for_current_day_at_weekend,
+                R.drawable.frame_for_other_months_weekend);
 
         if (views.hasPeriod()) {
             periodImage.setImageResource(views.getmImageResourceId());
@@ -90,6 +96,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         eventNameTextView.setText(views.getmEventName());
         return gridItemView;
     }
+
 
     private void setCalendarColor(CalendarViews views) {
         if (views.getmColorSettings() == 1) {

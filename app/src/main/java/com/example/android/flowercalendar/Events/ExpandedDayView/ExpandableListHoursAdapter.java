@@ -18,9 +18,12 @@ import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.DoneOnEditorActionListener;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.database.ShiftsDao;
 
+import java.time.LocalTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -29,17 +32,20 @@ import static com.example.android.flowercalendar.Calendar.CalendarFragment.picke
 
 public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
 
+    @SuppressLint("StaticFieldLeak")
     private Context context;
     private List<String> expandableListTitle;
     private LinkedHashMap<String, List<String>> expandableListDetail;
     private AppUtils appUtils = new AppUtils();
     private DailyScheduleEvents dailyScheduleEvents = new DailyScheduleEvents();
-    public static String scheduleGroup;
-    public static String scheduleItem;
+    public static String schedule;
     private int index = -1;
-    private int indexListPosition = -1;
     private int indexExpandedListPosition = -1;
-
+    private String shiftSchedule = findShiftSchedule();
+    private int shiftLength = findShiftDuration();
+    private ImageView imageViewGroupList;
+    private TextView listTitleTextViewGroupList;
+    private EditText editTextGroupList;
 
     ExpandableListHoursAdapter(Context context, List<String> expandableListTitle,
                                LinkedHashMap<String, List<String>> expandableListDetail) {
@@ -47,6 +53,7 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
     }
+
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
@@ -59,11 +66,13 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         return expandedListPosition;
     }
 
-    @SuppressLint({"InflateParams", "ClickableViewAccessibility"})
+    @SuppressLint({"InflateParams"})
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
+
         final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -71,44 +80,13 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         }
 
         EditText editText = convertView.findViewById(R.id.editText);
-
-        editText.setOnEditorActionListener(new DoneOnEditorActionListener());
-        editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        editText.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-
-        editText.setOnTouchListener((v, event) -> {
-            indexListPosition = listPosition;
-            indexExpandedListPosition = expandedListPosition;
-            return false;
-        });
-
-        editText.setOnLongClickListener(v -> {
-            EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-            eventsDao.deleteBySchedule(pickedDay, expandedListText);
-            editText.setText("");
-            return false;
-        });
-
-
-
         TextView expandedListTextView = convertView
                 .findViewById(R.id.hour);
 
+        handleEditTextSingleItem(editText, listPosition, expandedListPosition, expandedListText);
+        addDataFromDB(expandedListText, editText);
+        addShift(convertView, expandedListText);
         expandedListTextView.setText(expandedListText);
-
-        if (indexListPosition != -1 && indexExpandedListPosition != -1) {
-            scheduleItem = (String) getChild(indexListPosition, indexExpandedListPosition);
-        }
-
-        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        Event event = eventsDao.findBySchedule(pickedDay, expandedListText);
-        if (event != null) {
-            if (event.getSchedule().equals(expandedListText)) {
-                editText.setText(event.getEvent_name());
-            }
-        } else {
-            editText.setText("");
-        }
 
         return convertView;
     }
@@ -134,10 +112,11 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         return listPosition;
     }
 
-    @SuppressLint({"InflateParams", "ClickableViewAccessibility"})
+    @SuppressLint({"InflateParams"})
     @Override
     public View getGroupView(int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
+
         final String listTitle = (String) getGroup(listPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
@@ -145,11 +124,99 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
             convertView = Objects.requireNonNull(layoutInflater).inflate(R.layout.single_hours_group, null);
         }
 
+        findViewsGroupList(convertView);
 
-        ImageView imageView = convertView.findViewById(R.id.downArrow);
-        TextView listTitleTextView = convertView
+        editTextGroupListHandler(editTextGroupList, listPosition, listTitle);
+        listTitleTextViewGroupList.setText(listTitle);
+        showDownArrow(imageViewGroupList, listPosition);
+        addDataFromDB(listTitle, editTextGroupList);
+        addShift(convertView, listTitle);
+
+        return convertView;
+    }
+
+
+    private void addShift(View convertView, String listTitle) {
+
+        ImageView work = convertView.findViewById(R.id.work);
+
+        if (shiftSchedule != null && !shiftSchedule.equals("") && shiftLength != -1) {
+            String[] parts = shiftSchedule.split(":");
+            int shiftStartHour = Integer.parseInt(parts[0]);
+            int shiftStartMinutes = Integer.parseInt(parts[1]);
+
+            LocalTime shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
+
+            String[] currentHourParts = listTitle.split(":");
+            int currentHour = Integer.parseInt(currentHourParts[0]);
+            int currentMinutes = Integer.parseInt(currentHourParts[1]);
+
+            LocalTime currentTime = LocalTime.of(currentHour, currentMinutes);
+
+
+            if (shiftStartTime.equals(currentTime) || shiftStartTime.plusHours(shiftLength).equals(currentTime) || (shiftStartTime.isBefore(currentTime) && shiftStartTime.plusHours(shiftLength).isAfter(currentTime))) {
+                work.setVisibility(View.VISIBLE);
+            } else {
+                work.setVisibility(View.GONE);
+
+            }
+        }
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+
+    @Override
+    public boolean isChildSelectable(int listPosition, int expandedListPosition) {
+        return true;
+    }
+
+    private void findViewsGroupList(View convertView) {
+
+        imageViewGroupList = convertView.findViewById(R.id.downArrow);
+        listTitleTextViewGroupList = convertView
                 .findViewById(R.id.hour);
-        EditText editText = convertView.findViewById(R.id.editText);
+        editTextGroupList = convertView.findViewById(R.id.editText);
+
+    }
+
+
+    private String findShiftSchedule() {
+
+        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+
+        String schedule = null;
+        if (calendarEventsDao.findBypickedDate(pickedDay) != null) {
+            String todaysShift = calendarEventsDao.findBypickedDate(pickedDay).getShiftNumber();
+            if (todaysShift != null && !todaysShift.equals("")) {
+                ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
+                schedule = shiftsDao.findByShiftName(todaysShift).getSchedule();
+            }
+        }
+        return schedule;
+
+    }
+
+
+    private int findShiftDuration() {
+
+        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+        int duration = -1;
+        if (calendarEventsDao.findBypickedDate(pickedDay) != null) {
+            String todaysShift = calendarEventsDao.findBypickedDate(pickedDay).getShiftNumber();
+            ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
+            if (todaysShift != null && !todaysShift.equals("")) {
+                duration = shiftsDao.findByShiftName(todaysShift).getShift_length();
+            }
+        }
+        return duration;
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void editTextGroupListHandler(EditText editText, int listPosition, String listTitle) {
 
         editText.setOnEditorActionListener(new DoneOnEditorActionListener());
         editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
@@ -159,6 +226,9 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         editText.setOnTouchListener((v, event) -> {
             editText.setFocusableInTouchMode(true);
             index = listPosition;
+            if (index != -1) {
+                schedule = (String) getGroup(index);
+            }
             return false;
         });
         editText.addTextChangedListener(new TextWatcher() {
@@ -183,39 +253,54 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
             editText.setText("");
             return false;
         });
+    }
 
-        listTitleTextView.setTypeface(null, Typeface.BOLD);
-        listTitleTextView.setText(listTitle);
+    private void showDownArrow(ImageView imageView, int listPosition) {
+
         if (getChildrenCount(listPosition) > 0) {
             imageView.setVisibility(View.VISIBLE);
         } else {
             imageView.setVisibility(View.GONE);
         }
+    }
 
-        if (index != -1) {
-            scheduleGroup = (String) getGroup(index);
-        }
+    private void addDataFromDB(String listTitle, EditText editText) {
+
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
         Event event = eventsDao.findBySchedule(pickedDay, listTitle);
         if (event != null) {
             if (event.getSchedule().equals(listTitle)) {
                 editText.setText(event.getEvent_name());
+            } else {
+                editText.setText("");
             }
         } else {
             editText.setText("");
         }
-
-        return convertView;
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleEditTextSingleItem(EditText editText, int listPosition, int expandedListPosition, String expandedListText) {
 
-    @Override
-    public boolean isChildSelectable(int listPosition, int expandedListPosition) {
-        return true;
+        editText.setOnEditorActionListener(new DoneOnEditorActionListener());
+        editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+        editText.setOnTouchListener((v, event) -> {
+            index = listPosition;
+            indexExpandedListPosition = expandedListPosition;
+            if (index != -1 && indexExpandedListPosition != -1) {
+                schedule = (String) getChild(index, indexExpandedListPosition);
+            }
+            return false;
+        });
+
+        editText.setOnLongClickListener(v -> {
+            EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+            eventsDao.deleteBySchedule(pickedDay, expandedListText);
+            editText.setText("");
+            return false;
+        });
     }
 
 }

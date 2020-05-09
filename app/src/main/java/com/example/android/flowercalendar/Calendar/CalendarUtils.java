@@ -25,7 +25,7 @@ class CalendarUtils {
 
     private CalendarFragment calendarFragment;
 
-    void setBackgroundDrawing(LocalDate date, LinearLayout layout) {
+   /* void setBackgroundDrawing(LocalDate date, LinearLayout layout) {
 
         Month currentMonth = date.getMonth();
 
@@ -43,7 +43,7 @@ class CalendarUtils {
             layout.setBackgroundResource(R.mipmap.klonjesien);
         }
 
-    }
+    }*/
 
     //Animacja obrotu kalendarza
     void flipAnimation(CardView calendarCardView) {
@@ -67,25 +67,18 @@ class CalendarUtils {
         calendarFragment = new CalendarFragment();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(R.string.delete_all_dialog_message);
-        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                calendarFragment.deleteAllShifts(date);
-                calendarFragment.fillTheCalendar(context, textView, layout, gridView);
-            }
+        builder.setPositiveButton(R.string.delete, (dialog, id) -> {
+            calendarFragment.deleteAllShifts(date);
+            calendarFragment.fillTheCalendar(context, textView, layout, gridView);
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
+        builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+            if (dialog != null) {
+                dialog.dismiss();
             }
         });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
-
-
 }

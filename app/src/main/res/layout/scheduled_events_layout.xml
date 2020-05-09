@@ -4,11 +4,12 @@
     style="@style/BackgroundLayout"
     tools:context=".Events.ExpandedDayView.ToDoList">
 
-    <ExpandableListView
-        android:id="@+id/expandableListView"
-        style="@style/recyclerViewTasksListStyle"
-        android:dividerHeight="0dp"
-        android:groupIndicator="@null" />
+       <ExpandableListView
+           android:id="@+id/expandableListView"
+           style="@style/recyclerViewTasksListStyle"
+           android:layout_height="match_parent"
+           android:dividerHeight="0dp"
+           android:groupIndicator="@null" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

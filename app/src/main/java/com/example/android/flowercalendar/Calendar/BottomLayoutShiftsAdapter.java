@@ -59,21 +59,23 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
         holder.shift.setText(shift.getShift_name());
 
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                shiftMarked = position;
-                notifyDataSetChanged();
-            }
+        holder.itemView.setOnClickListener(v -> {
+            shiftMarked = position;
+            notifyDataSetChanged();
         });
         if (shiftMarked == position) {
             copyShiftNumber(shift);
             holder.shift.setBackgroundResource(R.drawable.frame2);
 
         } else {
-            setShiftsLayoutColor(holder);
+            //setShiftsLayoutColor(holder);
+            setDefaultColor(holder);
         }
 
+    }
+
+    private void setDefaultColor(ShiftsViewHolder holder){
+        holder.shift.setBackgroundColor(Color.parseColor("#7CB342"));
     }
 
     private void setShiftsLayoutColor(ShiftsViewHolder holder) {

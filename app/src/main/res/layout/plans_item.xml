@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
-    android:layout_height="wrap_content"
-    android:background="@color/semiTransparentColorWhite"
-   >
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/number"
-        style="@style/textViewStylePlansList"
-        android:layout_width="wrap_content"
-        tools:text="1." />
-
-    <TextView
-        android:id="@+id/contents"
-        style="@style/textViewStylePlansList"
-        android:layout_weight="5"
-        tools:text="Zostać Android developerem" />
-
-    <TextView
-        android:id="@+id/nextEventPlanned"
-        style="@style/textViewStylePlansList"
-        android:layout_weight="3"
-        android:gravity="center"
-        android:visibility="gone"
-        tools:text="Wtorek 20:00" />
-
-    <CheckBox
-        android:id="@+id/done"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center"/>
+        android:background="@color/semiTransparentColorWhite">
+
+        <TextView
+            android:id="@+id/number"
+            style="@style/textViewStylePlansList"
+            android:layout_width="wrap_content"
+            tools:text="1." />
+
+        <TextView
+            android:id="@+id/contents"
+            style="@style/textViewStylePlansList"
+            android:layout_weight="5"
+            tools:text="Zostać Android developerem" />
+
+        <TextView
+            android:id="@+id/nextEventPlanned"
+            style="@style/textViewStylePlansList"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:text="Wtorek 20:00" />
+
+        <CheckBox
+            android:id="@+id/done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary" />
 
 </LinearLayout>
-

@@ -110,7 +110,7 @@ public class OneDayPlan extends Fragment {
         question.setText(R.string.OneDayPlan);
         setHasOptionsMenu(true);
         pickedDay = LocalDate.now();
-        appUtils.displayImageFromDB(imageView);
+        //appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);

@@ -19,10 +19,8 @@ public class DoneOnEditorActionListener implements TextView.OnEditorActionListen
             v.setText(text);
 
             String schedule = null;
-            if (ExpandableListHoursAdapter.scheduleGroup != null) {
-                schedule = ExpandableListHoursAdapter.scheduleGroup;
-            } else if (ExpandableListHoursAdapter.scheduleItem != null) {
-                schedule = ExpandableListHoursAdapter.scheduleItem;
+            if (ExpandableListHoursAdapter.schedule != null) {
+                schedule = ExpandableListHoursAdapter.schedule;
             }
 
             appUtils.saveDataEvents(v, pickedDay, text, "-1", schedule, 3);

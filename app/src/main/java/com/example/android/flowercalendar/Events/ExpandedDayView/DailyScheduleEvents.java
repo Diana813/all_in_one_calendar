@@ -12,10 +12,13 @@ import android.widget.ExpandableListView;
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,7 +66,6 @@ public class DailyScheduleEvents extends Fragment {
     public void onPause() {
         super.onPause();
         setNumberOfEventsToPickedDate(pickedDay);
-        addListData();
     }
 
 
@@ -91,6 +93,28 @@ public class DailyScheduleEvents extends Fragment {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
         List<Event> scheduledEventsList = eventsDao.sortByPickedDay(pickedDay, 3);
+
+        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(getContext()).calendarEventsDao();
+        String currentShift = calendarEventsDao.findBypickedDate(pickedDay).getShiftNumber();
+
+        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(getContext()).shiftsDao();
+
+        String shiftSchedule = null;
+        String shiftFinish = null;
+        if (shiftsDao.findByShiftName(currentShift) != null) {
+            shiftSchedule = shiftsDao.findByShiftName(currentShift).getSchedule();
+            int shiftLenght = shiftsDao.findByShiftName(currentShift).getShift_length();
+
+            if (!shiftSchedule.equals("")) {
+                String[] split = shiftSchedule.split(":");
+                int shiftStartHour = Integer.parseInt(split[0]);
+                int shiftStartMinutes = Integer.parseInt(split[1]);
+
+                shiftFinish = String.valueOf(LocalTime.of(shiftStartHour, shiftStartMinutes).plusHours(shiftLenght));
+            }
+        }
+
+
         if (!scheduledEventsList.isEmpty()) {
             for (int i = 0; i < 24; i++) {
                 List<String> hour = new ArrayList<>();
@@ -98,11 +122,15 @@ public class DailyScheduleEvents extends Fragment {
 
                 for (Event event : scheduledEventsList) {
                     String addedHour = scheduledEventsList.get(scheduledEventsList.indexOf(event)).getSchedule();
-                    String[] parts = addedHour.split(":");
-                    if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(addedHour)) {
-                        hour.add(addedHour);
+                    if (addedHour != null) {
+                        String[] parts = addedHour.split(":");
+                        if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(addedHour)) {
+                            hour.add(addedHour);
+                        }
                     }
                 }
+
+
                 if (newHour != null) {
                     String[] parts = newHour.split(":");
                     if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(newHour)) {
@@ -114,6 +142,21 @@ public class DailyScheduleEvents extends Fragment {
             for (int i = 0; i < 24; i++) {
                 List<String> hour = new ArrayList<>();
                 expandableListDetail.put(((format("%02d", i) + ":00")), hour);
+
+                if (shiftSchedule != null && !shiftSchedule.equals("")) {
+                    String[] parts = shiftSchedule.split(":");
+                    if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(shiftSchedule)) {
+                        hour.add(shiftSchedule);
+                    }
+                }
+
+                if (shiftFinish != null) {
+                    String[] parts = shiftFinish.split(":");
+                    if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(shiftFinish)) {
+                        hour.add(shiftFinish);
+                    }
+                }
+
                 if (newHour != null) {
                     String[] parts = newHour.split(":");
                     if (format("%02d", i).equals(parts[0])) {
@@ -140,10 +183,19 @@ public class DailyScheduleEvents extends Fragment {
                     addListData();
                 }, 0, 0, true);
         timePickerDialog.show();
+        if (newHour != null) {
+            String[] parts = newHour.split(":");
+            String hour = parts[0];
+            expandableListView.setSelectionFromTop(Integer.parseInt(hour), 0);
+        }
+
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private void addListData() {
+
+        LocalTime now = LocalTime.now();
 
         LinkedHashMap<String, List<String>> expandableListDetail = getData();
         List<String> expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
@@ -153,6 +205,7 @@ public class DailyScheduleEvents extends Fragment {
 
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> true);
 
+        expandableListView.setSelectionFromTop(now.getHour(), 0);
     }
 
 
@@ -169,7 +222,6 @@ public class DailyScheduleEvents extends Fragment {
         }
         return pickedDay;
     }
-
 
 }
 

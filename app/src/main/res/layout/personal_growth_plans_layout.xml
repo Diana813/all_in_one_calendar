@@ -14,8 +14,7 @@
         android:id="@+id/timeOut"
         style="@style/textViewHeaders.small"
         android:layout_margin="10dp"
-        android:textColor="#000"
-        android:textStyle="bold" />
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/effectiveness"
@@ -23,7 +22,6 @@
         android:layout_below="@+id/timeOut"
         android:layout_margin="10dp"
         android:textColor="#000"
-        android:textStyle="bold"
         android:visibility="gone" />
 
     <ProgressBar
@@ -42,14 +40,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/determinateBar"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:background="@color/semiTransparentColorWhite"
         android:gravity="center"
         android:padding="15dp"
         android:textColor="#000"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        android:fontFamily="@font/comfortaa"
         tools:text="@string/fiveYearsPlan" />
 
 

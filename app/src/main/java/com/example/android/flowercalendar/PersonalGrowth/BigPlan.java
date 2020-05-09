@@ -97,14 +97,14 @@ public class BigPlan extends Fragment {
         ImageButton confirm = rootView.findViewById(R.id.confirm_button);
         TextView question = rootView.findViewById(R.id.title);
         question.setText(R.string.fiveYearsPlan);
-        ImageView imageView = rootView.findViewById(R.id.imageBackground);
+        //ImageView imageView = rootView.findViewById(R.id.imageBackground);
         determinateBar = rootView.findViewById(R.id.determinateBar);
         effectiveness = rootView.findViewById(R.id.effectiveness);
         timeOut = rootView.findViewById(R.id.timeOut);
 
 
         setHasOptionsMenu(true);
-        appUtils.displayImageFromDB(imageView);
+       // appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this);

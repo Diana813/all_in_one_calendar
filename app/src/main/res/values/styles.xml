@@ -38,7 +38,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
         <item name="android:textAppearance">?android:textAppearanceMedium</item>
         <item name="android:textColor">#fff</item>
         <item name="android:layout_gravity">center</item>
@@ -50,7 +50,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textSize">30sp</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:textColor">@color/grey</item>
     </style>
@@ -66,7 +66,7 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textColor">#2B3D4D</item>
@@ -87,7 +87,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">@font/comfortaa</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textAllCaps">true</item>
@@ -106,9 +106,9 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:textColor">#000</item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/comfortaa</item>
 
     </style>
 
@@ -118,6 +118,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">#222222</item>
         <item name="android:gravity">center_horizontal</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewHeaders">
@@ -126,6 +127,7 @@
         <item name="android:textColor">#000</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:textSize">22sp</item>
     </style>
 
@@ -154,13 +156,13 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewDateStyle.schedule">
         <item name="android:layout_alignParentEnd">true</item>
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
-        <item name="fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="forGirlsTextStyle">
@@ -169,6 +171,7 @@
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_gravity">center_horizontal</item>
+        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:layout_margin">6dp</item>
     </style>
 
@@ -193,15 +196,16 @@
         <item name="android:textSize">20sp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">#000</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewShift">
         <item name="android:layout_height">80dp</item>
         <item name="android:layout_width">60dp</item>
-        <item name="fontFamily">sans-serif-medium</item>
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
         <item name="android:textColor">#000</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewCalendarDayNumber">
@@ -210,7 +214,8 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">#000</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_margin">7dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewCalendarDayNumberWidget">
@@ -225,7 +230,7 @@
     <style name="textViewCalendarDayNumberWidget.textViewCalendarNumberOfEventsWidget">
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentStart">true</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_marginStart">3dp</item>
         <item name="android:textSize">16sp</item>
@@ -234,10 +239,10 @@
     <style name="textViewCalendarShiftNumber">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:gravity">center</item>
-        <item name="fontFamily">sans-serif</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewScheduleHours">
@@ -249,6 +254,7 @@
         <item name="android:layout_marginStart">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewScheduleHours.item">
@@ -260,7 +266,7 @@
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_margin">2dp</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:gravity">center</item>
@@ -274,7 +280,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/comfortaa</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <!-- Style for an EditText field in the editor -->
@@ -284,10 +291,11 @@
         <item name="android:layout_weight">3</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
         <item name="backgroundTint">@color/colorWhite</item>
         <item name="android:hint">@string/tasks</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="EditTextEventsOverview">
@@ -300,6 +308,7 @@
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="EditTextShiftEditorStyle">
@@ -310,6 +319,7 @@
         <item name="android:inputType">text</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="EditTextNumberStyle">
@@ -320,6 +330,7 @@
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_centerVertical">true</item>
+        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="confirmImageButtonStyle">
@@ -349,7 +360,7 @@
 
     <style name="Table" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/colorWhite</item>
-        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabSelectedTextColor">@color/colorWhite</item>
         <item name="tabTextAppearance">@style/TableTextAppearance</item>
         <item name="tabBackground">@color/colorPrimaryDark</item>
         <item name="android:layout_width">match_parent</item>
@@ -357,7 +368,7 @@
     </style>
 
     <style name="TableTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="tableLayoutShiftsEditorStyle">

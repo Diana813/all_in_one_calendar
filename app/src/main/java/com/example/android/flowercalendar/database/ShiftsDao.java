@@ -36,9 +36,6 @@ public interface ShiftsDao {
     @Query("SELECT * FROM shift WHERE id = :id")
     Shift findByShiftId(int id);
 
-    @Query("DELETE FROM shift WHERE shift_name = 'abrakadabra'")
-    void deleteRemovedShifts();
-
     @Query("SELECT * FROM shift ORDER BY position ASC")
     LiveData<List<Shift>> sortByOrder();
 }

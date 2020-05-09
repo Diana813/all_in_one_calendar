@@ -99,6 +99,7 @@ public class CalendarFragment extends Fragment {
     private RecyclerView shifts_recycler_view;
     private String alarmHour;
     private String alarmMinute;
+    private AlarmUtils alarmUtils;
 
 
     @Override
@@ -106,6 +107,7 @@ public class CalendarFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
+        alarmUtils = new AlarmUtils();
     }
 
     @Override
@@ -232,7 +234,7 @@ public class CalendarFragment extends Fragment {
         displayEmptyEvents();
         displayHeaderDate(date);
         displayCalendarWithData();
-        calendarUtils.setBackgroundDrawing(headerDate, backgroundDrawing);
+        //calendarUtils.setBackgroundDrawing(headerDate, backgroundDrawing);
         gridView.setAdapter(calendarAdapter);
 
     }
@@ -284,7 +286,6 @@ public class CalendarFragment extends Fragment {
             }
             calendarFill = calendarFill.plusDays(1);
         }
-
     }
 
 
@@ -461,7 +462,7 @@ public class CalendarFragment extends Fragment {
         Shift shift = shiftsDao.findByShiftName(newShiftNumber);
         getAlarmTime(shift);
         if (alarmHour != null) {
-            setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context);
+            alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context);
 
         }
     }
@@ -473,12 +474,14 @@ public class CalendarFragment extends Fragment {
         CalendarEvents shiftToUpdate = calendarEventsDao.findBypickedDate(pickedDay);
 
         if (shiftToUpdate != null) {
+            updateAlarmIfShiftIsChanged(shiftToUpdate);
 
             if (shiftToUpdate.getShiftNumber() != null) {
                 if (!shiftToUpdate.getShiftNumber().equals(newShiftNumber)) {
                     shiftToUpdate.setShiftNumber(newShiftNumber);
                     shiftToUpdate.setAlarmOn(true);
                     calendarEventsDao.update(shiftToUpdate);
+
 
                 }
             } else {
@@ -492,66 +495,39 @@ public class CalendarFragment extends Fragment {
     }
 
 
+    private void updateAlarmIfShiftIsChanged(CalendarEvents shiftToUpdate) {
+
+        if (shiftToUpdate.getShiftNumber() != null && !shiftToUpdate.getShiftNumber().equals(newShiftNumber)) {
+            ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
+            Shift shift = shiftsDao.findByShiftName(shiftToUpdate.getShiftNumber());
+            if (shift != null) {
+                getAlarmTime(shift);
+                alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context);
+            }
+
+
+            Shift newShift = shiftsDao.findByShiftName(newShiftNumber);
+            if (newShift != null) {
+                //alarmUtils.getAlarmTime(newShift, alarmHour, alarmMinute);
+                getAlarmTime(newShift);
+                alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context);
+            }
+
+
+        }
+    }
+
+
     private void getAlarmTime(Shift shift) {
-        String alarm = shift.getAlarm();
-        if (!alarm.equals("")) {
-            String[] split = alarm.split(":");
-            alarmHour = split[0];
-            alarmMinute = split[1];
-        }
-    }
-
-
-    private long uniqueRequestCodeForEachAlarm(LocalDate pickedDate, String alarmHour, String alarmMinute) {
-
-        int day = pickedDate.getDayOfMonth();
-        int month = pickedDate.getMonthValue();
-        int year = pickedDate.getYear();
-
-        String findId;
-        if (alarmHour != null) {
-            findId = day + "" + month + "" + year + "" + alarmHour + "" + alarmMinute;
-        } else {
-            findId = day + "" + month + "" + year;
+        if (shift != null) {
+            String alarm = shift.getAlarm();
+            if (!alarm.equals("")) {
+                String[] split = alarm.split(":");
+                alarmHour = split[0];
+                alarmMinute = split[1];
+            }
         }
 
-        return Long.parseLong(findId);
-    }
-
-
-    public void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate, Context context) {
-
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, (int) uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes), intent, 0);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        assert alarmManager != null;
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate),
-                pendingIntent);
-
-
-    }
-
-
-    public void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context) {
-
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, (int) uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute), intent,
-                0);
-
-        assert alarmManager != null;
-        alarmManager.cancel(pendingIntent);
-
-    }
-
-
-    private long pickedDateToMilis(String hour, String minutes, LocalDate pickedDate) {
-
-        LocalDateTime ldt = LocalDateTime.of(pickedDate.getYear(), pickedDate.getMonthValue(), pickedDate.getDayOfMonth(), Integer.parseInt(hour), Integer.parseInt(minutes), 0);
-        ZonedDateTime zdt = ldt.atZone(ZoneId.systemDefault());
-        return zdt.toInstant().toEpochMilli();
     }
 
 
@@ -596,7 +572,6 @@ public class CalendarFragment extends Fragment {
             TextView shiftNumber1 = childView.findViewById(R.id.shiftNumber);
             shiftNumber1.setText("");
             pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
-            deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context);
 
             pickedDay = String.valueOf(pickedDate);
 
@@ -604,6 +579,12 @@ public class CalendarFragment extends Fragment {
             CalendarEvents shiftToDelete = calendarEventsDao.findBypickedDate(pickedDay);
             if (shiftToDelete != null) {
                 calendarEventsDao.deleteBypickedDate(pickedDay);
+                ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
+                Shift shift = shiftsDao.findByShiftName(shiftToDelete.getShiftNumber());
+                getAlarmTime(shift);
+                if (alarmHour != null) {
+                    alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context);
+                }
             }
 
             return true;
@@ -694,7 +675,6 @@ public class CalendarFragment extends Fragment {
 
             public void onSwipeBottom() {
             }
-
         });
     }
 

@@ -100,11 +100,11 @@ public class ThisMonthPlan extends Fragment {
 
 
         setHasOptionsMenu(true);
-        appUtils.displayImageFromDB(imageView);
+        //appUtils.displayImageFromDB(imageView);
         appUtils.setRecyclerViewPersonalGrowth(recyclerView, adapter, context);
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
-        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0", null,1);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0", null, 1);
 
         return rootView;
     }

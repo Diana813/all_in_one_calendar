@@ -7,12 +7,13 @@
         android:id="@+id/listTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-thin"
+        android:fontFamily="@font/comfortaa"
         android:paddingLeft="40dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="17sp"
+        android:textStyle="bold"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="@string/espandedListViewTitles" />
 </FrameLayout>

@@ -9,7 +9,7 @@
         style="@style/textViewHeaders"
         android:layout_weight="0.2"
         android:gravity="center"
-        android:textColor="#000"
+        android:textColor="@color/colorPrimaryDark"
         android:padding="15dp"
         android:text="@string/lifePurpose" />
 

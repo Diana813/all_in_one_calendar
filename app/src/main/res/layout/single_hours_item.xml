@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-   >
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
 
     <TextView
         android:id="@+id/hour"
         style="@style/textViewScheduleHours.item"
-        android:textSize="18sp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@color/colorWhite"
+        android:textSize="18sp"
         tools:text="01:00" />
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/event"
-        style="@style/textViewScheduleHours.item"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
         android:layout_weight="3"
@@ -24,10 +23,23 @@
         <EditText
             android:id="@+id/editText"
             style="@style/EditTextScheduleHours"
+            android:fontFamily="@font/comfortaa"
             android:imeOptions="actionDone"
             tools:ignore="Autofill,LabelFor"
             tools:text="Cinema" />
 
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/work"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@color/colorWhite"
+            android:src="@mipmap/money"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>
