@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.Calendar.AlarmUtils;
+import com.example.android.flowercalendar.Alarm.AlarmUtils;
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;

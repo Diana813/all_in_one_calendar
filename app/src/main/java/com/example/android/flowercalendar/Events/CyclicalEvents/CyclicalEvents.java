@@ -11,12 +11,16 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -35,6 +39,7 @@ public class CyclicalEvents extends Fragment {
     private RelativeLayout empty_view;
     private TableLayout headerTable;
     private EventsListAdapter eventsListAdapter;
+
 
     public CyclicalEvents() {
         // Required empty public constructor
@@ -57,6 +62,7 @@ public class CyclicalEvents extends Fragment {
     public void onPause() {
         super.onPause();
         cyclicalEventsListAdapter.deleteFromDatabase();
+        eventsListAdapter.setIndexInDB();
 
     }
 

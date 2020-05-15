@@ -1,23 +1,15 @@
-package com.example.android.flowercalendar.Calendar;
+package com.example.android.flowercalendar.Alarm;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
-
-import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.Widget.WidgetData;
-
-import java.time.LocalDate;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.example.android.flowercalendar.Calendar.AlarmClock.ACTION_DISMISS;
-import static com.example.android.flowercalendar.Widget.CalendarWidgetProvider.getView;
+import static com.example.android.flowercalendar.Alarm.AlarmClock.ACTION_DISMISS;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

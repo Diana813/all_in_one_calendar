@@ -1,19 +1,13 @@
 package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import com.example.android.flowercalendar.Calendar.AlarmReceiver;
-import com.example.android.flowercalendar.Calendar.AlarmUtils;
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.Alarm.AlarmUtils;
 import com.example.android.flowercalendar.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarEvents;
@@ -24,7 +18,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -32,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import static android.app.PendingIntent.*;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class BackgroundActivityExpandedDayView extends Fragment {

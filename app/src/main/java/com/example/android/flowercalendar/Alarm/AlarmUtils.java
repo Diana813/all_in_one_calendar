@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Calendar;
+package com.example.android.flowercalendar.Alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -22,7 +22,7 @@ public class AlarmUtils {
         if (alarmHour != null) {
             findId = day + "" + month + "" + year + "" + alarmHour + "" + alarmMinute;
         } else {
-            findId = day + "" + month + "" + year;
+            findId = "-52";
         }
 
         return Long.parseLong(findId);
@@ -30,20 +30,27 @@ public class AlarmUtils {
 
     public void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate, Context context) {
 
+        if (uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes) == -52) {
+            return;
+        }
+
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, (int) uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes), intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         assert alarmManager != null;
-        if (uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes) != -1) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate),
-                    pendingIntent);
-        }
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate),
+                pendingIntent);
 
     }
 
 
     public void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context) {
+
+        if (uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute) == -52) {
+            return;
+        }
+
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);

@@ -13,7 +13,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetData {
+class WidgetData {
+
 
     private static List<PeriodData> widgetPeriodData(Context context) {
 
@@ -29,10 +30,12 @@ public class WidgetData {
 
             int cycleLength = periodData.getCycleLength();
             int periodLenght = periodData.getPeriodLength();
+            LocalDate periodFinish = periodStart.plusDays(periodLenght);
+
 
             for (int i = 0; i < 1000; i++) {
 
-                if (periodStart.plusDays(cycleLength * i).isEqual(today) || (periodStart.plusDays(cycleLength * i).isAfter(today) && periodStart.plusDays(cycleLength * i).isBefore(today.plusDays(7)))) {
+                if (periodStart.plusDays(cycleLength * i).isEqual(today) || (periodStart.plusDays(cycleLength * i).isAfter(today) && periodStart.plusDays(cycleLength * i).isBefore(today.plusDays(7))) || periodFinish.isEqual(today) || (periodFinish.isAfter(today) && periodFinish.isBefore(today.plusDays(7)))) {
                     widgetPeriodData.add(new PeriodData(String.valueOf(periodStart.plusDays(cycleLength * i)), periodLenght, cycleLength));
                 } else {
                     break;

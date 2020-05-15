@@ -94,6 +94,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         dayNumberTextView.setText(String.valueOf(views.getmDayNumber()));
         shiftNumberTextView.setText(String.valueOf(views.getmShiftNumber()));
         eventNameTextView.setText(views.getmEventName());
+
         return gridItemView;
     }
 

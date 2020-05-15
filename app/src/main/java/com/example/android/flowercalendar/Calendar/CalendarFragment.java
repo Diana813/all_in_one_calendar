@@ -1,8 +1,6 @@
 package com.example.android.flowercalendar.Calendar;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -20,10 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Alarm.AlarmUtils;
+import com.example.android.flowercalendar.Events.CyclicalEvents.DisplayCyclicalEventsInTheCalendar;
 import com.example.android.flowercalendar.Events.ExpandedDayView.BackgroundActivityExpandedDayView;
 import com.example.android.flowercalendar.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Colors;
@@ -36,10 +37,7 @@ import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +59,8 @@ public class CalendarFragment extends Fragment {
     private static final int DAYS_COUNT = 42;
     private ImageView previousButton;
     private ImageView nextButton;
+    private ImageView prevYearButton;
+    private ImageView nextYearButton;
     private TextView date;
     private int cycleLenght;
     private int periodLenght;
@@ -84,7 +84,7 @@ public class CalendarFragment extends Fragment {
     private String shiftNumber;
     private ColorsDao colorsDao;
     private Colors colorToUpdate;
-    private static String event;
+    private String event;
     private ArrayList<CalendarViews> calendarViewsArrayList;
     public static String pickedDay;
     private LocalDate pickedDate;
@@ -100,6 +100,8 @@ public class CalendarFragment extends Fragment {
     private String alarmHour;
     private String alarmMinute;
     private AlarmUtils alarmUtils;
+    private DisplayCyclicalEventsInTheCalendar displayCyclicalEventsInTheCalendar;
+    public static ArrayList<String> listOfCyclicalEvents;
 
 
     @Override
@@ -108,12 +110,12 @@ public class CalendarFragment extends Fragment {
         this.context = context;
         shiftsAdapter = new BottomLayoutShiftsAdapter(context, context);
         alarmUtils = new AlarmUtils();
+        displayCyclicalEventsInTheCalendar = new DisplayCyclicalEventsInTheCalendar();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
 
     }
 
@@ -156,6 +158,8 @@ public class CalendarFragment extends Fragment {
         date = rootView.findViewById(R.id.date);
         previousButton = rootView.findViewById(R.id.calendar_prev_button);
         nextButton = rootView.findViewById(R.id.calendar_next_button);
+        prevYearButton = rootView.findViewById(R.id.calendar_prev_year_button);
+        nextYearButton = rootView.findViewById(R.id.calendar_next_year_button);
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
     }
 
@@ -230,9 +234,11 @@ public class CalendarFragment extends Fragment {
     void fillTheCalendar(Context context, TextView date, LinearLayout backgroundDrawing, GridView gridView) {
 
         calendarViewsArrayList = new ArrayList<>();
+        listOfCyclicalEvents = new ArrayList<>();
         CalendarAdapter calendarAdapter = new CalendarAdapter(context, calendarViewsArrayList);
         displayEmptyEvents();
         displayHeaderDate(date);
+        setDisplayCyclicalEventsInTheCalendar();
         displayCalendarWithData();
         //calendarUtils.setBackgroundDrawing(headerDate, backgroundDrawing);
         gridView.setAdapter(calendarAdapter);
@@ -267,15 +273,16 @@ public class CalendarFragment extends Fragment {
 
     private void displayCalendarWithData() {
 
-        calendarFill = setDateAtFirstDayOfAMonth();
+        calendarFill = setDateAtFirstDayOfAMonth(calendarFill);
         lastMondayOfCurrentMonth = lastMondayOfCurrentMonth(calendarFill);
         displayPeriodEveryMonth();
-        calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar();
+        calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar(calendarFill);
         //Wypełniam kalendarz
         while (calendarViewsArrayList.size() < DAYS_COUNT) {
 
             dayOfMonth = calendarFill.getDayOfMonth();
             displayEventsAndShiftsIfEmpty();
+            event = numberOfEvents(event);
 
             if (periodStartDate != null) {
                 displayCalendarWithPeriodData();
@@ -288,8 +295,28 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+    private String numberOfEvents(String event) {
 
-    private LocalDate setDateAtFirstDayOfAMonth() {
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+
+        if (!listOfCyclicalEvents.isEmpty()) {
+            for (String cyclicalEvent :
+                    listOfCyclicalEvents) {
+                String[] parts = cyclicalEvent.split(";");
+                Event cyclicalEventInDB = eventsDao.findByEventNameKinfAndPickedDay(parts[1], String.valueOf(calendarFill), 1);
+                if (parts[0].equals(String.valueOf(calendarFill)) && cyclicalEventInDB == null) {
+                    if (event.equals("")) {
+                        event = "0";
+                    }
+                    event = String.valueOf(Integer.parseInt(event) + 1);
+                }
+            }
+        }
+        return event;
+    }
+
+
+    private LocalDate setDateAtFirstDayOfAMonth(LocalDate calendarFill) {
 
         int year = calendarFill.getYear();
         Month month = calendarFill.getMonth();
@@ -315,7 +342,7 @@ public class CalendarFragment extends Fragment {
         //Żeby dane na temat okresu wyświetlały się kiedy rozpocznie się następny miesiąc
         if (periodStartDate != null) {
             for (int i = 0; i < 1000; i++) {
-                calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar();
+                calendarFill = findWhatDateIsInTheFirstCellOfTheCalendar(calendarFill);
                 if (periodFinishDate.isBefore(calendarFill)) {
                     periodStartDate = periodStartDate.plusDays(cycleLenght);
                     periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
@@ -328,7 +355,7 @@ public class CalendarFragment extends Fragment {
     }
 
 
-    private LocalDate findWhatDateIsInTheFirstCellOfTheCalendar() {
+    private LocalDate findWhatDateIsInTheFirstCellOfTheCalendar(LocalDate calendarFill) {
 
         //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
         //poprzez sprawdzenie odpowiadającego mu numeru dnia tygodnia. Odejmuję jeden, bo
@@ -392,8 +419,7 @@ public class CalendarFragment extends Fragment {
             }
         } else {
 
-            calendarViewsArrayList.add(new CalendarViews(setCalendarColor(), calendarFill, headerDate,
-                    dayOfMonth, shiftNumber, event));
+            calendarViewsArrayList.add(new CalendarViews(setCalendarColor(), calendarFill, headerDate, dayOfMonth, shiftNumber, event));
 
         }
 
@@ -546,7 +572,7 @@ public class CalendarFragment extends Fragment {
     public void saveEventsNumberToPickedDate(String pickedDay) {
 
         EventsDao eventsDao = getDatabase(context).eventsDao();
-        List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay);
+        List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay, 1, 3);
         int numberOfEvents = listOfEvents.size();
 
         CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
@@ -596,17 +622,29 @@ public class CalendarFragment extends Fragment {
         previousButton.setOnClickListener(v -> setPreviousMonthView());
     }
 
+    private void setPreviousYearButtonClickEvent() {
+        prevYearButton.setOnClickListener(v -> setPreviousYearView());
+    }
+
+    private void setPreviousYearView() {
+        calendarUtils.flipAnimation(calendarCardView);
+        //Odejmowanie miesiąca
+        calendarFill = headerDate.minusYears(1);
+        displayPreviousPeriod();
+        fillTheCalendar(context, date, backgroundDrawing, gridView);
+    }
+
 
     private void setPreviousMonthView() {
         calendarUtils.flipAnimation(calendarCardView);
         //Odejmowanie miesiąca
         calendarFill = headerDate.minusMonths(1);
-        displayPrewiousMonthPeriod();
+        displayPreviousPeriod();
         fillTheCalendar(context, date, backgroundDrawing, gridView);
     }
 
 
-    private LocalDate previousMonthPeriodStartDate() {
+    private LocalDate previousPeriodStartDate() {
 
         int year = calendarFill.getYear();
         int day = calendarFill.getDayOfMonth();
@@ -639,6 +677,16 @@ public class CalendarFragment extends Fragment {
         nextButton.setOnClickListener(v -> setNextMonthView());
     }
 
+    private void setNextYearButtonClickEvent() {
+        nextYearButton.setOnClickListener(v -> setNextYearView());
+    }
+
+    private void setNextYearView() {
+        calendarUtils.flipAnimation(calendarCardView);
+        calendarFill = headerDate.plusYears(1);
+        fillTheCalendar(context, date, backgroundDrawing, gridView);
+    }
+
 
     private void setNextMonthView() {
         calendarUtils.flipAnimation(calendarCardView);
@@ -647,10 +695,10 @@ public class CalendarFragment extends Fragment {
     }
 
 
-    private void displayPrewiousMonthPeriod() {
+    private void displayPreviousPeriod() {
         if (periodStartDate != null) {
 
-            periodStartDate = previousMonthPeriodStartDate();
+            periodStartDate = previousPeriodStartDate();
             periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
 
         }
@@ -700,6 +748,8 @@ public class CalendarFragment extends Fragment {
             fillTheCalendar(context, date, backgroundDrawing, gridView);
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
+            setPreviousYearButtonClickEvent();
+            setNextYearButtonClickEvent();
 
         } else {
 
@@ -708,6 +758,8 @@ public class CalendarFragment extends Fragment {
             fillTheCalendar(context, date, backgroundDrawing, gridView);
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
+            setPreviousYearButtonClickEvent();
+            setNextYearButtonClickEvent();
         }
     }
 
@@ -741,7 +793,7 @@ public class CalendarFragment extends Fragment {
         calendarEventsDao.deleteAllShifts(String.valueOf(date.getMonth().getValue()));
         calendarFill = date;
         if (periodStartDate != null) {
-            periodStartDate = previousMonthPeriodStartDate();
+            periodStartDate = previousPeriodStartDate();
             periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
         }
     }
@@ -760,5 +812,32 @@ public class CalendarFragment extends Fragment {
         }
         return colorSettings;
     }
+
+    private void setDisplayCyclicalEventsInTheCalendar() {
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+        List<Event> cyclicalEvents = eventsDao.findByKind(0);
+
+        LocalDate currentDate = headerDate;
+        LocalDate firstDayOfTheMonth = setDateAtFirstDayOfAMonth(currentDate);
+        LocalDate firstCellOfTheCalendar = findWhatDateIsInTheFirstCellOfTheCalendar(firstDayOfTheMonth);
+        LocalDate lastDayOfCalendarView = firstCellOfTheCalendar.plusDays(41);
+
+        for (Event event : cyclicalEvents) {
+            String[] parts = event.getFrequency().split("-");
+            String pickedDaysOfWeek = parts[3];
+
+            String term;
+            if (event.getTerm() == null) {
+                term = "on_and_on";
+            } else {
+                term = event.getTerm();
+            }
+
+            displayCyclicalEventsInTheCalendar.displayCyclicalEvents(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, term, event.getEvent_name(), firstCellOfTheCalendar, lastDayOfCalendarView);
+
+        }
+    }
+
 }
 

@@ -23,10 +23,9 @@ import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActi
 import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -107,6 +106,7 @@ public class ToDoList extends Fragment {
         pickedDay = findWhatDateItIs();
         initData();
         addFreqActivList();
+        displayCyclicalEvents();
         appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, pickedDay, null, "0", null, 1);
         return rootView;
     }
@@ -189,7 +189,7 @@ public class ToDoList extends Fragment {
 
     private void removeData() {
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        eventsDao.deleteByPickedDate(pickedDay);
+        eventsDao.deleteByPickedDate(pickedDay, 1);
     }
 
     private void setFreqActButton() {
@@ -224,4 +224,23 @@ public class ToDoList extends Fragment {
     public static int positionOfTheNextEventOnTheList() {
         return eventsListSize + 1;
     }
+
+    private void displayCyclicalEvents() {
+
+        if (!CalendarFragment.listOfCyclicalEvents.isEmpty()) {
+
+            for (String cyclicalEvent : CalendarFragment.listOfCyclicalEvents) {
+                String[] parts = cyclicalEvent.split(";");
+
+                if (parts[0].equals(pickedDay)) {
+                    EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+                    Event event = eventsDao.findByEventKindAndName(parts[1], 0);
+                    appUtils.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
+
+                }
+            }
+        }
+
+    }
+
 }

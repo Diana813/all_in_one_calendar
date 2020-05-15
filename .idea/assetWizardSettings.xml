@@ -51,7 +51,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="83" />
+                                                <entry key="scalingPercent" value="96" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -61,7 +61,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="foregroundImage" value="C:\Users\diana\AndroidStudioProjects\FlowerCalendar\app\src\main\res\mipmap-xxxhdpi\AIO_Calendar_Icon.png" />
+                                      <entry key="backgroundImage" value="C:\Users\diana\Downloads\background.svg" />
+                                      <entry key="foregroundImage" value="C:\Users\diana\Downloads\ic_launcher_foreground.svg" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -117,6 +118,11 @@
                 </map>
               </option>
             </PersistentState>
+          </value>
+        </entry>
+        <entry key="vectorWizard">
+          <value>
+            <PersistentState />
           </value>
         </entry>
       </map>

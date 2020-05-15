@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="108px" height="108px" viewBox="0 0 108 108" version="1.1"
+    xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>ic_launcher_foreground</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="27.5377653%" cy="27.4856189%" fx="27.5377653%" fy="27.4856189%"
+            r="65.878193%" id="radialGradient-1">
+            <stop stop-color="#FFFFFF" stop-opacity="0.1" offset="0%" />
+            <stop stop-color="#FFFFFF" stop-opacity="0" offset="100%" />
+        </radialGradient>
+        <filter x="-34.0%" y="-32.0%" width="168.1%" height="164.0%" filterUnits="objectBoundingBox"
+            id="filter-2">
+            <feOffset dx="2" dy="4" in="SourceAlpha" result="shadowOffsetOuter1" />
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1" />
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix"
+                in="shadowBlurOuter1" result="shadowMatrixOuter1" />
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="adaptive-icon">
+            <g id="foreground">
+                <g>
+                    <rect id="finish" fill="url(#radialGradient-1)" x="0" y="0" width="108"
+                        height="108" />
+                    <g id="Cal-Icon" filter="url(#filter-2)"
+                        transform="translate(31.000000, 27.000000)">
+                        <rect id="Lower-Part-of-Calendar" fill="#1D263B" x="-6.54813894e-15"
+                            y="13.8235294" width="47" height="35.9411765" />
+                        <g id="Small-Calendar-Grid" transform="translate(2.764706, 18.431373)"
+                            fill="#4CB963">
+                            <rect id="Rectangle" x="0" y="0" width="2.15319773"
+                                height="2.10816353" />
+                            <rect id="Rectangle-Copy-37" x="6.37346527" y="0" width="2.15319773"
+                                height="2.10816353" />
+                            <rect id="Rectangle-Copy-40" x="19.1203958" y="23.695758"
+                                width="2.15319773" height="2.10816353" />
+                            <rect id="Rectangle-Copy-39" x="25.4938611" y="23.695758"
+                                width="2.15319773" height="2.10816353" />
+                            <rect id="Rectangle-Copy-38" x="12.6608026" y="0" width="2.15319773"
+                                height="2.10816353" />
+                        </g>
+                        <g id="Clock" transform="translate(34.098039, 38.705882)">
+                            <circle id="Oval" stroke-opacity="0.85" stroke="#000000"
+                                fill-opacity="0.85" fill="#000000" cx="5.06862745" cy="5.06862745"
+                                r="4.56862745" />
+                            <circle id="Oval" fill="#FFFFFF" cx="5.06862745" cy="5.06862745"
+                                r="4.14705882" />
+                            <path
+                                d="M3.32882756,5.88685871 L4.61902364,5.88685871 C4.87350779,5.88685871 5.07980795,6.09315888 5.07980795,6.34764303 C5.07980795,6.60212718 4.87350779,6.80842734 4.61902364,6.80842734 L3.32882756,6.80842734 C3.07434341,6.80842734 2.86804325,6.60212718 2.86804325,6.34764303 C2.86804325,6.09315888 3.07434341,5.88685871 3.32882756,5.88685871 Z"
+                                id="Rectangle" fill-opacity="0.85" fill="#000000"
+                                transform="translate(3.973926, 6.347643) rotate(-45.000000) translate(-3.973926, -6.347643) " />
+                            <path
+                                d="M3.91666667,2.48823529 L6.12843137,2.48823529 C6.35746711,2.48823529 6.54313725,2.67390544 6.54313725,2.90294118 C6.54313725,3.13197691 6.35746711,3.31764706 6.12843137,3.31764706 L3.91666667,3.31764706 C3.68763093,3.31764706 3.50196078,3.13197691 3.50196078,2.90294118 C3.50196078,2.67390544 3.68763093,2.48823529 3.91666667,2.48823529 Z"
+                                id="Rectangle-Copy-29" fill-opacity="0.85" fill="#000000"
+                                transform="translate(5.022549, 2.902941) rotate(-90.000000) translate(-5.022549, -2.902941) " />
+                            <circle id="Oval" fill-opacity="0.85" fill="#000000" cx="5.06862745"
+                                cy="5.06862745" r="1" />
+                        </g>
+                        <g id="Big-Calendar-Grid" transform="translate(2.764706, 16.588235)">
+                            <rect id="Rectangle" fill="#C5E1A5" x="25.4009685" y="0"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy" fill="#C5E1A5" x="31.7512106" y="0"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-2" fill="#FFC107" x="38.1014527" y="0"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-5" fill="#C5E1A5" x="25.4009685" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-4" fill="#C5E1A5" x="31.7512106" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-3" fill="#C5E1A5" x="38.1014527" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-8" fill="#C5E1A5" x="6.35024212" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-9" fill="#C5E1A5" x="0" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-7" fill="#C5E1A5" x="12.7004842" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-6" fill="#C5E1A5" x="19.0507264" y="5.86452763"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-17" fill="#C5E1A5" x="25.4009685"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-16" fill="#C5E1A5" x="31.7512106"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-15" fill="#C5E1A5" x="38.1014527"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-14" fill="#C5E1A5" x="6.35024212"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-13" fill="#C5E1A5" x="0" y="11.7290553"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-12" fill="#C5E1A5" x="12.7004842"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-11" fill="#FFC107" x="19.0507264"
+                                y="11.7290553" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-24" fill="#C5E1A5" x="25.4009685"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-23" fill="#C5E1A5" x="31.7512106"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-22" fill="#C5E1A5" x="38.1014527"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-21" fill="#C5E1A5" x="6.35024212"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-20" fill="#FFC107" x="0" y="17.5935829"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-19" fill="#C5E1A5" x="12.7004842"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-27" fill="#C5E1A5" x="6.35024212"
+                                y="23.4581105" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-26" fill="#C5E1A5" x="0" y="23.4581105"
+                                width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-25" fill="#C5E1A5" x="12.7004842"
+                                y="23.4581105" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-18" fill="#C5E1A5" x="19.0507264"
+                                y="17.5935829" width="4.29070414" height="4.18894831" />
+                            <rect id="Rectangle-Copy-10" fill="#C5E1A5" x="19.0507264" y="0"
+                                width="4.29070414" height="4.18894831" />
+                        </g>
+                        <g id="Upper-Part-of-Calendar" transform="translate(-0.000000, 6.450980)">
+                            <rect id="Rectangle" fill="#5C6784" x="0" y="0" width="47"
+                                height="9.21568627" />
+                            <rect id="Rectangle" fill="#FFFFFF" x="2.48722628" y="2.97280202"
+                                width="42.1970803" height="3.07189542" />
+                        </g>
+                        <g id="Upper-Calendar-Spring" transform="translate(5.529412, 0.000000)"
+                            fill="#181F35">
+                            <rect id="Rectangle" x="0" y="0" width="2.06654783" height="9.21568627"
+                                rx="1.03327392" />
+                            <rect id="Rectangle-Copy-30" x="6.37185581" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-32" x="0" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-31" x="6.37185581" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-33" x="12.7437116" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-34" x="19.1155674" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-35" x="25.4874233" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                            <rect id="Rectangle-Copy-36" x="32.0314914" y="0" width="2.06654783"
+                                height="9.21568627" rx="1.03327392" />
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

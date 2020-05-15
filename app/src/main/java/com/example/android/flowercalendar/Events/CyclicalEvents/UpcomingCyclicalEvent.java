@@ -35,6 +35,7 @@ class UpcomingCyclicalEvent {
         } else {
 
             nextEvent = displayDateIfTheFrequencyIsYears(parts, pickedStartDate, term);
+
         }
 
         return nextEvent;
@@ -47,21 +48,21 @@ class UpcomingCyclicalEvent {
         int howManyTimesLoop = howManyTimesRepeatEvent(term);
         for (int i = 0; i < howManyTimesLoop; i++) {
 
-                if (pickedStartDate.plusDays(Integer.parseInt(howManyDays)).
-                        isBefore(LocalDate.now())) {
+            if (pickedStartDate.plusDays(Integer.parseInt(howManyDays)).
+                    isBefore(LocalDate.now())) {
 
-                    pickedStartDate = pickedStartDate.plusDays(Integer.parseInt(howManyDays));
+                pickedStartDate = pickedStartDate.plusDays(Integer.parseInt(howManyDays));
 
-                    LocalDate pickedFinishDate = pickedFinishDate(term);
-                    if (pickedFinishDate != null) {
-                        if (pickedStartDate.isAfter(pickedFinishDate) || pickedStartDate.isEqual(pickedFinishDate)) {
-                            pickedStartDate = null;
-                            break;
-                        }
-                    } else {
+                LocalDate pickedFinishDate = pickedFinishDate(term);
+                if (pickedFinishDate != null) {
+                    if (pickedStartDate.isAfter(pickedFinishDate) || pickedStartDate.isEqual(pickedFinishDate)) {
+                        pickedStartDate = null;
                         break;
                     }
+                } else {
+                    break;
                 }
+            }
         }
 
         if (pickedStartDate == null) {
@@ -133,7 +134,7 @@ class UpcomingCyclicalEvent {
     }
 
 
-    private LocalDate dateAccordingToChoosenDayOfTheWeek(LocalDate pickedStartDate, DayOfWeek dayOfWeek, String howManyWeeks) {
+    LocalDate dateAccordingToChoosenDayOfTheWeek(LocalDate pickedStartDate, DayOfWeek dayOfWeek, String howManyWeeks) {
 
         LocalDate startDayOfAWeek;
 
@@ -284,4 +285,5 @@ class UpcomingCyclicalEvent {
         }
         return pickedFinishDate;
     }
+
 }

@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
@@ -17,7 +19,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,9 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
     private String eventName;
     private ArrayList<String> eventNames = new ArrayList<>();
     private UpcomingCyclicalEvent upcomingCyclicalEvent = new UpcomingCyclicalEvent();
+    private AppUtils appUtils = new AppUtils();
+    private ArrayList<String> cyclicalEvents = new ArrayList<>();
+    private CalendarFragment calendarFragment = new CalendarFragment();
 
 
     CyclicalEventsListAdapter(Context context) {
@@ -89,6 +93,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
             LocalDate upcomingEvent = upcomingCyclicalEvent.displayNextEvent(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, term);
 
+
             LocalDate today = LocalDate.now();
 
             if (upcomingEvent == null) {
@@ -138,6 +143,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         }
     }
 
+
     private void showUndoSnackbar() {
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), "Event deleted",
@@ -177,5 +183,6 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
 
         }
     }
+
 }
 

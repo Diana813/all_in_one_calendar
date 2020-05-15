@@ -22,6 +22,7 @@ public class EventsViewModel extends AndroidViewModel {
 
     public EventsViewModel(@NonNull Application application) {
         super(application);
+
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
         eventsLiveDataToDoList = eventsDao.sortByOrder(CalendarFragment.pickedDay, 1);
         eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()), 1);
@@ -34,6 +35,7 @@ public class EventsViewModel extends AndroidViewModel {
     public LiveData<List<Event>> getEventsListForAims() {
         return eventsLiveDataForAims;
     }
+
 
     public void insert(Event... events) {
         eventsDao.insert(events);

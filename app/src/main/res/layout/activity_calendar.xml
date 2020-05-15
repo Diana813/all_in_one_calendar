@@ -19,15 +19,27 @@
 
 
             <ImageView
+                android:id="@+id/calendar_prev_year_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="60dp"
+                android:src="@drawable/baseline_arrow_left_black_48"
+                android:tint="@color/colorPrimaryDark"
+                tools:ignore="ContentDescription" />
+
+
+            <ImageView
                 android:id="@+id/calendar_prev_button"
                 style="@style/nextPrevButtons"
                 android:layout_marginEnd="60dp"
                 android:src="@drawable/baseline_keyboard_arrow_left_black_48"
+                android:tint="@color/colorPrimaryDark"
                 tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/date"
                 style="@style/textViewDateStyle"
+                android:gravity="center"
                 tools:text="23 lipca 2019" />
 
             <ImageView
@@ -35,7 +47,19 @@
                 style="@style/nextPrevButtons"
                 android:layout_marginStart="60dp"
                 android:src="@drawable/baseline_keyboard_arrow_right_black_48"
+                android:tint="@color/colorPrimaryDark"
                 tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/calendar_next_year_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="60dp"
+                android:src="@drawable/baseline_arrow_right_black_48"
+                android:tint="@color/colorPrimaryDark"
+                tools:ignore="ContentDescription" />
+
+
         </LinearLayout>
 
         <androidx.cardview.widget.CardView

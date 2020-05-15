@@ -81,8 +81,8 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
         views.setTextColor(R.id.numberOfEvents, Color.parseColor("#002171"));
 
         if (dataList.get(position).isHasPeriod()) {
-
             views.setImageViewResource(R.id.periodImage, R.mipmap.period_icon_v2);
+            views.setViewVisibility(R.id.periodImage, View.VISIBLE);
         } else {
             views.setViewVisibility(R.id.periodImage, View.GONE);
         }

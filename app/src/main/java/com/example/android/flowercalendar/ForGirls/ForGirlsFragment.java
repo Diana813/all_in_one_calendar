@@ -53,9 +53,7 @@ public class ForGirlsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         saveData();
-
         AppUtils.updateWidget(getContext());
-
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -174,8 +174,20 @@ public class AppUtils {
             }
         }
 
+        Event cyclicalEvent = eventsDao.findByEventNameKinfAndPickedDay(eventTextString, pickedDay, 1);
+        if (cyclicalEvent != null) {
+            if (!cyclicalEvent.getEvent_name().equals(eventTextString) ||
+                    !cyclicalEvent.getPickedDay().equals(pickedDay) || cyclicalEvent.getEventKind() != eventKind) {
+                cyclicalEvent.setEvent_name(eventTextString);
+                cyclicalEvent.setPickedDay(pickedDay);
+                cyclicalEvent.setEventKind(eventKind);
+                eventsDao.update(cyclicalEvent);
+            }
+        } else {
 
-        eventsDao.insert(new Event(index, eventTextString, schedule, null, 0, pickedDay, eventKind, frequency, "0"));
+            eventsDao.insert(new Event(index, eventTextString, schedule, null, 0, pickedDay, eventKind, frequency, "0"));
+        }
+
     }
 
 

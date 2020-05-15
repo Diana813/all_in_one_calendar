@@ -21,7 +21,8 @@
         <ImageButton
             android:id="@+id/confirm_button"
             style="@style/confirmImageButtonStyle"
-            android:background="@color/colorAccent"
+            android:layout_marginEnd="20dp"
+            android:background="@color/colorPrimary"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>

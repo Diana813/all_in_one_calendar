@@ -22,8 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
-import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
@@ -37,6 +35,8 @@ import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import static java.lang.String.format;
 
 
 public class CyclicalEventsDetails extends Fragment {
@@ -82,7 +82,6 @@ public class CyclicalEventsDetails extends Fragment {
     private EditText howOftenEditText;
     private String dateString;
     private String startDate;
-    private String startDateProperFormat;
     private EditText howLongEditText;
     private int term = -1;
     private RadioButton everyFourWeeks;
@@ -111,7 +110,6 @@ public class CyclicalEventsDetails extends Fragment {
     private CyclicalEventsFrequencySettingsWeeks settingsWeeks;
     private CyclicalEventsFrequencySettingsMonths settingsMonths;
     private CyclicalEventsFrequencySettingsYears settingsYears;
-    private CalendarFragment calendarFragment;
 
     private String newEventName;
     private String newAlarm;
@@ -151,13 +149,11 @@ public class CyclicalEventsDetails extends Fragment {
         settingsWeeks = new CyclicalEventsFrequencySettingsWeeks();
         settingsMonths = new CyclicalEventsFrequencySettingsMonths();
         settingsYears = new CyclicalEventsFrequencySettingsYears();
-        calendarFragment = new CalendarFragment();
 
     }
 
     public void onPause() {
         super.onPause();
-        calendarFragment.saveEventsNumberToPickedDate(startDateProperFormat);
     }
 
 
@@ -613,7 +609,7 @@ public class CyclicalEventsDetails extends Fragment {
 
 
     @SuppressLint("ShowToast")
-    void saveEvent(String startTime) {
+    private void saveEvent(String startTime) {
 
         collectDataFromUserInput();
 
@@ -674,8 +670,7 @@ public class CyclicalEventsDetails extends Fragment {
         if (startDate != null) {
 
             String[] parts = startDate.split("-");
-            startDateProperFormat = parts[0] + "-" + String.format("%02d", Integer.parseInt(parts[1])) + "-" + parts[2];
-            newEventStartDate = startDateProperFormat;
+            newEventStartDate = parts[0] + "-" + format("%02d", Integer.parseInt(parts[1])) + "-" + parts[2];
         } else {
             newEventStartDate = event_start_date_extra;
         }

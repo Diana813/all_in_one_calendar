@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.CalendarDatabase;
@@ -23,6 +24,8 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.example.android.flowercalendar.Calendar.CalendarFragment.pickedDay;
 
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.FrequentActivitiesViewHolder> {
 
@@ -74,7 +77,6 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
         holder.eventNumber.setText(event.getPosition() + ".");
         holder.eventContents.setText(event.getEvent_name());
-
     }
 
     public void deleteItem(int position) {
@@ -102,7 +104,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
                 int index = stringsAims.get(i).getAimNumber();
                 String content = stringsAims.get(i).getAimContent();
 
-                eventsDao.deleteEvents(index, date, content);
+                eventsDao.deleteEvents(index, date, content, 1);
 
             }
 
@@ -113,7 +115,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
                 int index = eventNumbers.get(i).getAimNumber();
                 String content = eventNumbers.get(i).getAimContent();
 
-                eventsDao.deleteEvents(index, aimTime, content);
+                eventsDao.deleteEvents(index, aimTime, content, 1);
 
             }
         }
@@ -188,5 +190,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
         }
     }
+
+
 }
 

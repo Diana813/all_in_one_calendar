@@ -62,12 +62,6 @@ public class DailyScheduleEvents extends Fragment {
 
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        setNumberOfEventsToPickedDate(pickedDay);
-    }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -95,8 +89,14 @@ public class DailyScheduleEvents extends Fragment {
         List<Event> scheduledEventsList = eventsDao.sortByPickedDay(pickedDay, 3);
 
         CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(getContext()).calendarEventsDao();
-        String currentShift = calendarEventsDao.findBypickedDate(pickedDay).getShiftNumber();
 
+        String currentShift;
+        if (calendarEventsDao.findBypickedDate(pickedDay) == null) {
+            currentShift = null;
+        } else {
+            currentShift = calendarEventsDao.findBypickedDate(pickedDay).getShiftNumber();
+
+        }
         ShiftsDao shiftsDao = CalendarDatabase.getDatabase(getContext()).shiftsDao();
 
         String shiftSchedule = null;
@@ -206,12 +206,6 @@ public class DailyScheduleEvents extends Fragment {
         expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> true);
 
         expandableListView.setSelectionFromTop(now.getHour(), 0);
-    }
-
-
-    private void setNumberOfEventsToPickedDate(String pickedDay) {
-        CalendarFragment calendarFragment = new CalendarFragment();
-        calendarFragment.saveEventsNumberToPickedDate(pickedDay);
     }
 
 

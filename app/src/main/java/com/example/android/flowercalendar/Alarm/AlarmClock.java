@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar.Calendar;
+package com.example.android.flowercalendar.Alarm;
 
 import android.app.PendingIntent;
 import android.app.Service;
