@@ -2,7 +2,6 @@ package com.example.android.flowercalendar.Shifts;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

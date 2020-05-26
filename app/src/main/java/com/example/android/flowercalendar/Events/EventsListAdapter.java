@@ -3,15 +3,13 @@ package com.example.android.flowercalendar.Events;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
+import com.example.android.flowercalendar.Events.CyclicalEvents.DeleteCyclicalEvent;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.StringsAims;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -25,8 +23,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.example.android.flowercalendar.Calendar.CalendarFragment.pickedDay;
-
 public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.FrequentActivitiesViewHolder> {
 
     @SuppressLint("StaticFieldLeak")
@@ -39,6 +35,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
     private ArrayList<StringsAims> eventNumbers = new ArrayList<>();
     private String eventContent;
     private String aimTime;
+    private DeleteCyclicalEvent deleteCyclicalEvent = new DeleteCyclicalEvent();
 
     public EventsListAdapter(Context context) {
         if (context != null) {
@@ -116,6 +113,7 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
                 String content = eventNumbers.get(i).getAimContent();
 
                 eventsDao.deleteEvents(index, aimTime, content, 1);
+                deleteCyclicalEvent.deleteCyclicalEventFromPickedDay(eventNumbers.get(i).getAimContent(), eventsDao);
 
             }
         }

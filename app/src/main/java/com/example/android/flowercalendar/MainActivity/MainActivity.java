@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.MainActivity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,6 +10,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
+import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Coworkers.CoworkerFragment;
 import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEvents;
@@ -17,6 +18,7 @@ import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActi
 import com.example.android.flowercalendar.ForGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity;
 import com.example.android.flowercalendar.PersonalGrowth.LifeAims;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.Shifts.ShiftsFragment;
 
 import java.util.ArrayList;

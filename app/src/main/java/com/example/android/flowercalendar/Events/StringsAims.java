@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Events;
 
 public class StringsAims {
 

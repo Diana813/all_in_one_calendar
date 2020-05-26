@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.flowercalendar.DepthPageTransformer;
+import com.example.android.flowercalendar.Gestures.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;

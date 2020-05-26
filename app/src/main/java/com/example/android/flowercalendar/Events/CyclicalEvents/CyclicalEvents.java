@@ -11,16 +11,11 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -80,6 +75,7 @@ public class CyclicalEvents extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_events, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
+
 
         fab = rootView.findViewById(R.id.fab);
         fab.setVisibility(View.VISIBLE);

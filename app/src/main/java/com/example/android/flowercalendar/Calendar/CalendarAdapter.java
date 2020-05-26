@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.Calendar;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.provider.SyncStateContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.MainActivity;
+import com.example.android.flowercalendar.MainActivity.MainActivity;
 import com.example.android.flowercalendar.R;
 
 import java.time.DayOfWeek;
@@ -20,8 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-
-import static android.provider.SyncStateContract.*;
 
 
 public class CalendarAdapter extends ArrayAdapter<CalendarViews> {

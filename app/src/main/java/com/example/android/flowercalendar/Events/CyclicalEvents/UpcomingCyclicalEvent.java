@@ -17,21 +17,25 @@ class UpcomingCyclicalEvent {
         LocalDate nextEvent;
         LocalDate pickedStartDate = AppUtils.refactorStringIntoDate(startDate);
 
+        //days
         if (frequency.substring(0, 6).equals("0-0-0-")) {
 
             nextEvent = displayDateIfTheFrequencyIsDays(parts, pickedStartDate, term);
 
+            //weeks
         } else if (!frequency.substring(0, 6).equals("0-0-0-")
                 && frequency.substring(0, 4).equals("0-0-")) {
 
             nextEvent = displayDateIfTheFrequencyIsWeeks(parts, pickedStartDate, pickedDaysOfWeek, term);
 
+            //months
         } else if (!frequency.substring(0, 6).equals("0-0-0-")
                 && !frequency.substring(0, 4).equals("0-0-")
                 && frequency.substring(0, 2).equals("0-")) {
 
             nextEvent = displayDateIfTheFrequencyIsMonths(parts, pickedStartDate, frequency, term);
 
+            //years
         } else {
 
             nextEvent = displayDateIfTheFrequencyIsYears(parts, pickedStartDate, term);
@@ -65,11 +69,7 @@ class UpcomingCyclicalEvent {
             }
         }
 
-        if (pickedStartDate == null) {
-            return null;
-        } else {
-            return pickedStartDate.plusDays(Integer.parseInt(howManyDays));
-        }
+        return pickedStartDate;
     }
 
 
@@ -94,34 +94,8 @@ class UpcomingCyclicalEvent {
             }
         }
 
-        ArrayList<LocalDate> listOfDates = new ArrayList<>();
 
-        if (pickedDaysOfWeek.contains("mon")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.MONDAY, howManyWeeks));
-        }
-
-        if (pickedDaysOfWeek.contains("tue")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.TUESDAY, howManyWeeks));
-        }
-
-        if (pickedDaysOfWeek.contains("wed")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.WEDNESDAY, howManyWeeks));
-        }
-
-        if (pickedDaysOfWeek.contains("thr")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.THURSDAY, howManyWeeks));
-        }
-
-        if (pickedDaysOfWeek.contains("fri")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.FRIDAY, howManyWeeks));
-        }
-
-        if (pickedDaysOfWeek.contains("sat")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.SATURDAY, howManyWeeks));
-        }
-        if (pickedDaysOfWeek.contains("sun")) {
-            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.SUNDAY, howManyWeeks));
-        }
+        ArrayList<LocalDate> listOfDates = listOfDates(pickedStartDate, pickedDaysOfWeek, howManyWeeks);
 
         if (!listOfDates.isEmpty()) {
             Collections.sort(listOfDates);
@@ -274,7 +248,7 @@ class UpcomingCyclicalEvent {
     }
 
 
-    private LocalDate pickedFinishDate(String term) {
+    LocalDate pickedFinishDate(String term) {
 
         LocalDate pickedFinishDate = null;
         AppUtils appUtils = new AppUtils();
@@ -284,6 +258,40 @@ class UpcomingCyclicalEvent {
             pickedFinishDate = LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         }
         return pickedFinishDate;
+    }
+
+
+    ArrayList<LocalDate> listOfDates(LocalDate pickedStartDate, String pickedDaysOfWeek, String howManyWeeks) {
+
+        ArrayList<LocalDate> listOfDates = new ArrayList<>();
+
+        if (pickedDaysOfWeek.contains("mon")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.MONDAY, howManyWeeks));
+        }
+
+        if (pickedDaysOfWeek.contains("tue")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.TUESDAY, howManyWeeks));
+        }
+
+        if (pickedDaysOfWeek.contains("wed")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.WEDNESDAY, howManyWeeks));
+        }
+
+        if (pickedDaysOfWeek.contains("thr")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.THURSDAY, howManyWeeks));
+        }
+
+        if (pickedDaysOfWeek.contains("fri")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.FRIDAY, howManyWeeks));
+        }
+
+        if (pickedDaysOfWeek.contains("sat")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.SATURDAY, howManyWeeks));
+        }
+        if (pickedDaysOfWeek.contains("sun")) {
+            listOfDates.add(dateAccordingToChoosenDayOfTheWeek(pickedStartDate, DayOfWeek.SUNDAY, howManyWeeks));
+        }
+        return listOfDates;
     }
 
 }

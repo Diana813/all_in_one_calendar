@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Gestures;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,6 +10,7 @@ import com.example.android.flowercalendar.Events.CyclicalEvents.CyclicalEventsLi
 import com.example.android.flowercalendar.Events.ExpandedDayView.ExpandableListHoursAdapter;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.Shifts.ShiftsAdapter;
 
 import androidx.annotation.NonNull;
@@ -50,7 +51,7 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
         background = new ColorDrawable(Color.parseColor("#ffffff"));
     }
 
-    GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
+    public GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         bigPlanAdapter = adapter;
         icon = ContextCompat.getDrawable(BigPlanAdapter.getContext(),

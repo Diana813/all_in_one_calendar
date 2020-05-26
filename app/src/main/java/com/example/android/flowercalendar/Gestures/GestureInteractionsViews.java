@@ -1,4 +1,4 @@
-package com.example.android.flowercalendar;
+package com.example.android.flowercalendar.Gestures;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

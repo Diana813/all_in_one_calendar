@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
 import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivities;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
 import com.example.android.flowercalendar.database.BigPlanDao;
@@ -241,7 +242,7 @@ public class AppUtils {
 
     }
 
-    static void updateWidgetAtMidnight(Context context) {
+    public static void updateWidgetAtMidnight(Context context) {
 
         Intent intent = new Intent(context, CalendarWidgetProvider.class);
         intent.setAction("UPDATE_WIDGET_AT_MIDNIGHT");
@@ -299,6 +300,7 @@ public class AppUtils {
         timePickerDialog.show();
     }
 
+
     public String displayDateInAProperFormat(Calendar calendar) {
         String myFormat = "dd MMMM, yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
@@ -318,6 +320,16 @@ public class AppUtils {
 
         formattedDate = parsedDate.format(f2);
         return formattedDate;
+    }
+
+
+    @SuppressLint("SimpleDateFormat")
+    public static LocalDate changeSimpleDateFormatToLocalDate(String dateStr) {
+
+        DateTimeFormatter f = new DateTimeFormatterBuilder().appendPattern("dd MMMM, yyyy")
+                .toFormatter();
+
+        return LocalDate.parse(dateStr, f);
     }
 
     public void deleteIfTimeIsOut(int i, Context context) {
@@ -422,6 +434,12 @@ public class AppUtils {
                 statisticsPersonalGrowthDao.insert(new StatisticsPersonalGrowth(i, newEffectiveness, String.valueOf(dateOfAddingFirstItem)));
             }
         }
+
+    }
+
+    public static boolean isEqualOrBetweenDates(LocalDate searchedDate, LocalDate firstDate, LocalDate secondDate) {
+
+        return (searchedDate.isAfter(firstDate) || searchedDate.isEqual(firstDate)) && (searchedDate.isBefore(secondDate) || searchedDate.isEqual(secondDate));
 
     }
 }

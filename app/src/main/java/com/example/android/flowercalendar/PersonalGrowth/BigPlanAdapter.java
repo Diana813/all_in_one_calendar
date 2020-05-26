@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.StringsAims;
+import com.example.android.flowercalendar.Events.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;

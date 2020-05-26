@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
@@ -37,9 +36,6 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
     private String eventName;
     private ArrayList<String> eventNames = new ArrayList<>();
     private UpcomingCyclicalEvent upcomingCyclicalEvent = new UpcomingCyclicalEvent();
-    private AppUtils appUtils = new AppUtils();
-    private ArrayList<String> cyclicalEvents = new ArrayList<>();
-    private CalendarFragment calendarFragment = new CalendarFragment();
 
 
     CyclicalEventsListAdapter(Context context) {
@@ -75,6 +71,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         }
 
         final Event event = eventsList.get(position);
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
 
         if (event != null) {
 
@@ -84,15 +81,29 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
             String[] parts = event.getFrequency().split("-");
             String pickedDaysOfWeek = parts[3];
 
-            String term;
             if (event.getTerm() == null) {
-                term = "on_and_on";
-            } else {
-                term = event.getTerm();
+                event.setTerm("on_and_on");
+                eventsDao.update(event);
             }
 
-            LocalDate upcomingEvent = upcomingCyclicalEvent.displayNextEvent(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, term);
+            LocalDate upcomingEvent = upcomingCyclicalEvent.displayNextEvent(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, event.getTerm());
 
+            Event previousEvent;
+            try {
+                previousEvent = eventsList.get(position - 1);
+            } catch (IndexOutOfBoundsException e) {
+                previousEvent = null;
+            }
+
+            holder.nextEventPlanned.setVisibility(View.VISIBLE);
+
+            if (previousEvent != null &&
+                    event.getEvent_name().equals(previousEvent.getEvent_name()) &&
+                    (upcomingEvent.isAfter(upcomingCyclicalEvent.displayNextEvent(previousEvent.getPickedDay(), previousEvent.getFrequency(), pickedDaysOfWeek, previousEvent.getTerm())))) {
+                holder.contents.setVisibility(View.GONE);
+                holder.nextEventPlanned.setVisibility(View.GONE);
+                holder.line.setVisibility(View.GONE);
+            }
 
             LocalDate today = LocalDate.now();
 
@@ -105,8 +116,6 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
             } else {
                 holder.nextEventPlanned.setText(upcomingEvent.format(DateTimeFormatter.ofPattern("dd MMMM, yyyy")));
             }
-
-            holder.nextEventPlanned.setVisibility(View.VISIBLE);
 
             holder.itemView.setOnClickListener(v -> {
                 Fragment editorFragment = CyclicalEventsDetails.newInstance(event.getId(), event.getEvent_name(), event.getPickedDay(), event.getFrequency(), event.getSchedule(), 0, event.getEvent_length(), event.getAlarm(), event.getTerm());
@@ -174,12 +183,14 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
         private TextView number;
         private TextView contents;
         private TextView nextEventPlanned;
+        private View line;
 
         CyclicalEventsViewHolder(View itemView) {
             super(itemView);
             number = itemView.findViewById(R.id.number);
             contents = itemView.findViewById(R.id.contents);
             nextEventPlanned = itemView.findViewById(R.id.nextEventPlanned);
+            line = itemView.findViewById(R.id.line);
 
         }
     }

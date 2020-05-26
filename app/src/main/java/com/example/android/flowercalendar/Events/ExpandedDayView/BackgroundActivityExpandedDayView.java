@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Switch;
 
 import com.example.android.flowercalendar.Alarm.AlarmUtils;
-import com.example.android.flowercalendar.DepthPageTransformer;
+import com.example.android.flowercalendar.Gestures.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;

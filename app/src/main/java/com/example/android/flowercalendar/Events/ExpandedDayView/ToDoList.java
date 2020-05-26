@@ -20,7 +20,7 @@ import com.example.android.flowercalendar.Calendar.CalendarFragment;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
 import com.example.android.flowercalendar.Events.EventsViewModel;
 import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivitiesViewModel;
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
@@ -235,7 +235,10 @@ public class ToDoList extends Fragment {
                 if (parts[0].equals(pickedDay)) {
                     EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
                     Event event = eventsDao.findByEventKindAndName(parts[1], 0);
-                    appUtils.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
+                    if (event != null) {
+                        appUtils.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
+
+                    }
 
                 }
             }

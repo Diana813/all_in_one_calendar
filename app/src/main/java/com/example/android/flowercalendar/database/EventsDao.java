@@ -27,6 +27,10 @@ public interface EventsDao {
     @Query("DELETE FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
     void deleteBySchedule(String pickedDay, String schedule);
 
+    @Query("DELETE FROM event WHERE event_name = :eventName AND term = :term")
+    void deleteByEventNameAndTerm(String eventName, String term);
+
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Event event);
 
@@ -48,10 +52,13 @@ public interface EventsDao {
     @Query("DELETE FROM event WHERE eventKind = :eventKind")
     void deleteByEventKind(int eventKind);
 
+    @Query("DELETE FROM event WHERE eventKind = :eventKind AND frequency LIKE :frequency ||'%'")
+    void deleteByfrequency(int eventKind, String frequency);
+
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND (eventKind = :eventKind OR eventKind = :eventKind2)")
     List<Event> findByEventDate(String pickedDay, int eventKind, int eventKind2);
 
-    @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC")
+    @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC, picked_day ASC")
     LiveData<List<Event>> findByEventKind(int eventKind);
 
     @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC")
@@ -69,6 +76,11 @@ public interface EventsDao {
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind ORDER BY position ASC")
     List<Event> sortByPickedDay(String pickedDay, int eventKind);
 
+    @Query("SELECT * FROM event WHERE event_name = :eventName AND eventKind = :eventKind")
+    List<Event> findAllByEventKindAndName(String eventName, int eventKind);
+
+    @Query("DELETE FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind AND event_name = :event_name")
+    void deleteByPickedDateKindAndName(String pickedDay, int eventKind, String event_name);
 }
 
 

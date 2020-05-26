@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.example.android.flowercalendar.Alarm.AlarmUtils;
 import com.example.android.flowercalendar.Events.CyclicalEvents.DisplayCyclicalEventsInTheCalendar;
 import com.example.android.flowercalendar.Events.ExpandedDayView.BackgroundActivityExpandedDayView;
-import com.example.android.flowercalendar.GestureInteractionsViews;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;

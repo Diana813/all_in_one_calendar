@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
 
 import java.util.Objects;
