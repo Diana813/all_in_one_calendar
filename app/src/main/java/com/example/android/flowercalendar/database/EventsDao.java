@@ -16,10 +16,14 @@ public interface EventsDao {
     Event findByEventName(String eventName);
 
     @Query("SELECT * FROM event WHERE event_name = :eventName AND picked_day = :pickedDay AND eventKind = :eventKind")
-    Event findByEventNameKinfAndPickedDay(String eventName, String pickedDay, int eventKind);
+    Event findByEventNameKindAndPickedDay(String eventName, String pickedDay, int eventKind);
 
     @Query("SELECT * FROM event WHERE event_name = :eventName AND eventKind = :eventKind")
     Event findByEventKindAndName(String eventName, int eventKind);
+
+    @Query("SELECT * FROM event WHERE event_name = :eventName")
+    List<Event> findByEventNameList(String eventName);
+
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
     Event findBySchedule(String pickedDay, String schedule);
@@ -67,8 +71,8 @@ public interface EventsDao {
     @Query("DELETE FROM event WHERE (event_name = :event_name AND position = :position AND picked_day = :picked_day AND eventKind = :eventKind)")
     void deleteEvents(int position, String picked_day, String event_name, int eventKind);
 
-    @Query("SELECT * FROM event WHERE (picked_day = :pickedDay AND eventKind = :eventKind) ORDER BY position ASC")
-    LiveData<List<Event>> sortByOrder(String pickedDay, int eventKind);
+    @Query("SELECT * FROM event WHERE (picked_day = :pickedDay AND eventKind = :eventKind AND schedule = :schedule) ORDER BY position ASC")
+    LiveData<List<Event>> sortByOrder(String pickedDay, int eventKind, String schedule);
 
     @Query("DELETE FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind")
     void deleteByPickedDate(String pickedDay, int eventKind);
@@ -85,3 +89,5 @@ public interface EventsDao {
 
 
 
+/*
+SELECT * FROM event WHERE (picked_day = "2020-05-28" AND eventKind = 1 AND schedule = "") ORDER BY position ASC*/

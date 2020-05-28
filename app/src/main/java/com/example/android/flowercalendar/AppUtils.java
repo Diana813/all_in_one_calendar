@@ -162,7 +162,7 @@ public class AppUtils {
 
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        if (schedule != null) {
+        if (!schedule.equals("")) {
             Event eventToUpdate = eventsDao.findBySchedule(pickedDay, schedule);
 
             if (eventToUpdate != null) {
@@ -175,7 +175,7 @@ public class AppUtils {
             }
         }
 
-        Event cyclicalEvent = eventsDao.findByEventNameKinfAndPickedDay(eventTextString, pickedDay, 1);
+        Event cyclicalEvent = eventsDao.findByEventNameKindAndPickedDay(eventTextString, pickedDay, 1);
         if (cyclicalEvent != null) {
             if (!cyclicalEvent.getEvent_name().equals(eventTextString) ||
                     !cyclicalEvent.getPickedDay().equals(pickedDay) || cyclicalEvent.getEventKind() != eventKind) {

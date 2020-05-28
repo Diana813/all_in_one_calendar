@@ -24,8 +24,8 @@ public class EventsViewModel extends AndroidViewModel {
         super(application);
 
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveDataToDoList = eventsDao.sortByOrder(CalendarFragment.pickedDay, 1);
-        eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()), 1);
+        eventsLiveDataToDoList = eventsDao.sortByOrder(CalendarFragment.pickedDay, 1, "");
+        eventsLiveDataForAims = eventsDao.sortByOrder(String.valueOf(LocalDate.now()), 1, "");
     }
 
     public LiveData<List<Event>> getEventsList() {

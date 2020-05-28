@@ -37,7 +37,7 @@ public class OneDayPlan extends Fragment {
     private int layout;
     private BigPlanAdapter adapter;
     private Context context;
-    private AppUtils appUtils = new AppUtils();
+    private AppUtils appUtils;
     private LocalDate pickedDay;
     private ToDoList toDoList;
     private RecyclerView recyclerView;
@@ -69,6 +69,7 @@ public class OneDayPlan extends Fragment {
         adapter = new BigPlanAdapter(context, context);
         toDoList = new ToDoList();
         eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext());
+        appUtils = new AppUtils();
 
     }
 
@@ -115,7 +116,7 @@ public class OneDayPlan extends Fragment {
         appUtils.setItemTouchHelperPersonalGrowth(adapter, recyclerView);
         initData(this, adapter);
         initDataEvents();
-        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), "-1", null, 1);
+        appUtils.setConfirmButton(confirm, adapter, aimText, 4, String.valueOf(pickedDay), "-1", "", 1);
         return rootView;
     }
 

@@ -175,6 +175,10 @@ public class CyclicalEventsDetails extends Fragment {
         if (event_name_extra == null) {
             event_name_extra = "-1";
         }
+
+        if (how_long_term_extra == null) {
+            how_long_term_extra = "on_and_on";
+        }
     }
 
     @Override
@@ -625,23 +629,45 @@ public class CyclicalEventsDetails extends Fragment {
 
         if (!event_name_extra.equals("-1")) {
 
-            Event eventToUpdate = eventsDao.findByEventName(event_name_extra);
-            if (eventToUpdate != null) {
-                if ((!eventToUpdate.getEvent_name().equals(newEventName)) ||
-                        (!eventToUpdate.getSchedule().equals(newWhatTime)) ||
-                        (!eventToUpdate.getAlarm().equals(newAlarm)) ||
-                        (!eventToUpdate.getPickedDay().equals(startTime)) ||
-                        (eventToUpdate.getEvent_length() != newHowLong) ||
-                        !eventToUpdate.getFrequency().equals(newHowOften) ||
-                        !eventToUpdate.getTerm().equals(howLongTerm)) {
-                    eventToUpdate.setEvent_name(newEventName);
-                    eventToUpdate.setSchedule(newWhatTime);
-                    eventToUpdate.setAlarm(newAlarm);
-                    eventToUpdate.setEvent_length(newHowLong);
-                    eventToUpdate.setPickedDay(startTime);
-                    eventToUpdate.setFrequency(newHowOften);
-                    eventToUpdate.setTerm(howLongTerm);
-                    eventsDao.update(eventToUpdate);
+            List<Event> eventsToUpdate = eventsDao.findByEventNameList(event_name_extra);
+            if (eventsToUpdate != null) {
+                for (Event eventToUpdate : eventsToUpdate) {
+
+                    if (((!eventToUpdate.getEvent_name().equals(newEventName)) ||
+                            (!eventToUpdate.getSchedule().equals(newWhatTime)) ||
+                            (!eventToUpdate.getAlarm().equals(newAlarm)))
+                            &&
+                            ((event_start_date_extra.equals(startTime)) &&
+                                    (event_length_minutes_extra.equals(String.valueOf(newHowLong))
+                                            &&
+                                            how_often_extra.equals(newHowOften) &&
+                                            how_long_term_extra.equals(howLongTerm)))) {
+                        eventToUpdate.setEvent_name(newEventName);
+                        eventToUpdate.setSchedule(newWhatTime);
+                        eventToUpdate.setAlarm(newAlarm);
+                        eventsDao.update(eventToUpdate);
+                    } else {
+
+                        if (eventsToUpdate.get(0) != eventToUpdate) {
+                            eventToUpdate.setEvent_name("To delete");
+                            eventsDao.update(eventToUpdate);
+                            eventsDao.deleteByEventName("To delete");
+                            return;
+                        }
+                        eventsToUpdate.get(0).setEvent_name(newEventName);
+                        eventsToUpdate.get(0).setSchedule(newWhatTime);
+                        eventsToUpdate.get(0).setAlarm(newAlarm);
+                        eventsToUpdate.get(0).setEvent_length(newHowLong);
+                        eventsToUpdate.get(0).setPickedDay(startTime);
+                        eventsToUpdate.get(0).setFrequency(newHowOften);
+                        if(howLongTerm.equals(how_long_term_extra)){
+                            eventsToUpdate.get(0).setTerm(eventsToUpdate.get(eventsToUpdate.size() - 1).getTerm());
+                        }else{
+                            eventsToUpdate.get(0).setTerm(howLongTerm);
+                        }
+                        eventsDao.update(eventsToUpdate.get(0));
+
+                    }
                 }
             }
         } else {
@@ -732,7 +758,7 @@ public class CyclicalEventsDetails extends Fragment {
     private void findTerm() {
 
         if (howLongTerm == null) {
-            howLongTerm = "on_and_on";
+            howLongTerm = how_long_term_extra;
         } else {
             if (term != -1) {
                 if (term == 0) {

@@ -303,7 +303,7 @@ public class CalendarFragment extends Fragment {
             for (String cyclicalEvent :
                     listOfCyclicalEvents) {
                 String[] parts = cyclicalEvent.split(";");
-                Event cyclicalEventInDB = eventsDao.findByEventNameKinfAndPickedDay(parts[1], String.valueOf(calendarFill), 1);
+                Event cyclicalEventInDB = eventsDao.findByEventNameKindAndPickedDay(parts[1], String.valueOf(calendarFill), 1);
                 if (parts[0].equals(String.valueOf(calendarFill)) && cyclicalEventInDB == null) {
                     if (event.equals("")) {
                         event = "0";

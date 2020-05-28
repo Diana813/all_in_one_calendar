@@ -2,7 +2,6 @@ package com.example.android.flowercalendar.Events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.android.flowercalendar.AppUtils;
 import com.example.android.flowercalendar.DoneOnEditorActionListener;
+import com.example.android.flowercalendar.Events.CyclicalEvents.DeleteCyclicalEvent;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
@@ -37,7 +37,6 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
     private List<String> expandableListTitle;
     private LinkedHashMap<String, List<String>> expandableListDetail;
     private AppUtils appUtils = new AppUtils();
-    private DailyScheduleEvents dailyScheduleEvents = new DailyScheduleEvents();
     public static String schedule;
     private int index = -1;
     private int indexExpandedListPosition = -1;
@@ -46,6 +45,7 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
     private ImageView imageViewGroupList;
     private TextView listTitleTextViewGroupList;
     private EditText editTextGroupList;
+    private DeleteCyclicalEvent deleteCyclicalEvent = new DeleteCyclicalEvent();
 
     ExpandableListHoursAdapter(Context context, List<String> expandableListTitle,
                                LinkedHashMap<String, List<String>> expandableListDetail) {
@@ -249,6 +249,10 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
 
         editText.setOnLongClickListener(v -> {
             EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+            Event cyclicalEvent = eventsDao.findBySchedule(pickedDay, listTitle);
+            if (cyclicalEvent != null) {
+                deleteCyclicalEvent.deleteCyclicalEventFromPickedDay(cyclicalEvent.getEvent_name(), eventsDao);
+            }
             eventsDao.deleteBySchedule(pickedDay, listTitle);
             editText.setText("");
             return false;
@@ -298,6 +302,7 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         editText.setOnLongClickListener(v -> {
             EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
             eventsDao.deleteBySchedule(pickedDay, expandedListText);
+            deleteCyclicalEvent.deleteCyclicalEventFromPickedDay(expandedListText, eventsDao);
             editText.setText("");
             return false;
         });

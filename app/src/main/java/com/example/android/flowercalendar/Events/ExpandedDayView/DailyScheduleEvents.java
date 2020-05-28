@@ -36,10 +36,16 @@ public class DailyScheduleEvents extends Fragment {
     private FloatingActionButton fab;
     private String newHour;
     private String pickedDay;
+    private CalendarFragment calendarFragment;
 
 
     public DailyScheduleEvents() {
         // Required empty public constructor
+    }
+
+    public void onPause() {
+        super.onPause();
+        calendarFragment.saveEventsNumberToPickedDate(pickedDay);
     }
 
     public static DailyScheduleEvents newInstance() {
@@ -53,6 +59,7 @@ public class DailyScheduleEvents extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        calendarFragment = new CalendarFragment();
     }
 
 
