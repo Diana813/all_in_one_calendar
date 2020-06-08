@@ -94,7 +94,7 @@
 
     </ScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -105,12 +105,12 @@
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-    <Button
+  <!--  <Button
         android:id="@+id/freqActButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/addFrequentActivities"
         android:layout_gravity="end"
         android:layout_margin="20dp"
-        android:text="@string/addFrequentActivities"
-        android:visibility="gone" />
+        android:visibility="gone" />-->
 </LinearLayout>

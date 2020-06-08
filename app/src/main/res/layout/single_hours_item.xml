@@ -20,24 +20,26 @@
         android:layout_weight="3"
         android:background="@color/colorWhite">
 
-        <EditText
+
+        <ImageView
+            android:id="@+id/work"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center"
+            android:background="@color/colorWhite"
+            android:src="@drawable/baseline_business_center_black_48"
+            android:tint="@color/colorPrimary"
+            android:visibility="gone"
+            tools:ignore="ContentDescription" />
+
+        <com.example.android.flowercalendar.CopyPasteEditText
             android:id="@+id/editText"
             style="@style/EditTextScheduleHours"
             android:fontFamily="@font/comfortaa"
             android:imeOptions="actionDone"
             tools:ignore="Autofill,LabelFor"
             tools:text="Cinema" />
-
-        <ImageView
-            android:id="@+id/work"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:background="@color/colorWhite"
-            android:src="@mipmap/money"
-            android:visibility="gone"
-            android:layout_alignParentEnd="true"
-            tools:ignore="ContentDescription" />
 
     </RelativeLayout>
 

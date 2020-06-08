@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-    tools:context=".Shifts.ShiftsEditor">
+    tools:context=".shifts.ShiftsEditor">
 
     <androidx.cardview.widget.CardView style="@style/cardViewShiftsEditor">
 

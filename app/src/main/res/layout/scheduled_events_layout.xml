@@ -1,20 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_expanded_day_view"
     style="@style/BackgroundLayout"
-    tools:context=".Events.ExpandedDayView.ToDoList">
-
-       <ExpandableListView
-           android:id="@+id/expandableListView"
-           style="@style/recyclerViewTasksListStyle"
-           android:layout_height="match_parent"
-           android:dividerHeight="0dp"
-           android:groupIndicator="@null" />
+    android:layout_gravity="end">
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        style="@style/recyclerViewTasksListStyle"
+        android:dividerHeight="0dp"
+        android:groupIndicator="@null" />
+
+    <!--<Button
         android:id="@+id/fab"
-        style="@style/floatingActionButtonStyle"
-        android:src="@drawable/baseline_control_point_black_36" />
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/frameLayout"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:layout_marginHorizontal="20dp"
+        android:text="@string/add_new_hour" />
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/freqActButton"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/fab"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:text="@string/addFrequentActivities" />
+-->
+
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nvView"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/colorWhite"
+        app:itemTextColor="@color/colorPrimary">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/widgetGridView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:dividerHeight="0dp"
+            android:groupIndicator="@null" />
+
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

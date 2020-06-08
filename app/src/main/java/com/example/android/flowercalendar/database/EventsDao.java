@@ -62,7 +62,7 @@ public interface EventsDao {
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND (eventKind = :eventKind OR eventKind = :eventKind2)")
     List<Event> findByEventDate(String pickedDay, int eventKind, int eventKind2);
 
-    @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC, picked_day ASC")
+    @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC, date(picked_day) ASC")
     LiveData<List<Event>> findByEventKind(int eventKind);
 
     @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC")

@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout">
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:tint="@color/colorPrimaryDark"
+        android:id="@+id/icon"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/listTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/comfortaa"
-        android:paddingLeft="40dp"
+        android:paddingLeft="10dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:textColor="@color/colorPrimaryDark"
@@ -16,4 +26,4 @@
         android:textStyle="bold"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="@string/espandedListViewTitles" />
-</FrameLayout>
+</LinearLayout>

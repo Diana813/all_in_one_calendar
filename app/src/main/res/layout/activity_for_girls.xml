@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
     android:background="@mipmap/baletnica"
-    tools:context=".ForGirls.ForGirlsFragment">
+    tools:context=".forGirls.ForGirlsFragment">
 
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"

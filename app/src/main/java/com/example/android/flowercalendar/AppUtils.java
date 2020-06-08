@@ -18,12 +18,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.Events.EventsListAdapter;
-import com.example.android.flowercalendar.Events.ExpandedDayView.ToDoList;
-import com.example.android.flowercalendar.Events.FrequentActivities.FrequentActivities;
-import com.example.android.flowercalendar.Gestures.GestureInteractionsRecyclerView;
-import com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter;
-import com.example.android.flowercalendar.Widget.CalendarWidgetProvider;
+import com.example.android.flowercalendar.events.EventsListAdapter;
+import com.example.android.flowercalendar.events.ExpandedDayView.ToDoList;
+import com.example.android.flowercalendar.events.FrequentActivities.FrequentActivities;
+import com.example.android.flowercalendar.gestures.GestureInteractionsRecyclerView;
+import com.example.android.flowercalendar.personalGrowth.BigPlanAdapter;
+import com.example.android.flowercalendar.widget.CalendarWidgetProvider;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
@@ -57,7 +57,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.example.android.flowercalendar.PersonalGrowth.BigPlanAdapter.getContext;
+import static com.example.android.flowercalendar.personalGrowth.BigPlanAdapter.getContext;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class AppUtils {
@@ -279,7 +279,7 @@ public class AppUtils {
     }
 
 
-    public static long eventStartDayToMilis(String dateString) {
+    public static long dateStringToMilis(String dateString) {
 
         String[] parts = dateString.split("-");
         int year = Integer.parseInt(parts[0]);

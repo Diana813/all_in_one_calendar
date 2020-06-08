@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.example.android.flowercalendar.MainActivity.MainActivity;
+import com.example.android.flowercalendar.mainActivity.MainActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

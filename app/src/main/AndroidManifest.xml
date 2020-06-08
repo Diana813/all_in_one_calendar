@@ -24,9 +24,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".PersonalGrowth.BigPlan"
-            tools:ignore="InnerclassSeparator" />
-        <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
@@ -38,11 +35,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity.MainActivity"
+            android:name=".mainActivity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"
-            tools:ignore="InnerclassSeparator,LockedOrientationActivity">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -52,15 +48,7 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Calendar.CalendarAdapter"
-            tools:ignore="InnerclassSeparator" />
-        <activity
-            android:name=".PersonalGrowth.BackgroundActivity"
-            tools:ignore="InnerclassSeparator" />
-        <activity
-            android:name=".Statistics.StatisticsOfEffectiveness"
-            tools:ignore="InnerclassSeparator" />
+        <activity android:name=".statistics.StatisticsOfEffectiveness" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -75,10 +63,9 @@
         </provider>
 
         <receiver
-            android:name=".Alarm.AlarmReceiver"
+            android:name=".alarm.AlarmReceiver"
             android:enabled="true"
-            android:exported="true"
-            tools:ignore="InnerclassSeparator">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -86,18 +73,14 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".Alarm.AlarmClock"
-            tools:ignore="InnerclassSeparator" />
+        <service android:name=".alarm.AlarmClock" />
 
         <service
-            android:name=".Widget.GridViewWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            tools:ignore="InnerclassSeparator" />
+            android:name=".widget.GridViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+        <service android:name=".alarm.Notification" />
 
-        <receiver
-            android:name=".Widget.CalendarWidgetProvider"
-            tools:ignore="InnerclassSeparator">
+        <receiver android:name=".widget.CalendarWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

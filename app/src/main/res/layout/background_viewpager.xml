@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/background_layout"
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-        tools:context="com.example.android.flowercalendar.PersonalGrowth.BackgroundActivity">
+        tools:context="com.example.android.flowercalendar.personalGrowth.BackgroundActivity">
 
         <Switch
             android:id="@+id/alarmClockCheckBox"

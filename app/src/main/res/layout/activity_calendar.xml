@@ -3,7 +3,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
-    tools:context=".MainActivity.MainActivity">
+    tools:context=".mainActivity.MainActivity">
 
     <LinearLayout
         android:id="@+id/backgroundDrawing"
@@ -92,13 +92,13 @@
             android:layout_weight="0.5"
             android:background="#98FFFFFF">
 
-            <TextView
-                style="@style/textViewHeaders"
-                android:text="@string/weather" />
+            <!-- <TextView
+                 style="@style/textViewHeaders"
+                 android:text="@string/weather" />
 
-            <TextView
-                style="@style/textViewHeaders"
-                tools:text="29 degrees, sunny" />
+             <TextView
+                 style="@style/textViewHeaders"
+                 tools:text="29 degrees, sunny" />-->
 
         </LinearLayout>
 

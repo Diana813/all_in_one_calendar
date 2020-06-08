@@ -7,7 +7,7 @@
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
         android:background="@color/lightGrey"
-        tools:context=".Events.CyclicalEvents.CyclicalEventsDetails">
+        tools:context=".events.CyclicalEvents.CyclicalEventsDetails">
 
         <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 
@@ -330,7 +330,7 @@
                 <TextView
                     android:id="@+id/alarmOfTheEvent"
                     style="@style/OverviewStyle.Events"
-                    android:text="@string/alarm" />
+                    android:text="@string/notification" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

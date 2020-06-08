@@ -334,10 +334,10 @@
     </style>
 
     <style name="confirmImageButtonStyle">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">50dp</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:src">@drawable/baseline_navigate_next_black_18</item>
+        <item name="android:src">@drawable/baseline_done_white_48</item>
 
     </style>
 

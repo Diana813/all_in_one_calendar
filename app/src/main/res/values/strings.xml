@@ -164,5 +164,8 @@
     <string name="upcoming_occurance">Upcoming occurrence</string>
     <string name="show_statistics">Show statistics</string>
     <string name="your_average_effectiveness">Your average effectiveness:</string>
+    <string name="notification">Notification</string>
+    <string name="all_in_one_calendar">All in One Calendar</string>
+    <string name="add_new_hour">Add new hour</string>
 
 </resources>
