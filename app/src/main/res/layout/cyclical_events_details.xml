@@ -149,17 +149,17 @@
                     android:visibility="gone">
 
                     <RadioButton
+                        android:id="@+id/everyMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/same_day_every_month"
-                        android:id="@+id/everyMonth"
                         android:textSize="18sp" />
 
                     <RadioButton
+                        android:id="@+id/everyFourWeeks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/every"
-                        android:id="@+id/everyFourWeeks"
                         android:textSize="18sp" />
 
                 </RadioGroup>
@@ -186,10 +186,10 @@
                         android:layout_width="0dp"
                         android:layout_gravity="center"
                         android:layout_weight="4"
+                        android:gravity="center"
                         android:hint="@string/two"
                         android:inputType="number"
                         android:visibility="gone"
-                        android:gravity="center"
                         tools:ignore="Autofill" />
 
 
@@ -251,6 +251,16 @@
                         android:hint="@string/hintAlarm" />
 
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/resetStartTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
+                    android:text="@string/reset"
+                    android:fontFamily="@font/comfortaa"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
@@ -316,6 +326,16 @@
 
                 </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/resetDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="10dp"
+                    android:text="@string/reset"
+                    android:fontFamily="@font/comfortaa"
+                    android:textSize="20sp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -351,6 +371,16 @@
                         android:hint="@string/hintAlarm" />
 
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/resetNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:fontFamily="@font/comfortaa"
+                    android:layout_margin="10dp"
+                    android:text="@string/reset"
+                    android:textSize="20sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

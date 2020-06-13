@@ -18,12 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.alarm.AlarmUtils;
-import com.example.android.flowercalendar.events.CyclicalEvents.DisplayCyclicalEventsInTheCalendar;
-import com.example.android.flowercalendar.events.ExpandedDayView.BackgroundActivityExpandedDayView;
-import com.example.android.flowercalendar.gestures.GestureInteractionsViews;
 import com.example.android.flowercalendar.LoginActivity;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.alarm.AlarmUtils;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
@@ -34,6 +31,9 @@ import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.PeriodDataDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.events.CyclicalEvents.DisplayCyclicalEventsInTheCalendar;
+import com.example.android.flowercalendar.events.ExpandedDayView.BackgroundActivityExpandedDayView;
+import com.example.android.flowercalendar.gestures.GestureInteractionsViews;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
@@ -50,6 +50,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static com.example.android.flowercalendar.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 
@@ -528,7 +529,7 @@ public class CalendarFragment extends Fragment {
             Shift shift = shiftsDao.findByShiftName(shiftToUpdate.getShiftNumber());
             if (shift != null) {
                 getAlarmTime(shift);
-                alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context);
+                alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
             }
 
 
@@ -536,7 +537,7 @@ public class CalendarFragment extends Fragment {
             if (newShift != null) {
                 //alarmUtils.getAlarmTime(newShift, alarmHour, alarmMinute);
                 getAlarmTime(newShift);
-                alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context,"Open alarm class");
+                alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, "Open alarm class");
             }
 
 
@@ -609,7 +610,7 @@ public class CalendarFragment extends Fragment {
                 Shift shift = shiftsDao.findByShiftName(shiftToDelete.getShiftNumber());
                 getAlarmTime(shift);
                 if (alarmHour != null) {
-                    alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context);
+                    alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
                 }
             }
 

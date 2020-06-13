@@ -97,6 +97,19 @@ public class AppUtils {
         alertDialog.show();
     }
 
+    public static void showFillInThisFieldDialog(String fieldString, Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(fieldString);
+        builder.setPositiveButton(R.string.ok, (dialog, id) -> {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
     public void hideKeyboard(View view, Context context) {
 
         final InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);

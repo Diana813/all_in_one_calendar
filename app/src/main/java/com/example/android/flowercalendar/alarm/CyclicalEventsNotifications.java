@@ -3,11 +3,13 @@ package com.example.android.flowercalendar.alarm;
 import android.content.Context;
 
 import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.events.CyclicalEvents.UpcomingCyclicalEvent;
 import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.events.CyclicalEvents.UpcomingCyclicalEvent;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+
+import static com.example.android.flowercalendar.alarm.Notification.ACTION_OPEN_NOTIFICATION_CLASS;
 
 public class CyclicalEventsNotifications {
 
@@ -148,7 +150,7 @@ public class CyclicalEventsNotifications {
             String alarmHour = alarmParts[0];
             String alarmMinutes = alarmParts[1];
 
-            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context);
+            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context, ACTION_OPEN_NOTIFICATION_CLASS);
         }
     }
 

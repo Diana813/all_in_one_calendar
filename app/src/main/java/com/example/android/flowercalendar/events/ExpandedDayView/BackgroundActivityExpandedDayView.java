@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 
-import com.example.android.flowercalendar.alarm.AlarmUtils;
-import com.example.android.flowercalendar.gestures.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.alarm.AlarmUtils;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.gestures.DepthPageTransformer;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import static com.example.android.flowercalendar.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
 public class BackgroundActivityExpandedDayView extends Fragment {
@@ -108,7 +109,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
                     alarmClockSwitch1.setText("Alarm clock on: " + findAlarmTime());
 
                     if (alarmHour != null) {
-                        alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinutes, pickedAlarmDate(), getContext(),"Open alarm class");
+                        alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinutes, pickedAlarmDate(), getContext(), "Open alarm class");
                     }
 
                     CalendarEventsDao calendarEventsDao = getDatabase(getContext()).calendarEventsDao();
@@ -121,7 +122,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
 
                 } else {
                     alarmClockSwitch1.setText(R.string.alarmClockOff);
-                    alarmUtils.deleteAlarmFromAPickedDay(pickedAlarmDate(), alarmHour, alarmMinutes, Objects.requireNonNull(getContext()));
+                    alarmUtils.deleteAlarmFromAPickedDay(pickedAlarmDate(), alarmHour, alarmMinutes, Objects.requireNonNull(getContext()), ACTION_OPEN_ALARM_CLASS);
                     CalendarEventsDao calendarEventsDao = getDatabase(getContext()).calendarEventsDao();
                     CalendarEvents shiftTofind = calendarEventsDao.findBypickedDate(pickedDay);
                     shiftTofind.setAlarmOn(false);

@@ -167,5 +167,6 @@
     <string name="notification">Notification</string>
     <string name="all_in_one_calendar">All in One Calendar</string>
     <string name="add_new_hour">Add new hour</string>
+    <string name="reset">Reset</string>
 
 </resources>

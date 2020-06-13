@@ -5,22 +5,14 @@
     android:background="@drawable/gradient"
     tools:context="com.example.android.flowercalendar.LoginActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/all_in_one_calendar"
-        android:fontFamily="@font/comfortaa"
-        android:textSize="60sp"
-        android:textColor="@color/colorWhite"
-        android:layout_margin="40dp"
-        android:gravity="center"/>
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@mipmap/ic_launcher"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:scaleType="centerCrop"
+        android:src="@mipmap/aio_cal_background"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>

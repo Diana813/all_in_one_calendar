@@ -149,7 +149,7 @@ public class CyclicalEventsListAdapter extends RecyclerView.Adapter<CyclicalEven
             for (int i = 0; i < eventNames.size(); i++) {
 
                 Event event = eventsDao.findByEventKindAndName(eventNames.get(i), 0);
-                cyclicalEventsNotifications.deleteNotification(event, context);
+                cyclicalEventsNotifications.deleteNotification(event, context.getApplicationContext());
 
                 eventsDao.deleteByEventName(eventNames.get(i));
 

@@ -32,6 +32,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import static com.example.android.flowercalendar.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.example.android.flowercalendar.shifts.ShiftsFragment.newId;
 
 
@@ -167,7 +168,7 @@ public class ShiftsEditor extends Fragment {
 
                     if (changedAlarmShiftsList != null) {
                         for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
-                            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context);
+                            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
 
                             alarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, "Open alarm class");
                         }

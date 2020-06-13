@@ -58,13 +58,13 @@ public class AlarmUtils {
                 context, (int) uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes), intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         assert alarmManager != null;
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate), intervalMilis,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, pickedDateToMilis(hour, minutes, pickedDate), intervalMilis,
                 pendingIntent);
 
     }
 
 
-    public void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context) {
+    public void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context, String action) {
 
         if (uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute) == -52) {
             return;
@@ -72,6 +72,7 @@ public class AlarmUtils {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setAction(action);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, (int) uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute), intent,
                 0);
@@ -79,10 +80,8 @@ public class AlarmUtils {
         assert alarmManager != null;
         if (uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute) != -1) {
             alarmManager.cancel(pendingIntent);
-
         }
     }
-
 
     private long pickedDateToMilis(String hour, String minutes, LocalDate pickedDate) {
 

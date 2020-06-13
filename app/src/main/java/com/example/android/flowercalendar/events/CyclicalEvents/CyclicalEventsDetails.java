@@ -3,6 +3,7 @@ package com.example.android.flowercalendar.events.CyclicalEvents;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -120,6 +121,10 @@ public class CyclicalEventsDetails extends Fragment {
     private int newHowLong;
     private String howLongTerm;
 
+    private TextView resetStartTime;
+    private TextView resetDuration;
+    private TextView resetNotification;
+
 
     public CyclicalEventsDetails() {
         // Required empty public constructor
@@ -199,6 +204,9 @@ public class CyclicalEventsDetails extends Fragment {
         setHowLongButtonOnClickListener();
         setRadioGroupClickListener();
         setDayOfWeekOnClickListener();
+        setResetStartTime();
+        setResetDuration();
+        setResetNotification();
 
         arrayOfpickedDaysOfAWeek = new ArrayList<>();
         if (arrayOfpickedDaysOfAWeek.isEmpty()) {
@@ -244,6 +252,9 @@ public class CyclicalEventsDetails extends Fragment {
         fri = rootView.findViewById(R.id.fri);
         sat = rootView.findViewById(R.id.sat);
         sun = rootView.findViewById(R.id.sun);
+        resetStartTime = rootView.findViewById(R.id.resetStartTime);
+        resetDuration = rootView.findViewById(R.id.resetDuration);
+        resetNotification = rootView.findViewById(R.id.resetNotification);
 
     }
 
@@ -261,9 +272,6 @@ public class CyclicalEventsDetails extends Fragment {
         if (item.getItemId() == R.id.save) {
             saveEvent(findStartTime());
             appUtils.hideKeyboard(getView(), context);
-
-            CyclicalEvents cyclicalEvents = new CyclicalEvents();
-            getParentFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEvents).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -279,13 +287,45 @@ public class CyclicalEventsDetails extends Fragment {
             int eventDuration = Integer.parseInt(event_length_minutes_extra);
             int eventDurationInHours = eventDuration / 60;
             int eventDurationMinutes = eventDuration - eventDurationInHours * 60;
-            eventLengthEditTextHours.setText(String.valueOf(eventDurationInHours));
-            eventLengthEditTextMinutes.setText(String.valueOf(eventDurationMinutes));
+            if (eventDurationInHours != 0 && eventDurationMinutes != 0) {
+                eventLengthEditTextHours.setText(String.valueOf(eventDurationInHours));
+                eventLengthEditTextMinutes.setText(String.valueOf(eventDurationMinutes));
+            } else {
+                eventLengthEditTextHours.setHint("10");
+                eventLengthEditTextMinutes.setHint("10");
+            }
+
             alarmTextView.setText(event_alarm_extra);
             calendarView.setDate(AppUtils.dateStringToMilis(event_start_date_extra));
             displayHowOftenEditText();
             displayHowLongHeader();
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setResetStartTime() {
+        resetStartTime.setOnClickListener(v -> {
+            eventStartTimeTextView.setHint("06:00");
+            eventStartTimeTextView.setText("");
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setResetDuration() {
+        resetDuration.setOnClickListener(v -> {
+            eventLengthEditTextHours.setHint("10");
+            eventLengthEditTextMinutes.setHint("10");
+            eventLengthEditTextHours.setText("");
+            eventLengthEditTextMinutes.setText("");
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setResetNotification() {
+        resetNotification.setOnClickListener(v -> {
+            alarmTextView.setHint("06:00");
+            alarmTextView.setText("");
+        });
     }
 
 
@@ -618,9 +658,10 @@ public class CyclicalEventsDetails extends Fragment {
         collectDataFromUserInput();
 
         if (newEventName.isEmpty() ||
-                startTime.isEmpty() || newHowOften.isEmpty()) {
+                startTime == null || newHowOften == null) {
 
-            Toast.makeText(context, "Fill in name of the event, it's start date and freqency", Toast.LENGTH_LONG).show();
+            String emptyField = "Name of the event, it's start date and frequency are required";
+            AppUtils.showFillInThisFieldDialog(emptyField, context);
 
             return;
         }
@@ -632,7 +673,6 @@ public class CyclicalEventsDetails extends Fragment {
             List<Event> eventsToUpdate = eventsDao.findByEventNameList(event_name_extra);
             if (eventsToUpdate != null) {
                 for (Event eventToUpdate : eventsToUpdate) {
-                    cyclicalEventsNotifications.deleteNotification(eventToUpdate, context);
                     if (((!eventToUpdate.getEvent_name().equals(newEventName)) ||
                             (!eventToUpdate.getSchedule().equals(newWhatTime)) ||
                             (!eventToUpdate.getAlarm().equals(newAlarm)))
@@ -644,16 +684,19 @@ public class CyclicalEventsDetails extends Fragment {
                                             how_long_term_extra.equals(howLongTerm)))) {
 
 
+                        cyclicalEventsNotifications.deleteNotification(eventToUpdate, context.getApplicationContext());
+
                         eventToUpdate.setEvent_name(newEventName);
                         eventToUpdate.setSchedule(newWhatTime);
                         eventToUpdate.setAlarm(newAlarm);
                         eventsDao.update(eventToUpdate);
-                        cyclicalEventsNotifications.setNotification(eventToUpdate, context);
+                        cyclicalEventsNotifications.setNotification(eventToUpdate, context.getApplicationContext());
 
 
                     } else {
 
                         if (eventsToUpdate.get(0) != eventToUpdate) {
+                            cyclicalEventsNotifications.deleteNotification(eventToUpdate, context.getApplicationContext());
                             eventToUpdate.setEvent_name("To delete");
                             eventsDao.update(eventToUpdate);
                             eventsDao.deleteByEventName("To delete");
@@ -671,7 +714,7 @@ public class CyclicalEventsDetails extends Fragment {
                             eventsToUpdate.get(0).setTerm(howLongTerm);
                         }
                         eventsDao.update(eventsToUpdate.get(0));
-                        cyclicalEventsNotifications.setNotification(eventToUpdate, context);
+                        cyclicalEventsNotifications.setNotification(eventToUpdate, context.getApplicationContext());
 
                     }
                 }
@@ -680,9 +723,12 @@ public class CyclicalEventsDetails extends Fragment {
 
             Event event = new Event(-56, newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm);
             eventsDao.insert(event);
-            cyclicalEventsNotifications.setNotification(event, context);
+            cyclicalEventsNotifications.setNotification(event, context.getApplicationContext());
 
         }
+
+        CyclicalEvents cyclicalEvents = new CyclicalEvents();
+        getParentFragmentManager().beginTransaction().replace(R.id.flContent, cyclicalEvents).commit();
     }
 
 

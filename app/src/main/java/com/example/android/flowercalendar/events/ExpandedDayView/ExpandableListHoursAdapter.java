@@ -152,29 +152,30 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
 
         ImageView work = convertView.findViewById(R.id.work);
 
-        if (shiftSchedule != null && !shiftSchedule.equals("") && shiftLength != -1) {
+        if ((shiftSchedule != null && !shiftSchedule.equals("") && shiftLength != -1)) {
             String[] parts = shiftSchedule.split(":");
             int shiftStartHour = Integer.parseInt(parts[0]);
             int shiftStartMinutes = Integer.parseInt(parts[1]);
 
             shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
-
-            String[] currentHourParts = listTitle.split(":");
-            int currentHour = Integer.parseInt(currentHourParts[0]);
-            int currentMinutes = Integer.parseInt(currentHourParts[1]);
-
-            LocalTime currentTime = LocalTime.of(currentHour, currentMinutes);
-
-
-            if (shiftStartTime.equals(currentTime) || shiftStartTime.plusHours(shiftLength).equals(currentTime) || (shiftStartTime.isBefore(currentTime) && shiftStartTime.plusHours(shiftLength).isAfter(currentTime))) {
-                work.setVisibility(View.VISIBLE);
-            } else if (previousShiftLenght > 0 && (LocalTime.MIDNIGHT.equals(currentTime) || LocalTime.MIDNIGHT.plusHours(previousShiftLenght).equals(currentTime) || (LocalTime.MIDNIGHT.isBefore(currentTime) && LocalTime.MIDNIGHT.plusHours(previousShiftLenght).isAfter(currentTime)))) {
-                work.setVisibility(View.VISIBLE);
-            } else {
-                work.setVisibility(View.GONE);
-
-            }
         }
+        String[] currentHourParts = listTitle.split(":");
+        int currentHour = Integer.parseInt(currentHourParts[0]);
+        int currentMinutes = Integer.parseInt(currentHourParts[1]);
+
+        LocalTime currentTime = LocalTime.of(currentHour, currentMinutes);
+
+
+        if (shiftStartTime != null && (shiftStartTime.equals(currentTime) || shiftStartTime.plusHours(shiftLength).equals(currentTime) || (shiftStartTime.isBefore(currentTime) && shiftStartTime.plusHours(shiftLength).isAfter(currentTime)))) {
+            work.setVisibility(View.VISIBLE);
+        } else if (previousShiftLenght > 0 && (LocalTime.MIDNIGHT.equals(currentTime) || LocalTime.MIDNIGHT.plusHours(previousShiftLenght).equals(currentTime) || (LocalTime.MIDNIGHT.isBefore(currentTime) && LocalTime.MIDNIGHT.plusHours(previousShiftLenght).isAfter(currentTime)))) {
+            work.setVisibility(View.VISIBLE);
+        } else {
+            work.setVisibility(View.GONE);
+
+        }
+
+
     }
 
     @Override
@@ -243,18 +244,19 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
             ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
             if (todaysShift != null && !todaysShift.equals("")) {
                 duration = shiftsDao.findByShiftName(todaysShift).getShift_length();
-                String[] parts = shiftSchedule.split(":");
-                int shiftStartHour = Integer.parseInt(parts[0]);
-                int shiftStartMinutes = Integer.parseInt(parts[1]);
+                if (!shiftSchedule.equals("")) {
+                    String[] parts = shiftSchedule.split(":");
+                    int shiftStartHour = Integer.parseInt(parts[0]);
+                    int shiftStartMinutes = Integer.parseInt(parts[1]);
 
-                shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
-                if (shiftStartTime != null) {
-                    if (shiftStartTime.plusHours(duration).isAfter(LocalTime.MIDNIGHT)) {
-                        Duration dur = Duration.between(shiftStartTime, LocalTime.MIDNIGHT.minusMinutes(1));
-                        duration = (int) dur.toHours();
+                    shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
+                    if (shiftStartTime != null) {
+                        if (shiftStartTime.plusHours(duration).isBefore(LocalTime.NOON)) {
+                            Duration dur = Duration.between(shiftStartTime, LocalTime.MIDNIGHT.minusMinutes(1));
+                            duration = (int) dur.toHours();
+                        }
                     }
                 }
-
             }
         }
         return duration;
@@ -276,9 +278,9 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
                     int shiftStartHour = Integer.parseInt(parts[0]);
                     int shiftStartMinutes = Integer.parseInt(parts[1]);
 
-                    shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
+                    LocalTime shiftStartTime = LocalTime.of(shiftStartHour, shiftStartMinutes);
                     if (shiftStartTime != null) {
-                        if (shiftStartTime.plusHours(duration).isAfter(LocalTime.MIDNIGHT)) {
+                        if (shiftStartTime.plusHours(duration).isBefore(LocalTime.NOON)) {
                             Duration dur = Duration.between(LocalTime.MIDNIGHT, shiftStartTime.plusHours(duration));
                             previousShiftduration = (int) dur.toHours();
                         }
