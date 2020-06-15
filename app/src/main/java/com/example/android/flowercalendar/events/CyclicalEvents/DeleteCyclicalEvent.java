@@ -1,6 +1,6 @@
 package com.example.android.flowercalendar.events.CyclicalEvents;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.calendar.CalendarFragment;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;

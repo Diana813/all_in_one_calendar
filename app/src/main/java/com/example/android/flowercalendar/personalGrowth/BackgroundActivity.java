@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android.flowercalendar.gestures.DepthPageTransformer;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.gestures.DepthPageTransformer;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -36,7 +36,6 @@ public class BackgroundActivity extends Fragment {
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
 
 
-
         // Create an adapter that knows which fragment should be shown on each page
         LifeAimsViewPagerAdapter adapter = new LifeAimsViewPagerAdapter(this) {
         };
@@ -55,6 +54,8 @@ public class BackgroundActivity extends Fragment {
                 (tab, position) -> tab.setText(titles[position])).attach();
 
         viewPager.setPageTransformer(new DepthPageTransformer());
+
+
         return rootView;
 
     }

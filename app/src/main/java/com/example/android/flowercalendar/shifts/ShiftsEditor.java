@@ -14,15 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.alarm.AlarmUtils;
-import com.example.android.flowercalendar.calendar.CalendarFragment;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.alarm.AlarmUtils;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.utils.AppUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -38,8 +37,6 @@ import static com.example.android.flowercalendar.shifts.ShiftsFragment.newId;
 
 public class ShiftsEditor extends Fragment {
 
-    private AppUtils appUtils = new AppUtils();
-    private AlarmUtils alarmUtils = new AlarmUtils();
     private Context context;
     private String shift_name_extra;
     private String shift_schedule_extra;
@@ -164,13 +161,11 @@ public class ShiftsEditor extends Fragment {
                     String newAlarmHour = parts2[0];
                     String newAlarmMinute = parts2[1];
 
-                    CalendarFragment calendarFragment = new CalendarFragment();
-
                     if (changedAlarmShiftsList != null) {
                         for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
-                            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
+                            AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
 
-                            alarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, "Open alarm class");
+                            AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, "Open alarm class");
                         }
                     }
                 }
@@ -220,7 +215,7 @@ public class ShiftsEditor extends Fragment {
 
         if (item.getItemId() == R.id.save) {
             saveShift();
-            appUtils.hideKeyboard(getView(), context);
+            AppUtils.hideKeyboard(getView(), context);
             goBackToShifts();
             return true;
         }

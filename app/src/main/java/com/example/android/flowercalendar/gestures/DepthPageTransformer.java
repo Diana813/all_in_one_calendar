@@ -17,7 +17,7 @@ public class DepthPageTransformer implements ViewPager2.PageTransformer {
     public void transformPage(View view, float position) {
         int pageWidth = view.getWidth();
         if (getContext() != null) {
-            bigPlanAdapter = new BigPlanAdapter(getContext(), getContext());
+            bigPlanAdapter = new BigPlanAdapter(getContext());
         }
 
 

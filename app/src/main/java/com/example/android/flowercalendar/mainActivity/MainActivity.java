@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.calendar.CalendarFragment;
 import com.example.android.flowercalendar.coworkers.CoworkerFragment;
 import com.example.android.flowercalendar.events.CyclicalEvents.CyclicalEvents;
@@ -19,8 +19,8 @@ import com.example.android.flowercalendar.events.FrequentActivities.FrequentActi
 import com.example.android.flowercalendar.forGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.personalGrowth.BackgroundActivity;
 import com.example.android.flowercalendar.personalGrowth.LifeAims;
-import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.shifts.ShiftsFragment;
+import com.example.android.flowercalendar.widget.WidgetUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        AppUtils.updateWidget(this);
-        AppUtils.updateWidgetAtMidnight(this);
+        WidgetUtils.updateWidget(this);
+        WidgetUtils.updateWidgetAtMidnight(this);
     }
 
 

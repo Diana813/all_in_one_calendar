@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.flowercalendar.BuildConfig;
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
@@ -53,7 +53,6 @@ public class LifeAims extends Fragment {
     private ImageView searchImage;
     private Bitmap selectedImageBitmap;
     private String absolutePath;
-    private ImagePathDao imagePathDao;
     private int layout;
     private AppUtils appUtils = new AppUtils();
 
@@ -163,8 +162,6 @@ public class LifeAims extends Fragment {
     }
 
 
-
-
     private void setAddPhotoOnClickListener() {
         addPhoto.setOnClickListener(v -> captureFromCamera());
     }
@@ -207,6 +204,7 @@ public class LifeAims extends Fragment {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
+
 
     private void getImageFromInternet() {
 
@@ -299,7 +297,7 @@ public class LifeAims extends Fragment {
 
     private void saveImagePathToDb(String path) {
 
-        imagePathDao = getDatabase(getContext()).imagePathDao();
+        ImagePathDao imagePathDao = getDatabase(getContext()).imagePathDao();
         ImagePath imagePathToUpdate = imagePathDao.findLastImage();
 
         if (imagePathToUpdate != null) {

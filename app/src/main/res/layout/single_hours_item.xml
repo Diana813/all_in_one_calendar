@@ -33,7 +33,7 @@
             android:visibility="gone"
             tools:ignore="ContentDescription" />
 
-        <com.example.android.flowercalendar.CopyPasteEditText
+        <com.example.android.flowercalendar.utils.CopyPasteEditText
             android:id="@+id/editText"
             style="@style/EditTextScheduleHours"
             android:fontFamily="@font/comfortaa"

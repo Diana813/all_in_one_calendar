@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 
 public class AlarmUtils {
 
-    private long uniqueRequestCodeForEachAlarm(LocalDate pickedDate, String alarmHour, String alarmMinute) {
+    private static long uniqueRequestCodeForEachAlarm(LocalDate pickedDate, String alarmHour, String alarmMinute) {
 
         int day = pickedDate.getDayOfMonth();
         int month = pickedDate.getMonthValue();
@@ -28,7 +28,7 @@ public class AlarmUtils {
         return Long.parseLong(findId);
     }
 
-    public void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate, Context context, String action) {
+    public static void setAlarmToPickedDay(String hour, String minutes, LocalDate pickedDate, Context context, String action) {
 
         if (uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes) == -52) {
             return;
@@ -45,7 +45,7 @@ public class AlarmUtils {
 
     }
 
-    void setCyclicalNotification(String hour, String minutes, LocalDate pickedDate, Context context, String action, long intervalMilis, String eventName) {
+    static void setCyclicalNotification(String hour, String minutes, LocalDate pickedDate, Context context, String action, long intervalMilis, String eventName) {
 
         if (uniqueRequestCodeForEachAlarm(pickedDate, hour, minutes) == -52) {
             return;
@@ -64,7 +64,7 @@ public class AlarmUtils {
     }
 
 
-    public void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context, String action) {
+    public static void deleteAlarmFromAPickedDay(LocalDate pickedDate, String alarmHour, String alarmMinute, Context context, String action) {
 
         if (uniqueRequestCodeForEachAlarm(pickedDate, alarmHour, alarmMinute) == -52) {
             return;
@@ -83,7 +83,7 @@ public class AlarmUtils {
         }
     }
 
-    private long pickedDateToMilis(String hour, String minutes, LocalDate pickedDate) {
+    private static long pickedDateToMilis(String hour, String minutes, LocalDate pickedDate) {
 
         long pickedDateToMillis = -1;
         if (hour != null) {

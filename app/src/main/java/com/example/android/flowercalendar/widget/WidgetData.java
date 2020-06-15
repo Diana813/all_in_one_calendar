@@ -2,7 +2,7 @@ package com.example.android.flowercalendar.widget;
 
 import android.content.Context;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEvents;
 import com.example.android.flowercalendar.database.CalendarEventsDao;

@@ -100,7 +100,6 @@ public class CalendarFragment extends Fragment {
     private RecyclerView shifts_recycler_view;
     private String alarmHour;
     private String alarmMinute;
-    private AlarmUtils alarmUtils;
     private DisplayCyclicalEventsInTheCalendar displayCyclicalEventsInTheCalendar;
     public static ArrayList<String> listOfCyclicalEvents;
 
@@ -110,7 +109,6 @@ public class CalendarFragment extends Fragment {
         super.onAttach(context);
         this.context = context;
         shiftsAdapter = new BottomLayoutShiftsAdapter(context);
-        alarmUtils = new AlarmUtils();
         displayCyclicalEventsInTheCalendar = new DisplayCyclicalEventsInTheCalendar();
     }
 
@@ -489,7 +487,7 @@ public class CalendarFragment extends Fragment {
         Shift shift = shiftsDao.findByShiftName(newShiftNumber);
         getAlarmTime(shift);
         if (alarmHour != null) {
-            alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, "Open alarm class");
+            AlarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, "Open alarm class");
 
         }
     }
@@ -529,18 +527,15 @@ public class CalendarFragment extends Fragment {
             Shift shift = shiftsDao.findByShiftName(shiftToUpdate.getShiftNumber());
             if (shift != null) {
                 getAlarmTime(shift);
-                alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
+                AlarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
             }
 
 
             Shift newShift = shiftsDao.findByShiftName(newShiftNumber);
             if (newShift != null) {
-                //alarmUtils.getAlarmTime(newShift, alarmHour, alarmMinute);
                 getAlarmTime(newShift);
-                alarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, "Open alarm class");
+                AlarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, "Open alarm class");
             }
-
-
         }
     }
 
@@ -610,7 +605,7 @@ public class CalendarFragment extends Fragment {
                 Shift shift = shiftsDao.findByShiftName(shiftToDelete.getShiftNumber());
                 getAlarmTime(shift);
                 if (alarmHour != null) {
-                    alarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
+                    AlarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
                 }
             }
 

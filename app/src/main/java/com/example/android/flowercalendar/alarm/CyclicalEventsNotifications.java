@@ -2,7 +2,7 @@ package com.example.android.flowercalendar.alarm;
 
 import android.content.Context;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.events.CyclicalEvents.UpcomingCyclicalEvent;
 
@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import static com.example.android.flowercalendar.alarm.Notification.ACTION_OPEN_NOTIFICATION_CLASS;
 
 public class CyclicalEventsNotifications {
-
-    private AlarmUtils alarmUtils = new AlarmUtils();
 
     public void setNotification(Event event, Context context) {
 
@@ -37,7 +35,7 @@ public class CyclicalEventsNotifications {
             LocalDate upcomingEvent = AppUtils.refactorStringIntoDate(event.getPickedDay()).plusDays(dayFrequency);
             long nextEvent = AppUtils.dateStringToMilis(upcomingEvent.toString());
             intervalMilis = nextEvent - startDate;
-            alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+            AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             //weeks
         } else if (!frequency.substring(0, 6).equals("0-0-0-")
                 && frequency.substring(0, 4).equals("0-0-")) {
@@ -52,7 +50,7 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
 
             if (pickedDaysOfWeek.contains("tue")) {
@@ -61,7 +59,7 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
 
             }
 
@@ -71,7 +69,7 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
 
             if (pickedDaysOfWeek.contains("thr")) {
@@ -80,7 +78,7 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
 
 
@@ -89,7 +87,7 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
 
             if (pickedDaysOfWeek.contains("sat")) {
@@ -97,14 +95,14 @@ public class CyclicalEventsNotifications {
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
             if (pickedDaysOfWeek.contains("sun")) {
                 LocalDate startDateWeeks = UpcomingCyclicalEvent.dateAccordingToChoosenDayOfTheWeek(AppUtils.refactorStringIntoDate(event.getPickedDay()), DayOfWeek.SUNDAY, String.valueOf(weeksFrequency));
                 long start = AppUtils.dateStringToMilis(startDateWeeks.toString());
                 long upcomingEvent = AppUtils.dateStringToMilis(startDateWeeks.plusWeeks(weeksFrequency).toString());
                 intervalMilis = upcomingEvent - start;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             }
 
 
@@ -122,7 +120,7 @@ public class CyclicalEventsNotifications {
                 LocalDate upcomingEvent = AppUtils.refactorStringIntoDate(event.getPickedDay()).plusMonths(monthsFrequency);
                 long nextEvent = AppUtils.dateStringToMilis(upcomingEvent.toString());
                 intervalMilis = nextEvent - startDate;
-                alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
             } else {
                 //todo
             }
@@ -134,7 +132,7 @@ public class CyclicalEventsNotifications {
             LocalDate upcomingEvent = AppUtils.refactorStringIntoDate(event.getPickedDay()).plusYears(yearsFrequency);
             long nextEvent = AppUtils.dateStringToMilis(upcomingEvent.toString());
             intervalMilis = nextEvent - startDate;
-            alarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
+            AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
         }
 
     }
@@ -150,7 +148,7 @@ public class CyclicalEventsNotifications {
             String alarmHour = alarmParts[0];
             String alarmMinutes = alarmParts[1];
 
-            alarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context, ACTION_OPEN_NOTIFICATION_CLASS);
+            AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context, ACTION_OPEN_NOTIFICATION_CLASS);
         }
     }
 

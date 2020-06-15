@@ -7,7 +7,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 
 import java.time.LocalDate;

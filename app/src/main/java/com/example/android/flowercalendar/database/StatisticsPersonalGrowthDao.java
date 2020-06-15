@@ -27,6 +27,10 @@ public interface StatisticsPersonalGrowthDao {
     @Query("DELETE FROM statistics_personal_growth")
     void deleteAll();
 
+    @Query("DELETE FROM statistics_personal_growth WHERE effectiveness = 0")
+    void deleteByEffectiveness();
+
+
     @Query("SELECT * FROM statistics_personal_growth ORDER BY aim_time ASC")
     LiveData<List<StatisticsPersonalGrowth>> getAllStatisticsPersonalGrowth();
 

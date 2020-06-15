@@ -1,32 +1,26 @@
 package com.example.android.flowercalendar.events.ExpandedDayView;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
-import com.example.android.flowercalendar.CopyPasteEditText;
-import com.example.android.flowercalendar.CopyPasteEditTextListener;
-import com.example.android.flowercalendar.database.Shift;
-import com.example.android.flowercalendar.events.CyclicalEvents.DeleteCyclicalEvent;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.events.CyclicalEvents.DeleteCyclicalEvent;
+import com.example.android.flowercalendar.utils.AppUtils;
+import com.example.android.flowercalendar.utils.CopyPasteEditText;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -54,7 +48,6 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
     private TextView listTitleTextViewGroupList;
     private CopyPasteEditText editTextGroupList;
     private DeleteCyclicalEvent deleteCyclicalEvent = new DeleteCyclicalEvent();
-    private AppUtils appUtils = new AppUtils();
     private LocalTime shiftStartTime;
 
     ExpandableListHoursAdapter(Context context, List<String> expandableListTitle,
@@ -98,7 +91,7 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
         addDataFromDB(expandedListText, editText);
         addShift(convertView, expandedListText);
         expandedListTextView.setText(expandedListText);
-        editText.addListener(() -> appUtils.saveDataEvents(editText, pickedDay, editText.getText().toString(), "-1", schedule, 3));
+        editText.addListener(() -> AppUtils.saveDataEvents(editText, pickedDay, editText.getText().toString(), "-1", schedule, 3));
 
         return convertView;
     }
@@ -339,7 +332,7 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
             return false;
         });
 
-        editText.addListener(() -> appUtils.saveDataEvents(editText, pickedDay, editText.getText().toString(), "-1", schedule, 3));
+        editText.addListener(() -> AppUtils.saveDataEvents(editText, pickedDay, editText.getText().toString(), "-1", schedule, 3));
     }
 
     private void showDownArrow(ImageView imageView, int listPosition) {
@@ -390,7 +383,5 @@ public class ExpandableListHoursAdapter extends BaseExpandableListAdapter {
             return false;
         });
     }
-
-
 }
 

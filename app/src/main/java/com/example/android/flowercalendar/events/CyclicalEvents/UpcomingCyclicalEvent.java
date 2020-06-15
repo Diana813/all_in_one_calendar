@@ -1,6 +1,6 @@
 package com.example.android.flowercalendar.events.CyclicalEvents;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -251,9 +251,8 @@ public class UpcomingCyclicalEvent {
     LocalDate pickedFinishDate(String term) {
 
         LocalDate pickedFinishDate = null;
-        AppUtils appUtils = new AppUtils();
         if (term.contains(",")) {
-            String dateStr = appUtils.changeSimpleDateFormat(term);
+            String dateStr = AppUtils.changeSimpleDateFormat(term);
             String[] parts = dateStr.split("/");
             pickedFinishDate = LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         }

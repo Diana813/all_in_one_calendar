@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.events.EventsListAdapter;
 import com.example.android.flowercalendar.gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.R;
@@ -31,7 +31,6 @@ public class FrequentActivities extends Fragment {
 
     private Context context;
     private EventsListAdapter eventsListAdapter;
-    private AppUtils appUtils = new AppUtils();
     private static int freqActSize;
     private RelativeLayout empty_view;
 
@@ -96,7 +95,7 @@ public class FrequentActivities extends Fragment {
                 ItemTouchHelper(new GestureInteractionsRecyclerView(eventsListAdapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
         initData(this, eventsListAdapter);
-        appUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, "", null, "0", "", 2);
+        AppUtils.setConfirmButtonEvents(confirm, eventsListAdapter, eventText, "", null, "0", "", 2);
 
         return rootView;
     }

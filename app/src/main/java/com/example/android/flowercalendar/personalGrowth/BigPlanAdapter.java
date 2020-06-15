@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.events.EventsListAdapter;
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.events.StringsAims;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.events.EventsListAdapter;
+import com.example.android.flowercalendar.events.StringsAims;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private String aimToDelete;
 
 
-    public BigPlanAdapter(Context requireNonNull, Context context) {
+    public BigPlanAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
         BigPlanAdapter.context = context;
-
     }
+
 
     public static Context getContext() {
         return context;
@@ -56,6 +56,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         this.aimsList = aimsList;
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -79,9 +80,11 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         holder.aimNumber.setText(Integer.parseInt(bigPlanData.getAimIndex()) + 1 + ".");
         holder.aimContents.setText(bigPlanData.getAimContents());
         holder.checkBox.setVisibility(View.VISIBLE);
+        //prevent situations when checkbox is checked where it shouldn't
+        holder.checkBox.setOnCheckedChangeListener(null);
         if (bigPlanData.getIsChecked() == 0) {
             holder.checkBox.setChecked(false);
-        } else {
+        } else if (bigPlanData.getIsChecked() == 1) {
             holder.checkBox.setChecked(true);
         }
 
@@ -98,7 +101,6 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
                 bigPlanDao.update(bigPlanData);
             }
         });
-
     }
 
 
@@ -116,6 +118,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         toDoListStrings.add(new StringsAims(currentString, aimToDelete));
 
     }
+
 
     private void findDeletedAimPositionInToDoList(String toDelete) {
 
@@ -145,6 +148,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         eventsListAdapter.deleteFromDatabase(toDoListStrings);
     }
 
+
     private void showUndoSnackbar() {
 
         Snackbar snackbar = Snackbar.make((((Activity) context).findViewById(android.R.id.content)), R.string.AimDeletedSnackBar,
@@ -153,17 +157,17 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         snackbar.show();
     }
 
+
     private void undoDelete() {
         aimsList.add(pos,
                 bigPlanData);
         aimStrings.remove(aimStrings.size() - 1);
         toDoListStrings.remove(toDoListStrings.size() - 1);
         notifyItemInserted(pos);
-
     }
 
-    public void onItemMove(int fromPosition, int toPosition) {
 
+    public void onItemMove(int fromPosition, int toPosition) {
 
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
@@ -178,8 +182,8 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         }
 
         notifyItemMoved(fromPosition, toPosition);
-
     }
+
 
     public void setAimIndexInDB() {
 
@@ -190,9 +194,8 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
             bigPlanData.setAimIndex(String.valueOf(aimsList.indexOf(bigPlanData)));
             bigPlanDao.update(bigPlanData);
         }
-
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -202,6 +205,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
             return aimsList.size();
         }
     }
+
 
     static class BigPlanViewHolder extends RecyclerView.ViewHolder {
         private TextView aimNumber;

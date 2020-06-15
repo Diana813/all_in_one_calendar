@@ -25,7 +25,7 @@ public class LifeAimsViewPagerAdapter extends FragmentStateAdapter {
             fragment.setContent(layouts[position]);
             return fragment;
         } else if (position == 1) {
-            BigPlan fragment = new BigPlan();
+            FiveYearsPlan fragment = new FiveYearsPlan();
             fragment.setContent(layouts[position]);
             return fragment;
 
@@ -49,5 +49,6 @@ public class LifeAimsViewPagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return 5;
     }
+
 }
 

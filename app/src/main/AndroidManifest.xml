@@ -79,6 +79,7 @@
             android:name=".widget.GridViewWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service android:name=".alarm.Notification" />
+        <service android:name=".alarm.AlarmService" />
 
         <receiver android:name=".widget.CalendarWidgetProvider">
             <intent-filter>

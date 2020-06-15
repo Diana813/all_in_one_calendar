@@ -12,18 +12,17 @@ import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanData;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
-public class ThisMonthPlan extends Plan {
+public class FiveYearsPlan extends Plan {
 
     private Context context;
     private LocalDate timeOutDate;
-    private LocalDate firstItemDate;
-
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -35,7 +34,7 @@ public class ThisMonthPlan extends Plan {
     @Override
     public void onPause() {
         super.onPause();
-        addEffectivenesToDB(context, 3, firstItemDate, progress);
+        addEffectivenesToDB(context, 1, firstItemDate, progress);
     }
 
 
@@ -43,9 +42,9 @@ public class ThisMonthPlan extends Plan {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        question.setText(R.string.thisMonthPlan);
-        initData(this, adapter, planViewModel.getThisMonthAimsList(), planViewModel.getThisMonthAimsListIsChecked());
-        AppUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0", null, 1);
+        question.setText(R.string.fiveYearsPlan);
+        initData(this, adapter, planViewModel.getFiveYearsPlanAimsList(), planViewModel.getFiveYearsPlanAimsListIsChecked());
+        AppUtils.setConfirmButton(confirm, adapter, aimText, 1, null, "0", null, 1);
         return rootView;
     }
 
@@ -59,36 +58,37 @@ public class ThisMonthPlan extends Plan {
 
             if (aims.size() != 0) {
 
-                int month = isTheTimeOut(aims, 3);
-                int year = LocalDate.now().getYear();
+                int year = isTheTimeOut(aims, 1);
 
-                String firstItemDateString = aims.get(0).getStartDate();
-                firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
 
-                timeOutDate = LocalDate.of(year, month, 1).plusMonths(1);
+                timeOutDate = AppUtils.refactorStringIntoDate(aims.get(0).getStartDate()).plusYears(5);
+                LocalDate theEndOfAYear = LocalDate.of(year, Month.JANUARY, 1).plusYears(1);
+
+                if (timeOutDate.isEqual(LocalDate.now()) ||
+                        timeOutDate.isBefore(LocalDate.now())) {
+                    deleteIfTimeIsOut(1, context);
+
+                }
+
                 long howManyDaysLeft = howMuchTimeLeft(timeOutDate).toDays();
+                long howManyDaysLeftTillTheEndOfThisYear = howMuchTimeLeft(theEndOfAYear).toDays();
+
+                int howManyYearsLeft = timeOutDate.getYear() - LocalDate.now().getYear() - 1;
+
                 if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
                     howManyDaysLeft = howMuchTimeLeft(timeOutDate).toHours();
                     timeOut.setText("Time left: " + howManyDaysLeft + " hours");
                 } else {
-                    timeOut.setText("Time left: " + howManyDaysLeft + " days");
-                }
-
-                if (timeOutDate.isBefore(LocalDate.now()) ||
-                        timeOutDate.isEqual(LocalDate.now())) {
-                    deleteIfTimeIsOut(3, context);
+                    timeOut.setText("Time left: " + howManyYearsLeft + " years, " + howManyDaysLeftTillTheEndOfThisYear + " days " + "(" + howManyDaysLeft + " days)");
                 }
                 if (newId == 0) {
                     timeOut.setVisibility(View.GONE);
                 }
-
             } else {
                 timeOut.setVisibility(View.GONE);
             }
 
         });
-
     }
-
 }
 

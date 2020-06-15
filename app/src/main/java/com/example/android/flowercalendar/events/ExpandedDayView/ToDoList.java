@@ -16,16 +16,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.calendar.CalendarFragment;
+import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.events.EventsListAdapter;
 import com.example.android.flowercalendar.events.EventsViewModel;
 import com.example.android.flowercalendar.events.FrequentActivities.FrequentActivitiesViewModel;
 import com.example.android.flowercalendar.gestures.GestureInteractionsRecyclerView;
-import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -49,7 +49,6 @@ public class ToDoList extends Fragment {
     private int layout;
     private RecyclerView freqActDrawList;
     private RecyclerView toDoListRecyclerView;
-    private AppUtils appUtils;
     private ImageButton confirm;
     private EditText editText;
     private TextView eventsLabel;
@@ -75,7 +74,6 @@ public class ToDoList extends Fragment {
         ToDoList.context = context;
         toDoListAdapter = new EventsListAdapter(context);
         frequentActivitiesDrawerListAdapter = new FrequentActivitiesDrawerListAdapter(context);
-        appUtils = new AppUtils();
     }
 
 
@@ -107,7 +105,7 @@ public class ToDoList extends Fragment {
         initData();
         addFreqActivList();
         displayCyclicalEvents();
-        appUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, pickedDay, null, "0", "", 1);
+        AppUtils.setConfirmButtonEvents(confirm, toDoListAdapter, editText, pickedDay, null, "0", "", 1);
         return rootView;
     }
 
@@ -135,8 +133,7 @@ public class ToDoList extends Fragment {
     }
 
     void saveEvent(String newEvent, String pickedDate) {
-        AppUtils appUtils = new AppUtils();
-        appUtils.saveDataEvents(null, pickedDate, newEvent, "-1", "", 1);
+        AppUtils.saveDataEvents(null, pickedDate, newEvent, "-1", "", 1);
     }
 
     private String findWhatDateItIs() {
@@ -234,14 +231,13 @@ public class ToDoList extends Fragment {
                     EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
                     Event event = eventsDao.findByEventKindAndName(parts[1], 0);
                     if (event != null) {
-                        appUtils.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
+                        AppUtils.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
 
                     }
 
                 }
             }
         }
-
     }
 
 }

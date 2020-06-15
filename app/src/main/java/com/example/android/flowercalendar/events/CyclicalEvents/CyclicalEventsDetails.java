@@ -3,7 +3,6 @@ package com.example.android.flowercalendar.events.CyclicalEvents;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +19,10 @@ import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.flowercalendar.alarm.CyclicalEventsNotifications;
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.alarm.CyclicalEventsNotifications;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -107,7 +105,6 @@ public class CyclicalEventsDetails extends Fragment {
     private int frequency = -1;
     private int radioButtonMonthsOrWeeks;
 
-    private AppUtils appUtils;
     private CyclicalEventsFrequencySettingsDays settingsDays;
     private CyclicalEventsFrequencySettingsWeeks settingsWeeks;
     private CyclicalEventsFrequencySettingsMonths settingsMonths;
@@ -151,13 +148,11 @@ public class CyclicalEventsDetails extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        appUtils = new AppUtils();
         settingsDays = new CyclicalEventsFrequencySettingsDays();
         settingsWeeks = new CyclicalEventsFrequencySettingsWeeks();
         settingsMonths = new CyclicalEventsFrequencySettingsMonths();
         settingsYears = new CyclicalEventsFrequencySettingsYears();
         cyclicalEventsNotifications = new CyclicalEventsNotifications();
-
     }
 
     public void onPause() {
@@ -271,7 +266,7 @@ public class CyclicalEventsDetails extends Fragment {
 
         if (item.getItemId() == R.id.save) {
             saveEvent(findStartTime());
-            appUtils.hideKeyboard(getView(), context);
+            AppUtils.hideKeyboard(getView(), context);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -454,12 +449,12 @@ public class CyclicalEventsDetails extends Fragment {
 
 
     private void setTimeScheduleButton() {
-        eventTimeButton.setOnClickListener(v -> appUtils.eventTimeSettingDialog(eventStartTimeTextView, context));
+        eventTimeButton.setOnClickListener(v -> AppUtils.eventTimeSettingDialog(eventStartTimeTextView, context));
     }
 
 
     private void setAlarmButton() {
-        alarmButton.setOnClickListener(v -> appUtils.eventTimeSettingDialog(alarmTextView, context));
+        alarmButton.setOnClickListener(v -> AppUtils.eventTimeSettingDialog(alarmTextView, context));
     }
 
 
@@ -625,7 +620,7 @@ public class CyclicalEventsDetails extends Fragment {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateString = appUtils.displayDateInAProperFormat(calendar);
+                        dateString = AppUtils.displayDateInAProperFormat(calendar);
                         howLongHeader.setText("Until " + dateString);
 
                     };

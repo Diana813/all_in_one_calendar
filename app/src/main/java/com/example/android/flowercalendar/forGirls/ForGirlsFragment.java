@@ -13,11 +13,12 @@ import android.widget.CalendarView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.AppUtils;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.PeriodData;
 import com.example.android.flowercalendar.database.PeriodDataDao;
+import com.example.android.flowercalendar.widget.WidgetUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -50,7 +51,7 @@ public class ForGirlsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         saveData();
-        AppUtils.updateWidget(getContext());
+        WidgetUtils.updateWidget(getContext());
     }
 
     @SuppressLint("ClickableViewAccessibility")
