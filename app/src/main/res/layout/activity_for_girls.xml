@@ -25,6 +25,7 @@
         <TextView
             android:id="@+id/periodLenght"
             style="@style/forGirlsTextStyle"
+            android:gravity="center"
             android:text="@string/periodLenght" />
 
         <TextView
@@ -40,6 +41,7 @@
         <TextView
             android:id="@+id/cycleLenght"
             style="@style/forGirlsTextStyle"
+            android:gravity="center"
             android:text="@string/cycleLenght" />
 
         <TextView

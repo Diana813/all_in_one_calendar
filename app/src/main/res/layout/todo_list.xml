@@ -5,7 +5,7 @@
     android:id="@+id/activity_expanded_day_view"
     style="@style/BackgroundLayout"
     android:layout_gravity="end"
-    tools:context=".events.ExpandedDayView.ToDoList">
+    tools:context=".events.expandedDayView.ToDoList">
 
     <include layout="@layout/add_events" />
 

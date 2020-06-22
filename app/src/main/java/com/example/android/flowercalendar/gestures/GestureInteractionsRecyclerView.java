@@ -6,9 +6,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.example.android.flowercalendar.events.CyclicalEvents.CyclicalEventsListAdapter;
-import com.example.android.flowercalendar.events.ExpandedDayView.ExpandableListHoursAdapter;
-import com.example.android.flowercalendar.events.EventsListAdapter;
+import com.example.android.flowercalendar.events.cyclicalEvents.CyclicalEventsListAdapter;
+import com.example.android.flowercalendar.events.expandedDayView.ExpandableListHoursAdapter;
+import com.example.android.flowercalendar.events.eventsUtils.EventsListAdapter;
 import com.example.android.flowercalendar.personalGrowth.BigPlanAdapter;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.shifts.ShiftsAdapter;

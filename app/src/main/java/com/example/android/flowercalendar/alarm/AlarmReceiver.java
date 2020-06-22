@@ -7,11 +7,27 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.android.flowercalendar.database.CalendarDatabase;
+import com.example.android.flowercalendar.database.CalendarEvents;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
+import com.example.android.flowercalendar.database.Shift;
+import com.example.android.flowercalendar.database.ShiftsDao;
+import com.example.android.flowercalendar.events.cyclicalEvents.UpcomingCyclicalEvent;
+import com.example.android.flowercalendar.utils.AppUtils;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.content.Intent.ACTION_BOOT_COMPLETED;
+import static android.content.Intent.ACTION_MY_PACKAGE_REPLACED;
 import static com.example.android.flowercalendar.alarm.AlarmClock.ACTION_DISMISS;
 import static com.example.android.flowercalendar.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.example.android.flowercalendar.alarm.Notification.ACTION_OPEN_NOTIFICATION_CLASS;
+import static com.example.android.flowercalendar.alarm.Notification.ACTION_SET_NOTIFICATION;
 import static com.example.android.flowercalendar.alarm.Notification.ACTION_STOP;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -23,7 +39,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         if (ACTION_DISMISS.equals(action)) {
             dismissRingtone(context);
-
         } else if (ACTION_OPEN_ALARM_CLASS.equals(action)) {
             openAlarmClass(context);
         } else if (ACTION_STOP.equals(action)) {
@@ -31,6 +46,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         } else if (ACTION_OPEN_NOTIFICATION_CLASS.equals(action)) {
             String notificationInfo = intent.getStringExtra("title");
             openNotificationClass(context, notificationInfo);
+        } else if (ACTION_SET_NOTIFICATION.equals(action)) {
+            String notificationInfo = intent.getStringExtra("title");
+            setUpcomingEventNotyfication(context, notificationInfo);
+        } else if (ACTION_BOOT_COMPLETED.equals(action)) {
+            setAllTheNotifications(context);
+            setAllTheAlarms(context);
+        } else if (ACTION_MY_PACKAGE_REPLACED.equals((action))) {
+            setAllTheNotifications(context);
+            setAllTheAlarms(context);
         }
 
     }
@@ -90,6 +114,48 @@ public class AlarmReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         assert aManager != null;
         aManager.cancel(pendingIntent);
+    }
+
+    private void setUpcomingEventNotyfication(Context context, String notificationInfo) {
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+        List<Event> events = eventsDao.findAllByEventKindAndName(notificationInfo, 0);
+
+        for (Event event : events) {
+            String[] parts = event.getFrequency().split("-");
+            String pickedDaysOfWeek = parts[3];
+            String[] alarmParts = event.getAlarm().split(":");
+            String alarmHour = alarmParts[0];
+            String alarmMinutes = alarmParts[1];
+            UpcomingCyclicalEvent.displayNextEvent(event.getPickedDay(), event.getFrequency(), pickedDaysOfWeek, event.getTerm(), context);
+            AlarmUtils.setUpcomingEventNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, notificationInfo);
+        }
+
+    }
+
+    private void setAllTheNotifications(Context context) {
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+
+        List<Event> cyclicalEvents = eventsDao.findByKind(0);
+
+        for (Event event : cyclicalEvents) {
+            CyclicalEventsNotifications.setNotification(event, context);
+        }
+    }
+
+    private void setAllTheAlarms(Context context) {
+
+        CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+        List<CalendarEvents> calendarEvents = calendarEventsDao.findAllEvents();
+
+        for (CalendarEvents calendarEvent : calendarEvents) {
+            if (calendarEvent.getShiftNumber() != null && !calendarEvent.getShiftNumber().equals("") && (AppUtils.refactorStringIntoDate(calendarEvent.getPickedDate()).isAfter(LocalDate.now()) || AppUtils.refactorStringIntoDate(calendarEvent.getPickedDate()).isEqual(LocalDate.now()))) {
+                ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
+                Shift shift = shiftsDao.findByShiftName(calendarEvent.getShiftNumber());
+                AlarmUtils.getAlarmTime(shift);
+                AlarmUtils.setAlarmToPickedDay(AlarmUtils.alarmHour, AlarmUtils.alarmMinutes, AppUtils.refactorStringIntoDate(calendarEvent.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS);
+            }
+        }
     }
 
 }

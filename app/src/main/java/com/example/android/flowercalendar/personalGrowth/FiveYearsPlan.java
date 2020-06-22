@@ -77,9 +77,9 @@ public class FiveYearsPlan extends Plan {
 
                 if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
                     howManyDaysLeft = howMuchTimeLeft(timeOutDate).toHours();
-                    timeOut.setText("Time left: " + howManyDaysLeft + " hours");
+                    timeOut.setText(getString(R.string.timeLeft) + " " + howManyDaysLeft + " " + getString(R.string.hoursLeft));
                 } else {
-                    timeOut.setText("Time left: " + howManyYearsLeft + " years, " + howManyDaysLeftTillTheEndOfThisYear + " days " + "(" + howManyDaysLeft + " days)");
+                    timeOut.setText(getString(R.string.timeLeft) + " " + howManyYearsLeft + " " + getString(R.string.yearsLeft) + " " + howManyDaysLeftTillTheEndOfThisYear + " " + getString(R.string.daysLeft) + " " + "(" + howManyDaysLeft + " " + getString(R.string.daysLeft) + ")");
                 }
                 if (newId == 0) {
                     timeOut.setVisibility(View.GONE);

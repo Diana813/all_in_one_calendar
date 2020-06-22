@@ -13,21 +13,19 @@ import androidx.lifecycle.ViewModelProvider;
 public class StatisticsOfEffectiveness extends AppCompatActivity {
 
     private TextView fiveYears;
+    private TextView fiveYearsStatistics;
     private TextView oneYear;
+    private TextView oneYearStatistics;
     private TextView month;
+    private TextView monthStatistics;
     private TextView day;
+    private TextView dayStatistics;
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_personal_growth);
-
-       /* StatisticsPersonalGrowthDao statisticsPersonalGrowthDao = CalendarDatabase.getDatabase(getBaseContext()).statisticsPersonalGrowthDao();
-
-        statisticsPersonalGrowthDao.deleteAll();*/
-
-
         findViews();
         setSupportActionBar(toolbar);
         initData();
@@ -35,9 +33,13 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
 
     private void findViews() {
         fiveYears = findViewById(R.id.fiveYears);
+        fiveYearsStatistics = findViewById(R.id.fiveYearsStatistic);
         oneYear = findViewById(R.id.oneYear);
+        oneYearStatistics = findViewById(R.id.oneYearStatistic);
         month = findViewById(R.id.month);
+        monthStatistics = findViewById(R.id.monthStatistic);
         day = findViewById(R.id.day);
+        dayStatistics = findViewById(R.id.dayStatistic);
         toolbar = findViewById(R.id.toolbar);
     }
 
@@ -58,9 +60,10 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                     }
                     int averageEffectiveness = x / itemCount;
 
-                    fiveYears.setText("Your average effectiveness for 5 years plan is: " + averageEffectiveness + "%");
+                    fiveYears.setText(getString(R.string.fiveYears));
+                    fiveYearsStatistics.setText(averageEffectiveness + "%");
                 } else {
-                    fiveYears.setText("Your average effectiveness for 5 years plan is: " + "No data available");
+                    fiveYears.setText(getString(R.string.fiveYears) + " " + getString(R.string.noData));
                 }
 
             }
@@ -77,9 +80,10 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                         x = x + oneYearList.get(i).getEffectiveness();
                     }
                     int averageEffectiveness = x / itemCount;
-                    oneYear.setText("Your average effectiveness for 1 year plan is: " + averageEffectiveness + "%");
+                    oneYear.setText(getString(R.string.oneYear));
+                    oneYearStatistics.setText(averageEffectiveness + "%");
                 } else {
-                    oneYear.setText("Your average effectiveness for 1 year plan is: " + "No data available");
+                    oneYear.setText(getString(R.string.oneYear) + " " + getString(R.string.noData));
                 }
             }
         });
@@ -94,10 +98,11 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                         x = x + monthList.get(i).getEffectiveness();
                     }
                     int averageEffectiveness = x / itemCount;
-                    month.setText("Your average effectiveness every month is: " + averageEffectiveness + "%");
+                    month.setText(getString(R.string.oneMonth));
+                    monthStatistics.setText(averageEffectiveness + "%");
 
                 } else {
-                    month.setText("Your average effectiveness every month is: " + "No data available");
+                    month.setText(getString(R.string.oneMonth) + " " + getString(R.string.noData));
                 }
             }
         });
@@ -113,9 +118,10 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                         x = x + dayList.get(i).getEffectiveness();
                     }
                     int averageEffectiveness = x / itemCount;
-                    day.setText("Your average effectiveness every day is: " + averageEffectiveness + "%");
+                    day.setText(getString(R.string.oneDay));
+                    dayStatistics.setText(averageEffectiveness + "%");
                 } else {
-                    day.setText("Your average effectiveness every day is: " + "No data available");
+                    day.setText(getString(R.string.oneDay) + " " + getString(R.string.noData));
                 }
 
             }

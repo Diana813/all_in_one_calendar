@@ -11,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.mainActivity.MainActivity;
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.mainActivity.MainActivity;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -73,13 +73,9 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         year = headerDate.getYear();
         headerDateDayOfWeek = calendarFill.getDayOfWeek();
 
-        //setCalendarColor(views);
-        setCalendarColor(R.drawable.weekend_frame,
-                Color.BLACK,
-                Color.parseColor("#000000"),
-                Color.BLACK,
-                R.drawable.frame_for_current_day_at_weekend,
-                R.drawable.frame_for_other_months_weekend);
+        setCalendarColor(
+                Color.parseColor("#000000")
+        );
 
         if (views.hasPeriod()) {
             periodImage.setImageResource(views.getmImageResourceId());
@@ -93,60 +89,6 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
         eventNameTextView.setText(views.getmEventName());
 
         return gridItemView;
-    }
-
-
-    private void setCalendarColor(CalendarViews views) {
-        if (views.getmColorSettings() == 1) {
-            setCalendarColor(R.drawable.weekend_frame,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend,
-                    R.drawable.frame_for_other_months_weekend);
-        } else if (views.getmColorSettings() == 2) {
-            setCalendarColor(R.drawable.weekend_frame_yellow,
-                    Color.parseColor("#b71c1c"),
-                    Color.parseColor("#000000"),
-                    Color.parseColor("#b71c1c"),
-                    R.drawable.frame_for_current_day_at_weekend_yellow,
-                    R.drawable.frame_for_other_months_weekend_yellow);
-        } else if (views.getmColorSettings() == 3) {
-            setCalendarColor(R.drawable.weekend_frame_green,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend_green,
-                    R.drawable.frame_for_other_months_weekend_green);
-        } else if ((views.getmColorSettings() == 4)) {
-            setCalendarColor(R.drawable.weekend_frame_blue,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend_blue,
-                    R.drawable.frame_for_other_months_weekend_blue);
-        } else if ((views.getmColorSettings() == 5)) {
-            setCalendarColor(R.drawable.weekend_frame_violet,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend_violet,
-                    R.drawable.frame_for_other_months_weekend_violet);
-        } else if ((views.getmColorSettings() == 6)) {
-            setCalendarColor(R.drawable.weekend_frame_grey,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend_grey,
-                    R.drawable.frame_for_other_months_weekend_grey);
-        } else {
-            setCalendarColor(R.drawable.weekend_frame,
-                    Color.BLACK,
-                    Color.parseColor("#000000"),
-                    Color.BLACK,
-                    R.drawable.frame_for_current_day_at_weekend,
-                    R.drawable.frame_for_other_months_weekend);
-        }
     }
 
 
@@ -164,22 +106,22 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     }
 
 
-    private void setCalendarColor(int backgroundResourceForWeekend, int textColorForWeekendShift, int textColorForCurrentDayNum, int texColorForShiftCurrentDay, int backgroundForCurrentDayWeekend, int backgroundForOtherMonthWeekend) {
+    private void setCalendarColor(int textColorForCurrentDayNum) {
 
         //Kolory kalendarza w zależności od dnia tygodnia
         if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-            layout.setBackgroundResource(backgroundResourceForWeekend);
+            layout.setBackgroundResource(R.drawable.weekend_frame);
             weekend();
-            shiftNumberTextView.setTextColor(textColorForWeekendShift);
+            shiftNumberTextView.setTextColor(Color.BLACK);
         }
 
         //Wyróżnienie dziesiejszej daty
         if (headerDate.isEqual(calendarFill)) {
             dayNumberTextView.setTextColor(textColorForCurrentDayNum);
             layout.setBackgroundResource(R.drawable.frame2);
-            shiftNumberTextView.setTextColor(texColorForShiftCurrentDay);
+            shiftNumberTextView.setTextColor(Color.BLACK);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(backgroundForCurrentDayWeekend);
+                layout.setBackgroundResource(R.drawable.frame_for_current_day_at_weekend);
                 todaysDateAtWeekend();
             }
         }
@@ -190,7 +132,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
             shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
             layout.setBackgroundResource(R.drawable.frame_for_other_month_days);
             if (headerDateDayOfWeek == DayOfWeek.SATURDAY || headerDateDayOfWeek == DayOfWeek.SUNDAY) {
-                layout.setBackgroundResource(backgroundForOtherMonthWeekend);
+                layout.setBackgroundResource(R.drawable.frame_for_other_months_weekend);
                 weekend();
                 shiftNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));
                 dayNumberTextView.setTextColor(Color.parseColor("#BDBDBD"));

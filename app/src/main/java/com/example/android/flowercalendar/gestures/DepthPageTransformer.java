@@ -4,22 +4,15 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.example.android.flowercalendar.personalGrowth.BigPlanAdapter;
-
 import androidx.viewpager2.widget.ViewPager2;
 
 import static com.example.android.flowercalendar.personalGrowth.BigPlanAdapter.getContext;
 
 public class DepthPageTransformer implements ViewPager2.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
-    private BigPlanAdapter bigPlanAdapter;
 
     public void transformPage(View view, float position) {
         int pageWidth = view.getWidth();
-        if (getContext() != null) {
-            bigPlanAdapter = new BigPlanAdapter(getContext());
-        }
-
 
         view.setTranslationX(-1 * view.getWidth() * position);
 

@@ -19,10 +19,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.flowercalendar.BuildConfig;
-import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
+import com.example.android.flowercalendar.mainActivity.MainActivity;
+import com.example.android.flowercalendar.utils.AppUtils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -54,7 +55,8 @@ public class LifeAims extends Fragment {
     private Bitmap selectedImageBitmap;
     private String absolutePath;
     private int layout;
-    private AppUtils appUtils = new AppUtils();
+    private static Uri uri;
+    private static String message;
 
     public LifeAims() {
         // Required empty public constructor
@@ -67,10 +69,6 @@ public class LifeAims extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        if (layout == 0) {
-            layout = R.layout.activity_life_aims;
-        }
         ViewGroup rootView = (ViewGroup) inflater.inflate(layout, container, false);
 
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
@@ -80,13 +78,19 @@ public class LifeAims extends Fragment {
         addPhoto = rootView.findViewById(R.id.addPhoto);
         searchImage = rootView.findViewById(R.id.searchPhoto);
 
-        appUtils.displayImageFromDB(aimImage);
+
+        AppUtils.displayImageFromDB(aimImage);
         askPermissions();
         checkCameraHardware(getActivity());
         setAddImageClickListener();
         setAddPhotoOnClickListener();
         setSearchImageOnClickListener();
-        getImageFromInternet();
+        if (uri != null) {
+            setImageFromTheInternet();
+        }
+        if (message != null && !message.equals("")) {
+            AppUtils.showFillInThisFieldDialog(message, getContext());
+        }
         return rootView;
     }
 
@@ -206,22 +210,19 @@ public class LifeAims extends Fragment {
     }
 
 
-    private void getImageFromInternet() {
+    static void getImageFromInternet(Uri uriFromInternet) {
+        uri = uriFromInternet;
+    }
 
-        if (getArguments() == null) {
-            return;
-        }
-        if (getArguments().getParcelable("image") != null) {
-            Uri receivedUri = getArguments().getParcelable("image");
-            aimImage.setImageURI(receivedUri);
-            Picasso.get().load(
-                    receivedUri).into(target);
-        }
+    private void setImageFromTheInternet() {
+        aimImage.setImageURI(uri);
+        Picasso.get().load(
+                uri).into(target);
 
     }
 
+
     private Target target = new Target() {
-        @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
             new Thread(() -> {
 
@@ -286,8 +287,6 @@ public class LifeAims extends Fragment {
                     }
                     saveToInternalStorage(selectedImageBitmap);
                     saveImagePathToDb(absolutePath);
-
-
                     break;
             }
         } else {
@@ -302,12 +301,31 @@ public class LifeAims extends Fragment {
 
         if (imagePathToUpdate != null) {
             if (!imagePathToUpdate.getImagePath().equals(path)) {
+                File file = new File(imagePathToUpdate.getImagePath());
+                boolean deleted = file.delete();
+                if(!deleted){
+                    boolean deleted2 = false;
+                    try {
+                        deleted2 = file.getCanonicalFile().delete();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(!deleted2){
+                        boolean deleted3 = Objects.requireNonNull(getContext()).deleteFile(file.getName());
+                    }
+                }
+                boolean exist = file.exists();
+                System.out.println(exist);
                 imagePathToUpdate.setImagePath(path);
                 imagePathDao.update(imagePathToUpdate);
             }
         } else {
             imagePathDao.insert(new ImagePath(0, path));
         }
+    }
+
+    static void getMessage(String messageInfo) {
+        message = messageInfo;
     }
 
 }

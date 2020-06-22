@@ -27,14 +27,8 @@ public interface ShiftsDao {
     @Query("DELETE FROM Shift")
     void deleteAll();
 
-    @Query("SELECT * FROM Shift")
-    LiveData<List<Shift>> getAllShifts();
-
     @Query("DELETE FROM shift WHERE shift_name = :shiftName")
     void deleteByShiftName(String shiftName);
-
-    @Query("SELECT * FROM shift WHERE id = :id")
-    Shift findByShiftId(int id);
 
     @Query("SELECT * FROM shift ORDER BY position ASC")
     LiveData<List<Shift>> sortByOrder();

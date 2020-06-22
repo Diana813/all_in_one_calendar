@@ -1,5 +1,6 @@
 package com.example.android.flowercalendar.personalGrowth;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,21 @@ public class BackgroundActivity extends Fragment {
 
         viewPager.setPageTransformer(new DepthPageTransformer());
 
+        if (getArguments() != null) {
+            Uri receivedUri;
+            String message;
+            if (getArguments().getParcelable("image") != null) {
+                receivedUri = getArguments().getParcelable("image");
+                message = "";
+                LifeAims.getMessage(message);
+                LifeAims.getImageFromInternet(receivedUri);
+            } else if (getArguments().get("message") != null) {
+                message = getArguments().getString("message");
+                receivedUri = null;
+                LifeAims.getImageFromInternet(receivedUri);
+                LifeAims.getMessage(message);
+            }
+        }
 
         return rootView;
 

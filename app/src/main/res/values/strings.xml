@@ -1,48 +1,20 @@
 <resources>
-    <string name="app_name">All in One Calendar</string>
+    <string name="app_name" translatable="false">All in One Calendar</string>
 
     <string name="periodStart">Mark the beginning of your period</string>
     <string name="periodLenght">How long does your period last?</string>
     <string name="cycleLenght">How long does your menstrual cycle last?</string>
-    <string name="confirmationButton">Confirm</string>
     <string name="logOutButton">Log out</string>
     <string name="settings">Color settings</string>
     <string name="chooseColor">Choose your color theme</string>
-
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-
     <string name="save">Save</string>
-    <!-- Dialog message when user is leaving editor but hasn't saved changes -->
-    <string name="unsaved_changes_dialog_message">Discard your changes and quit editing?</string>
-
-    <!-- Dialog button text for the option to discard a user's changes  -->
-    <string name="discard">Discard</string>
-
-    <!-- Dialog button text for the option to keep editing the current book  -->
-    <string name="keep_editing">Keep Editing</string>
-
-    <string name="No_start_date">No start day provided</string>
-    <string name="No_period_lenght">No period length provided</string>
-    <string name="No_cycle_lenght">No cycle length provided</string>
-    <string name="No_message">No message provided</string>
-    <string name="No_reminder">No reminder provided</string>
-    <string name="No_end">No end provided</string>
-    <string name="No_color_set">No color set</string>
-    <string name="Empty_field">Fill in all fields</string>
-    <string name="insert_data_error">Error with saving data</string>
-
-    <string name="data_saved">Data saved</string>
-    <string name="data_edited">Data edited</string>
-
-    <string name="edit_data_error">Error with editing data</string>
-    <string name="add_period_data_activity_label">Add your period data</string>
     <string name="edit_period_data_activity_label">Edit your period data</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_all_dialog_message">Delete all data?</string>
     <string name="delete_all">Delete all data</string>
-    <string name="welcomeText">All in One Calendar</string>
     <string name="header">All in One Calendar</string>
     <string name="Calendar">Calendar</string>
     <string name="ForGirls">For Girls</string>
@@ -64,26 +36,12 @@
     <string name="thisMonth">This month</string>
     <string name="dayPlan">Daily plan</string>
     <string name="tasks">Add your task</string>
-    <string name="weather">Current weather:</string>
-
-    <string name="current_date"> Current date</string>
-    <string name="add_event">Add event</string>
-    <string name="sun">SUN</string>
-    <string name="mon">MON</string>
-    <string name="tue">TUE</string>
-    <string name="wed">WED</string>
-    <string name="thu">THU</string>
-    <string name="fri">FRI</string>
-    <string name="sat">SAT</string>
-    <string name="last_date">30</string>
-
     <string name="shift_name">Shift</string>
     <string name="schedule">Schedule</string>
     <string name="alarm">Alarm</string>
     <string name="edit">Edit shift</string>
     <string name="empty_view_title">Add shift</string>
-    <string name="hintSchedule">8:00 – 16:00</string>
-    <string name="hintShiftName">1 or \"morning\"</string>
+    <string name="hintShiftName">1 or \"morn\"</string>
     <string name="hintAlarm"> 06:00</string>
     <string name="shiftStart">Shift start</string>
     <string name="shiftLenght">Shift length</string>
@@ -94,11 +52,6 @@
     <string name="snack_bar_text">Shift deleted</string>
     <string name="snack_bar_undo">Undo</string>
     <string name="deleteAllShifts">Delete all shifts</string>
-    <string name="plans">Your plans:</string>
-    <string name="events">Events</string>
-    <string name="cyclicalEvents">Cyclical events</string>
-    <string name="frequentActivities">Frequent activities</string>
-    <string name="cyclicalEventsDetails">One-time events</string>
     <string name="activitiesList">Frequent activities list:</string>
     <string name="addFrequentActivities">Add frequent activities</string>
     <string name="descriptionFrequentActivities">Add all the events that happen often and
@@ -107,20 +60,11 @@
     <string name="addCyclicalEvents">Add cyclical events</string>
     <string name="descriptionCyclicalEvents">Add all events that occur periodically
         and you want them to be marked on the calendar automatically</string>
-    <string name="dateOfTheEvent">Date</string>
-    <string name="timeOfTheEvent">Time</string>
     <string name="period">How long?</string>
     <string name="eventName">Event name:</string>
-    <string name="hintEventName">Cinema</string>
-    <string name="plansToMake">Make plans:)</string>
-    <string name="freqActiv">Add frequent activities</string>
-    <string name="emptyViewBigPlan">Add your aims</string>
     <string name="AimDeletedSnackBar">Aim deleted</string>
     <string name="ToDo">To do list</string>
     <string name="dailySchedule">Daily schedule</string>
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-
     <string name="Monday">MON</string>
     <string name="Tuesday">TUE</string>
     <string name="Wednesday">WED</string>
@@ -132,19 +76,13 @@
     <string name="minutes">minutes</string>
     <string name="numberOfHours">10</string>
     <string name="espandedListViewTitles">expandedListViewTitle</string>
-    <string name="good_morning">Good morning!</string>
-    <string name="have_a_nice_day">Have a nice day!</string>
-    <string name="its_time">It\'s 8:00 o\'clock</string>
-    <string name="turn_of_alarm">Silence</string>
     <string name="dialog_title_auth">Authentication is required to continue</string>
     <string name="dialog_msg_auth">This app uses authentication to protect your data.</string>
     <string name="alarmClockOff">Alarm clock off </string>
-    <string name="alarmClockOn">Alarm clock on: </string>
-    <string name="timeOfTheCyclicEvent">When</string>
     <string name="startDate">Start date</string>
     <string name="how_often">How often</string>
     <string name="what_time">What time</string>
-    <string name="birthday">Urodziny</string>
+    <string name="birthday">Birthday</string>
     <string name="every">Every</string>
     <string name="two">2</string>
     <string name="years">year(s)</string>
@@ -165,8 +103,38 @@
     <string name="show_statistics">Show statistics</string>
     <string name="your_average_effectiveness">Your average effectiveness:</string>
     <string name="notification">Notification</string>
-    <string name="all_in_one_calendar">All in One Calendar</string>
     <string name="add_new_hour">Add new hour</string>
     <string name="reset">Reset</string>
+    <string name="imageMessage">To download image from the Internet you need to long press the image and choose \"Share image\" via All In One Calendar</string>
+    <string name="fiveYears">5 years:</string>
+    <string name="noData">No data available</string>
+    <string name="oneYear">1 year:</string>
+    <string name="oneMonth">1 month:</string>
+    <string name="oneDay">1 day:</string>
+    <string name="effectiveness">Effectiveness: </string>
+    <string name="timeLeft">Time left: </string>
+    <string name="hoursLeft"> hours</string>
+    <string name="daysLeft"> days</string>
+    <string name="yearsLeft"> years, </string>
+    <string name="alarmOn">Alarm clock on:</string>
+    <string name="noAlarm">no alarm provided</string>
+    <string name="copied">Copied</string>
+    <string name="until">Until</string>
+    <string name="times">times</string>
+    <string name="Times">Times:</string>
+    <string name="requirements">Name of the event, it\'s start date and frequency are required</string>
+    <string name="ofTheMonth">of the  month</string>
+    <string name="first">first</string>
+    <string name="second">second</string>
+    <string name="third">third</string>
+    <string name="fourth">fourth</string>
+    <string name="fifth">fifth</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 
 </resources>

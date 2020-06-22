@@ -8,41 +8,25 @@ import android.content.Context;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.database.CalendarEvents;
+import com.example.android.flowercalendar.database.CalendarEventsDao;
+import com.example.android.flowercalendar.database.Event;
+import com.example.android.flowercalendar.database.EventsDao;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import androidx.cardview.widget.CardView;
 
-class CalendarUtils {
+import static com.example.android.flowercalendar.database.CalendarDatabase.getDatabase;
 
-    private CalendarFragment calendarFragment;
-
-   /* void setBackgroundDrawing(LocalDate date, LinearLayout layout) {
-
-        Month currentMonth = date.getMonth();
-
-        if (currentMonth.equals(Month.DECEMBER) || currentMonth.equals(Month.JANUARY) ||
-                currentMonth.equals(Month.FEBRUARY)) {
-            layout.setBackgroundResource(R.mipmap.klonzima);
-        } else if (currentMonth.equals(Month.MARCH) || currentMonth.equals(Month.APRIL) ||
-                currentMonth.equals(Month.MAY)) {
-            layout.setBackgroundResource(R.mipmap.klonwiosna);
-        } else if (currentMonth.equals(Month.JUNE) || currentMonth.equals(Month.JULY) ||
-                currentMonth.equals(Month.AUGUST)) {
-            layout.setBackgroundResource(R.mipmap.klonlato);
-        } else if (currentMonth.equals(Month.SEPTEMBER) || currentMonth.equals(Month.OCTOBER) ||
-                currentMonth.equals(Month.NOVEMBER)) {
-            layout.setBackgroundResource(R.mipmap.klonjesien);
-        }
-
-    }*/
+public class CalendarUtils {
 
     //Animacja obrotu kalendarza
-    void flipAnimation(CardView calendarCardView) {
+    static void flipAnimation(CardView calendarCardView) {
 
         final ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 1f, 0f);
         final ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 0f, 1f);
@@ -58,14 +42,15 @@ class CalendarUtils {
         objectAnimator.start();
     }
 
-    void showDeleteConfirmationDialog(final Context context, final LocalDate date, final TextView textView, final LinearLayout layout, final GridView gridView) {
 
-        calendarFragment = new CalendarFragment();
+    static void showDeleteConfirmationDialog(final Context context, final LocalDate date, final TextView textView, final GridView gridView) {
+
+        CalendarFragment calendarFragment = new CalendarFragment();
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(R.string.delete_all_dialog_message);
         builder.setPositiveButton(R.string.delete, (dialog, id) -> {
             calendarFragment.deleteAllShifts(date);
-            calendarFragment.fillTheCalendar(context, textView, layout, gridView);
+            calendarFragment.fillTheCalendar(context, textView, gridView);
         });
         builder.setNegativeButton(R.string.cancel, (dialog, id) -> {
 
@@ -76,5 +61,27 @@ class CalendarUtils {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+    public static void saveEventsNumberToPickedDate(String pickedDay, Context context) {
+
+        EventsDao eventsDao = getDatabase(context).eventsDao();
+        List<Event> listOfEvents = eventsDao.findByEventDate(pickedDay, 1, 3);
+        int numberOfEvents = listOfEvents.size();
+
+        CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
+        CalendarEvents eventToUpdate = calendarEventsDao.findBypickedDate(pickedDay);
+
+        if (eventToUpdate != null) {
+
+            if (!eventToUpdate.getEventsNumber().equals(String.valueOf(numberOfEvents))) {
+                eventToUpdate.setEventsNumber(String.valueOf(numberOfEvents));
+                calendarEventsDao.update(eventToUpdate);
+
+            }
+        } else {
+            calendarEventsDao.insert(new CalendarEvents("", false, pickedDay, String.valueOf(numberOfEvents), null));
+        }
     }
 }

@@ -4,16 +4,18 @@ import android.content.Context;
 
 import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.events.CyclicalEvents.UpcomingCyclicalEvent;
+import com.example.android.flowercalendar.events.cyclicalEvents.UpcomingCyclicalEvent;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import static com.example.android.flowercalendar.alarm.Notification.ACTION_OPEN_NOTIFICATION_CLASS;
+import static com.example.android.flowercalendar.alarm.Notification.ACTION_SET_NOTIFICATION;
 
 public class CyclicalEventsNotifications {
 
-    public void setNotification(Event event, Context context) {
+
+    public static void setNotification(Event event, Context context) {
 
         if (event.getAlarm() == null || event.getAlarm().equals("")) {
             return;
@@ -111,19 +113,8 @@ public class CyclicalEventsNotifications {
                 && !frequency.substring(0, 4).equals("0-0-")
                 && frequency.substring(0, 2).equals("0-")) {
 
-            int monthsFrequency = Integer.parseInt(frequency.substring(2, 3));
-
-            String weeksOrMonths = frequency.substring(4, 6);
-
-            if (weeksOrMonths.contains("*m")) {
-                //todo
-                LocalDate upcomingEvent = AppUtils.refactorStringIntoDate(event.getPickedDay()).plusMonths(monthsFrequency);
-                long nextEvent = AppUtils.dateStringToMilis(upcomingEvent.toString());
-                intervalMilis = nextEvent - startDate;
-                AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, action, intervalMilis, eventName);
-            } else {
-                //todo
-            }
+            long intervalMil = Long.parseLong("2592000000");
+            AlarmUtils.setCyclicalNotification(alarmHour, alarmMinutes, AppUtils.refactorStringIntoDate(event.getPickedDay()), context, ACTION_SET_NOTIFICATION, intervalMil, eventName);
 
             //years
         } else {
@@ -149,6 +140,8 @@ public class CyclicalEventsNotifications {
             String alarmMinutes = alarmParts[1];
 
             AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context, ACTION_OPEN_NOTIFICATION_CLASS);
+
+            AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(event.getPickedDay()), alarmHour, alarmMinutes, context, ACTION_SET_NOTIFICATION);
         }
     }
 

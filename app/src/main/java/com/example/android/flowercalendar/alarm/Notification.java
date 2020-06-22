@@ -13,6 +13,8 @@ public class Notification extends AlarmService {
 
     public static final String ACTION_STOP = "OK";
     public static final String ACTION_OPEN_NOTIFICATION_CLASS = "Open notification class";
+    public static final String ACTION_SET_NOTIFICATION = "Set notification";
+
     private String notificationInfo;
 
 

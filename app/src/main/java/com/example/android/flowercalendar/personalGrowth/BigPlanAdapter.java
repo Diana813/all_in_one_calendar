@@ -15,8 +15,8 @@ import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
-import com.example.android.flowercalendar.events.EventsListAdapter;
-import com.example.android.flowercalendar.events.StringsAims;
+import com.example.android.flowercalendar.events.eventsUtils.EventsListAdapter;
+import com.example.android.flowercalendar.events.eventsUtils.StringsAims;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;

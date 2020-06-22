@@ -1,14 +1,9 @@
 package com.example.android.flowercalendar.utils;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -22,15 +17,10 @@ import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Event;
-import com.example.android.flowercalendar.database.EventsDao;
 import com.example.android.flowercalendar.database.ImagePath;
 import com.example.android.flowercalendar.database.ImagePathDao;
-import com.example.android.flowercalendar.events.EventsListAdapter;
-import com.example.android.flowercalendar.events.ExpandedDayView.ToDoList;
-import com.example.android.flowercalendar.events.FrequentActivities.FrequentActivities;
+import com.example.android.flowercalendar.events.eventsUtils.UtilsEvents;
 import com.example.android.flowercalendar.personalGrowth.BigPlanAdapter;
-import com.example.android.flowercalendar.widget.CalendarWidgetProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -101,19 +90,9 @@ public class AppUtils {
             adapter.deleteFromDatabase();
             adapter.setAimIndexInDB();
             if (pickedDay != null) {
-                saveDataEvents(aim, pickedDay, null, frequency, schedule, eventKind);
+                UtilsEvents.saveDataEvents(aim, pickedDay, null, frequency, schedule, eventKind);
             }
             aim.setText("");
-        });
-
-    }
-
-    public static void setConfirmButtonEvents(ImageButton confirm, final EventsListAdapter adapter, final TextView textView, final String pickedDay, final String newEvent, String frequency, String schedule, int eventKind) {
-        confirm.setOnClickListener(v -> {
-            saveDataEvents(textView, pickedDay, newEvent, frequency, schedule, eventKind);
-            adapter.deleteFromDatabase(null);
-            adapter.setIndexInDB();
-            textView.setText("");
         });
 
     }
@@ -131,56 +110,8 @@ public class AppUtils {
 
     }
 
-    public static void saveDataEvents(TextView plan, String pickedDay, String newEvent, String frequency, String schedule, int eventKind) {
 
-        String eventTextString;
-        if (newEvent != null) {
-            eventTextString = newEvent;
-        } else {
-            eventTextString = plan.getText().toString();
-        }
-
-
-        int index;
-        if (pickedDay.equals("")) {
-            index = FrequentActivities.getFreqActSize();
-        } else {
-            index = ToDoList.positionOfTheNextEventOnTheList();
-        }
-
-
-        EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        if (!schedule.equals("")) {
-            Event eventToUpdate = eventsDao.findBySchedule(pickedDay, schedule);
-
-            if (eventToUpdate != null) {
-                if (eventToUpdate.getSchedule().equals(schedule) &&
-                        !eventToUpdate.getEvent_name().equals(eventTextString)) {
-                    eventToUpdate.setEvent_name(eventTextString);
-                    eventsDao.update(eventToUpdate);
-                }
-
-            }
-        }
-
-        Event cyclicalEvent = eventsDao.findByEventNameKindAndPickedDay(eventTextString, pickedDay, 1);
-        if (cyclicalEvent != null) {
-            if (!cyclicalEvent.getEvent_name().equals(eventTextString) ||
-                    !cyclicalEvent.getPickedDay().equals(pickedDay) || cyclicalEvent.getEventKind() != eventKind) {
-                cyclicalEvent.setEvent_name(eventTextString);
-                cyclicalEvent.setPickedDay(pickedDay);
-                cyclicalEvent.setEventKind(eventKind);
-                eventsDao.update(cyclicalEvent);
-            }
-        } else {
-
-            eventsDao.insert(new Event(index, eventTextString, schedule, null, 0, pickedDay, eventKind, frequency, "0"));
-        }
-
-    }
-
-
-    public void displayImageFromDB(ImageView view) {
+    public static void displayImageFromDB(ImageView view) {
 
         ImagePathDao imagePathDao = getDatabase(getContext()).imagePathDao();
         ImagePath imagePath = imagePathDao.findLastImage();
@@ -195,7 +126,7 @@ public class AppUtils {
     }
 
 
-    private void loadImageFromStorage(String path, ImageView view) {
+    private static void loadImageFromStorage(String path, ImageView view) {
 
         try {
             File file = new File(path, "aimImage.jpg");
@@ -206,9 +137,6 @@ public class AppUtils {
         }
 
     }
-
-
-
 
 
     public static LocalDate refactorStringIntoDate(String stringDate) {

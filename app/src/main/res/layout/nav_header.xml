@@ -12,9 +12,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/comfortaa"
         android:text="@string/header"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
 </LinearLayout>

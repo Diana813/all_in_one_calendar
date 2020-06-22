@@ -2,7 +2,6 @@ package com.example.android.flowercalendar.database;
 
 import java.util.List;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -34,10 +33,6 @@ public interface CalendarEventsDao {
 
     @Query("UPDATE calendar_events SET shiftNumber = '' WHERE currentMonth = :currentMonth")
     void deleteAllShifts(String currentMonth);
-
-
-    @Query("SELECT * FROM calendar_events")
-    LiveData<List<CalendarEvents>> getAllCalendarEvents();
 
     @Insert()
     void insert(CalendarEvents calendarEvent);

@@ -27,18 +27,8 @@ public interface StatisticsPersonalGrowthDao {
     @Query("DELETE FROM statistics_personal_growth")
     void deleteAll();
 
-    @Query("DELETE FROM statistics_personal_growth WHERE effectiveness = 0")
-    void deleteByEffectiveness();
-
-
     @Query("SELECT * FROM statistics_personal_growth ORDER BY aim_time ASC")
     LiveData<List<StatisticsPersonalGrowth>> getAllStatisticsPersonalGrowth();
-
-    @Query("SELECT * FROM statistics_personal_growth WHERE dateOfAdding = :dateOfAdding AND aim_time = :aimTime")
-    StatisticsPersonalGrowth findByDateOfAdding(String dateOfAdding, int aimTime);
-
-    @Query("SELECT * FROM statistics_personal_growth WHERE aim_time = :aimTime limit 1")
-    StatisticsPersonalGrowth findfirstItem(int aimTime);
 
     @Query("SELECT * FROM statistics_personal_growth WHERE aim_time = :aimTime ORDER BY dateOfAdding = :dateOfAdding DESC limit 1")
     StatisticsPersonalGrowth findLastItem(int aimTime, String dateOfAdding);

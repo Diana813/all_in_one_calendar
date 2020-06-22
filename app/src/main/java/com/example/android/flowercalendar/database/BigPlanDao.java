@@ -17,14 +17,8 @@ public interface BigPlanDao {
     @Update()
     void update(BigPlanData bigPlanData);
 
-    @Query("DELETE FROM big_plan_data WHERE aimContents =:aimContent")
-    void deleteByAimContent(String aimContent);
-
     @Query("DELETE FROM big_plan_data WHERE (aimIndex =:aimIndex AND aimTime = :aimTime AND aimContents = :aimContent)")
     void deleteItemFromPlans(int aimIndex, int aimTime, String aimContent);
-
-    @Query("UPDATE big_plan_data SET aimIndex = :aimIndex")
-    void updateAimIndex(String aimIndex);
 
     @Query("DELETE FROM big_plan_data WHERE aimTime = :aimTime")
     void deleteAll(int aimTime);

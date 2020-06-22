@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,18 +13,16 @@ import android.widget.ExpandableListView;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.calendar.CalendarFragment;
 import com.example.android.flowercalendar.coworkers.CoworkerFragment;
-import com.example.android.flowercalendar.events.CyclicalEvents.CyclicalEvents;
-import com.example.android.flowercalendar.events.FrequentActivities.FrequentActivities;
+import com.example.android.flowercalendar.events.cyclicalEvents.CyclicalEvents;
+import com.example.android.flowercalendar.events.frequentActivities.FrequentActivities;
 import com.example.android.flowercalendar.forGirls.ForGirlsFragment;
 import com.example.android.flowercalendar.personalGrowth.BackgroundActivity;
-import com.example.android.flowercalendar.personalGrowth.LifeAims;
 import com.example.android.flowercalendar.shifts.ShiftsFragment;
 import com.example.android.flowercalendar.widget.WidgetUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -85,24 +82,31 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
-        if ("android.intent.action.SEND".equals(action) && "text/".equals(type)) {
-            Log.println(Log.ASSERT, "shareablTextExtra", Objects.requireNonNull(intent.getStringExtra("android.intent.extra.TEXT")));
-        } else if (("android.intent.action.SEND".equals(action) && "image/jpeg".equals(type))) {
+
+        if ("android.intent.action.SEND".equals(action) && "image/jpeg".equals(type)) {
             Uri receivedUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
             if (receivedUri != null) {
-                Fragment lifeAims = new LifeAims();
+                Fragment backgroundActivity = new BackgroundActivity();
                 Bundle args = new Bundle();
                 args.putParcelable("image", receivedUri);
-                lifeAims.setArguments(args);
+                backgroundActivity.setArguments(args);
                 FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
-                tx.replace(R.id.flContent, lifeAims);
+                tx.replace(R.id.flContent, backgroundActivity);
                 tx.commit();
             }
 
 
-        }
+        } else if ("android.intent.action.SEND".equals(action) && "text/plain".equals(type)) {
 
+            Fragment backgroundActivity = new BackgroundActivity();
+            Bundle args = new Bundle();
+            args.putString("message", getString(R.string.imageMessage));
+            backgroundActivity.setArguments(args);
+            FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
+            tx.replace(R.id.flContent, backgroundActivity);
+            tx.commit();
+        }
     }
 
 
@@ -148,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public static LinkedHashMap<String, List<String>> getData() {
+    public LinkedHashMap<String, List<String>> getData() {
 
         LinkedHashMap<String, List<String>> expandableListDetail = new LinkedHashMap<>();
 
@@ -163,15 +167,15 @@ public class MainActivity extends AppCompatActivity {
         List<String> personalGrowth = new ArrayList<>();
 
         List<String> events = new ArrayList<>();
-        events.add("Cyclical Events");
-        events.add("Frequent activities");
+        events.add(getString(R.string.CyclicalEvents));
+        events.add(getString(R.string.FrequentActivities));
 
-        expandableListDetail.put("Calendar", calendar);
-        expandableListDetail.put("Events", events);
-        expandableListDetail.put("For girls", forGirls);
-        expandableListDetail.put("Shifts", shifts);
-        expandableListDetail.put("Coworkers", coworkers);
-        expandableListDetail.put("Personal growth", personalGrowth);
+        expandableListDetail.put(getString(R.string.Calendar), calendar);
+        expandableListDetail.put(getString(R.string.OneTimeEvents), events);
+        expandableListDetail.put(getString(R.string.ForGirls), forGirls);
+        expandableListDetail.put(getString(R.string.Shifts), shifts);
+        expandableListDetail.put(getString(R.string.Coworkers), coworkers);
+        expandableListDetail.put(getString(R.string.PersonalGrowth), personalGrowth);
 
 
         return expandableListDetail;
@@ -278,7 +282,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+    private boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+                                 int childPosition, long id) {
         Fragment fragment = null;
 
         Class fragmentClass;
@@ -303,4 +308,6 @@ public class MainActivity extends AppCompatActivity {
         mDrawer.closeDrawers();
         return true;
     }
+
+
 }

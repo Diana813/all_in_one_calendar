@@ -3,17 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/singleFreqActItem"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    android:elevation="8dp">
 
-    <TextView
-        android:id="@+id/numberOfEvents"
-        style="@style/textViewStylePlansList"
-        android:layout_width="match_parent"
-        tools:text="kino" />
+        <TextView
+            android:id="@+id/numberOfEvents"
+            style="@style/textViewStylePlansList"
+            android:layout_width="match_parent"
+            tools:text="kino" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000" />
 
 </LinearLayout>

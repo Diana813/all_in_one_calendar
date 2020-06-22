@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanDao;
 import com.example.android.flowercalendar.database.BigPlanData;
@@ -24,6 +23,7 @@ import com.example.android.flowercalendar.database.StatisticsPersonalGrowth;
 import com.example.android.flowercalendar.database.StatisticsPersonalGrowthDao;
 import com.example.android.flowercalendar.gestures.GestureInteractionsRecyclerView;
 import com.example.android.flowercalendar.statistics.StatisticsOfEffectiveness;
+import com.example.android.flowercalendar.utils.AppUtils;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -138,7 +138,7 @@ public class Plan extends Fragment {
                         progress = aimsList.size() * 100 / newId;
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
-                        effectiveness.setText("Effectiveness: " + progress + "%");
+                        effectiveness.setText((getString(R.string.effectiveness)) + " " + progress + "%");
                     } else if (aims.size() == 0) {
                         progress = -1;
                     } else {

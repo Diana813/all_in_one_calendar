@@ -1,29 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/statisticsItem"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle">
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+    android:background="@color/colorPrimaryDark">
 
     <include layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/statisticHeader"
         style="@style/textViewHeaders.statistics"
-        android:text="@string/your_average_effectiveness" />
+        android:gravity="center"
+        android:padding="40dp"
+        android:text="@string/your_average_effectiveness"
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/fiveYears"
-        style="@style/textViewHeaders.statistics.small" />
+    <LinearLayout
+        style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+        android:background="@drawable/statistics_background">
 
-    <TextView
-        android:id="@+id/oneYear"
-        style="@style/textViewHeaders.statistics.small" />
 
-    <TextView
-        android:id="@+id/month"
-        style="@style/textViewHeaders.statistics.small" />
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical">
 
-    <TextView
-        android:id="@+id/day"
-        style="@style/textViewHeaders.statistics.small" />
+            <TextView
+                android:id="@+id/fiveYears"
+                style="@style/textViewHeaders.statistics.small"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                tools:text="5 years plan:" />
+
+            <TextView
+                android:id="@+id/fiveYearsStatistic"
+                style="@style/textViewHeaders.statistics"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                tools:text="50%" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/oneYear"
+                style="@style/textViewHeaders.statistics.small"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                tools:text="5 years plan:" />
+
+            <TextView
+                android:id="@+id/oneYearStatistic"
+                style="@style/textViewHeaders.statistics"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                tools:text="50%" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/month"
+                style="@style/textViewHeaders.statistics.small"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                tools:text="5 years plan:" />
+
+            <TextView
+                android:id="@+id/monthStatistic"
+                style="@style/textViewHeaders.statistics"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                tools:text="50%" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/day"
+                style="@style/textViewHeaders.statistics.small"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                tools:text="5 years plan:" />
+
+            <TextView
+                android:id="@+id/dayStatistic"
+                style="@style/textViewHeaders.statistics"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                tools:text="50%" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -7,7 +7,7 @@
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
         android:background="@color/lightGrey"
-        tools:context=".events.CyclicalEvents.CyclicalEventsDetails">
+        tools:context=".events.cyclicalEvents.CyclicalEventsDetails">
 
         <androidx.cardview.widget.CardView style="@style/cardViewColorSettingsAndOverviewStyle">
 

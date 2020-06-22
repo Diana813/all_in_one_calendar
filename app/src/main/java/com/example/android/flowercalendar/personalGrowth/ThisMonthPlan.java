@@ -69,9 +69,9 @@ public class ThisMonthPlan extends Plan {
                 long howManyDaysLeft = howMuchTimeLeft(timeOutDate).toDays();
                 if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
                     howManyDaysLeft = howMuchTimeLeft(timeOutDate).toHours();
-                    timeOut.setText("Time left: " + howManyDaysLeft + " hours");
+                    timeOut.setText((getString(R.string.timeLeft)) + " " + howManyDaysLeft + " " + getString(R.string.hoursLeft));
                 } else {
-                    timeOut.setText("Time left: " + howManyDaysLeft + " days");
+                    timeOut.setText((getString(R.string.timeLeft)) + " " + howManyDaysLeft + " " + getString(R.string.daysLeft));
                 }
 
                 if (timeOutDate.isBefore(LocalDate.now()) ||

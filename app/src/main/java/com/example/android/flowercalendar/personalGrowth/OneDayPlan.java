@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.android.flowercalendar.calendar.CalendarFragment;
+import com.example.android.flowercalendar.calendar.CalendarUtils;
 import com.example.android.flowercalendar.utils.AppUtils;
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.BigPlanData;
-import com.example.android.flowercalendar.events.EventsListAdapter;
-import com.example.android.flowercalendar.events.EventsViewModel;
-import com.example.android.flowercalendar.events.ExpandedDayView.ToDoList;
+import com.example.android.flowercalendar.events.eventsUtils.EventsListAdapter;
+import com.example.android.flowercalendar.events.eventsUtils.EventsViewModel;
+import com.example.android.flowercalendar.events.expandedDayView.ToDoList;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +28,6 @@ public class OneDayPlan extends Plan {
 
     private Context context;
     private LocalDate pickedDay;
-    private ToDoList toDoList;
     private EventsListAdapter eventsListAdapter;
     private LocalDate timeOutDate;
 
@@ -35,7 +36,6 @@ public class OneDayPlan extends Plan {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        toDoList = new ToDoList();
         eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext());
 
     }
@@ -44,7 +44,7 @@ public class OneDayPlan extends Plan {
     @Override
     public void onPause() {
         super.onPause();
-        toDoList.setNumberOfEventsToPickedDate(String.valueOf(pickedDay));
+        CalendarUtils.saveEventsNumberToPickedDate(String.valueOf(pickedDay), context);
         eventsListAdapter.setIndexInDB();
         addEffectivenesToDB(context, 4, firstItemDate, progress);
     }
@@ -74,7 +74,7 @@ public class OneDayPlan extends Plan {
 
                 timeOutDate = AppUtils.refactorStringIntoDate(aims.get(0).getStartDate()).plusDays(1);
                 long howManyHoursLeft = howMuchTimeLeft(timeOutDate).toHours();
-                timeOut.setText("Time left: " + howManyHoursLeft + " hours");
+                timeOut.setText((getString(R.string.timeLeft)) + " " + howManyHoursLeft + " " + getString(R.string.hoursLeft));
 
                 if (timeOutDate.isBefore(LocalDate.now()) ||
                         timeOutDate.isEqual(LocalDate.now())) {

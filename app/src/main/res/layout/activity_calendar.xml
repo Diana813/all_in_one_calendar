@@ -104,9 +104,6 @@
 
     </LinearLayout>
 
-
-    <include layout="@layout/color_settings" />
-
     <include layout="@layout/shifts_setting_bottom_sheet" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

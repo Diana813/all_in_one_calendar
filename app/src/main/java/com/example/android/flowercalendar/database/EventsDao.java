@@ -24,16 +24,11 @@ public interface EventsDao {
     @Query("SELECT * FROM event WHERE event_name = :eventName")
     List<Event> findByEventNameList(String eventName);
 
-
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
     Event findBySchedule(String pickedDay, String schedule);
 
     @Query("DELETE FROM event WHERE picked_day = :pickedDay AND schedule = :schedule")
     void deleteBySchedule(String pickedDay, String schedule);
-
-    @Query("DELETE FROM event WHERE event_name = :eventName AND term = :term")
-    void deleteByEventNameAndTerm(String eventName, String term);
-
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Event event);
@@ -47,17 +42,8 @@ public interface EventsDao {
     @Query("DELETE FROM event")
     void deleteAll();
 
-    @Query("SELECT * FROM event")
-    LiveData<List<Event>> getAllEvents();
-
     @Query("DELETE FROM event WHERE event_name = :eventName")
     void deleteByEventName(String eventName);
-
-    @Query("DELETE FROM event WHERE eventKind = :eventKind")
-    void deleteByEventKind(int eventKind);
-
-    @Query("DELETE FROM event WHERE eventKind = :eventKind AND frequency LIKE :frequency ||'%'")
-    void deleteByfrequency(int eventKind, String frequency);
 
     @Query("SELECT * FROM event WHERE picked_day = :pickedDay AND (eventKind = :eventKind OR eventKind = :eventKind2)")
     List<Event> findByEventDate(String pickedDay, int eventKind, int eventKind2);
@@ -87,7 +73,3 @@ public interface EventsDao {
     void deleteByPickedDateKindAndName(String pickedDay, int eventKind, String event_name);
 }
 
-
-
-/*
-SELECT * FROM event WHERE (picked_day = "2020-05-28" AND eventKind = 1 AND schedule = "") ORDER BY position ASC*/
