@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.calendar.CalendarFragment;
-import com.example.android.flowercalendar.calendar.CalendarUtils;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.Event;
 import com.example.android.flowercalendar.database.EventsDao;
@@ -34,12 +33,6 @@ public class ExpandedDayEvents extends Fragment {
     public ExpandedDayEvents() {
         // Required empty public constructor
     }
-
-    public void onPause() {
-        super.onPause();
-        CalendarUtils.saveEventsNumberToPickedDate(pickedDay, context);
-    }
-
 
     @Override
     public void onAttach(@NonNull Context context) {

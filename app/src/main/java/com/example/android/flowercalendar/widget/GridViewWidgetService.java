@@ -8,6 +8,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.calendar.CalendarViews;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,17 +18,17 @@ public class GridViewWidgetService extends RemoteViewsService {
 
     @Override
     public AppWidgetGridView onGetViewFactory(Intent intent) {
-        return new AppWidgetGridView(this.getApplicationContext(), WidgetData.widgetData(getApplicationContext()));
+        return new AppWidgetGridView(this.getApplicationContext(), WidgetData.widgetData());
 
     }
 }
 
 class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
 
-    private List<DataListWidget> dataList;
+    private List<CalendarViews> dataList;
     private Context context;
 
-    AppWidgetGridView(Context applicationContext, List<DataListWidget> dataList) {
+    AppWidgetGridView(Context applicationContext, List<CalendarViews> dataList) {
         this.context = applicationContext;
         this.dataList = dataList;
     }
@@ -39,7 +40,7 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-        dataList = WidgetData.widgetData(context.getApplicationContext());
+        dataList = WidgetData.widgetData();
     }
 
     @Override
@@ -74,13 +75,13 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
             views.setTextColor(R.id.dayOfAWeek, Color.BLACK);
         }
 
-        views.setTextViewText(R.id.dayNumber, String.valueOf(dataList.get(position).getDayNumber()));
-        views.setTextViewText(R.id.shiftNumber, dataList.get(position).getShiftNumber());
+        views.setTextViewText(R.id.dayNumber, String.valueOf(dataList.get(position).getmDayNumber()));
+        views.setTextViewText(R.id.shiftNumber, dataList.get(position).getmShiftNumber());
         views.setTextColor(R.id.shiftNumber, Color.BLACK);
-        views.setTextViewText(R.id.numberOfEvents, dataList.get(position).getNumberOfEvents());
+        views.setTextViewText(R.id.numberOfEvents, dataList.get(position).getmEventName());
         views.setTextColor(R.id.numberOfEvents, Color.parseColor("#002171"));
 
-        if (dataList.get(position).isHasPeriod()) {
+        if (dataList.get(position).hasPeriod()) {
             views.setImageViewResource(R.id.periodImage, R.mipmap.period_icon_v2);
             views.setViewVisibility(R.id.periodImage, View.VISIBLE);
         } else {
@@ -88,10 +89,10 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
         }
 
         Intent fillInIntent = new Intent();
-        fillInIntent.putExtra("dayNumber", dataList.get(position).getDayNumber());
-        fillInIntent.putExtra("shiftNumber", dataList.get(position).getShiftNumber());
-        fillInIntent.putExtra("numberOfEvents", dataList.get(position).getNumberOfEvents());
-        fillInIntent.putExtra("hasPeriod", dataList.get(position).isHasPeriod());
+        fillInIntent.putExtra("dayNumber", dataList.get(position).getmDayNumber());
+        fillInIntent.putExtra("shiftNumber", dataList.get(position).getmShiftNumber());
+        fillInIntent.putExtra("numberOfEvents", dataList.get(position).getmEventName());
+        fillInIntent.putExtra("hasPeriod", dataList.get(position).hasPeriod());
         views.setOnClickFillInIntent(R.id.singleItem, fillInIntent);
         return views;
     }

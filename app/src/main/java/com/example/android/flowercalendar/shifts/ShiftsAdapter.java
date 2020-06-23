@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
 import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Colors;
-import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Shift;
 import com.example.android.flowercalendar.database.ShiftsDao;
 import com.google.android.material.snackbar.Snackbar;
@@ -121,40 +119,8 @@ public class ShiftsAdapter extends RecyclerView.Adapter<ShiftsAdapter.ShiftsView
         holder.shiftName.setBackgroundColor(Color.parseColor("#33691E"));
         holder.shiftName.setTextColor(Color.WHITE);
 
-        //setshiftsColor(holder);
     }
 
-    private void setshiftsColor(ShiftsViewHolder holder) {
-
-        ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
-        Colors newColor = colorsDao.findLastColor1();
-        if (newColor != null) {
-            int chosenColor = newColor.getColor_number();
-
-            if (chosenColor == 1) {
-                //red
-                holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
-            } else if (chosenColor == 2) {
-                //yellow
-                holder.shiftName.setBackgroundColor(Color.parseColor("#ffeb3b"));
-            } else if (chosenColor == 3) {
-                //green
-                holder.shiftName.setBackgroundColor(Color.parseColor("#64dd17"));
-            } else if (chosenColor == 4) {
-                //blue
-                holder.shiftName.setBackgroundColor(Color.parseColor("#448aff"));
-            } else if (chosenColor == 5) {
-                //violet
-                holder.shiftName.setBackgroundColor(Color.parseColor("#ba68c8"));
-            } else if (chosenColor == 6) {
-                //grey
-                holder.shiftName.setBackgroundColor(Color.parseColor("#757575"));
-            } else {
-                //red
-                holder.shiftName.setBackgroundColor(Color.parseColor("#b71c1c"));
-            }
-        }
-    }
 
     public void deleteItem(int position) {
 

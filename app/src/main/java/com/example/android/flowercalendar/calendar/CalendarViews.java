@@ -14,47 +14,44 @@ public class CalendarViews {
     private LocalDate mPeriodStart;
     private LocalDate mPeriodEnd;
     private LocalDate mHeaderDate;
-    private int mColorSettings;
 
-    CalendarViews(int colorSettings, LocalDate calendarFill, LocalDate headerDate, int dayNumber, String shiftNumber, String eventName) {
+    CalendarViews(LocalDate calendarFill, LocalDate headerDate, int dayNumber, String shiftNumber, String numberOfEvents) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
-        mEventName = eventName;
+        mEventName = numberOfEvents;
         mCalendarFill = calendarFill;
         mHeaderDate = headerDate;
-        mColorSettings = colorSettings;
     }
 
-    CalendarViews(int colorSettings, LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, String shiftNumber, String eventName, int imageResourceId) {
+    CalendarViews(LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, String shiftNumber, String numberOfEvents, int imageResourceId) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
-        mEventName = eventName;
+        mEventName = numberOfEvents;
         mImageResourceId = imageResourceId;
         mCalendarFill = calendarFill;
         mPeriodStart = periodStart;
         mPeriodEnd = periodEnd;
         mHeaderDate = headerDate;
-        mColorSettings = colorSettings;
     }
 
 
-    LocalDate getmCalendarFill() {
+    public LocalDate getmCalendarFill() {
         return mCalendarFill;
     }
 
-    int getmDayNumber() {
+    public int getmDayNumber() {
         return mDayNumber;
     }
 
-    String getmShiftNumber() {
+    public String getmShiftNumber() {
         return mShiftNumber;
     }
 
-    String getmEventName() {
+    public String getmEventName() {
         return mEventName;
     }
 
-    int getmImageResourceId() {
+    public int getmImageResourceId() {
         return mImageResourceId;
     }
 
@@ -66,19 +63,12 @@ public class CalendarViews {
         return mPeriodEnd;
     }
 
-    LocalDate getmHeaderDate() {
+    public LocalDate getmHeaderDate() {
         return mHeaderDate;
     }
 
-    int getmColorSettings() {
-        return mColorSettings;
-    }
-
-    boolean hasPeriod() {
+    public boolean hasPeriod() {
         return mImageResourceId != NO_IMAGE_PROVIDED;
     }
 
-    public void setmColorSettings(int colorSettings) {
-        mColorSettings = colorSettings;
-    }
 }

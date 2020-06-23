@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
-import com.example.android.flowercalendar.database.CalendarDatabase;
-import com.example.android.flowercalendar.database.Colors;
-import com.example.android.flowercalendar.database.ColorsDao;
 import com.example.android.flowercalendar.database.Shift;
 
 import java.util.List;
@@ -65,51 +62,13 @@ public class BottomLayoutShiftsAdapter extends RecyclerView.Adapter<BottomLayout
             holder.shift.setBackgroundResource(R.drawable.frame2);
 
         } else {
-            //setShiftsLayoutColor(holder);
             setDefaultColor(holder);
         }
 
     }
 
-    private void setDefaultColor(ShiftsViewHolder holder){
+    private void setDefaultColor(ShiftsViewHolder holder) {
         holder.shift.setBackgroundColor(Color.parseColor("#7CB342"));
-    }
-
-    private void setShiftsLayoutColor(ShiftsViewHolder holder) {
-        int colorSettings;
-
-        ColorsDao colorsDao = CalendarDatabase.getDatabase(context).colorsDao();
-        Colors colorToUpdate = colorsDao.findLastColor1();
-
-
-        if (colorToUpdate == null) {
-            colorSettings = 0;
-        } else {
-            colorSettings = colorToUpdate.getColor_number();
-        }
-
-        if (colorSettings == 1) {
-            //red
-            holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
-        } else if (colorSettings == 2) {
-            //yellow
-            holder.shift.setBackgroundColor(Color.parseColor("#fff9c4"));
-        } else if (colorSettings == 3) {
-            //green
-            holder.shift.setBackgroundColor(Color.parseColor("#9cff57"));
-        } else if (colorSettings == 4) {
-            //blue (#84ffff)
-            holder.shift.setBackgroundColor(Color.parseColor("#90caf9"));
-        } else if (colorSettings == 5) {
-            //violet (#ce93d8)
-            holder.shift.setBackgroundColor(Color.parseColor("#e1bee7"));
-        } else if (colorSettings == 6) {
-            //grey
-            holder.shift.setBackgroundColor(Color.parseColor("#BDBDBD"));
-        } else {
-            //red
-            holder.shift.setBackgroundColor(Color.parseColor("#f05545"));
-        }
     }
 
 

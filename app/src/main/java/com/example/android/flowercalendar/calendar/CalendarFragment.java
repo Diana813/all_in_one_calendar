@@ -53,7 +53,7 @@ public class CalendarFragment extends CalendarBrain {
     private ImageView nextYearButton;
     private CardView calendarCardView;
     private String event;
-    private ArrayList<CalendarViews> calendarViewsArrayList;
+    public static ArrayList<CalendarViews> calendarViewsArrayList;
     private LocalDate pickedDate;
     private int dayOfMonth;
     private LocalDate lastMondayOfCurrentMonth;
@@ -157,7 +157,7 @@ public class CalendarFragment extends CalendarBrain {
                 displayCalendarWithPeriodData();
 
             } else {
-                calendarViewsArrayList.add(new CalendarViews(0, calendarFill, headerDate, dayOfMonth, shiftNumber, event));
+                calendarViewsArrayList.add(new CalendarViews(calendarFill, headerDate, dayOfMonth, shiftNumber, event));
 
             }
             calendarFill = calendarFill.plusDays(1);
@@ -211,7 +211,7 @@ public class CalendarFragment extends CalendarBrain {
                 (periodStartDate.isBefore(calendarFill) &&
                         periodFinishDate.isAfter(calendarFill))) {
 
-            calendarViewsArrayList.add(new CalendarViews(0,
+            calendarViewsArrayList.add(new CalendarViews(
                     calendarFill,
                     headerDate,
                     periodStartDate,
@@ -235,7 +235,7 @@ public class CalendarFragment extends CalendarBrain {
             }
         } else {
 
-            calendarViewsArrayList.add(new CalendarViews(0, calendarFill, headerDate, dayOfMonth, shiftNumber, event));
+            calendarViewsArrayList.add(new CalendarViews(calendarFill, headerDate, dayOfMonth, shiftNumber, event));
 
         }
 
@@ -492,6 +492,5 @@ public class CalendarFragment extends CalendarBrain {
 
         }
     }
-
 }
 

@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.calendar.CalendarUtils;
 import com.example.android.flowercalendar.events.eventsUtils.EventsListAdapter;
 import com.example.android.flowercalendar.events.eventsUtils.EventsViewModel;
 import com.example.android.flowercalendar.events.eventsUtils.UtilsEvents;
@@ -55,6 +56,8 @@ public class ToDoList extends ExpandedDayEvents {
         super.onPause();
         toDoListAdapter.setIndexInDB();
         toDoListAdapter.deleteFromDatabase(null);
+        CalendarUtils.saveEventsNumberToPickedDate(pickedDay, context);
+
     }
 
     @Override

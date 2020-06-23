@@ -1,5 +1,7 @@
 package com.example.android.flowercalendar.database;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -20,4 +22,7 @@ public interface ImagePathDao {
 
     @Query("SELECT * FROM imagePath WHERE id = (SELECT MAX(ID) FROM imagePath)")
     ImagePath findLastImage ();
+
+    @Query("SELECT * FROM imagePath")
+    List<ImagePath> findAllImages ();
 }

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -303,14 +304,14 @@ public class LifeAims extends Fragment {
             if (!imagePathToUpdate.getImagePath().equals(path)) {
                 File file = new File(imagePathToUpdate.getImagePath());
                 boolean deleted = file.delete();
-                if(!deleted){
+                if (!deleted) {
                     boolean deleted2 = false;
                     try {
                         deleted2 = file.getCanonicalFile().delete();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if(!deleted2){
+                    if (!deleted2) {
                         boolean deleted3 = Objects.requireNonNull(getContext()).deleteFile(file.getName());
                     }
                 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.example.android.flowercalendar.R;
+import com.example.android.flowercalendar.calendar.CalendarUtils;
 import com.example.android.flowercalendar.database.CalendarDatabase;
 import com.example.android.flowercalendar.database.CalendarEventsDao;
 import com.example.android.flowercalendar.database.Event;
@@ -39,6 +40,12 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
     private int layout;
     private String newHour;
     private FreqActAdapterSchedule frequentActivitiesDrawerListAdapter;
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CalendarUtils.saveEventsNumberToPickedDate(pickedDay, context);
+    }
 
 
     public void setContent(int layout) {
