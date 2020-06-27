@@ -52,7 +52,7 @@ public class CalendarFragment extends CalendarBrain {
     private ImageView prevYearButton;
     private ImageView nextYearButton;
     private CardView calendarCardView;
-    private String event;
+    public String event;
     public static ArrayList<CalendarViews> calendarViewsArrayList;
     private LocalDate pickedDate;
     private int dayOfMonth;
@@ -65,7 +65,7 @@ public class CalendarFragment extends CalendarBrain {
         super.onAttach(context);
         displayCyclicalEventsInTheCalendar = new DisplayCyclicalEventsInTheCalendar();
     }
-
+    
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -102,7 +102,7 @@ public class CalendarFragment extends CalendarBrain {
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
     }
 
-    void fillTheCalendar(Context context, TextView date, GridView gridView) {
+    public void fillTheCalendar(Context context, TextView date, GridView gridView) {
 
         calendarViewsArrayList = new ArrayList<>();
         listOfCyclicalEvents = new ArrayList<>();
@@ -116,7 +116,7 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    private void displayEmptyEvents() {
+    public void displayEmptyEvents() {
 
         if (event == null) {
             event = "";
@@ -140,7 +140,7 @@ public class CalendarFragment extends CalendarBrain {
         headerDate = LocalDate.of(year, month, day);
     }
 
-    private void displayCalendarWithData() {
+    public void displayCalendarWithData() {
 
         calendarFill = setDateAtFirstDayOfAMonth(calendarFill);
         lastMondayOfCurrentMonth = lastMondayOfCurrentMonth(calendarFill);
@@ -183,7 +183,7 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    private void displayEventsAndShiftsIfEmpty() {
+    public void displayEventsAndShiftsIfEmpty() {
 
         CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
         CalendarEvents calendarEventToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));
@@ -204,7 +204,7 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    private void displayCalendarWithPeriodData() {
+    public void displayCalendarWithPeriodData() {
 
         if ((periodStartDate.isEqual(calendarFill) ||
                 periodFinishDate.isEqual(calendarFill)) ||
@@ -349,11 +349,11 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    private void setPreviousButtonClickEvent() {
+    public void setPreviousButtonClickEvent() {
         previousButton.setOnClickListener(v -> setPreviousMonthView());
     }
 
-    private void setPreviousYearButtonClickEvent() {
+    public void setPreviousYearButtonClickEvent() {
         prevYearButton.setOnClickListener(v -> setPreviousYearView());
     }
 
@@ -375,12 +375,12 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    private void setNextButtonClickEvent() {
+    public void setNextButtonClickEvent() {
 
         nextButton.setOnClickListener(v -> setNextMonthView());
     }
 
-    private void setNextYearButtonClickEvent() {
+    public void setNextYearButtonClickEvent() {
         nextYearButton.setOnClickListener(v -> setNextYearView());
     }
 
@@ -448,6 +448,7 @@ public class CalendarFragment extends CalendarBrain {
             cycleLenght = periodDataDao.findLastPeriod().getCycleLength();
             periodFinishDate = periodStartDate.plusDays(periodLenght - 1);
 
+
             fillTheCalendar(context, date, gridView);
             setPreviousButtonClickEvent();
             setNextButtonClickEvent();
@@ -464,10 +465,11 @@ public class CalendarFragment extends CalendarBrain {
             setPreviousYearButtonClickEvent();
             setNextYearButtonClickEvent();
         }
+
     }
 
 
-    private void setDisplayCyclicalEventsInTheCalendar() {
+    public void setDisplayCyclicalEventsInTheCalendar() {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
         List<Event> cyclicalEvents = eventsDao.findByKind(0);

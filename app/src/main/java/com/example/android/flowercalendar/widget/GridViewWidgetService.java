@@ -18,7 +18,7 @@ public class GridViewWidgetService extends RemoteViewsService {
 
     @Override
     public AppWidgetGridView onGetViewFactory(Intent intent) {
-        return new AppWidgetGridView(this.getApplicationContext(), WidgetData.widgetData());
+        return new AppWidgetGridView(this.getApplicationContext(), WidgetData.widgetData(getApplicationContext()));
 
     }
 }
@@ -40,7 +40,7 @@ class AppWidgetGridView implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onDataSetChanged() {
-        dataList = WidgetData.widgetData();
+        dataList = WidgetData.widgetData(context);
     }
 
     @Override

@@ -41,7 +41,6 @@ public class CalendarFrame extends Fragment {
         shiftsAdapter = new BottomLayoutShiftsAdapter(context);
     }
 
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 

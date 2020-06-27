@@ -22,12 +22,12 @@ import static com.example.android.flowercalendar.database.CalendarDatabase.getDa
 
 public class CalendarBrain extends CalendarFrame {
 
-    int cycleLenght;
-    int periodLenght;
-    LocalDate periodStartDate;
-    LocalDate periodFinishDate;
-    LocalDate calendarFill;
-    String shiftNumber;
+    public static int cycleLenght;
+    public int periodLenght;
+    public static LocalDate periodStartDate;
+    public static LocalDate periodFinishDate;
+    public LocalDate calendarFill;
+    public static String shiftNumber;
     String alarmHour;
     String alarmMinute;
     DisplayCyclicalEventsInTheCalendar displayCyclicalEventsInTheCalendar;
@@ -142,7 +142,7 @@ public class CalendarBrain extends CalendarFrame {
     }
 
 
-    public LocalDate setDateAtFirstDayOfAMonth(LocalDate calendarFill) {
+    public static LocalDate setDateAtFirstDayOfAMonth(LocalDate calendarFill) {
 
         int year = calendarFill.getYear();
         Month month = calendarFill.getMonth();
@@ -154,7 +154,7 @@ public class CalendarBrain extends CalendarFrame {
     }
 
 
-    public LocalDate lastMondayOfCurrentMonth(LocalDate localeDate) {
+    public static LocalDate lastMondayOfCurrentMonth(LocalDate localeDate) {
 
         LocalDate firstDayOfNextMonth = localeDate.plusMonths(1);
         int nextMonthBeginningCell =
@@ -163,7 +163,7 @@ public class CalendarBrain extends CalendarFrame {
     }
 
 
-    public LocalDate findWhatDateIsInTheFirstCellOfTheCalendar(LocalDate calendarFill) {
+    public static LocalDate findWhatDateIsInTheFirstCellOfTheCalendar(LocalDate calendarFill) {
 
         //Sprawdzam, w której komórce kalendarza znajduje się pierwszy dzień miesiąca,
         //poprzez sprawdzenie odpowiadającego mu numeru dnia tygodnia. Odejmuję jeden, bo

@@ -38,7 +38,7 @@ public class CalendarWidgetProvider extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
 
             RemoteViews remoteView = getView(context);
-            WidgetData.widgetData();
+            WidgetData.widgetData(context);
             appWidgetManager.updateAppWidget(appWidgetId, remoteView);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widgetGridView);
         }

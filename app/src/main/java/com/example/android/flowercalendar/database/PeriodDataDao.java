@@ -29,4 +29,7 @@ public interface PeriodDataDao {
 
     @Query("SELECT * FROM periodData WHERE id = (SELECT MAX(ID) FROM periodData)")
     PeriodData findLastPeriod();
+
+    @Query("SELECT * FROM periodData")
+    List<PeriodData> findAllPeriodData();
 }

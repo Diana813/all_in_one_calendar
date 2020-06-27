@@ -35,7 +35,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarViews> {
     private Context context;
 
 
-    CalendarAdapter(Context context, ArrayList<CalendarViews> calendarViews) {
+    public CalendarAdapter(Context context, ArrayList<CalendarViews> calendarViews) {
         super(context, 0, calendarViews);
         this.context = context;
     }

@@ -197,18 +197,13 @@ public class ForGirlsFragment extends Fragment {
         PeriodData periodToUpdate = periodDataDao.findLastPeriod();
 
         if (periodToUpdate != null) {
-            if (!periodToUpdate.getPeriodStartDate().equals(startPeriodDate)) {
-                if (startPeriodDate == null) {
-                    periodToUpdate.setPeriodStartDate(periodToUpdate.getPeriodStartDate());
-                } else {
-                    periodToUpdate.setPeriodStartDate(startPeriodDate);
+            if (periodToUpdate.getPeriodStartDate().equals(startPeriodDate) &&
+                    (periodToUpdate.getCycleLength() != cycleTimeChosenValue ||
+                            periodToUpdate.getPeriodLength() != periodTimeChosenValue)) {
 
-                }
                 periodToUpdate.setPeriodLength(periodTimeChosenValue);
                 periodToUpdate.setCycleLength(cycleTimeChosenValue);
-
                 periodDataDao.update(periodToUpdate);
-
             }
         } else {
             periodDataDao.insert(new PeriodData(startPeriodDate, periodTimeChosenValue, cycleTimeChosenValue));

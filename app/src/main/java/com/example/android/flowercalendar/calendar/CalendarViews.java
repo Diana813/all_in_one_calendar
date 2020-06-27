@@ -15,7 +15,7 @@ public class CalendarViews {
     private LocalDate mPeriodEnd;
     private LocalDate mHeaderDate;
 
-    CalendarViews(LocalDate calendarFill, LocalDate headerDate, int dayNumber, String shiftNumber, String numberOfEvents) {
+    public CalendarViews(LocalDate calendarFill, LocalDate headerDate, int dayNumber, String shiftNumber, String numberOfEvents) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
         mEventName = numberOfEvents;
@@ -23,7 +23,7 @@ public class CalendarViews {
         mHeaderDate = headerDate;
     }
 
-    CalendarViews(LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, String shiftNumber, String numberOfEvents, int imageResourceId) {
+    public CalendarViews(LocalDate calendarFill, LocalDate headerDate, LocalDate periodStart, LocalDate periodEnd, int dayNumber, String shiftNumber, String numberOfEvents, int imageResourceId) {
         mDayNumber = dayNumber;
         mShiftNumber = shiftNumber;
         mEventName = numberOfEvents;
