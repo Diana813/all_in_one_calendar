@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1078749315275",
+    "firebase_url": "https://all-in-one-calen-1592310439538.firebaseio.com",
+    "project_id": "all-in-one-calen-1592310439538",
+    "storage_bucket": "all-in-one-calen-1592310439538.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078749315275:android:d247dae4d9f4ba5b8a9b4e",
+        "android_client_info": {
+          "package_name": "com.dianaszczepankowska.AllInOneCalendar.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078749315275-30rfv3oc7juhq9v78iv4rc2f3te0n3b3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dianaszczepankowska.AllInOneCalendar.android",
+            "certificate_hash": "88c9cd202e929701bc4fb9cee2b7f8a95f80bcc1"
+          }
+        },
+        {
+          "client_id": "1078749315275-938l712nu89c9tec8hm3c68c21d6p2eu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCki6_qJzZOsWBSfIkYQ7LhZ1u4qflqTSA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078749315275-938l712nu89c9tec8hm3c68c21d6p2eu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

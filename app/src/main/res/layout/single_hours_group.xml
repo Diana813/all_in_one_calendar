@@ -56,7 +56,7 @@
                 android:layout_alignParentEnd="true"
                 tools:ignore="ContentDescription" />
 
-            <com.example.android.flowercalendar.utils.CopyPasteEditText
+            <com.dianaszczepankowska.AllInOneCalendar.android.utils.CopyPasteEditText
                 android:id="@+id/editText"
                 style="@style/EditTextScheduleHours"
                 android:fontFamily="@font/comfortaa"

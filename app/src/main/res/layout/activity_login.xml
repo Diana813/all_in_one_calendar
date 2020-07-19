@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
     android:background="@drawable/gradient"
-    tools:context="com.example.android.flowercalendar.LoginActivity">
+    tools:context="com.dianaszczepankowska.AllInOneCalendar.android.LoginActivity">
 
 
     <ImageView

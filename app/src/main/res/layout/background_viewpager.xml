@@ -6,7 +6,7 @@
     <LinearLayout
         android:id="@+id/background_layout"
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-        tools:context="com.example.android.flowercalendar.personalGrowth.BackgroundActivity">
+        tools:context="com.dianaszczepankowska.AllInOneCalendar.android.personalGrowth.BackgroundActivity">
 
         <Switch
             android:id="@+id/alarmClockCheckBox"
@@ -18,6 +18,18 @@
             android:visibility="gone">
 
         </Switch>
+
+        <TextView
+            android:id="@+id/holiday"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="20sp"
+            android:layout_margin="10dp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:fontFamily="@font/comfortaa"
+            android:textStyle="bold"
+            tools:text="Lalalala" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
