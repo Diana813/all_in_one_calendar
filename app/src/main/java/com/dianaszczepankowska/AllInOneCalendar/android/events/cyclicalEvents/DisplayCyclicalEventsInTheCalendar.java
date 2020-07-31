@@ -275,7 +275,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
     }
 
 
-    private LocalDate findNewStartEventDate(LocalDate startCyclicalEvent, LocalDate
+    public LocalDate findNewStartEventDate(LocalDate startCyclicalEvent, LocalDate
             firstDayOfCalendarView, int frequency) {
 
         LocalDate newStartCyclicalEvent = startCyclicalEvent;

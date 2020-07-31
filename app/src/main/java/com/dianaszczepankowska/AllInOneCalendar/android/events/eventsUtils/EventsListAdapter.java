@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarBrain;
+import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
+import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFrame;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents.DeleteCyclicalEvent;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
@@ -122,6 +125,27 @@ public class EventsListAdapter extends RecyclerView.Adapter<EventsListAdapter.Fr
 
             }
         }
+    }
+
+    public void addToDatabase(ArrayList<StringsAims> stringsAims) {
+
+        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+        String date = String.valueOf(LocalDate.now());
+
+        if (stringsAims != null) {
+
+            for (int i = 0; i < stringsAims.size(); i++) {
+
+                int index = stringsAims.get(i).getAimNumber();
+                String content = stringsAims.get(i).getAimContent();
+
+                Event event = new Event(index, content, null, null, 0, date, 1, null, null);
+                eventsDao.insert(event);
+
+            }
+
+        }
+
     }
 
 

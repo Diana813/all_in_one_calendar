@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
-    android:background="@mipmap/baletnica"
     tools:context=".forGirls.ForGirlsFragment">
 
     <LinearLayout
@@ -23,7 +22,7 @@
         </CalendarView>
 
         <TextView
-            android:id="@+id/periodLenght"
+            android:id="@+id/periodLength"
             style="@style/forGirlsTextStyle"
             android:gravity="center"
             android:text="@string/periodLenght" />
@@ -39,7 +38,7 @@
 
 
         <TextView
-            android:id="@+id/cycleLenght"
+            android:id="@+id/cycleLength"
             style="@style/forGirlsTextStyle"
             android:gravity="center"
             android:text="@string/cycleLenght" />
@@ -52,6 +51,27 @@
             android:id="@+id/cycleTime"
             style="@style/forGirlsSeekBarStyle"
             android:max="40" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:text="@string/save" />
+
+        <ImageView
+            android:id="@+id/saveImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_done_white_48"
+            android:tint="@color/colorPrimaryDark"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/save"
+            android:visibility="gone"/>
     </LinearLayout>
+
+
 </RelativeLayout>
 

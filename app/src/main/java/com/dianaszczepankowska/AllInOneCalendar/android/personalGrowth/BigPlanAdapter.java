@@ -39,6 +39,8 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private ArrayList<StringsAims> toDoListStrings = new ArrayList<>();
     private int currentString;
     private String aimToDelete;
+    private Plan plan = new Plan();
+    private String date;
 
 
     public BigPlanAdapter(Context context) {
@@ -76,6 +78,9 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
 
         final BigPlanData bigPlanData = aimsList.get(position);
         aimTime = bigPlanData.getAimTime();
+        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+        date = bigPlanData.getStartDate();
+
 
         holder.aimNumber.setText(Integer.parseInt(bigPlanData.getAimIndex()) + 1 + ".");
         holder.aimContents.setText(bigPlanData.getAimContents());
@@ -91,12 +96,10 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
 
-                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
                 bigPlanData.setIsChecked(1);
                 bigPlanDao.update(bigPlanData);
             } else {
 
-                BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
                 bigPlanData.setIsChecked(0);
                 bigPlanDao.update(bigPlanData);
             }
@@ -112,11 +115,11 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         String aimContent = bigPlanData.getAimContents();
         aimStrings.add(new StringsAims(aimIndex, aimContent));
         aimsList.remove(position);
+        deleteFromDatabase();
         notifyItemRemoved(position);
         showUndoSnackbar();
         findDeletedAimPositionInToDoList(aimContent);
         toDoListStrings.add(new StringsAims(currentString, aimToDelete));
-
     }
 
 
@@ -148,6 +151,23 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         eventsListAdapter.deleteFromDatabase(toDoListStrings);
     }
 
+    public void addToDatabase() {
+
+        BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
+
+        if (aimStrings != null) {
+            for (int i = 0; i < aimStrings.size(); i++) {
+                int aimIndex = aimStrings.get(i).getAimNumber();
+                String aimContent = aimStrings.get(i).getAimContent();
+                BigPlanData aim = new BigPlanData(aimTime, String.valueOf(aimIndex), aimContent, 0, date);
+                bigPlanDao.insert(aim);
+            }
+        }
+
+        EventsListAdapter eventsListAdapter = new EventsListAdapter(EventsListAdapter.getContext());
+        eventsListAdapter.addToDatabase(toDoListStrings);
+    }
+
 
     private void showUndoSnackbar() {
 
@@ -161,6 +181,7 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
     private void undoDelete() {
         aimsList.add(pos,
                 bigPlanData);
+        addToDatabase();
         aimStrings.remove(aimStrings.size() - 1);
         toDoListStrings.remove(toDoListStrings.size() - 1);
         notifyItemInserted(pos);
@@ -190,7 +211,6 @@ public class BigPlanAdapter extends RecyclerView.Adapter<BigPlanAdapter.BigPlanV
         BigPlanDao bigPlanDao = CalendarDatabase.getDatabase(context).bigPlanDao();
 
         for (BigPlanData bigPlanData : aimsList) {
-
             bigPlanData.setAimIndex(String.valueOf(aimsList.indexOf(bigPlanData)));
             bigPlanDao.update(bigPlanData);
         }

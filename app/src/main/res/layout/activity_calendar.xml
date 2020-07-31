@@ -7,6 +7,7 @@
 
     <LinearLayout
         android:id="@+id/backgroundDrawing"
+        android:background="@color/colorWhite"
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle">
 
         <LinearLayout

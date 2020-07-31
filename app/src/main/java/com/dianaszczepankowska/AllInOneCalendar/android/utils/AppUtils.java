@@ -212,4 +212,19 @@ public class AppUtils {
         return (searchedDate.isAfter(firstDate) || searchedDate.isEqual(firstDate)) && (searchedDate.isBefore(secondDate) || searchedDate.isEqual(secondDate));
 
     }
+
+    @SuppressLint("DefaultLocale")
+    public static String formatPeriodDateProperly(String periodDate) {
+        if (periodDate == null) {
+            return null;
+        } else if (periodDate.contains("-")) {
+            return periodDate;
+        }
+        String[] split = periodDate.split(":");
+        String year = split[0];
+        String month = split[1];
+        String day = split[2];
+        return String.format("%04d-%02d-%02d", Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+    }
+
 }

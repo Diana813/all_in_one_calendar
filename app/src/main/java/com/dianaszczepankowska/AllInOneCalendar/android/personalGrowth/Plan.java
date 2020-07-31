@@ -131,11 +131,10 @@ public class Plan extends Fragment {
                     String firstItemDateString = aims.get(0).getStartDate();
                     firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
                 }
-
                 newId = aims.size();
-                listLiveDataIsChecked.observe(fragment, aimsList -> {
-                    if (aimsList.size() != 0 && newId != 0) {
-                        progress = aimsList.size() * 100 / newId;
+                listLiveDataIsChecked.observe(fragment, aimsListIsChecked -> {
+                    if (aimsListIsChecked.size() != 0 && newId != 0) {
+                        progress = aimsListIsChecked.size() * 100 / aims.size();
                         determinateBar.setProgress(progress);
                         effectiveness.setVisibility(View.VISIBLE);
                         effectiveness.setText((getString(R.string.effectiveness)) + " " + progress + "%");

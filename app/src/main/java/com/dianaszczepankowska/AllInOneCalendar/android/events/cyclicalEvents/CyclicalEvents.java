@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static java.util.Objects.requireNonNull;
+
 public class CyclicalEvents extends Fragment {
 
     private Context context;
@@ -74,7 +76,7 @@ public class CyclicalEvents extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_events, container, false);
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
+        requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
 
 
         fab = rootView.findViewById(R.id.fab);
@@ -128,8 +130,8 @@ public class CyclicalEvents extends Fragment {
     }
 
     private void showFragment(final Fragment fragment) {
-        FragmentTransaction fragmentTransaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.flContent, fragment);
+        FragmentTransaction fragmentTransaction = (requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(((ViewGroup) requireNonNull(getView()).getParent()).getId(), fragment);
         fragmentTransaction.commitNow();
     }
 

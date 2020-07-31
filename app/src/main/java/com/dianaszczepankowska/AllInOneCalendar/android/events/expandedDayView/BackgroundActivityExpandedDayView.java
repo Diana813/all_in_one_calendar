@@ -38,7 +38,6 @@ public class BackgroundActivityExpandedDayView extends Fragment {
     private String alarmMinutes;
     private boolean isAlarmOn;
     private String shiftNumber;
-    private TextView holidayInfo;
 
 
     public BackgroundActivityExpandedDayView() {
@@ -67,7 +66,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
         TabLayout tabs = rootView.findViewById(R.id.tabs);
         // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
-        holidayInfo = rootView.findViewById(R.id.holiday);
+        TextView holidayInfo = rootView.findViewById(R.id.holiday);
         for (Holiday holiday : holidays) {
             if (holiday.getDate().equals(pickedDay)) {
                 holidayInfo.setVisibility(View.VISIBLE);

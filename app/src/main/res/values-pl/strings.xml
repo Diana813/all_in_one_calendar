@@ -133,5 +133,13 @@
     <string name="friday">piątek</string>
     <string name="saturday">sobotę</string>
     <string name="sunday">niedzielę</string>
+    <string name="average_cycle_length">Średnia długość cyklu:</string>
+    <string name="average_period_length">Średnia długość okresu:</string>
+    <string name="period_length">Długość okresu</string>
+    <string name="cycle_length">Długść cyklu</string>
+    <string name="daysPlural">dni</string>
+    <string name="monthsPlural">miesiące</string>
+    <string name="delete_last">Usuń ostatni okres</string>
+    <string name="deleteOne">Usuń</string>
 
 </resources>

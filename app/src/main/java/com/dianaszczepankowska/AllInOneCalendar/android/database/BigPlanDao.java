@@ -32,4 +32,11 @@ public interface BigPlanDao {
     @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime AND isChecked = :isChecked ORDER BY aimIndex ASC")
     LiveData<List<BigPlanData>> findByisChecked(int aimTime, int isChecked);
 
+    @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime AND isChecked = :isChecked ORDER BY aimIndex ASC")
+    List<BigPlanData> getByisChecked(int aimTime, int isChecked);
+
+    @Query("SELECT * FROM big_plan_data WHERE aimTime = :aimTime AND aimIndex = :aimIndex")
+    BigPlanData getByIndex(int aimTime, String aimIndex);
+
+
 }

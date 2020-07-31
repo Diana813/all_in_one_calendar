@@ -53,6 +53,7 @@ public class ShiftsEditor extends Fragment {
     private EditText shiftNameEditText;
     private EditText shiftLengthEditText;
     private int newShiftLength;
+    private TextView resetAlarm;
 
     static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
 
@@ -103,6 +104,7 @@ public class ShiftsEditor extends Fragment {
         shiftStartTextView = view.findViewById(R.id.shiftStart);
         ImageView shiftStartSettingButton = view.findViewById(R.id.event_time_button);
         shiftStartSettingButton.setOnClickListener(v -> shiftSettingDialog());
+        resetAlarm = view.findViewById(R.id.reset);
 
         alarmTextView = view.findViewById(R.id.alarmStart);
         ImageView alarmButton = view.findViewById(R.id.alarm_button);
@@ -117,6 +119,8 @@ public class ShiftsEditor extends Fragment {
             alarmTextView.setText(shift_alarm_extra);
             shiftLengthEditText.setText(shift_length_extra);
         }
+
+        setResetAlarm();
 
 
         return view;
@@ -149,27 +153,44 @@ public class ShiftsEditor extends Fragment {
 
             Shift shiftToUpdate = shiftsDao.findByShiftName(shift_name_extra);
             if (shiftToUpdate != null) {
-                if (shiftToUpdate.getAlarm() != null && !shiftToUpdate.getAlarm().equals(newAlarm)) {
-                    CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
-                    List<CalendarEvents> changedAlarmShiftsList = calendarEventsDao.findByShiftNumber(shiftToUpdate.getShift_name());
+                CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
+                List<CalendarEvents> changedAlarmShiftsList = calendarEventsDao.findByShiftNumber(shiftToUpdate.getShift_name());
+
+
+                if (shiftToUpdate.getAlarm() != null && !shiftToUpdate.getAlarm().equals(newAlarm) && !shiftToUpdate.getAlarm().equals("")) {
 
                     String[] parts = shiftToUpdate.getAlarm().split(":");
                     String alarmHour = parts[0];
                     String alarmMinute = parts[1];
 
-                    String[] parts2 = newAlarm.split(":");
-                    String newAlarmHour = parts2[0];
-                    String newAlarmMinute = parts2[1];
+                    if (!newAlarm.equals("")) {
+                        String[] parts2 = newAlarm.split(":");
+                        String newAlarmHour = parts2[0];
+                        String newAlarmMinute = parts2[1];
 
-                    if (changedAlarmShiftsList != null) {
+                        if (changedAlarmShiftsList != null) {
+                            for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
+                                AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
+
+                                AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS);
+                            }
+
+                        }
+                    } else {
                         for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
                             AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
 
-                            AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, "Open alarm class");
                         }
                     }
-                }
+                } else if (shiftToUpdate.getAlarm() != null && shiftToUpdate.getAlarm().equals("") && !newAlarm.equals("")) {
+                    String[] parts2 = newAlarm.split(":");
+                    String newAlarmHour = parts2[0];
+                    String newAlarmMinute = parts2[1];
+                    for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
+                        AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS);
+                    }
 
+                }
 
                 if ((!shiftToUpdate.getShift_name().equals(newShiftName)) ||
                         (!shiftToUpdate.getSchedule().equals(newShiftStart)) ||
@@ -182,11 +203,13 @@ public class ShiftsEditor extends Fragment {
                     shiftsDao.update(shiftToUpdate);
                 }
             }
+
         } else {
 
             shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm, newShiftLength));
 
         }
+
     }
 
     private void shiftSettingDialog() {
@@ -229,5 +252,13 @@ public class ShiftsEditor extends Fragment {
                 Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContent, new ShiftsFragment());
         fragmentTransaction.commitNow();
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setResetAlarm() {
+        resetAlarm.setOnClickListener(v -> {
+            alarmTextView.setHint("06:00");
+            alarmTextView.setText("");
+        });
     }
 }

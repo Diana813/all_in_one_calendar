@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarBrain.findWhatDateIsInTheFirstCellOfTheCalendar;
 import static com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarBrain.lastMondayOfCurrentMonth;
-import static com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarBrain.listOfCyclicalEvents;
 import static com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarBrain.setDateAtFirstDayOfAMonth;
 import static com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase.getDatabase;
 
@@ -140,6 +139,7 @@ class WidgetData {
 
         for (
                 CalendarViews calendarView : calendarViewsArrayList) {
+
             if (AppUtils.isEqualOrBetweenDates(calendarView.getmCalendarFill(), today, today.plusDays(7))) {
                 widgetData.add(calendarView);
             }
@@ -155,7 +155,13 @@ class WidgetData {
         PeriodDataDao periodDataDao = getDatabase(context).periodDataDao();
         if (periodDataDao.findLastPeriod() != null) {
             String periodStart = periodDataDao.findLastPeriod().getPeriodStartDate();
-            String[] parts = periodStart.split(":");
+
+            String[] parts;
+            if (periodStart.contains(":")) {
+                parts = periodStart.split(":");
+            } else {
+                parts = periodStart.split("-");
+            }
 
             int periodYear = Integer.parseInt(parts[0]);
             int periodMonth = Integer.parseInt(parts[1]);

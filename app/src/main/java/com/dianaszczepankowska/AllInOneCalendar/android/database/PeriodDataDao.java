@@ -2,6 +2,7 @@ package com.dianaszczepankowska.AllInOneCalendar.android.database;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -23,12 +24,18 @@ public interface PeriodDataDao {
     @Query("DELETE FROM periodData")
     void deleteAll();
 
-    @Query("DELETE FROM periodData WHERE id = (SELECT MAX(ID) FROM periodData)")
+    @Query("DELETE FROM periodData WHERE periodSatrtDate = (SELECT MAX(date(periodSatrtDate)) FROM periodData)")
     void deleteLastPeriod();
 
-    @Query("SELECT * FROM periodData WHERE id = (SELECT MAX(ID) FROM periodData)")
+    @Query("SELECT * FROM periodData ORDER BY date(periodSatrtDate) DESC Limit 1")
     PeriodData findLastPeriod();
 
-    @Query("SELECT * FROM periodData")
+    @Query("SELECT * FROM periodData ORDER BY date(periodSatrtDate) DESC Limit 2")
+    List<PeriodData> findPriodBeforeLastOne();
+
+    @Query("SELECT * FROM periodData ORDER BY date(periodSatrtDate) DESC")
     List<PeriodData> findAllPeriodData();
+
+    @Query("SELECT * FROM periodData ORDER BY date(periodSatrtDate) DESC")
+    LiveData<List<PeriodData>> getAllPeriodData();
 }

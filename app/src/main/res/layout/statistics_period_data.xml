@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+    android:layout_margin="15dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewHeaders"
+            android:layout_weight="1"
+            android:text="@string/average_cycle_length"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/cycleLength"
+            style="@style/textViewHeaders"
+            android:layout_weight="2"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="27 days" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/textViewHeaders"
+            android:layout_weight="1"
+            android:text="@string/average_period_length"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/periodLength"
+            style="@style/textViewHeaders"
+            android:layout_weight="2"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="5 days" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:background="@color/colorPrimaryDark"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:id="@+id/row"
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/title_label"
+                style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/startDate" />
+
+            <TextView
+                android:id="@+id/price_label"
+                style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/period_length" />
+
+            <TextView
+                android:id="@+id/quantity_label"
+                style="@style/ShiftsTextViewLabelStyle"
+                android:text="@string/cycle_length" />
+        </LinearLayout>
+    </TableLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list"
+        style="@style/recyclerViewTasksListStyle" />
+
+</LinearLayout>

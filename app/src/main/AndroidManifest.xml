@@ -4,6 +4,7 @@
     package="com.dianaszczepankowska.AllInOneCalendar.android"
     android:sharedUserId="com.dianaszczepankowska.AllInOneCalendar.android">
 
+
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -23,7 +24,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        android:process="com.dianaszczepankowska.AllInOneCalendar.android">
         <activity
             android:name="com.dianaszczepankowska.AllInOneCalendar.android.LoginActivity"
             android:label="@string/app_name"
@@ -75,6 +77,7 @@
         </receiver>
 
         <service android:name="com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmService" />
+        <service android:name="com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock" />
 
         <service
             android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.GridViewWidgetService"
@@ -90,7 +93,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/calendar_widget_info" />
         </receiver>
-
     </application>
 
 </manifest>

@@ -112,29 +112,47 @@
                     android:id="@+id/shift_alarm"
                     style="@style/OverviewStyle"
                     android:layout_width="0dp"
+                    android:layout_marginVertical="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:text="@string/alarm" />
 
+
                 <RelativeLayout
                     android:layout_width="0dp"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:layout_marginStart="10dp">
 
-                    <ImageView
-                        android:id="@+id/alarm_button"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_toEndOf="@+id/alarmStart"
-                        android:src="@drawable/baseline_alarm_black_48"
-                        tools:ignore="ContentDescription" />
+                        android:orientation="horizontal"
+                        android:id="@+id/alarmLayout"
+                        android:gravity="center_vertical"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:id="@+id/alarmStart"
+                            style="@style/textViewOneTimeEventsStyle"
+                            android:layout_margin="20dp"
+                            android:hint="@string/hintAlarm" />
+
+                        <ImageView
+                            android:id="@+id/alarm_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:src="@drawable/baseline_alarm_black_48"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/alarmStart"
-                        style="@style/textViewOneTimeEventsStyle"
-                        android:layout_margin="20dp"
-                        android:hint="@string/hintAlarm" />
+                        android:id="@+id/reset"
+                        style="@style/textViewDateStyle.schedule"
+                        android:layout_below="@+id/alarmLayout"
+                        android:text="@string/reset"
+                        android:textColor="@color/colorPrimaryDark" />
+
                 </RelativeLayout>
 
             </TableRow>
