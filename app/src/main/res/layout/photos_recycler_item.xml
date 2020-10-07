@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.dianaszczepankowska.AllInOneCalendar.android.utils.RoundedCornerPicture
+        android:id="@+id/aimImage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_margin="10dp"
+        android:scaleType="fitXY"
+        tools:ignore="ContentDescription" />
+
+
+</FrameLayout>

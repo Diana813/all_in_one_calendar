@@ -6,21 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.EventsListAdapter;
-import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsRecyclerView;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CyclicalEventsListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.EventsListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsRecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +34,6 @@ public class CyclicalEvents extends Fragment {
     private Context context;
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
     private FloatingActionButton fab;
-    private RelativeLayout empty_view;
     private TableLayout headerTable;
     private EventsListAdapter eventsListAdapter;
 
@@ -77,26 +77,17 @@ public class CyclicalEvents extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.add_events, container, false);
         requireNonNull(getActivity()).setTitle(getString(R.string.CyclicalEvents));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(null);
 
 
-        fab = rootView.findViewById(R.id.fab);
+        fab = rootView.findViewById(R.id.fab2);
         fab.setVisibility(View.VISIBLE);
-        LinearLayout editText = rootView.findViewById(R.id.editTextLinearLayout);
-        editText.setVisibility(View.GONE);
-        empty_view = rootView.findViewById(R.id.empty_view);
-        TextView eventsLabel = rootView.findViewById(R.id.eventsLabel);
-        eventsLabel.setVisibility(View.GONE);
-        headerTable = rootView.findViewById(R.id.table);
         RelativeLayout mainLayout = rootView.findViewById(R.id.mainLayout);
         mainLayout.setPadding(0, 4, 0, 0);
-        TextView emptyViewTitle = rootView.findViewById(R.id.empty_title_text);
-        TextView emptyViewSubtitle = rootView.findViewById(R.id.empty_subtitle_text);
-        ImageView imageView = rootView.findViewById(R.id.empty_view_image);
-        emptyViewTitle.setText(R.string.addCyclicalEvents);
-        emptyViewSubtitle.setText(R.string.descriptionCyclicalEvents);
-        imageView.setImageResource(R.mipmap.cycle_event_icon);
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.list);
+        RecyclerView recyclerView = rootView.findViewById(R.id.list2);
+        recyclerView.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(cyclicalEventsListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         ItemTouchHelper itemTouchHelper = new
@@ -115,13 +106,6 @@ public class CyclicalEvents extends Fragment {
             assert events != null;
             cyclicalEventsListAdapter.setEventsList(events);
             eventsListAdapter.setEventsList(events);
-            if (events.isEmpty()) {
-                empty_view.setVisibility(View.VISIBLE);
-                headerTable.setVisibility(View.GONE);
-            } else {
-                empty_view.setVisibility(View.GONE);
-                headerTable.setVisibility(View.VISIBLE);
-            }
         });
     }
 
@@ -129,10 +113,13 @@ public class CyclicalEvents extends Fragment {
         fab.setOnClickListener(view1 -> showFragment(CyclicalEventsDetails.newInstance(-1, "-1", null, null, null, 0, 0, null, null)));
     }
 
-    private void showFragment(final Fragment fragment) {
-        FragmentTransaction fragmentTransaction = (requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+    private void showFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireNonNull(getActivity()).getSupportFragmentManager();
+        assert fragment != null;
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack("tag").commit();
+       /* FragmentTransaction fragmentTransaction = (requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(((ViewGroup) requireNonNull(getView()).getParent()).getId(), fragment);
-        fragmentTransaction.commitNow();
+        fragmentTransaction.commitNow();*/
     }
 
 }

@@ -49,16 +49,19 @@ public interface EventsDao {
     List<Event> findByEventDate(String pickedDay, int eventKind, int eventKind2);
 
     @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC, date(picked_day) ASC")
-    LiveData<List<Event>> findByEventKind(int eventKind);
+    LiveData<List<Event>> findByEventKindOrderedBYDate(int eventKind);
 
     @Query("SELECT * FROM event WHERE eventKind = :eventKind ORDER BY event_name ASC")
-    List<Event> findByKind(int eventKind);
+    List<Event> findByKindOrderedByName(int eventKind);
 
     @Query("DELETE FROM event WHERE (event_name = :event_name AND position = :position AND picked_day = :picked_day AND eventKind = :eventKind)")
     void deleteEvents(int position, String picked_day, String event_name, int eventKind);
 
     @Query("SELECT * FROM event WHERE (picked_day = :pickedDay AND eventKind = :eventKind AND schedule = :schedule) ORDER BY position ASC")
     LiveData<List<Event>> sortByOrder(String pickedDay, int eventKind, String schedule);
+
+    @Query("SELECT * FROM event WHERE (picked_day = :pickedDay AND eventKind = :eventKind) ORDER BY time(schedule) ASC")
+    LiveData<List<Event>> sortByOrder(String pickedDay, int eventKind);
 
     @Query("DELETE FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind")
     void deleteByPickedDate(String pickedDay, int eventKind);
@@ -71,5 +74,15 @@ public interface EventsDao {
 
     @Query("DELETE FROM event WHERE picked_day = :pickedDay AND eventKind = :eventKind AND event_name = :event_name")
     void deleteByPickedDateKindAndName(String pickedDay, int eventKind, String event_name);
+
+    @Query("DELETE FROM event WHERE eventKind = :eventKind ")
+    void deleteByEventKind(int eventKind);
+
+    @Query("SELECT * FROM event Where picked_day = :pickedDay Order by time(schedule) ASC")
+    List<Event> findByDate(String pickedDay);
+
+    @Query("SELECT * FROM event Where picked_day = :pickedDay and eventKind != :eventKind Order by time(schedule) ASC")
+    List<Event> findByDateExcept(String pickedDay, int eventKind);
+
 }
 

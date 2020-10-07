@@ -7,11 +7,12 @@
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
         android:layout_height="wrap_content"
-        android:background="@color/semiTransparentColorWhite">
+        android:background="@color/lightOrangeZilla">
 
         <TextView
             android:id="@+id/number"
             style="@style/textViewStylePlansList"
+            android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             tools:text="1." />
 
@@ -24,9 +25,9 @@
         <TextView
             android:id="@+id/nextEventPlanned"
             style="@style/textViewStylePlansList"
-            android:textSize="16sp"
             android:layout_weight="3"
             android:gravity="center"
+            android:textSize="16sp"
             android:visibility="gone"
             tools:text="Wtorek 20:00" />
 
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:backgroundTint="@color/lightOrangeZilla"
             android:visibility="gone" />
 
 
@@ -44,6 +46,7 @@
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorPrimary" />
+        android:background="@color/lightGreyZilla"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/singleDay"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dayOfAWeek"
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/Monday"
+        android:background="@drawable/frame"/>
+
+    <include layout="@layout/single_calendar_item"/>
+
+</LinearLayout>

@@ -10,26 +10,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodData;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodDataDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.statistics.PeriodStatistics;
-import com.dianaszczepankowska.AllInOneCalendar.android.widget.WidgetUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.widget.shifts.WidgetUtils;
+import com.google.android.material.textfield.TextInputEditText;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayDateInLongFormat;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.dayGramma;
+
 
 public class ForGirlsFragment extends Fragment {
 
@@ -37,7 +44,6 @@ public class ForGirlsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private CalendarView mCalendarView;
     private String startPeriodDate;
     private TextView periodTimeValue;
     private TextView cycleTimeValue;
@@ -47,7 +53,9 @@ public class ForGirlsFragment extends Fragment {
     private SeekBar cycleTimeSeekBar;
     private PeriodDataDao periodDataDao;
     private Button saveButon;
-    private ImageView saveImage;
+    private TextInputEditText date_editText;
+    private static final String EXTRA_START_PERIOD_DATE = "start_period";
+
 
     @SuppressLint("ClickableViewAccessibility")
     private View.OnTouchListener touchListener = (view, motionEvent) -> false;
@@ -56,6 +64,27 @@ public class ForGirlsFragment extends Fragment {
     public void onPause() {
         super.onPause();
         WidgetUtils.updateWidget(getContext());
+    }
+
+    public static ForGirlsFragment newInstance(String startPeriodDate) {
+
+        ForGirlsFragment fragment = new ForGirlsFragment();
+        Bundle args = new Bundle();
+        args.putString(EXTRA_START_PERIOD_DATE, startPeriodDate);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            startPeriodDate = args.getString(EXTRA_START_PERIOD_DATE);
+        } else {
+            startPeriodDate = null;
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,20 +96,32 @@ public class ForGirlsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.edit_period_data_activity_label));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(null);
+        MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_filter_vintage_black_48).setChecked(true).setOnMenuItemClickListener(item -> {
+            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new ForGirlsFragment()).addToBackStack("tag").commit();
+            return true;
+        });
 
-
-        mCalendarView = rootView.findViewById(R.id.girlsCalendar);
         periodTimeSeekBar = rootView.findViewById(R.id.periodTime);
         cycleTimeSeekBar = rootView.findViewById(R.id.cycleTime);
-        mCalendarView.setOnTouchListener(touchListener);
         periodTimeSeekBar.setOnTouchListener(touchListener);
         cycleTimeSeekBar.setOnTouchListener(touchListener);
         periodTimeValue = rootView.findViewById(R.id.periodTimeValue);
         cycleTimeValue = rootView.findViewById(R.id.cycleTimeValue);
-        saveButon = rootView.findViewById(R.id.save);
-        saveImage = rootView.findViewById(R.id.saveImage);
+        saveButon = rootView.findViewById(R.id.confirmButton);
+        saveButon.setText(R.string.save);
+        date_editText = rootView.findViewById(R.id.textinput);
+        date_editText.setFocusable(false);
+        date_editText.setOnClickListener(v -> {
+            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            tx.replace(R.id.flContent, new DatePickerFragment());
+            tx.commit();
+        });
+        date_editText.setOnTouchListener(touchListener);
 
-        setPeriodStartDate();
+
         setPeriodTimeValue();
         setCycleTimeValue();
         initData();
@@ -105,23 +146,12 @@ public class ForGirlsFragment extends Fragment {
             return true;
         } else if (item.getItemId() == R.id.statistics) {
             PeriodStatistics periodStatistics = new PeriodStatistics();
-            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().addToBackStack("tag");
             tx.replace(((ViewGroup) Objects.requireNonNull(getView()).getParent()).getId(), periodStatistics);
             tx.commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressLint("DefaultLocale")
-    private void setPeriodStartDate() {
-        mCalendarView
-                .setOnDateChangeListener(
-                        (view, year, month, dayOfMonth) -> {
-                            startPeriodDate = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", dayOfMonth);
-                            saveImage.setVisibility(View.GONE);
-                            saveButon.setVisibility(View.VISIBLE);
-                        });
     }
 
     private void setPeriodTimeValue() {
@@ -132,11 +162,10 @@ public class ForGirlsFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                periodTimeValue.setText("" + progress);
+                periodTimeValue.setText("" + progress + " " + dayGramma(progress, getContext()));
                 //noinspection IntegerDivisionInFloatingPointContext
                 periodTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
                 periodTimeChosenValue = progress;
-                saveImage.setVisibility(View.GONE);
                 saveButon.setVisibility(View.VISIBLE);
             }
 
@@ -151,6 +180,7 @@ public class ForGirlsFragment extends Fragment {
 
     }
 
+
     private void setCycleTimeValue() {
 
         cycleTimeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -160,11 +190,10 @@ public class ForGirlsFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 int val = (progress * (seekBar.getWidth() - 2 * seekBar.getThumbOffset())) / seekBar.getMax();
-                cycleTimeValue.setText("" + progress);
+                cycleTimeValue.setText("" + progress + " " + dayGramma(progress, getContext()));
                 //noinspection IntegerDivisionInFloatingPointContext
                 cycleTimeValue.setX(seekBar.getX() + val + seekBar.getThumbOffset() / 2);
                 cycleTimeChosenValue = progress;
-                saveImage.setVisibility(View.GONE);
                 saveButon.setVisibility(View.VISIBLE);
 
             }
@@ -256,7 +285,7 @@ public class ForGirlsFragment extends Fragment {
             long currentZonedDateTimeInMilis = currentZonedDateTime.toInstant().toEpochMilli();
             periodTimeSeekBar.setProgress(0);
             cycleTimeSeekBar.setProgress(0);
-            mCalendarView.setDate(currentZonedDateTimeInMilis);
+            date_editText.setText("");
         } else {
             String periodStartDay = periodDataDao.findLastPeriod().getPeriodStartDate();
             if (periodStartDay == null) {
@@ -271,10 +300,17 @@ public class ForGirlsFragment extends Fragment {
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
             int day = Integer.parseInt(parts[2]);
-            LocalDateTime periodStartDate = LocalDateTime.now().withYear(year).withMonth(month).withDayOfMonth(day);
-            ZonedDateTime zdt = periodStartDate.atZone(ZoneId.systemDefault());
-            long periodStartDateInMilis = zdt.toInstant().toEpochMilli();
-            mCalendarView.setDate(periodStartDateInMilis);
+            LocalDate periodStartDate = LocalDate.now().withYear(year).withMonth(month).withDayOfMonth(day);
+            //LocalDateTime periodStartDate = LocalDateTime.now().withYear(year).withMonth(month).withDayOfMonth(day);
+            //ZonedDateTime zdt = periodStartDate.atZone(ZoneId.systemDefault());
+            //long periodStartDateInMilis = zdt.toInstant().toEpochMilli();
+
+            if (startPeriodDate != null) {
+                LocalDate startPeriod = refactorStringIntoDate(startPeriodDate);
+                date_editText.setText(displayDateInLongFormat(startPeriod));
+            } else {
+                date_editText.setText(displayDateInLongFormat(periodStartDate));
+            }
 
             int periodLength = periodDataDao.findLastPeriod().getPeriodLength();
             periodTimeSeekBar.setProgress(periodLength);
@@ -288,8 +324,10 @@ public class ForGirlsFragment extends Fragment {
     private void setSaveButon() {
         saveButon.setOnClickListener(v -> {
             saveData();
-            saveButon.setVisibility(View.GONE);
-            saveImage.setVisibility(View.VISIBLE);
+            FragmentTransaction tx = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+            tx.replace(R.id.flContent, new CalendarFragment());
+            tx.commit();
+
         });
     }
 

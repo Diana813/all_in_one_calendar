@@ -13,18 +13,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PeriodStatisticsAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodData;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodDataDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.forGirls.ForGirlsFragment;
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 
 import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.dayGramma;
 
 public class PeriodStatistics extends Fragment {
 
@@ -32,6 +39,8 @@ public class PeriodStatistics extends Fragment {
     private PeriodDataDao periodDataDao;
     private TextView periodLength;
     private TextView cycleLength;
+    private View separator;
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -46,6 +55,13 @@ public class PeriodStatistics extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.statistics_period_data, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.ForGirls));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(R.drawable.baseline_chevron_left_black_24);
+
+        MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_filter_vintage_black_48).setChecked(true).setOnMenuItemClickListener(item -> {
+            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new ForGirlsFragment()).addToBackStack("tag").commit();
+            return true;
+        });
 
         setHasOptionsMenu(true);
 
@@ -56,8 +72,10 @@ public class PeriodStatistics extends Fragment {
         cycleLength = rootView.findViewById(R.id.cycleLength);
         periodsList.setAdapter(periodStatisticsAdapter);
         periodsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        periodLength.setText(countAveragePeriodLength() + " " + getString(R.string.daysPlural));
-        cycleLength.setText(countAverageCycleLength() + " " + getString(R.string.daysPlural));
+        periodLength.setText(countAveragePeriodLength() + " " + dayGramma(countAveragePeriodLength(), getContext()));
+        cycleLength.setText(countAverageCycleLength() + " " + dayGramma(countAverageCycleLength(), getContext()));
+        separator = rootView.findViewById(R.id.separator);
+        separator.setBackgroundColor(Objects.requireNonNull(getContext()).getColor(R.color.lightGreyZilla));
         return rootView;
 
     }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.LifeAimsViewPagerAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.DepthPageTransformer;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -15,13 +16,15 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DownloadImageUtils.getImageFromInternet;
 
 public class BackgroundActivity extends Fragment {
 
     public BackgroundActivity() {
-        // Required empty public constructor
     }
 
     @Override
@@ -35,19 +38,15 @@ public class BackgroundActivity extends Fragment {
                              Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.background_viewpager, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.LifeAims));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(null);
 
 
-        // Create an adapter that knows which fragment should be shown on each page
         LifeAimsViewPagerAdapter adapter = new LifeAimsViewPagerAdapter(this) {
         };
-
-
         ViewPager2 viewPager = rootView.findViewById(R.id.viewpager);
         TabLayout tabs = rootView.findViewById(R.id.tabs);
-
-        // Set the adapter onto the view pager
         viewPager.setAdapter(adapter);
-        // Connect the tab layout with the view pager.
 
         String[] titles = new String[]{getString(R.string.lifeAims), getString(R.string.bigPlan), getString(R.string.thisYear), getString(R.string.thisMonth), getString(R.string.dayPlan)};
 
@@ -63,17 +62,16 @@ public class BackgroundActivity extends Fragment {
                 receivedUri = getArguments().getParcelable("image");
                 message = "";
                 LifeAims.getMessage(message);
-                LifeAims.getImageFromInternet(receivedUri);
+                getImageFromInternet(receivedUri);
             } else if (getArguments().get("message") != null) {
                 message = getArguments().getString("message");
                 receivedUri = null;
-                LifeAims.getImageFromInternet(receivedUri);
+                getImageFromInternet(receivedUri);
                 LifeAims.getMessage(message);
             }
         }
 
         return rootView;
-
     }
 
 }

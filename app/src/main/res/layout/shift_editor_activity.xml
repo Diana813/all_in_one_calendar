@@ -1,165 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteZilla"
     tools:context=".shifts.ShiftsEditor">
 
-    <androidx.cardview.widget.CardView style="@style/cardViewShiftsEditor">
+    <LinearLayout
+        android:id="@+id/mainLayout"
+        style="@style/tableLayoutShiftsEditorStyle"
+        android:background="@color/whiteZilla"
+        tools:context=".shifts.ShiftsEditor">
 
-        <TableLayout style="@style/tableLayoutShiftsEditorStyle">
 
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+            android:layout_marginHorizontal="10dp">
 
-            <TableRow style="@style/TableRowStyle">
-
-                <TextView
-                    android:id="@+id/shift_name"
-                    style="@style/OverviewStyle"
-                    android:layout_width="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/addShiftName" />
-
-                <EditText
-                    android:id="@+id/shift_name_edit_text"
-                    style="@style/EditTextShiftEditorStyle"
-                    android:hint="@string/hintShiftName"
-                    android:importantForAutofill="no" />
-            </TableRow>
+            <TextView
+                android:id="@+id/shift_name"
+                style="@style/OverviewStyle"
+                android:layout_gravity="center_vertical"
+                android:text="@string/addShiftName" />
 
             <View
                 style="@style/tableLayoutViewStyle"
-                android:background="@android:color/darker_gray" />
+                android:layout_marginBottom="15dp"
+                android:background="@color/checkboxGreyZilla" />
 
-            <TableRow style="@style/TableRowStyle">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shift_name_edit_text"
+                style="@style/EditTextShiftEditorStyle"
+                android:hint="@string/name"
+                android:importantForAutofill="no"
+                android:textColor="@color/lightGreenZilla">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textinput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/grey2zilla" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/startLayout"
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+            android:layout_marginHorizontal="10dp"
+            android:paddingTop="20dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/shift_schedule"
                     style="@style/OverviewStyle"
-                    android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
                     android:text="@string/shiftStart" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2">
-
-                    <ImageView
-                        android:id="@+id/event_time_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:layout_toEndOf="@+id/shiftStart"
-                        android:src="@drawable/baseline_access_time_black_48"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/shiftStart"
-                        style="@style/textViewOneTimeEventsStyle"
-                        android:layout_margin="20dp"
-                        android:hint="@string/hintAlarm" />
-
-                </RelativeLayout>
-
-            </TableRow>
-
-            <View
-                style="@style/tableLayoutViewStyle"
-                android:background="@android:color/darker_gray" />
-
-            <TableRow style="@style/TableRowStyle">
+                <ImageView
+                    android:id="@+id/arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_keyboard_arrow_down_black_18"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/shift_lenght"
+                    android:id="@+id/shiftStart"
                     style="@style/OverviewStyle"
-                    android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_weight="1"
-                    android:text="@string/shiftLenght" />
+                    android:layout_toEndOf="@+id/shift_schedule" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2">
+            </RelativeLayout>
 
-                    <EditText
-                        android:id="@+id/shift_lenght_edit_text"
-                        style="@style/EditTextNumberStyle"
-                        android:hint="@string/hintShiftLenght"
-                        android:importantForAutofill="no" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="35dp"
-                        android:layout_toEndOf="@+id/shift_lenght_edit_text"
-                        android:text="@string/hours"
-                        android:textColor="#000"
-                        android:textSize="20sp" />
-                </RelativeLayout>
-            </TableRow>
 
             <View
+                android:id="@+id/shiftStartLine"
                 style="@style/tableLayoutViewStyle"
-                android:background="@android:color/darker_gray" />
+                android:background="@color/checkboxGreyZilla" />
 
-            <TableRow style="@style/TableRowStyle">
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="7dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/shift_lenght"
+                style="@style/EditTextShiftEditorStyle"
+                android:hint="@string/shiftLenght"
+                android:importantForAutofill="no"
+                android:textColor="@color/lightGreenZilla">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shift_lenght_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="@color/grey2zilla" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/alarm_button"
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="25dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/shift_alarm"
                     style="@style/OverviewStyle"
-                    android:layout_width="0dp"
-                    android:layout_marginVertical="20dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
                     android:text="@string/alarm" />
 
+                <ImageView
+                    android:id="@+id/arrow3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/baseline_keyboard_arrow_down_black_18"
+                    tools:ignore="ContentDescription" />
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:layout_marginStart="10dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/alarmLayout"
-                        android:gravity="center_vertical"
-                        tools:ignore="UseCompoundDrawables">
+                <TextView
+                    android:id="@+id/alarmStart"
+                    style="@style/OverviewStyle"
+                    android:layout_gravity="center_vertical"
+                    android:layout_toEndOf="@+id/shift_alarm" />
 
-                        <TextView
-                            android:id="@+id/alarmStart"
-                            style="@style/textViewOneTimeEventsStyle"
-                            android:layout_margin="20dp"
-                            android:hint="@string/hintAlarm" />
+                <View
+                    android:id="@+id/alarmLine"
+                    style="@style/tableLayoutViewStyle"
+                    android:layout_below="@+id/alarmStart"
+                    android:background="@color/checkboxGreyZilla" />
 
-                        <ImageView
-                            android:id="@+id/alarm_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
-                            android:src="@drawable/baseline_alarm_black_48"
-                            tools:ignore="ContentDescription" />
-                    </LinearLayout>
+            </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/reset"
-                        style="@style/textViewDateStyle.schedule"
-                        android:layout_below="@+id/alarmLayout"
-                        android:text="@string/reset"
-                        android:textColor="@color/colorPrimaryDark" />
+            <TextView
+                android:id="@+id/reset"
+                style="@style/textViewOneTimeEventsStyle"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="end"
+                android:text="@string/reset"
+                android:textColor="@color/grey2zilla" />
+        </LinearLayout>
 
-                </RelativeLayout>
+    </LinearLayout>
 
-            </TableRow>
+    <TextView
+        android:id="@+id/clean"
+        style="@style/textViewOneTimeEventsStyle"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/confirmLayout"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:text="@string/clean"
+        android:textColor="@color/grey2zilla"
+        android:textSize="18sp" />
 
-            <View
-                style="@style/tableLayoutViewStyle"
-                android:background="@android:color/darker_gray" />
-        </TableLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+    <include
+        android:id="@+id/confirmLayout"
+        layout="@layout/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

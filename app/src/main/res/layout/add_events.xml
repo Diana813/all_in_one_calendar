@@ -1,116 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle">
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightOrangeZilla">
 
-    <ScrollView
-        android:id="@+id/addEventToTheList"
-        style="@style/BackgroundLayout"
-        android:layout_weight="1"
-        tools:ignore="InefficientWeight">
-
-        <RelativeLayout
-            android:id="@+id/mainLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/eventsLabel"
-                style="@style/textViewHeaders"
-                android:gravity="center_horizontal"
-                android:paddingTop="50dp" />
-
-            <TableLayout
-                android:id="@+id/table"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/eventsLabel"
-                android:background="@color/colorPrimaryDark"
-                android:padding="8dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:id="@+id/row"
-                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-                    android:paddingTop="1dp">
-
-                    <TextView
-                        android:id="@+id/content"
-                        style="@style/ShiftsTextViewLabelStyle"
-                        android:layout_marginStart="10dp"
-                        android:layout_weight="1"
-                        android:gravity="start"
-                        android:text="@string/cyclicalEventsList" />
-
-                    <TextView
-                        android:id="@+id/date"
-                        style="@style/ShiftsTextViewLabelStyle"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:text="@string/upcoming_occurance" />
-
-                </LinearLayout>
-            </TableLayout>
-
-
-            <RelativeLayout
-                android:id="@+id/empty_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/eventsLabel"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="80dp">
-
-                <ImageView
-                    android:id="@+id/empty_view_image"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
-                    android:layout_centerHorizontal="true"
-                    android:paddingStart="10dp"
-                    tools:ignore="ContentDescription,RtlSymmetry" />
-
-                <TextView
-                    android:id="@+id/empty_title_text"
-                    style="@style/EmptyViewTextStyle"
-                    android:layout_below="@id/empty_view_image" />
-
-                <TextView
-                    android:id="@+id/empty_subtitle_text"
-                    style="@style/EmptyViewTextStyle.subtitle"
-                    android:layout_below="@id/empty_title_text" />
-            </RelativeLayout>
-
-
-            <FrameLayout
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/table"
-                android:layout_marginTop="10dp">
-
-                <include layout="@layout/recycleview_and_edittext" />
-            </FrameLayout>
-        </RelativeLayout>
-
-    </ScrollView>
-
-   <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/to_do_list"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list2"
+        style="@style/recyclerViewTasksListStyle"
+        android:layout_below="@+id/title"
+        android:paddingTop="20dp"
+        tools:ignore="InefficientWeight" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:src="@drawable/baseline_control_point_black_48"
-        android:visibility="gone">
+        android:src="@drawable/baseline_add_white_48"
+        android:visibility="gone"
+        app:backgroundTint="@color/darkOrangeZilla" />
 
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+    <TextView
+        android:id="@+id/clean"
+        style="@style/textViewOneTimeEventsStyle"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/confirmLayout"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textColor="@color/grey2zilla"
+        android:textSize="18sp"
+        android:visibility="gone" />
 
-  <!--  <Button
-        android:id="@+id/freqActButton"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/confirmLayout"
+        layout="@layout/confirm_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/addFrequentActivities"
-        android:layout_gravity="end"
-        android:layout_margin="20dp"
-        android:visibility="gone" />-->
-</LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

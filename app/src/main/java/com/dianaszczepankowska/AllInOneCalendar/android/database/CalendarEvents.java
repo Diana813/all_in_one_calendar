@@ -25,13 +25,17 @@ public class CalendarEvents {
     @ColumnInfo(name = "shiftNumber")
     private String shiftNumber;
 
+    @ColumnInfo(name = "shiftIdForGoogle")
+    private String shiftIdForGoogle;
 
-    public CalendarEvents(String currentMonth, boolean isAlarmOn, String pickedDate, String eventsNumber, String shiftNumber) {
+
+    public CalendarEvents(String currentMonth, boolean isAlarmOn, String pickedDate, String eventsNumber, String shiftNumber, String shiftIdForGoogle) {
         this.currentMonth = currentMonth;
         this.isAlarmOn = isAlarmOn;
         this.pickedDate = pickedDate;
         this.eventsNumber = eventsNumber;
         this.shiftNumber = shiftNumber;
+        this.shiftIdForGoogle = shiftIdForGoogle;
     }
 
     public int getId() {
@@ -81,5 +85,13 @@ public class CalendarEvents {
 
     public void setAlarmOn(boolean alarmOn) {
         isAlarmOn = alarmOn;
+    }
+
+    public String getShiftIdForGoogle() {
+        return shiftIdForGoogle;
+    }
+
+    public void setShiftIdForGoogle(String shiftIdForGoogle) {
+        this.shiftIdForGoogle = shiftIdForGoogle;
     }
 }

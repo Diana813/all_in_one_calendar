@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_menu"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+    app:behavior_hideable="true"
+    android:background="@drawable/bottom_menu_background"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa"
+        android:text="@string/header"
+        android:textColor="@color/blackZilla"
+        android:textSize="18sp"
+        android:layout_margin="20dp"
+        android:textStyle="bold" />
+
+
+    <ExpandableListView
+        android:id="@+id/expandableListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:headerDividersEnabled="false"
+        android:dividerHeight="0dp"
+        android:groupIndicator="@color/lightestGreyZilla" />
+
+
+</LinearLayout>

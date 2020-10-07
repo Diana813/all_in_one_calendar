@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
 
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
-        android:padding="10dp">
+        android:paddingVertical="10dp">
 
         <TextView
             android:id="@+id/periodStart"
             style="@style/textViewStyleStatisticsPeriodItem"
-            tools:text="2020-01-31" />
+            tools:text="2020-01-31"
+            android:gravity="start"
+            android:layout_weight="2"/>
 
         <TextView
             android:id="@+id/periodLength"
             style="@style/textViewStyleStatisticsPeriodItem"
-            tools:text="27 dni" />
+            tools:text="27 dni"
+            android:gravity="center"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/cycleLength"
             style="@style/textViewStyleStatisticsPeriodItem"
-            tools:text="5 dni" />
+            tools:text="5 dni"
+            android:gravity="center"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/arrowLayout"
         style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
-            android:layout_width="80dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/baseline_import_export_black_48"
-            android:tint="@color/colorPrimaryDark"
+            android:layout_gravity="start"
+            android:src="@drawable/baseline_import_export_black_36"
+            app:tint="@color/blueZilla"
             tools:ignore="ContentDescription" />
 
         <TextView

@@ -1,79 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/row"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
-    app:cardElevation="3dp">
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+    android:id="@+id/shiftTableItemLinearLayout"
+    android:paddingVertical="8dp">
 
-    <LinearLayout
+    <TableLayout
         android:id="@+id/list_of_items"
-        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:padding="8dp">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#000"
-            android:padding="1dp">
+        <LinearLayout
+            android:id="@+id/row"
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
 
             <TextView
-                android:id="@+id/shift"
+                android:id="@+id/shiftItem"
                 style="@style/textViewShift"
-                android:background="@drawable/weekend_frame"
-                tools:text="2" />
-
-        </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/shift_schedule"
-            style="@style/TableTextViews"
-            android:layout_marginStart="10dp"
-            android:textSize="15sp"
-            tools:text="12:00 - 18:00" />
+                android:gravity="start"
+                android:paddingStart="10dp"
+                android:layout_width="100dp"
+                tools:text="2"
+                tools:ignore="RtlSymmetry" />
 
 
-        <LinearLayout
-            style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-            android:layout_width="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_weight="0.75"
-            android:gravity="center"
-            tools:ignore="UseCompoundDrawables">
+            <TextView
+                android:id="@+id/shift_schedule"
+                style="@style/TableTextViews"
+                android:paddingStart="5dp"
+                android:textColor="@color/blackZilla"
+                android:textSize="15sp"
+                tools:text="12:00 - 18:00"
+                tools:ignore="RtlSymmetry" />
 
-            <ImageView
-                android:id="@+id/alarmClock"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="8dp"
-                android:src="@drawable/baseline_alarm_black_48"
-                tools:ignore="ContentDescription">
-
-            </ImageView>
 
             <TextView
                 android:id="@+id/shift_alarm"
                 style="@style/TableTextViews"
-                android:layout_width="wrap_content"
+                android:paddingStart="5dp"
+                android:textColor="@color/blackZilla"
                 android:textSize="15sp"
-                tools:text="11:00" />
+                tools:text="11:00"
+                tools:ignore="RtlSymmetry" />
+
         </LinearLayout>
+    </TableLayout>
 
-        <ImageView
-            style="@style/ImageViewEditStyle"
-            android:src="@drawable/baseline_create_black_36"
-            tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/imageArrow"
+        style="@style/ImageViewEditStyle"
+        android:src="@drawable/baseline_navigate_next_black_18"
+        app:tint="@color/blueZilla"
+        android:layout_marginEnd="2dp"
+        tools:ignore="ContentDescription" />
+</LinearLayout>
 
-    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/list_of_items"
-        android:background="@color/colorPrimaryDark" />
 
-</RelativeLayout>

@@ -14,22 +14,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:visibility="gone">
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-        </Switch>
 
         <TextView
             android:id="@+id/holiday"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:textSize="20sp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:visibility="gone"
             android:gravity="center"
-            android:fontFamily="@font/comfortaa"
+            android:textSize="20sp"
             android:textStyle="bold"
+            android:visibility="gone"
             tools:text="Lalalala" />
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

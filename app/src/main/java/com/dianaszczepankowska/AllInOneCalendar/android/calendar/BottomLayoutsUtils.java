@@ -1,41 +1,62 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.calendar;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
+import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.BottomLayoutShiftsAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
-class BottomLayoutsUtils {
+public class BottomLayoutsUtils {
 
 
-    static void checkShiftsLayoutState(BottomSheetBehavior shiftsSheetBehavior) {
+    public static void checkBottomLayoutState(BottomSheetBehavior sheetBehavior, SharedPreferences sharedPreferences, Context context) {
 
-        if (shiftsSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        boolean showShifts;
+        if (sharedPreferences != null) {
+            showShifts = sharedPreferences.getBoolean(context.getString(R.string.show_shifts), false);
         } else {
-            shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            showShifts = true;
+        }
+
+        if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED && showShifts) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
     }
 
-    static void initShiftsData(CalendarFragment context, final BottomLayoutShiftsAdapter bottomLayoutShiftsAdapter) {
+    public static void initShiftsData(MainActivity context, final BottomLayoutShiftsAdapter bottomLayoutShiftsAdapter, TextView emptyView) {
         ShiftsViewModel shiftsViewModel = new ViewModelProvider(context).get(ShiftsViewModel.class);
-        shiftsViewModel.getShiftsList().observe(context, bottomLayoutShiftsAdapter::setShiftList);
+        shiftsViewModel.getShiftsList().observe(context,
+                shiftList -> {
+                    bottomLayoutShiftsAdapter.setShiftList(shiftList);
+                    if (shiftList.isEmpty()) {
+                        emptyView.setVisibility(View.VISIBLE);
+                        emptyView.setText(R.string.no_shifts);
+                    }
+                }
+        );
+
     }
 
 
-    static void shiftsBottomSheetListener(final BottomSheetBehavior shiftsSheetBehavior, final ImageView imageView) {
-        shiftsSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+    public static void bottomSheetListener(final BottomSheetBehavior sheetBehavior, final View imageView) {
+        sheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        hideShifts(imageView, shiftsSheetBehavior);
+                        hideBottomLayout(imageView, sheetBehavior);
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
@@ -57,8 +78,10 @@ class BottomLayoutsUtils {
         });
     }
 
-    private static void hideShifts(ImageView shiftsDownArrow, final BottomSheetBehavior shiftsSheetBehavior) {
-        shiftsDownArrow.setOnClickListener(view -> shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
+    private static void hideBottomLayout(View shiftsDownArrow, final BottomSheetBehavior sheetBehavior) {
+        if (shiftsDownArrow != null) {
+            shiftsDownArrow.setOnClickListener(view -> sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN));
+        }
     }
 
 }

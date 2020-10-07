@@ -1,7 +1,7 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
-import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DialogsUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
     public void displayCyclicalEvents(String startDate, String frequency, String pickedDaysOfWeek, String term, String eventName, LocalDate firstDayOfCalendarView, LocalDate lastDayOfCalendarView, ArrayList<String> listOfCyclicalEvents) {
 
 
-        LocalDate startCyclicalEvent = AppUtils.refactorStringIntoDate(startDate);
+        LocalDate startCyclicalEvent = DateUtils.refactorStringIntoDate(startDate);
 
         //days
         if (frequency.substring(0, 6).equals("0-0-0-")) {
@@ -55,7 +55,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
 
 
             for (int i = 0; i < 50; i++) {
-                if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+                if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
                     startCyclicalEvent = startCyclicalEvent.plusDays(dayFrequency);
 
                     if (finishCyclicalEventDate != null && startCyclicalEvent.isAfter(finishCyclicalEventDate)) {
@@ -138,7 +138,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
                 finishCyclicalEventDate = startCyclicalEvent.plusMonths(monthsFrequency * Integer.parseInt(term));
             }
 
-            if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+            if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
                 listOfCyclicalEvents.add(startCyclicalEvent + ";" + eventName);
             }
 
@@ -154,7 +154,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
                             break;
                         }
 
-                        if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+                        if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
                             listOfCyclicalEvents.add(startCyclicalEvent + ";" + eventName);
                         }
                     } else {
@@ -169,7 +169,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
                         LocalDate firstOcurranceDayOfWeek = startCyclicalEvent.plusMonths(monthsFrequency).with(firstInMonth(dayOfWeek));
                         startCyclicalEvent = firstOcurranceDayOfWeek.plusWeeks(findDayOfWeekOccurence((double) startCyclicalEvent.getDayOfMonth()) - 1);
 
-                        if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+                        if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
 
                             if (finishCyclicalEventDate != null && startCyclicalEvent.isAfter(finishCyclicalEventDate)) {
                                 break;
@@ -202,7 +202,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
                 finishCyclicalEventDate = startCyclicalEvent.plusYears(yearsFrequency * Integer.parseInt(term));
             }
 
-            if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+            if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
                 listOfCyclicalEvents.add(startCyclicalEvent + ";" + eventName);
             }
             for (int i = 0; i < 150; i++) {
@@ -213,7 +213,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
                         break;
                     }
 
-                    if (AppUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
+                    if (DialogsUtils.isEqualOrBetweenDates(startCyclicalEvent, firstDayOfCalendarView, lastDayOfCalendarView)) {
                         listOfCyclicalEvents.add(startCyclicalEvent + ";" + eventName);
                     }
                 } else {
@@ -235,9 +235,9 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
 
         LocalDate nextEv = dateAccordingToChoosenDayOfTheWeek(startCyclicalEvent, dayOfWeek, String.valueOf(weeksFrequency));
 
-        LocalDate firstCyclicalEvent = AppUtils.refactorStringIntoDate(startDate);
+        LocalDate firstCyclicalEvent = DateUtils.refactorStringIntoDate(startDate);
 
-        if (AppUtils.isEqualOrBetweenDates(nextEv, firstDayOfCalendarView, lastDayOfCalendarView)) {
+        if (DialogsUtils.isEqualOrBetweenDates(nextEv, firstDayOfCalendarView, lastDayOfCalendarView)) {
             for (int i = 0; i < 10; i++) {
                 if ((nextEv.minusWeeks(weeksFrequency).isAfter(firstDayOfCalendarView) || nextEv.minusWeeks(weeksFrequency).isEqual(firstDayOfCalendarView)) && (nextEv.minusWeeks(weeksFrequency).isAfter(firstCyclicalEvent))) {
                     nextEv = nextEv.minusWeeks(weeksFrequency);
@@ -256,7 +256,7 @@ public class DisplayCyclicalEventsInTheCalendar extends UpcomingCyclicalEvent {
         }
 
         for (int i = 0; i < 10; i++) {
-            if (AppUtils.isEqualOrBetweenDates(nextEv, firstDayOfCalendarView, lastDayOfCalendarView)) {
+            if (DialogsUtils.isEqualOrBetweenDates(nextEv, firstDayOfCalendarView, lastDayOfCalendarView)) {
                 nextEv = nextEv.plusWeeks(weeksFrequency);
 
 

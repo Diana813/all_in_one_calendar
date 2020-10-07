@@ -3,26 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
-    android:background="@color/colorWhite">
+    android:background="@color/lightOrangeZilla"
+    android:padding="10dp">
 
     <TableLayout
         android:id="@+id/label"
-        android:layout_marginTop="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:layout_marginTop="2dp"
         android:padding="8dp">
-
 
         <LinearLayout
             android:id="@+id/row"
-            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-            android:paddingTop="1dp">
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
 
             <TextView
                 android:id="@+id/title_label"
                 style="@style/ShiftsTextViewLabelStyle"
-                android:text="@string/shift_name" />
+                android:gravity="start"
+                android:paddingStart="10dp"
+                android:text="@string/shift_name"
+                tools:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/price_label"
@@ -34,10 +35,6 @@
                 style="@style/ShiftsTextViewLabelStyle"
                 android:text="@string/alarm" />
 
-            <TextView
-                android:id="@+id/sale_label"
-                style="@style/ShiftsTextViewLabelStyle"
-                android:text="@string/edit" />
         </LinearLayout>
     </TableLayout>
 
@@ -45,7 +42,8 @@
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/empty_shelf_image"
@@ -72,8 +70,9 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
         android:layout_margin="20dp"
-        android:src="@drawable/baseline_control_point_black_36"
-        app:backgroundTint="@color/colorAccent" />
+        android:src="@drawable/baseline_add_white_48"
+        android:visibility="gone"
+        app:backgroundTint="@color/darkOrangeZilla" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -83,7 +82,6 @@
         android:layout_below="@+id/label"
         android:orientation="vertical"
         android:padding="5dp" />
-
 
 </RelativeLayout>
 

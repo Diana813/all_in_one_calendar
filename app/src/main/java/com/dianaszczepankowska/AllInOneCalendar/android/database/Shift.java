@@ -23,6 +23,7 @@ public class Shift {
     @ColumnInfo(name = "position")
     private int position;
 
+
     public Shift(int position, String shift_name, String schedule, String alarm, int shift_length) {
         this.position = position;
         this.shift_name = shift_name;

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <GridView
+        android:id="@+id/widgetGridView"
+        android:background="@drawable/widget_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:divider="#f0f0f0"
+        android:dividerHeight="1dp"
+        android:numColumns="7"
+        tools:listitem="@layout/calendar_widget_item_shifts" />
+
+</LinearLayout>

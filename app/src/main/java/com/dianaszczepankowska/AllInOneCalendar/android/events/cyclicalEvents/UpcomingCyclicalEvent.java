@@ -2,7 +2,7 @@ package com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents;
 
 import android.content.Context;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class UpcomingCyclicalEvent {
 
         String[] parts = frequency.split("-");
         LocalDate nextEvent;
-        LocalDate pickedStartDate = AppUtils.refactorStringIntoDate(startDate);
+        LocalDate pickedStartDate = DateUtils.refactorStringIntoDate(startDate);
 
         //days
         if (frequency.substring(0, 6).equals("0-0-0-")) {
@@ -257,7 +257,7 @@ public class UpcomingCyclicalEvent {
 
         LocalDate pickedFinishDate = null;
         if (term.contains(",")) {
-            String dateStr = AppUtils.changeSimpleDateFormat(term);
+            String dateStr = DateUtils.fromLongDateFormatToShortDateFormat(term);
             String[] parts = dateStr.split("/");
             pickedFinishDate = LocalDate.of(Integer.parseInt(parts[2]), Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
         }

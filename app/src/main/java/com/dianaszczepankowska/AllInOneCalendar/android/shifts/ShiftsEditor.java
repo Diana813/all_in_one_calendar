@@ -5,34 +5,27 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
-import com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmUtils;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEvents;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEventsDao;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.Shift;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.ShiftsDao;
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DialogsUtils;
+import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
-import static com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsFragment.newId;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DatabaseUtils.saveShiftData;
 
 
 public class ShiftsEditor extends Fragment {
@@ -50,12 +43,16 @@ public class ShiftsEditor extends Fragment {
 
     private TextView shiftStartTextView;
     private TextView alarmTextView;
-    private EditText shiftNameEditText;
-    private EditText shiftLengthEditText;
-    private int newShiftLength;
+    private TextInputEditText shiftNameEditText;
+    private TextInputEditText shiftLengthEditText;
+    public static int newShiftLength;
     private TextView resetAlarm;
+    private Button confirm;
+    private TextView clean;
+    private LinearLayout startLayout;
+    private LinearLayout alarmButton;
 
-    static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
+    public static ShiftsEditor newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
 
         ShiftsEditor fragment = new ShiftsEditor();
         Bundle args = new Bundle();
@@ -97,18 +94,13 @@ public class ShiftsEditor extends Fragment {
         View view = inflater.inflate(R.layout.shift_editor_activity, container, false);
 
         setHasOptionsMenu(true);
-
-        shiftLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
-
-        shiftNameEditText = view.findViewById(R.id.shift_name_edit_text);
-        shiftStartTextView = view.findViewById(R.id.shiftStart);
-        ImageView shiftStartSettingButton = view.findViewById(R.id.event_time_button);
-        shiftStartSettingButton.setOnClickListener(v -> shiftSettingDialog());
-        resetAlarm = view.findViewById(R.id.reset);
-
-        alarmTextView = view.findViewById(R.id.alarmStart);
-        ImageView alarmButton = view.findViewById(R.id.alarm_button);
+        handleToolbarAndBottomMenu();
+        findViews(view);
+        startLayout.setOnClickListener(v -> shiftSettingDialog());
+        setConfirmButton();
+        setCleanButton();
         alarmButton.setOnClickListener(v -> alarmSettingDialog());
+        setResetAlarm();
 
         if (!shift_name_extra.equals("-1") &&
                 shift_alarm_extra != null &&
@@ -118,131 +110,63 @@ public class ShiftsEditor extends Fragment {
             shiftStartTextView.setText(shift_schedule_extra);
             alarmTextView.setText(shift_alarm_extra);
             shiftLengthEditText.setText(shift_length_extra);
+            shiftStartTextView.setVisibility(View.VISIBLE);
         }
-
-        setResetAlarm();
-
 
         return view;
     }
 
 
-    private void saveShift() {
-
-        String newShiftName = shiftNameEditText.getText().toString();
-        String newShiftStart = shiftStartTextView.getText().toString();
-        String newAlarm = alarmTextView.getText().toString();
-
-
-        try {
-            newShiftLength = Integer.parseInt(shiftLengthEditText.getText().toString());
-        } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-
-        }
-
-        if (newShiftName.isEmpty() &&
-                newAlarm.isEmpty() && newShiftStart.isEmpty()) {
-            return;
-        }
+    private void handleToolbarAndBottomMenu() {
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.add_shift));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(R.drawable.baseline_chevron_left_black_24);
+        MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_business_center_black_48).setChecked(true).setOnMenuItemClickListener(item -> {
+            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new ShiftsFragment()).addToBackStack("tag").commit();
+            return true;
+        });
+    }
 
 
-        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
-
-        if (!shift_name_extra.equals("-1")) {
-
-            Shift shiftToUpdate = shiftsDao.findByShiftName(shift_name_extra);
-            if (shiftToUpdate != null) {
-                CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(context).calendarEventsDao();
-                List<CalendarEvents> changedAlarmShiftsList = calendarEventsDao.findByShiftNumber(shiftToUpdate.getShift_name());
-
-
-                if (shiftToUpdate.getAlarm() != null && !shiftToUpdate.getAlarm().equals(newAlarm) && !shiftToUpdate.getAlarm().equals("")) {
-
-                    String[] parts = shiftToUpdate.getAlarm().split(":");
-                    String alarmHour = parts[0];
-                    String alarmMinute = parts[1];
-
-                    if (!newAlarm.equals("")) {
-                        String[] parts2 = newAlarm.split(":");
-                        String newAlarmHour = parts2[0];
-                        String newAlarmMinute = parts2[1];
-
-                        if (changedAlarmShiftsList != null) {
-                            for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
-                                AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
-
-                                AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS);
-                            }
-
-                        }
-                    } else {
-                        for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
-                            AlarmUtils.deleteAlarmFromAPickedDay(AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
-
-                        }
-                    }
-                } else if (shiftToUpdate.getAlarm() != null && shiftToUpdate.getAlarm().equals("") && !newAlarm.equals("")) {
-                    String[] parts2 = newAlarm.split(":");
-                    String newAlarmHour = parts2[0];
-                    String newAlarmMinute = parts2[1];
-                    for (CalendarEvents calendarEvents : changedAlarmShiftsList) {
-                        AlarmUtils.setAlarmToPickedDay(newAlarmHour, newAlarmMinute, AppUtils.refactorStringIntoDate(calendarEvents.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS);
-                    }
-
-                }
-
-                if ((!shiftToUpdate.getShift_name().equals(newShiftName)) ||
-                        (!shiftToUpdate.getSchedule().equals(newShiftStart)) ||
-                        (!shiftToUpdate.getAlarm().equals(newAlarm)) ||
-                        (shiftToUpdate.getShift_length() != newShiftLength)) {
-                    shiftToUpdate.setShift_name(newShiftName);
-                    shiftToUpdate.setSchedule(newShiftStart);
-                    shiftToUpdate.setAlarm(newAlarm);
-                    shiftToUpdate.setShift_length(newShiftLength);
-                    shiftsDao.update(shiftToUpdate);
-                }
-            }
-
-        } else {
-
-            shiftsDao.insert(new Shift(newId, newShiftName, newShiftStart, newAlarm, newShiftLength));
-
-        }
+    private void findViews(View view) {
+        shiftLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
+        shiftNameEditText = view.findViewById(R.id.textinput);
+        shiftStartTextView = view.findViewById(R.id.shiftStart);
+        resetAlarm = view.findViewById(R.id.reset);
+        confirm = view.findViewById(R.id.confirmButton);
+        clean = view.findViewById(R.id.clean);
+        alarmTextView = view.findViewById(R.id.alarmStart);
+        startLayout = view.findViewById(R.id.startLayout);
+        alarmButton = view.findViewById(R.id.alarm_button);
 
     }
 
     private void shiftSettingDialog() {
 
-        @SuppressLint("DefaultLocale") TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+        @SuppressLint({"DefaultLocale", "SetTextI18n"}) TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme,
                 (view, hour, minute) -> shiftStartTextView.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
         timePickerDialog.show();
+        shiftStartTextView.setVisibility(View.VISIBLE);
+
     }
 
     private void alarmSettingDialog() {
 
-        @SuppressLint("DefaultLocale") TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(),
+        @SuppressLint({"DefaultLocale", "SetTextI18n"}) TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme,
                 (view, hour, minute) -> alarmTextView.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
         timePickerDialog.show();
-    }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.save_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    private void setConfirmButton() {
 
-        if (item.getItemId() == R.id.save) {
-            saveShift();
-            AppUtils.hideKeyboard(getView(), context);
+        confirm.setOnClickListener(v -> {
+            saveShiftData(shiftNameEditText, shiftStartTextView, alarmTextView, shiftLengthEditText, context, shift_name_extra);
+            DialogsUtils.hideKeyboard(getView(), context);
             goBackToShifts();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        });
     }
 
 
@@ -256,8 +180,14 @@ public class ShiftsEditor extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void setResetAlarm() {
-        resetAlarm.setOnClickListener(v -> {
-            alarmTextView.setHint("06:00");
+        resetAlarm.setOnClickListener(v -> alarmTextView.setText(""));
+    }
+
+    private void setCleanButton() {
+        clean.setOnClickListener(v -> {
+            shiftNameEditText.setText("");
+            shiftStartTextView.setText("");
+            shiftLengthEditText.setText("");
             alarmTextView.setText("");
         });
     }

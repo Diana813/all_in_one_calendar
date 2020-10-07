@@ -5,6 +5,7 @@ import android.app.Application;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
+import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class PlanViewModel extends AndroidViewModel {
     private LiveData<List<BigPlanData>> thisMonthLiveDataIsChecked;
     private LiveData<List<BigPlanData>> oneDayLiveData;
     private LiveData<List<BigPlanData>> oneDayLiveDataIsChecked;
+    private LiveData<List<BigPlanData>> todoListLiveData;
+    private LiveData<List<BigPlanData>> todoListLiveDataIsChecked;
 
 
     public PlanViewModel(@NonNull Application application) {
@@ -36,6 +39,9 @@ public class PlanViewModel extends AndroidViewModel {
         thisMonthLiveDataIsChecked = bigPlanDao.findByisChecked(3, 1);
         oneDayLiveData = bigPlanDao.findByAimTime(4);
         oneDayLiveDataIsChecked = bigPlanDao.findByisChecked(4, 1);
+        todoListLiveData = bigPlanDao.findByAimTimeAndDate(5, BackgroundActivityExpandedDayView.currentDate);
+        todoListLiveDataIsChecked = bigPlanDao.findByisCheckedAndDate(5, 1, BackgroundActivityExpandedDayView.currentDate);
+
     }
 
     LiveData<List<BigPlanData>> getFiveYearsPlanAimsList() {
@@ -68,6 +74,14 @@ public class PlanViewModel extends AndroidViewModel {
 
     LiveData<List<BigPlanData>> getOneDayAimsListIsChecked() {
         return oneDayLiveDataIsChecked;
+    }
+
+    public LiveData<List<BigPlanData>> getTodoListLiveData() {
+        return todoListLiveData;
+    }
+
+    public LiveData<List<BigPlanData>> getTodoListLiveDataIsChecked() {
+        return todoListLiveDataIsChecked;
     }
 
     public void insert(BigPlanData... aims) {

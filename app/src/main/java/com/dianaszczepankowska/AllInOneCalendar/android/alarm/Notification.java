@@ -13,7 +13,7 @@ public class Notification extends AlarmService {
 
     public static final String ACTION_STOP = "OK";
     public static final String ACTION_OPEN_NOTIFICATION_CLASS = "Open notification class";
-    public static final String ACTION_SET_NOTIFICATION = "Set notification";
+    public static final String ACTION_SET_NOTIFICATIONS = "Set notification";
 
     private String notificationInfo;
 
@@ -22,7 +22,7 @@ public class Notification extends AlarmService {
     public void startAlarmService(int ringtoneType, int ringtneType2, int audioManagerStream, int usage, boolean looping) throws IOException {
         super.startAlarmService(ringtoneType, ringtneType2, audioManagerStream, usage, looping);
 
-        setTheNotificationTapAction(this, ACTION_STOP, R.mipmap.ic_launcher, "NOTIFICATION", notificationInfo, R.drawable.baseline_delete_black_48, "OK");
+        setTheNotificationTapAction(this, ACTION_STOP, R.mipmap.ic_launcher, notificationInfo, "All in One Calendar", R.drawable.baseline_delete_black_48, "OK");
     }
 
 

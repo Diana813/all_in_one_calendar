@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.EventKind;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ExpandableListHoursAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEventsDao;
@@ -21,17 +23,23 @@ import com.dianaszczepankowska.AllInOneCalendar.android.database.Event;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.EventsDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.ShiftsDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.frequentActivities.FrequentActivitiesViewModel;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DialogsUtils;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.UtilsEvents.addNotification;
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.currentDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayHeaderDateInToolbar;
 import static java.lang.String.format;
 
 public class DailyScheduleEvents extends ExpandedDayEvents {
@@ -48,9 +56,9 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
     }
 
 
-    public void setContent(int layout) {
+   /* public void setContent(int layout) {
         this.layout = layout;
-    }
+    }*/
 
 
     @Override
@@ -63,8 +71,13 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.scheduled_events_layout, container, false);
 
-        View rootView = inflater.inflate(layout, container, false);
+        Objects.requireNonNull(getActivity()).setTitle(context.getString(R.string.dailySchedule));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(displayHeaderDateInToolbar(currentDate));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(R.drawable.baseline_chevron_left_black_24);
+
+
         setHasOptionsMenu(true);
         expandableListView = rootView.findViewById(R.id.expandableListView);
         mDrawer = rootView.findViewById(R.id.activity_expanded_day_view);
@@ -96,6 +109,9 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
             return true;
         } else if (item.getItemId() == R.id.action_add_hour) {
             timeSettingDialog();
+        } else if (item.getItemId() == R.id.action_add_notification) {
+            addNotification(getView(), context);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -109,7 +125,7 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
         pickedDay = findWhatDateItIs();
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(getContext()).eventsDao();
-        List<Event> scheduledEventsList = eventsDao.sortByPickedDay(pickedDay, 3);
+        List<Event> scheduledEventsList = eventsDao.sortByPickedDay(pickedDay, EventKind.EVENTS.getIntValue());
 
         CalendarEventsDao calendarEventsDao = CalendarDatabase.getDatabase(getContext()).calendarEventsDao();
 
@@ -127,39 +143,35 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
         if (shiftsDao.findByShiftName(currentShift) != null) {
             shiftSchedule = shiftsDao.findByShiftName(currentShift).getSchedule();
             int shiftLenght = shiftsDao.findByShiftName(currentShift).getShift_length();
-
-            if (!shiftSchedule.equals("")) {
-                String[] split = shiftSchedule.split(":");
-                int shiftStartHour = Integer.parseInt(split[0]);
-                int shiftStartMinutes = Integer.parseInt(split[1]);
-
-                shiftFinish = String.valueOf(LocalTime.of(shiftStartHour, shiftStartMinutes).plusHours(shiftLenght));
-            }
+            shiftFinish = DialogsUtils.findShiftFinish(shiftSchedule, shiftLenght);
         }
 
 
         if (!scheduledEventsList.isEmpty()) {
             for (int i = 0; i < 24; i++) {
-                List<String> hour = new ArrayList<>();
-                expandableListDetail.put(((format("%02d", i) + ":00")), hour);
+                if (scheduledEventsList.get(i).getSchedule() != null) {
+                    List<String> hour = new ArrayList<>();
+                    expandableListDetail.put(((format("%02d", i) + ":00")), hour);
 
-                for (Event event : scheduledEventsList) {
-                    String addedHour = scheduledEventsList.get(scheduledEventsList.indexOf(event)).getSchedule();
-                    if (addedHour != null) {
-                        String[] parts = addedHour.split(":");
-                        if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(addedHour)) {
-                            hour.add(addedHour);
+                    for (Event event : scheduledEventsList) {
+                        String addedHour = scheduledEventsList.get(scheduledEventsList.indexOf(event)).getSchedule();
+                        if (addedHour != null) {
+                            String[] parts = addedHour.split(":");
+                            if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(addedHour)) {
+                                hour.add(addedHour);
+                            }
+                        }
+                    }
+
+
+                    if (newHour != null) {
+                        String[] parts = newHour.split(":");
+                        if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(newHour)) {
+                            hour.add(newHour);
                         }
                     }
                 }
 
-
-                if (newHour != null) {
-                    String[] parts = newHour.split(":");
-                    if (format("%02d", i).equals(parts[0]) && !(format("%02d", i) + ":00").equals(newHour)) {
-                        hour.add(newHour);
-                    }
-                }
             }
         } else {
             for (int i = 0; i < 24; i++) {
@@ -187,6 +199,7 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
                     }
                 }
             }
+
         }
         return expandableListDetail;
     }

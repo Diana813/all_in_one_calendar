@@ -2,6 +2,7 @@ package com.dianaszczepankowska.AllInOneCalendar.android.database;
 
 import java.util.List;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -20,9 +21,12 @@ public interface ImagePathDao {
     @Query("DELETE FROM imagePath")
     void deleteAll();
 
+    @Query("DELETE FROM imagePath WHERE imagePath = :imagePath")
+    void deleteByPath(String imagePath);
+
     @Query("SELECT * FROM imagePath WHERE id = (SELECT MAX(ID) FROM imagePath)")
-    ImagePath findLastImage ();
+    ImagePath findLastImage();
 
     @Query("SELECT * FROM imagePath")
-    List<ImagePath> findAllImages ();
+    LiveData<List<ImagePath>> findAllImages();
 }

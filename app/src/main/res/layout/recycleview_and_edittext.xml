@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
+    android:id="@+id/editAndRecycle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
-        style="@style/recyclerViewTasksListStyle" />
+        style="@style/recyclerViewTasksListStyle"
+        android:layout_marginBottom="120dp"
+        tools:ignore="InefficientWeight" />
 
     <LinearLayout
         android:id="@+id/editTextLinearLayout"
-        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
+        style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:background="@color/lightOrangeZilla">
 
         <EditText
             android:id="@+id/editText"
@@ -21,10 +29,24 @@
         <ImageButton
             android:id="@+id/confirm_button"
             style="@style/confirmImageButtonStyle"
+            android:layout_gravity="center"
             android:layout_marginEnd="20dp"
-            android:tint="@color/colorPrimary"
-            android:background="@color/colorWhite"
+            android:background="@color/lightOrangeZilla"
+            android:scaleType="fitXY"
+            android:tint="@color/blueZilla"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        android:src="@drawable/baseline_add_white_48"
+        app:backgroundTint="@color/darkOrangeZilla"
+        android:visibility="gone"/>
+</RelativeLayout>

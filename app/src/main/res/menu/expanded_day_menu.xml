@@ -14,9 +14,15 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_add_notification"
+        android:title="@string/add_notification"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_add_hour"
         android:title="@string/add_new_hour"
         android:visible="false"
         app:showAsAction="never" />
+
 
 </menu>

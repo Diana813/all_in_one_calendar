@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
 
@@ -18,6 +18,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.dayGramma;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.yearGramma;
 
 public class FiveYearsPlan extends Plan {
 
@@ -44,14 +48,14 @@ public class FiveYearsPlan extends Plan {
         super.onCreateView(inflater, container, savedInstanceState);
         question.setText(R.string.fiveYearsPlan);
         initData(this, adapter, planViewModel.getFiveYearsPlanAimsList(), planViewModel.getFiveYearsPlanAimsListIsChecked());
-        AppUtils.setConfirmButton(confirm, adapter, aimText, 1, null, "0", null, 1);
+        setFabListener(adapter, 1, LocalDate.now().toString());
         return rootView;
     }
 
 
     @SuppressLint({"FragmentLiveDataObserve", "SetTextI18n"})
     @Override
-    void initData(Fragment fragment, final BigPlanAdapter adapter, LiveData<List<BigPlanData>> listLiveData, LiveData<List<BigPlanData>> listLiveDataIsChecked) {
+    void initData(Fragment fragment, final PlansRecyclerViewAdapter adapter, LiveData<List<BigPlanData>> listLiveData, LiveData<List<BigPlanData>> listLiveDataIsChecked) {
         super.initData(fragment, adapter, listLiveData, listLiveDataIsChecked);
         listLiveData.observe(fragment, aims -> {
             adapter.setAimsList(aims);
@@ -61,7 +65,7 @@ public class FiveYearsPlan extends Plan {
                 int year = isTheTimeOut(aims, 1);
 
 
-                timeOutDate = AppUtils.refactorStringIntoDate(aims.get(0).getStartDate()).plusYears(5);
+                timeOutDate = refactorStringIntoDate(aims.get(0).getStartDate()).plusYears(5);
                 LocalDate theEndOfAYear = LocalDate.of(year, Month.JANUARY, 1).plusYears(1);
 
                 if (timeOutDate.isEqual(LocalDate.now()) ||
@@ -77,9 +81,10 @@ public class FiveYearsPlan extends Plan {
 
                 if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
                     howManyDaysLeft = howMuchTimeLeft(timeOutDate).toHours();
-                    timeOut.setText(getString(R.string.timeLeft) + " " + howManyDaysLeft + " " + getString(R.string.hoursLeft));
+                    timeOut.setText(howManyDaysLeft + " " + getString(R.string.hoursLeft));
                 } else {
-                    timeOut.setText(getString(R.string.timeLeft) + " " + howManyYearsLeft + " " + getString(R.string.yearsLeft) + " " + howManyDaysLeftTillTheEndOfThisYear + " " + getString(R.string.daysLeft) + " " + "(" + howManyDaysLeft + " " + getString(R.string.daysLeft) + ")");
+
+                    timeOut.setText(howManyYearsLeft + " " + yearGramma(howManyYearsLeft) + " " + howManyDaysLeftTillTheEndOfThisYear + " " + dayGramma(howManyYearsLeft, context) + " " + "(" + howManyDaysLeft + " " + dayGramma(howManyYearsLeft, context) + ")");
                 }
                 if (newId == 0) {
                     timeOut.setVisibility(View.GONE);
@@ -90,5 +95,6 @@ public class FiveYearsPlan extends Plan {
 
         });
     }
+
 }
 

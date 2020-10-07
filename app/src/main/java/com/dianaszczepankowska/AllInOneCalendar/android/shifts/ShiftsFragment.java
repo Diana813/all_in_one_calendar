@@ -12,15 +12,19 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ShiftListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.EventsViewModel;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsRecyclerView;
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,11 +33,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ShiftsFragment extends Fragment {
 
-    private ShiftsAdapter adapter;
+    private ShiftListAdapter adapter;
     private ShiftsViewModel shiftsViewModel;
+    private EventsViewModel eventsViewModel;
     private Context context;
     private RelativeLayout empty_view;
-    static int newId;
+    public static int newId;
 
     public static ShiftsFragment newInstance() {
         return new ShiftsFragment();
@@ -43,7 +48,7 @@ public class ShiftsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        adapter = new ShiftsAdapter(context);
+        adapter = new ShiftListAdapter(context);
 
     }
 
@@ -79,20 +84,29 @@ public class ShiftsFragment extends Fragment {
 
         setHasOptionsMenu(true);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Shifts));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(null);
+        MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_business_center_black_48).setChecked(true).setOnMenuItemClickListener(item -> {
+            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new ShiftsFragment()).addToBackStack("tag").commit();
+            return true;
+        });
+
         empty_view = view.findViewById(R.id.empty_view);
 
 
         FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(view1 -> showFragment(ShiftsEditor.newInstance(-1, null, null, null, null)));
 
-        initData();
+        initShiftsData();
         return view;
     }
 
     private void showFragment(final Fragment fragment) {
-        FragmentTransaction fragmentTransaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.flContent, fragment);
-        fragmentTransaction.commitNow();
+
+        FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).addToBackStack("tag").commit();
     }
 
 
@@ -130,7 +144,7 @@ public class ShiftsFragment extends Fragment {
     }
 
 
-    private void initData() {
+    private void initShiftsData() {
         shiftsViewModel = new ViewModelProvider(this).get(ShiftsViewModel.class);
         shiftsViewModel.getShiftsList().observe(getViewLifecycleOwner(), shifts -> {
             adapter.setShiftList(shifts);
@@ -147,6 +161,7 @@ public class ShiftsFragment extends Fragment {
             }
         });
     }
+
 
     private void removeData() {
         if (shiftsViewModel != null) {

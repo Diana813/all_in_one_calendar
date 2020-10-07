@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shiftTableItemLinearLayout"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+    android:paddingVertical="8dp"
+    android:baselineAligned="false">
+
+
+    <TableLayout
+        android:id="@+id/list_of_items"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_weight="3"
+        android:paddingVertical="8dp">
+
+        <TextView
+            android:id="@+id/shift_schedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:textColor="@color/grey2zilla"
+            android:textSize="12sp"
+            tools:ignore="RtlSymmetry"
+            tools:text="12:00 - 18:00" />
+
+        <LinearLayout
+            android:id="@+id/row"
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
+
+            <TextView
+                android:id="@+id/shiftItem"
+                style="@style/textViewShift"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="start"
+                android:textColor="@color/grey3zilla"
+                android:textSize="15sp"
+                tools:ignore="RtlSymmetry"
+                tools:text="2" />
+
+
+            <TextView
+                android:id="@+id/shift_alarm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="2"
+                android:gravity="end"
+                android:textColor="@color/grey3zilla"
+                android:textSize="15sp"
+                tools:ignore="RtlSymmetry"
+                tools:text="11:00" />
+
+            <ImageView
+                android:id="@+id/imageArrow"
+                style="@style/ImageViewEditStyle"
+                android:layout_width="0dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_weight="0.5"
+                android:contentDescription="@string/edit"
+                android:src="@drawable/baseline_create_black_36"
+                app:tint="@color/blueZilla" />
+        </LinearLayout>
+    </TableLayout>
+
+
+</LinearLayout>

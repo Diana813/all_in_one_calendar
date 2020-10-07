@@ -25,7 +25,9 @@ import com.dianaszczepankowska.AllInOneCalendar.android.alarm.CyclicalEventsNoti
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.Event;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.EventsDao;
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.UtilsEvents;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DialogsUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,8 +36,11 @@ import java.util.Objects;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.dateStringToMilis;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
 import static java.lang.String.format;
 
 
@@ -193,7 +198,10 @@ public class CyclicalEventsDetails extends Fragment {
 
         findViews(rootView);
         setHasOptionsMenu(true);
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.OneTimeEvents));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.addCyclicalEvents));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(R.drawable.baseline_chevron_left_black_24);
+
 
         displayDataIfExist();
         setTimeScheduleButton();
@@ -215,7 +223,7 @@ public class CyclicalEventsDetails extends Fragment {
     private void findViews(View rootView) {
 
         eventStartTimeTextView = rootView.findViewById(R.id.eventStart);
-        eventTimeButton = rootView.findViewById(R.id.event_time_button);
+        eventTimeButton = rootView.findViewById(R.id.startLayout);
         alarmButton = rootView.findViewById(R.id.alarm_button);
         alarmTextView = rootView.findViewById(R.id.alarm);
         eventNameEditText = rootView.findViewById(R.id.event_name_edit_text);
@@ -262,7 +270,7 @@ public class CyclicalEventsDetails extends Fragment {
 
         if (item.getItemId() == R.id.save) {
             saveEvent(findStartTime());
-            AppUtils.hideKeyboard(getView(), context);
+            DialogsUtils.hideKeyboard(getView(), context);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -287,7 +295,7 @@ public class CyclicalEventsDetails extends Fragment {
             }
 
             alarmTextView.setText(event_alarm_extra);
-            calendarView.setDate(AppUtils.dateStringToMilis(event_start_date_extra));
+            calendarView.setDate(dateStringToMilis(event_start_date_extra));
             displayHowOftenEditText();
             displayHowLongHeader();
         }
@@ -447,12 +455,12 @@ public class CyclicalEventsDetails extends Fragment {
 
 
     private void setTimeScheduleButton() {
-        eventTimeButton.setOnClickListener(v -> AppUtils.eventTimeSettingDialog(eventStartTimeTextView, context));
+        eventTimeButton.setOnClickListener(v -> DialogsUtils.eventTimeSettingDialog(eventStartTimeTextView, context));
     }
 
 
     private void setAlarmButton() {
-        alarmButton.setOnClickListener(v -> AppUtils.eventTimeSettingDialog(alarmTextView, context));
+        alarmButton.setOnClickListener(v -> DialogsUtils.eventTimeSettingDialog(alarmTextView, context));
     }
 
 
@@ -618,7 +626,7 @@ public class CyclicalEventsDetails extends Fragment {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        dateString = AppUtils.displayDateInAProperFormat(calendar);
+                        dateString = DateUtils.displayDateInALongFormat(calendar);
                         howLongHeader.setText(getString(R.string.until) + " " + dateString);
 
                     };
@@ -654,7 +662,7 @@ public class CyclicalEventsDetails extends Fragment {
                 startTime == null || newHowOften == null || howOftenEditText.getText().toString().equals("")) {
 
             String emptyField = (getString(R.string.requirements));
-            AppUtils.showFillInThisFieldDialog(emptyField, context);
+            DialogsUtils.showFillInThisFieldDialog(emptyField, context);
 
             return;
         }
@@ -715,8 +723,8 @@ public class CyclicalEventsDetails extends Fragment {
             }
         } else {
 
-
-            Event event = new Event(-56, newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm);
+            String id = UtilsEvents.createEventId(startTime);
+            Event event = new Event(-56, newEventName, newWhatTime, newAlarm, newHowLong, startTime, 0, newHowOften, howLongTerm, id);
             eventsDao.insert(event);
             CyclicalEventsNotifications.setNotification(event, context.getApplicationContext());
 
@@ -767,7 +775,7 @@ public class CyclicalEventsDetails extends Fragment {
 
         } else if (frequency == 1) {
             if (arrayOfpickedDaysOfAWeek.isEmpty()) {
-                arrayOfpickedDaysOfAWeek.add(AppUtils.refactorStringIntoDate(findStartTime()).getDayOfWeek().toString().toLowerCase().substring(0, 3));
+                arrayOfpickedDaysOfAWeek.add(refactorStringIntoDate(findStartTime()).getDayOfWeek().toString().toLowerCase().substring(0, 3));
             }
 
             newHowOften = "0" + "-" + "0" + "-" + howOftenEditText.getText().toString() + "-" + arrayOfpickedDaysOfAWeek + "-" + "0";

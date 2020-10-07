@@ -1,16 +1,30 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/whiteZilla</item>
+        <item name="colorPrimaryDark">@color/whiteZilla</item>
+        <item name="colorAccent">@color/darkOrangeZilla</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:ambientShadowAlpha">0.6</item>
         <item name="android:spotShadowAlpha">0.6</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="android:textColor">@color/blackZilla</item>
+        <item name="colorSecondary">@color/darkGreyZilla</item>
+        <item name="android:statusBarColor">@color/whiteZilla</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:textColorSecondary">@color/grey2zilla</item>
+        <item name="colorControlActivated">@color/lightGreenZilla</item>
+        <item name="colorControlHighlight">@color/lightGreenZilla</item>
+        <item name="colorControlNormal">@color/checkboxGreyZilla</item>
+
     </style>
+
+    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/darkOrangeZilla</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 
     <style name="colorPickerBigPart">
         <item name="android:layout_width">70dp</item>
@@ -29,18 +43,18 @@
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginStart">35dp</item>
         <item name="android:layout_marginTop">15dp</item>
-        <item name="backgroundColor">#BDBDBD</item>
+        <item name="backgroundColor">@color/lightGreyZilla</item>
     </style>
 
     <!-- Style for the table labels text views in shift activity-->
     <style name="ShiftsTextViewLabelStyle">
         <item name="android:gravity">center</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">110dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:fontFamily">@font/comfortaa</item>
-        <item name="android:textAppearance">?android:textAppearanceMedium</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/lightGreyZilla</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">true</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
@@ -50,9 +64,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textSize">30sp</item>
-        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:paddingTop">16dp</item>
-        <item name="android:textColor">@color/grey</item>
+        <item name="android:textColor">@color/lightGreyZilla</item>
     </style>
 
     <style name="EmptyViewTextStyle.subtitle">
@@ -63,14 +76,12 @@
 
     <!-- Style for the table's text views in table_item.xml-->
     <style name="TableTextViews">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:fontFamily">@font/comfortaa</item>
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:textColor">#2B3D4D</item>
         <item name="android:gravity">center</item>
+        <item name="android:layout_width">110dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/lightBlackZilla</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <!-- Style for the table rows in shift editor activity-->
@@ -84,13 +95,11 @@
     <!-- Style for a category in the editor -->
     <style name="OverviewStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">@color/grey2zilla</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginHorizontal">5dp</item>
     </style>
 
     <style name="OverviewStyle.Events">
@@ -108,7 +117,6 @@
         <item name="android:layout_margin">10dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:layout_gravity">center</item>
-        <item name="fontFamily">@font/comfortaa</item>
 
     </style>
 
@@ -117,10 +125,9 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="fontFamily">@font/comfortaa</item>
 
     </style>
 
@@ -130,7 +137,6 @@
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">#222222</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewHeaders">
@@ -139,33 +145,32 @@
         <item name="android:textColor">#000</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:textSize">22sp</item>
     </style>
 
     <style name="textViewHeaders.statistics">
-        <item name="android:textSize">40sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:gravity">start</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/blackZilla</item>
     </style>
 
     <style name="textViewHeaders.statistics.small">
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:gravity">start</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">@color/blackZilla</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="textViewHeaders.small">
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
     </style>
 
     <style name="textViewDateStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">20sp</item>
-        <item name="fontFamily">@font/comfortaa</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="textViewDateStyle.schedule">
@@ -177,17 +182,16 @@
     <style name="forGirlsTextStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:layout_gravity">center_horizontal</item>
-        <item name="fontFamily">@font/comfortaa</item>
-        <item name="android:layout_margin">6dp</item>
+        <item name="android:textColor">@color/blackZilla</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
+        <item name="android:layout_marginVertical">30dp</item>
     </style>
 
     <style name="forGirlsSeekBarStyle">
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_marginHorizontal">20dp</item>
     </style>
 
     <style name="forGirlsSeekBatValueStyle">
@@ -200,31 +204,28 @@
     <style name="textViewOneTimeEventsStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:textColor">#000</item>
-        <item name="fontFamily">@font/comfortaa</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
     </style>
 
     <style name="textViewShift">
-        <item name="android:layout_height">80dp</item>
-        <item name="android:layout_width">60dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:textColor">#000</item>
-        <item name="fontFamily">@font/comfortaa</item>
+        <item name="android:layout_width">110dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="textViewCalendarDayNumber">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">#222222</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_margin">5dp</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewCalendarDayNumberWidget">
@@ -239,7 +240,6 @@
     <style name="textViewCalendarDayNumberWidget.textViewCalendarNumberOfEventsWidget">
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentStart">true</item>
-        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_marginStart">3dp</item>
         <item name="android:textSize">16sp</item>
@@ -249,9 +249,8 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">#222222</item>
         <item name="android:gravity">center</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewScheduleHours">
@@ -263,7 +262,6 @@
         <item name="android:layout_marginStart">2dp</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="textViewScheduleHours.item">
@@ -274,13 +272,9 @@
     <style name="textViewShiftItemBottomLayout">
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">50dp</item>
-        <item name="android:layout_margin">2dp</item>
-        <item name="fontFamily">@font/comfortaa</item>
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:textColor">#000</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 
@@ -289,7 +283,6 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:gravity">center</item>
-        <item name="fontFamily">@font/comfortaa</item>
         <item name="android:textSize">18sp</item>
     </style>
 
@@ -301,10 +294,9 @@
         <item name="android:layout_margin">10dp</item>
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">20sp</item>
-        <item name="backgroundTint">@color/colorWhite</item>
+        <item name="android:textSize">18sp</item>
+        <item name="backgroundTint">@color/darkGreyZilla</item>
         <item name="android:hint">@string/tasks</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="EditTextEventsOverview">
@@ -317,18 +309,14 @@
         <item name="android:inputType">textCapSentences|textMultiLine</item>
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="EditTextShiftEditorStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:layout_weight">2</item>
-        <item name="android:inputType">text</item>
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">20sp</item>
-        <item name="fontFamily">@font/comfortaa</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:textColor">@color/darkGreyZilla</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="EditTextNumberStyle">
@@ -339,22 +327,21 @@
         <item name="android:textColor">#000</item>
         <item name="android:textSize">20sp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="fontFamily">@font/comfortaa</item>
     </style>
 
     <style name="confirmImageButtonStyle">
-        <item name="android:layout_height">50dp</item>
-        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">20dp</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:src">@drawable/baseline_done_white_48</item>
 
     </style>
 
     <style name="recyclerViewTasksListStyle">
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginBottom">100dp</item>
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:textSize">20sp</item>
     </style>
@@ -368,16 +355,17 @@
     </style>
 
     <style name="Table" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/colorWhite</item>
-        <item name="tabSelectedTextColor">@color/colorWhite</item>
+        <item name="tabIndicatorColor">@color/darkOrangeZilla</item>
+        <item name="tabSelectedTextColor">@color/blackZilla</item>
         <item name="tabTextAppearance">@style/TableTextAppearance</item>
-        <item name="tabBackground">@color/colorPrimaryDark</item>
+        <item name="tabBackground">@color/whiteZilla</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="TableTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/grey2zilla</item>
+        <item name="textAllCaps">false</item>
     </style>
 
     <style name="tableLayoutShiftsEditorStyle">
@@ -385,15 +373,16 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">vertical</item>
-        <item name="backgroundColor">@color/lightGrey</item>
-        <item name="android:layout_margin">10dp</item>
+        <item name="backgroundColor">@color/lightGreyZilla</item>
+        <item name="android:padding">20dp</item>
     </style>
 
     <style name="tableLayoutViewStyle">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_marginTop">5dp</item>
-        <item name="background">@android:color/darker_gray</item>
+        <item name="android:layout_marginHorizontal">5dp</item>
+        <item name="background">@color/checkboxGreyZilla</item>
     </style>
 
     <style name="cardViewPlansList">
@@ -409,8 +398,6 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">12dp</item>
-        <item name="elevation">20dp</item>
-        <item name="cardElevation">30dp</item>
     </style>
 
     <style name="cardViewColorSettingsAndOverviewStyle">
@@ -435,8 +422,8 @@
     </style>
 
     <style name="nextPrevButtons">
-        <item name="android:layout_height">40dp</item>
-        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">30dp</item>
         <item name="android:layout_margin">5dp</item>
     </style>
 
@@ -461,8 +448,7 @@
 
     <style name="ImageViewEditStyle">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">0.75</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_margin">7dp</item>
 
@@ -471,7 +457,7 @@
     <style name="periodImage">
         <item name="android:layout_height">10dp</item>
         <item name="android:layout_width">10dp</item>
-        <item name="android:layout_margin">7dp</item>
+        <item name="android:layout_marginVertical">7dp</item>
     </style>
 
     <style name="personalGrowthCheckBoxStyle">
@@ -514,5 +500,15 @@
         <item name="background">@color/colorWhite</item>
     </style>
 
+    <style name="menuFabStyle">
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_width">45dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_margin">25dp</item>
+        <item name="backgroundTint">@color/darkOrangeZilla</item>
+        <item name="tint">@color/whiteZilla</item>
+    </style>
 
 </resources>

@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.StatisticsPersonalGrowthDao;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,6 +19,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.dayGramma;
 
 public class ThisMonthPlan extends Plan {
 
@@ -45,14 +50,14 @@ public class ThisMonthPlan extends Plan {
         super.onCreateView(inflater, container, savedInstanceState);
         question.setText(R.string.thisMonthPlan);
         initData(this, adapter, planViewModel.getThisMonthAimsList(), planViewModel.getThisMonthAimsListIsChecked());
-        AppUtils.setConfirmButton(confirm, adapter, aimText, 3, null, "0", null, 1);
+        setFabListener(adapter, 3, LocalDate.now().toString());
         return rootView;
     }
 
 
     @SuppressLint({"FragmentLiveDataObserve", "SetTextI18n"})
     @Override
-    void initData(Fragment fragment, final BigPlanAdapter adapter, LiveData<List<BigPlanData>> listLiveData, LiveData<List<BigPlanData>> listLiveDataIsChecked) {
+    void initData(Fragment fragment, final PlansRecyclerViewAdapter adapter, LiveData<List<BigPlanData>> listLiveData, LiveData<List<BigPlanData>> listLiveDataIsChecked) {
         super.initData(fragment, adapter, listLiveData, listLiveDataIsChecked);
         listLiveData.observe(fragment, aims -> {
             adapter.setAimsList(aims);
@@ -63,15 +68,15 @@ public class ThisMonthPlan extends Plan {
                 int year = LocalDate.now().getYear();
 
                 String firstItemDateString = aims.get(0).getStartDate();
-                firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+                firstItemDate = refactorStringIntoDate(firstItemDateString);
 
                 timeOutDate = LocalDate.of(year, month, 1).plusMonths(1);
                 long howManyDaysLeft = howMuchTimeLeft(timeOutDate).toDays();
                 if (howManyDaysLeft == 1 || howManyDaysLeft < 1) {
                     howManyDaysLeft = howMuchTimeLeft(timeOutDate).toHours();
-                    timeOut.setText((getString(R.string.timeLeft)) + " " + howManyDaysLeft + " " + getString(R.string.hoursLeft));
+                    timeOut.setText(howManyDaysLeft + " " + getString(R.string.hoursLeft));
                 } else {
-                    timeOut.setText((getString(R.string.timeLeft)) + " " + howManyDaysLeft + " " + getString(R.string.daysLeft));
+                    timeOut.setText(howManyDaysLeft + " " + dayGramma((int) howManyDaysLeft, context));
                 }
 
                 if (timeOutDate.isBefore(LocalDate.now()) ||

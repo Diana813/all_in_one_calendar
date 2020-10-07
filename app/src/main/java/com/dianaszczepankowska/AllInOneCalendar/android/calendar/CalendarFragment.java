@@ -1,23 +1,29 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.calendar;
 
 import android.annotation.SuppressLint;
-import android.app.LoaderManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.CalendarProviderMethods;
+import com.dianaszczepankowska.AllInOneCalendar.android.EventKind;
+import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
-import com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CalendarAdapterWithRota;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CalendarAdapterNoRota;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.StatisticsPersonalGrowthDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.AlarmUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEvents;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEventsDao;
@@ -27,11 +33,13 @@ import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodData;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.PeriodDataDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.Shift;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.ShiftsDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.UserData;
+import com.dianaszczepankowska.AllInOneCalendar.android.database.UserDataDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents.DisplayCyclicalEventsInTheCalendar;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsViews;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.Holiday;
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
@@ -42,7 +50,8 @@ import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
 import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
@@ -53,17 +62,16 @@ import static com.google.common.collect.Lists.reverse;
 public class CalendarFragment extends CalendarBrain {
 
     private static final int DAYS_COUNT = 42;
-    private ImageView previousButton;
-    private ImageView nextButton;
     private ImageView prevYearButton;
     private ImageView nextYearButton;
-    private CardView calendarCardView;
+    private FrameLayout calendarCardView;
     public String event;
     public ArrayList<CalendarViews> calendarViewsArrayList;
     private LocalDate pickedDate;
     private int dayOfMonth;
     private LocalDate lastMondayOfCurrentMonth;
     public static String pickedDay;
+    public static String accountEmail;
 
 
     @Override
@@ -80,11 +88,17 @@ public class CalendarFragment extends CalendarBrain {
 
         View rootView = inflater.inflate(R.layout.activity_calendar, container, false);
         Objects.requireNonNull(getActivity()).setTitle(getString(R.string.Calendar));
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(null);
+        MainActivity.menu.findItem(R.id.home).setIcon(R.drawable.baseline_home_black_48).setChecked(true);
+        MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_today_black_48).setOnMenuItemClickListener(item -> {
+            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, new BackgroundActivityExpandedDayView()).addToBackStack("tag").commit();
+            return true;
+        });
 
         findViews(rootView);
-        setBottomSheetsBehavior();
-        setBottomLayoutShiftsAdapter();
-        BottomLayoutsUtils.initShiftsData(this, shiftsAdapter);
+
         setHasOptionsMenu(true);
         onGridViewItemClickListener();
         swipeTheCalendar();
@@ -92,7 +106,8 @@ public class CalendarFragment extends CalendarBrain {
         calendarFill = LocalDate.now();
         displayRightPeriod();
 
-        ConnectivityManager conM = (ConnectivityManager)
+
+      /*  ConnectivityManager conM = (ConnectivityManager)
                 Objects.requireNonNull(getContext()).getSystemService(Context.CONNECTIVITY_SERVICE);
 
         assert conM != null;
@@ -103,20 +118,35 @@ public class CalendarFragment extends CalendarBrain {
         if (networkInfo != null && networkInfo.isConnected()) {
             loaderManager.restartLoader(HOLIDAY_LOADER_ID, null, this);
         }
+*/
+        UserDataDao userDataDao = getDatabase(getContext()).userDataDao();
+        UserData owner = null;
+        if (userDataDao.getAllUsers() != null && !userDataDao.getAllUsers().isEmpty()) {
+            owner = userDataDao.getAllUsers().get(0);
+        }
+        if (owner != null) {
+            accountEmail = owner.getEmail();
+        } else {
+            getUserGoogleAccountEmail();
+            if (userDataDao.getAllUsers() != null && !userDataDao.getAllUsers().isEmpty()) {
+                owner = userDataDao.getAllUsers().get(0);
+                accountEmail = owner.getEmail();
+            }
 
+        }
+
+       /* try {
+            GSuiteCalendarApi.buildClientServise();
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+*/
         return rootView;
     }
 
     private void findViews(View rootView) {
-
-        shifts_bottom_sheet = rootView.findViewById(R.id.shiftsSettings);
-        shifts_recycler_view = rootView.findViewById(R.id.shifts_list_recycler);
-        shiftsDownArrow = rootView.findViewById(R.id.shiftsDownArrow);
-        backgroundDrawing = rootView.findViewById(R.id.backgroundDrawing);
         gridView = rootView.findViewById(R.id.widgetGridView);
         date = rootView.findViewById(R.id.date);
-        previousButton = rootView.findViewById(R.id.calendar_prev_button);
-        nextButton = rootView.findViewById(R.id.calendar_next_button);
         prevYearButton = rootView.findViewById(R.id.calendar_prev_year_button);
         nextYearButton = rootView.findViewById(R.id.calendar_next_year_button);
         calendarCardView = rootView.findViewById(R.id.calendarCardView);
@@ -126,12 +156,26 @@ public class CalendarFragment extends CalendarBrain {
 
         calendarViewsArrayList = new ArrayList<>();
         listOfCyclicalEvents = new ArrayList<>();
-        CalendarAdapter calendarAdapter = new CalendarAdapter(context, calendarViewsArrayList);
-        displayEmptyEvents();
-        displayHeaderDate(date);
-        setDisplayCyclicalEventsInTheCalendar();
-        displayCalendarWithData();
-        gridView.setAdapter(calendarAdapter);
+
+        boolean showShifts = sharedPreferences.getBoolean(getString(R.string.show_shifts), false);
+        if (showShifts) {
+            CalendarAdapterWithRota calendarAdapter = new CalendarAdapterWithRota(context, calendarViewsArrayList);
+            displayEmptyEvents();
+            displayHeaderDate(date);
+            setDisplayCyclicalEventsInTheCalendar();
+            displayCalendarWithData();
+            gridView.setAdapter(calendarAdapter);
+
+
+        } else {
+            CalendarAdapterNoRota calendarAdapter = new CalendarAdapterNoRota(context, calendarViewsArrayList);
+            displayEmptyEvents();
+            displayHeaderDate(date);
+            setDisplayCyclicalEventsInTheCalendar();
+            displayCalendarWithData();
+            gridView.setAdapter(calendarAdapter);
+        }
+
 
     }
 
@@ -146,7 +190,7 @@ public class CalendarFragment extends CalendarBrain {
     private boolean displayHolidays() {
         if (holidays != null) {
             for (Holiday holiday : holidays) {
-                LocalDate holidayDate = AppUtils.refactorStringIntoDate(holiday.getDate());
+                LocalDate holidayDate = DateUtils.refactorStringIntoDate(holiday.getDate());
                 if (holidayDate.getYear() <= calendarFill.getYear()) {
                     if (calendarFill.isEqual(holidayDate)) {
                         return true;
@@ -168,6 +212,9 @@ public class CalendarFragment extends CalendarBrain {
 
         //Data wyświetlana w górnym TextView
         DateTimeFormatter sdf = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
+        if (pickedDay != null) {
+            calendarFill = DateUtils.refactorStringIntoDate(pickedDay);
+        }
         String todaysDate = calendarFill.format(sdf);
         date.setText(todaysDate);
 
@@ -178,6 +225,7 @@ public class CalendarFragment extends CalendarBrain {
         //Zmienna do przechowywania daty, która wyświetla się w górnym TextView
         //potrzebna do prawidłowego działania buttonów i kolorowania kalendarza
         headerDate = LocalDate.of(year, month, day);
+        pickedDay = null;
     }
 
     public void displayCalendarWithData() {
@@ -288,7 +336,9 @@ public class CalendarFragment extends CalendarBrain {
 
         gridView.setOnItemClickListener((adapterView, view, position, id) -> {
 
-            if (shiftsSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            boolean showShifts = sharedPreferences.getBoolean(getString(R.string.show_shifts), false);
+
+            if (shiftsSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED && showShifts) {
 
                 pickedDate = calendarViewsArrayList.get(position).getmCalendarFill();
                 pickedDay = String.valueOf(pickedDate);
@@ -298,10 +348,12 @@ public class CalendarFragment extends CalendarBrain {
                     ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
                     Shift shift = shiftsDao.findByShiftName(shiftToDelete.getShiftNumber());
                     getAlarmTime(shift);
-                    if (alarmHour != null) {
+                    if (alarmHour != null && !alarmHour.equals("")) {
                         AlarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, getContext(), ACTION_OPEN_ALARM_CLASS);
                         shiftToDelete.setAlarmOn(false);
                         calendarEventsDao.update(shiftToDelete);
+                        alarmHour = null;
+                        alarmMinute = null;
                     }
                 }
 
@@ -351,14 +403,16 @@ public class CalendarFragment extends CalendarBrain {
         pickedDay = String.valueOf(pickedDate);
 
 
-        saveShiftToPickedDate(context, newShiftNumber, headerDate, alarmHour, alarmMinute, pickedDate);
+        saveShiftToPickedDate(context, newShiftNumber, headerDate, pickedDate, accountEmail);
 
         ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
         Shift shift = shiftsDao.findByShiftName(newShiftNumber);
         getAlarmTime(shift);
 
         if (alarmHour != null && !alarmHour.equals("")) {
-            AlarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, ACTION_OPEN_ALARM_CLASS);
+            AlarmUtils.setAlarmToPickedDay(alarmHour, alarmMinute, pickedDate, context, ACTION_OPEN_ALARM_CLASS, null);
+
+
         }
     }
 
@@ -397,10 +451,17 @@ public class CalendarFragment extends CalendarBrain {
                         calendarEventsDao.deleteBypickedDate(pickedDay);
                         ShiftsDao shiftsDao = getDatabase(context).shiftsDao();
                         Shift shift = shiftsDao.findByShiftName(shiftToDelete.getShiftNumber());
+                        EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
+                        Event rotaToDelete = eventsDao.findByEventNameKindAndPickedDay(shiftToDelete.getShiftNumber(), pickedDay, EventKind.SHIFTS.getIntValue());
+                        if(rotaToDelete != null){
+                            CalendarProviderMethods.deleteEvent(context, rotaToDelete.getEventId());
+                        }
                         getAlarmTime(shift);
                         if (alarmHour != null) {
                             AlarmUtils.deleteAlarmFromAPickedDay(pickedDate, alarmHour, alarmMinute, context, ACTION_OPEN_ALARM_CLASS);
                         }
+                        eventsDao.deleteByPickedDateKindAndName(pickedDay, EventKind.SHIFTS.getIntValue(), shift.getShift_name());
+
                     }
                 }
                 return true;
@@ -412,10 +473,6 @@ public class CalendarFragment extends CalendarBrain {
         });
     }
 
-
-    public void setPreviousButtonClickEvent(PeriodData period, PeriodDataDao periodDataDao) {
-        previousButton.setOnClickListener(v -> setPreviousMonthView());
-    }
 
     public void setPreviousYearButtonClickEvent() {
         prevYearButton.setOnClickListener(v -> setPreviousYearView());
@@ -434,11 +491,6 @@ public class CalendarFragment extends CalendarBrain {
         displayRightPeriod();
     }
 
-
-    public void setNextButtonClickEvent() {
-
-        nextButton.setOnClickListener(v -> setNextMonthView());
-    }
 
     public void setNextYearButtonClickEvent() {
         nextYearButton.setOnClickListener(v -> setNextYearView());
@@ -504,10 +556,10 @@ public class CalendarFragment extends CalendarBrain {
         if (listOfPeriods != null && !listOfPeriods.isEmpty()) {
             for (PeriodData period : listOfPeriods) {
 
-                LocalDate periodDate = displayCyclicalEventsInTheCalendar.findNewStartEventDate(AppUtils.refactorStringIntoDate(period.getPeriodStartDate()), firstCellOfTheCalendar, period.getCycleLength());
+                LocalDate periodDate = displayCyclicalEventsInTheCalendar.findNewStartEventDate(DateUtils.refactorStringIntoDate(period.getPeriodStartDate()), firstCellOfTheCalendar, period.getCycleLength());
                 try {
                     PeriodData nextPeriod = listOfPeriods.get(listOfPeriods.indexOf(period) + 1);
-                    if (periodDate.isBefore(AppUtils.refactorStringIntoDate(nextPeriod.getPeriodStartDate()))) {
+                    if (periodDate.isBefore(DateUtils.refactorStringIntoDate(nextPeriod.getPeriodStartDate()))) {
                         periodData = period;
                         break;
                     }
@@ -551,8 +603,6 @@ public class CalendarFragment extends CalendarBrain {
         }
 
         fillTheCalendar(context, date, gridView);
-        setPreviousButtonClickEvent(period, periodDataDao);
-        setNextButtonClickEvent();
         setPreviousYearButtonClickEvent();
         setNextYearButtonClickEvent();
     }
@@ -561,7 +611,7 @@ public class CalendarFragment extends CalendarBrain {
     public void setDisplayCyclicalEventsInTheCalendar() {
 
         EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-        List<Event> cyclicalEvents = eventsDao.findByKind(0);
+        List<Event> cyclicalEvents = eventsDao.findByKindOrderedByName(0);
 
         LocalDate currentDate = headerDate;
         LocalDate firstDayOfTheMonth = setDateAtFirstDayOfAMonth(currentDate);

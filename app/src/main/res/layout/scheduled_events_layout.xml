@@ -10,7 +10,8 @@
         android:id="@+id/expandableListView"
         style="@style/recyclerViewTasksListStyle"
         android:dividerHeight="0dp"
-        android:groupIndicator="@null" />
+        android:groupIndicator="@null"
+        android:background="@color/lightOrangeZilla"/>
 
     <!--<Button
         android:id="@+id/fab"
@@ -40,14 +41,14 @@
         android:layout_width="150dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/colorWhite"
+        android:background="@color/lightOrangeZilla"
         app:itemTextColor="@color/colorPrimary">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/widgetGridView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="@color/lightOrangeZilla"
             android:dividerHeight="0dp"
             android:groupIndicator="@null" />
 

@@ -5,6 +5,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -19,7 +22,7 @@ import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 public class AlarmService extends Service {
 
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
     public void startAlarmService(int ringtoneType, int ringtneType2, int audioManagerStream, int usage, boolean looping) throws IOException {
 
@@ -28,17 +31,47 @@ public class AlarmService extends Service {
             alarmUri = RingtoneManager.getDefaultUri(ringtneType2);
         }
 
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
-                .setLegacyStreamType(audioManagerStream)
-                .setUsage(usage)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build());
-        mediaPlayer.setDataSource(this, alarmUri);
-        mediaPlayer.setLooping(looping);
-        mediaPlayer.prepare();
-        mediaPlayer.start();
+        AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+
+        assert am != null;
+        int result = am.requestAudioFocus(new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(
+                        new AudioAttributes.Builder()
+                                .setUsage(usage)
+                                .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                                .setLegacyStreamType(audioManagerStream)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .build()
+                )
+                .setAcceptsDelayedFocusGain(false)
+                .build()
+        );
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                    .setLegacyStreamType(audioManagerStream)
+                    .setUsage(usage)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
+            mediaPlayer.setDataSource(this, alarmUri);
+            mediaPlayer.setLooping(looping);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } else if (result == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
+                    .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
+                    .setLegacyStreamType(audioManagerStream)
+                    .setUsage(usage)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build());
+            mediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            mediaPlayer.setLooping(false);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        }
 
     }
 

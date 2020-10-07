@@ -1,76 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/BackgroundLayout"
+    android:background="@color/lightOrangeZilla"
     tools:context=".forGirls.ForGirlsFragment">
 
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-        android:background="#98FFFFFF">
+        android:layout_marginTop="30dp">
 
         <TextView
             android:id="@+id/periodStart"
             style="@style/forGirlsTextStyle"
             android:text="@string/periodStart" />
 
-        <CalendarView
-            android:id="@+id/girlsCalendar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/date_editText"
+            style="@style/EditTextShiftEditorStyle"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/periodStartDate"
+            android:importantForAutofill="no"
+            android:textColor="@color/lightGreenZilla"
+            app:endIconDrawable="@drawable/baseline_navigate_next_black_18"
+            app:endIconMode="custom"
+            app:endIconTint="@color/lightGreyZilla">
 
-        </CalendarView>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textinput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:inputType="textCapSentences"
+                android:textColor="@color/blackZilla" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/periodLength"
             style="@style/forGirlsTextStyle"
-            android:gravity="center"
             android:text="@string/periodLenght" />
 
         <TextView
             android:id="@+id/periodTimeValue"
             style="@style/forGirlsSeekBatValueStyle" />
 
-        <SeekBar
-            android:id="@+id/periodTime"
-            style="@style/forGirlsSeekBarStyle"
-            android:max="10" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <SeekBar
+                android:id="@+id/periodTime"
+                style="@style/forGirlsSeekBarStyle"
+                android:layout_centerVertical="true"
+                android:max="10"
+                android:progressBackgroundTint="@color/grey2zilla"
+                android:progressTint="@color/blueZilla"
+                android:thumb="@drawable/custom_thumb" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/custom_thumb"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/cycleLength"
             style="@style/forGirlsTextStyle"
-            android:gravity="center"
             android:text="@string/cycleLenght" />
 
         <TextView
             android:id="@+id/cycleTimeValue"
             style="@style/forGirlsSeekBatValueStyle" />
 
-        <SeekBar
-            android:id="@+id/cycleTime"
-            style="@style/forGirlsSeekBarStyle"
-            android:max="40" />
-
-        <Button
-            android:id="@+id/save"
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:text="@string/save" />
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/saveImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/baseline_done_white_48"
-            android:tint="@color/colorPrimaryDark"
-            android:layout_gravity="end"
-            android:layout_marginEnd="20dp"
-            android:contentDescription="@string/save"
-            android:visibility="gone"/>
+            <SeekBar
+                android:id="@+id/cycleTime"
+                style="@style/forGirlsSeekBarStyle"
+                android:layout_centerVertical="true"
+                android:max="40"
+                android:progressBackgroundTint="@color/grey2zilla"
+                android:progressTint="@color/blueZilla"
+                android:secondaryProgress="0"
+                android:thumb="@drawable/custom_thumb" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/custom_thumb"
+                tools:ignore="ContentDescription" />
+
+        </RelativeLayout>
+
+
     </LinearLayout>
+
+    <include
+        layout="@layout/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
 
 </RelativeLayout>

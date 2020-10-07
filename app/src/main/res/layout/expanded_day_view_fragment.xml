@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout"
+    android:background="@color/whiteZilla">
+
+
+    <ScrollView
+        style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+        android:layout_marginBottom="140dp"
+        android:background="@color/whiteZilla"
+        android:paddingTop="20dp">
+
+
+        <LinearLayout
+            android:id="@+id/background_layout"
+            style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+            tools:context="com.dianaszczepankowska.AllInOneCalendar.android.personalGrowth.BackgroundActivity">
+
+            <LinearLayout
+                android:id="@+id/alarmClock"
+                style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                android:layout_marginTop="10dp"
+                android:background="@color/lightOrangeZilla"
+                android:gravity="center_vertical"
+                android:paddingVertical="15dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="10dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/workIcon"
+                    android:src="@drawable/baseline_alarm_black_48"
+                    app:tint="@color/grey3zilla" />
+
+                <TextView
+                    android:id="@+id/alarm"
+                    style="@style/textViewHeaders"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:textColor="@color/grey3zilla"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Switch
+                    android:id="@+id/alarmClockCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:thumbTint="@color/greenZilla"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                android:paddingStart="25dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/workIcon"
+                    android:src="@drawable/baseline_business_center_black_48"
+                    app:tint="@color/grey3zilla" />
+
+                <TextView
+                    android:id="@+id/work"
+                    style="@style/textViewHeaders"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/work"
+                    android:textColor="@color/grey3zilla"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/workLayout"
+                layout="@layout/work_calendar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/workAddButton"
+                layout="@layout/add_button" />
+
+            <include layout="@layout/separator" />
+
+            <LinearLayout
+                style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                android:paddingStart="25dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="10dp"
+                tools:ignore="UseCompoundDrawables">
+
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/eventsIcon"
+                    android:src="@drawable/baseline_today_black_48"
+                    app:tint="@color/grey3zilla" />
+
+                <TextView
+                    android:id="@+id/question"
+                    style="@style/textViewHeaders"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/events"
+                    android:textColor="@color/grey3zilla"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/eventsLayout"
+                layout="@layout/events_calendar_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="10dp"
+                android:visibility="gone" />
+
+            <include
+                android:id="@+id/eventsAddButton"
+                layout="@layout/add_button" />
+
+            <LinearLayout
+                android:id="@+id/todoLayout"
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:background="@color/lightOrangeZilla"
+                android:paddingVertical="10dp">
+
+                <include layout="@layout/separator" />
+
+                <LinearLayout
+                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                    android:paddingVertical="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="10dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/baseline_check_circle_outline_black_48"
+                        app:tint="@color/grey3zilla"
+                        android:contentDescription="TODO" />
+
+                    <TextView
+                        android:id="@+id/toDo"
+                        style="@style/textViewHeaders"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/tasks_to_be_done"
+                        android:textColor="@color/grey3zilla"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="0dp" />
+
+                    <ImageView
+                        style="@style/ImageViewEditStyle"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="2dp"
+                        android:src="@drawable/baseline_navigate_next_black_18"
+                        app:tint="@color/blueZilla"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dailyScheduleLayout"
+                style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+                android:background="@color/lightOrangeZilla"
+                android:paddingVertical="10dp">
+
+
+                <include layout="@layout/separator" />
+
+                <LinearLayout
+                    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+                    android:paddingVertical="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="10dp"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/baseline_format_list_bulleted_black_48"
+                        app:tint="@color/grey3zilla"
+                        android:contentDescription="TODO" />
+
+                    <TextView
+                        android:id="@+id/schedule"
+                        style="@style/textViewHeaders"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="@string/dailySchedule"
+                        android:textColor="@color/grey3zilla"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_width="0dp" />
+
+                    <ImageView
+                        style="@style/ImageViewEditStyle"
+                        android:layout_gravity="end|center_vertical"
+                        android:src="@drawable/baseline_navigate_next_black_18"
+                        app:tint="@color/blueZilla"
+                        tools:ignore="ContentDescription" />
+
+                </LinearLayout>
+
+                <include layout="@layout/separator" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/clean"
+        style="@style/textViewOneTimeEventsStyle"
+        android:layout_width="match_parent"
+        android:layout_above="@+id/confirmLayout"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/back"
+        android:textColor="@color/grey2zilla"
+        android:textSize="18sp" />
+
+    <include
+        android:id="@+id/confirmLayout"
+        layout="@layout/confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="20dp" />
+</RelativeLayout>
+

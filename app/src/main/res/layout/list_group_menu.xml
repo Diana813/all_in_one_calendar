@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
     tools:ignore="UseCompoundDrawables">
 
     <ImageView
+        android:id="@+id/icon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_margin="20dp"
         android:layout_gravity="center"
-        android:tint="@color/colorPrimaryDark"
-        android:id="@+id/icon"
+        android:layout_margin="20dp"
+        app:tint="@color/darkGreyZilla"
         tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/listTitle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/comfortaa"
+        android:layout_weight="1"
         android:paddingLeft="10dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/darkGreyZilla"
         android:textSize="17sp"
-        android:textStyle="bold"
         tools:ignore="RtlHardcoded,RtlSymmetry"
         tools:text="@string/espandedListViewTitles" />
+
+    <ImageView
+        style="@style/ImageViewEditStyle"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/baseline_navigate_next_black_18"
+        app:tint="@color/blueZilla"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

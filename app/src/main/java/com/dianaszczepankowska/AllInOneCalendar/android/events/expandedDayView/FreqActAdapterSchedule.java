@@ -76,7 +76,7 @@ public class FreqActAdapterSchedule extends RecyclerView.Adapter<FreqActAdapterS
             String newEvent = event.getEvent_name();
             copyEvent(newEvent);
             holder.backgroundLayout.setElevation(0);
-            holder.backgroundLayout.setBackgroundResource(R.drawable.gradient);
+            holder.backgroundLayout.setBackgroundResource(R.drawable.custom_button);
             holder.eventName.setTextColor(Color.WHITE);
 
         } else {

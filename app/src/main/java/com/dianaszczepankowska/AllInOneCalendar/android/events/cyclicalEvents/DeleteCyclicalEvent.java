@@ -1,9 +1,10 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.UtilsEvents;
 import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.Event;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.EventsDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -85,6 +86,8 @@ public class DeleteCyclicalEvent {
         String[] parts = cyclicalEventToDelete.getFrequency().split("-");
         String pickedDaysOfAWeek = parts[3];
 
+        String id = UtilsEvents.createEventId(cyclicalEventToDelete.getPickedDay());
+
         int searchedFrequency = findFrequency(frequency);
 
         //add new event with new startDate
@@ -115,14 +118,14 @@ public class DeleteCyclicalEvent {
 
         LocalDate eventFinishDate;
         if (cyclicalEventToDelete.getTerm().contains(",")) {
-            eventFinishDate = AppUtils.changeSimpleDateFormatToLocalDate(cyclicalEventToDelete.getTerm());
+            eventFinishDate = DateUtils.changeLongMonthDateFormatToLocalDate(cyclicalEventToDelete.getTerm());
         } else {
             eventFinishDate = null;
         }
 
-        if (eventFinishDate == null || AppUtils.refactorStringIntoDate(newStartDate).isBefore(eventFinishDate) ||
-                AppUtils.refactorStringIntoDate(newStartDate).isEqual(eventFinishDate)) {
-            eventsDao.insert(new Event(-56, aimContent, cyclicalEventToDelete.getSchedule(), cyclicalEventToDelete.getAlarm(), cyclicalEventToDelete.getEvent_length(), newStartDate, 0, cyclicalEventToDelete.getFrequency(), term));
+        if (eventFinishDate == null || DateUtils.refactorStringIntoDate(newStartDate).isBefore(eventFinishDate) ||
+                DateUtils.refactorStringIntoDate(newStartDate).isEqual(eventFinishDate)) {
+            eventsDao.insert(new Event(-56, aimContent, cyclicalEventToDelete.getSchedule(), cyclicalEventToDelete.getAlarm(), cyclicalEventToDelete.getEvent_length(), newStartDate, 0, cyclicalEventToDelete.getFrequency(), term, id));
         }
 
     }
@@ -135,8 +138,8 @@ public class DeleteCyclicalEvent {
 
     private Event findTheRightEventToDelete(Event cyclicalEvent) {
 
-        LocalDate cyclicalEventFinishDate = AppUtils.changeSimpleDateFormatToLocalDate(cyclicalEvent.getTerm());
-        LocalDate pickedDate = AppUtils.refactorStringIntoDate(CalendarFragment.pickedDay);
+        LocalDate cyclicalEventFinishDate = DateUtils.changeLongMonthDateFormatToLocalDate(cyclicalEvent.getTerm());
+        LocalDate pickedDate = DateUtils.refactorStringIntoDate(CalendarFragment.pickedDay);
 
 
         Event cyclicalEventToDelete;
@@ -167,8 +170,8 @@ public class DeleteCyclicalEvent {
     private void deleteEvent(String frequency, EventsDao eventsDao, String aimContent, Event cyclicalEventToDelete) {
 
         String term = cyclicalEventToDelete.getTerm();
-        LocalDate newFinishDay = AppUtils.refactorStringIntoDate(CalendarFragment.pickedDay);
-        LocalDate cyclicalEventStartDate = AppUtils.refactorStringIntoDate(cyclicalEventToDelete.getPickedDay());
+        LocalDate newFinishDay = DateUtils.refactorStringIntoDate(CalendarFragment.pickedDay);
+        LocalDate cyclicalEventStartDate = DateUtils.refactorStringIntoDate(cyclicalEventToDelete.getPickedDay());
 
         int searchedFrequency = findFrequency(frequency);
 

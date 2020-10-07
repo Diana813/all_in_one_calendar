@@ -1,54 +1,60 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.calendar;
 
+import android.annotation.SuppressLint;
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.LoginActivity;
+import com.dianaszczepankowska.AllInOneCalendar.android.BuildConfig;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.coworkers.CoworkersUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.coworkers.FriendsPicker;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.Holiday;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.HolidaysLoader;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.confirm;
 
 public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallbacks<List<Holiday>> {
 
+    private static final String API_KEY = BuildConfig.API_KEY;
     public Context context;
-    public BottomLayoutShiftsAdapter shiftsAdapter;
-    public BottomSheetBehavior shiftsSheetBehavior;
-    public ImageView shiftsDownArrow;
+    public static BottomSheetBehavior shiftsSheetBehavior;
     public LocalDate headerDate;
     public TextView date;
     public LinearLayout backgroundDrawing;
     public GridView gridView;
-    public LinearLayout shifts_bottom_sheet;
-    public RecyclerView shifts_recycler_view;
     private String holiday;
     private static String country = Locale.getDefault().getCountry().substring(0, 2).toUpperCase();
     public static List<Holiday> holidays;
+    private boolean showShifts;
+    private Menu menu;
+    public static SharedPreferences sharedPreferences;
+    private CalendarFragment calendarFragment;
 
     private static final String HOLIDAYS_REQUEST_URL = "https://www.googleapis.com/calendar/v3/calendars/pl.polish%23holiday%40group.v.calendar.google.com/events?";
-    //"https://calendarific.com/api/v2/holidays";
+
 
     static final int HOLIDAY_LOADER_ID = 1;
 
@@ -56,13 +62,27 @@ public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallb
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        shiftsAdapter = new BottomLayoutShiftsAdapter(context);
+        sharedPreferences = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
+        calendarFragment = new CalendarFragment();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.calendar_fragment_menu, menu);
+        this.menu = menu;
+        showShifts = sharedPreferences.getBoolean(getString(R.string.show_shifts), false);
+        if (showShifts) {
+            menu.findItem(R.id.showShifts).setChecked(true);
+
+        } else {
+            menu.findItem(R.id.showShifts).setChecked(false);
+            greyMenuItem(menu.findItem(R.id.deleteShifts));
+            greyMenuItem(menu.findItem(R.id.settingShifts));
+            greyMenuItem(menu.findItem(R.id.share));
+
+        }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -70,45 +90,62 @@ public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallb
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.logOut) {
-            launchLoginActivity();
-            return true;
-        }
-
         if (item.getItemId() == R.id.settingShifts) {
-            BottomLayoutsUtils.checkShiftsLayoutState(shiftsSheetBehavior);
-            BottomLayoutsUtils.shiftsBottomSheetListener(shiftsSheetBehavior, shiftsDownArrow);
+            BottomLayoutsUtils.checkBottomLayoutState(shiftsSheetBehavior, sharedPreferences, context);
+            BottomLayoutsUtils.bottomSheetListener(shiftsSheetBehavior, confirm);
             return true;
         }
 
         if (item.getItemId() == R.id.deleteShifts) {
-            CalendarUtils.showDeleteConfirmationDialog(context, headerDate, date, gridView);
+            if (showShifts) {
+                CalendarUtils.showDeleteConfirmationDialog(context, headerDate, date, gridView);
+            }
+            return true;
+        }
+
+        if (item.getItemId() == R.id.share) {
+            if (showShifts) {
+                FragmentManager manager = getChildFragmentManager();
+                FriendsPicker dialog = new FriendsPicker();
+                dialog.show(manager, null);
+                CoworkersUtils.showFriendsList();
+                CoworkersUtils.shareDataWithFriend();
+            }
+            return true;
+        }
+
+        if (item.getItemId() == R.id.showShifts) {
+            showShifts = sharedPreferences.getBoolean(getString(R.string.show_shifts), false);
+
+            if (!showShifts) {
+                menu.findItem(R.id.showShifts).setChecked(true);
+                showShifts = true;
+
+            } else {
+                menu.findItem(R.id.showShifts).setChecked(false);
+                showShifts = false;
+            }
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(getString(R.string.show_shifts), showShifts);
+            editor.apply();
+            FragmentTransaction fragmentTransaction = (Objects.requireNonNull(getActivity())).getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.flContent, calendarFragment);
+            fragmentTransaction.commitNow();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void greyMenuItem(MenuItem item) {
+        SpannableString s = new SpannableString(item.getTitle().toString());
+        s.setSpan(new ForegroundColorSpan(context.getColor(R.color.lightGreyZilla)), 0, s.length(), 0);
+        item.setTitle(s);
 
-    private void launchLoginActivity() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
     }
 
-    public void setBottomSheetsBehavior() {
-        shiftsSheetBehavior = BottomSheetBehavior.from(shifts_bottom_sheet);
-        shiftsSheetBehavior.setHideable(true);
-        shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-    }
-
-
-    public void setBottomLayoutShiftsAdapter() {
-
-        shiftsAdapter = new BottomLayoutShiftsAdapter(context);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        shifts_recycler_view.setLayoutManager(layoutManager);
-        shifts_recycler_view.setAdapter(shiftsAdapter);
-    }
 
     @Override
     public Loader<List<Holiday>> onCreateLoader(int id, Bundle args) {
@@ -124,15 +161,15 @@ public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallb
 
         //en.uk%40holiday.calendar.google.com/events?key=yourAPIKey";
 
-        String apiKey = "AIzaSyCki6_qJzZOsWBSfIkYQ7LhZ1u4qflqTSA"; //"0882ca90415097ad93cc06c34075d971c03922e4";
-       /* uriBuilder.appendQueryParameter("api_key", apiKey);
+        //;
+       /* uriBuilder.appendQueryParameter("api_key", key);
         uriBuilder.appendQueryParameter("country", country);
         uriBuilder.appendQueryParameter("year", year);
         uriBuilder.appendQueryParameter("day", day);
         uriBuilder.appendQueryParameter("month", month);
         uriBuilder.appendQueryParameter("language", country.toLowerCase());*/
 
-        uriBuilder.appendQueryParameter("key", apiKey);
+        uriBuilder.appendQueryParameter("key", API_KEY);
 
         return new HolidaysLoader(this.getContext(), uriBuilder.toString());
     }
@@ -148,4 +185,5 @@ public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallb
     public void onLoaderReset(Loader<List<Holiday>> loader) {
 
     }
+
 }

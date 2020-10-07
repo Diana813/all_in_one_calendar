@@ -2,9 +2,12 @@ package com.dianaszczepankowska.AllInOneCalendar.android.statistics;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,8 +29,12 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statistics_personal_growth);
+        //no background for status bar
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         findViews();
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(this.getSupportActionBar()).setTitle(getString(R.string.effectiveness_toolbar));
+        this.getSupportActionBar().setIcon(R.drawable.baseline_chevron_left_black_24);
         initData();
     }
 
@@ -62,6 +69,7 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
 
                     fiveYears.setText(getString(R.string.fiveYears));
                     fiveYearsStatistics.setText(averageEffectiveness + "%");
+                    effectivenessColor(averageEffectiveness, fiveYearsStatistics);
                 } else {
                     fiveYears.setText(getString(R.string.fiveYears) + " " + getString(R.string.noData));
                 }
@@ -82,6 +90,7 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                     int averageEffectiveness = x / itemCount;
                     oneYear.setText(getString(R.string.oneYear));
                     oneYearStatistics.setText(averageEffectiveness + "%");
+                    effectivenessColor(averageEffectiveness, oneYearStatistics);
                 } else {
                     oneYear.setText(getString(R.string.oneYear) + " " + getString(R.string.noData));
                 }
@@ -100,6 +109,7 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                     int averageEffectiveness = x / itemCount;
                     month.setText(getString(R.string.oneMonth));
                     monthStatistics.setText(averageEffectiveness + "%");
+                    effectivenessColor(averageEffectiveness, monthStatistics);
 
                 } else {
                     month.setText(getString(R.string.oneMonth) + " " + getString(R.string.noData));
@@ -120,11 +130,23 @@ public class StatisticsOfEffectiveness extends AppCompatActivity {
                     int averageEffectiveness = x / itemCount;
                     day.setText(getString(R.string.oneDay));
                     dayStatistics.setText(averageEffectiveness + "%");
+                    effectivenessColor(averageEffectiveness, dayStatistics);
                 } else {
                     day.setText(getString(R.string.oneDay) + " " + getString(R.string.noData));
                 }
 
             }
         });
+    }
+
+    private void effectivenessColor(int averageEffectiveness, TextView textView) {
+        if (averageEffectiveness < 35) {
+            textView.setTextColor(this.getColor(R.color.red));
+        } else if (averageEffectiveness < 70) {
+            textView.setTextColor(this.getColor(R.color.yellow));
+        } else {
+            textView.setTextColor(this.getColor(R.color.greenZilla));
+
+        }
     }
 }

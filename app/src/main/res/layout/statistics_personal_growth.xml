@@ -3,29 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/statisticsItem"
     style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/lightOrangeZilla">
 
     <include layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/statisticHeader"
         style="@style/textViewHeaders.statistics"
-        android:gravity="center"
-        android:padding="40dp"
-        android:text="@string/your_average_effectiveness"
-        android:textStyle="bold" />
+        android:padding="20dp"
+        android:text="@string/your_average_effectiveness" />
 
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
-        android:background="@drawable/statistics_background">
+        android:background="@color/lightOrangeZilla">
 
 
         <LinearLayout
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center_vertical">
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/frame"
+            android:gravity="center_vertical"
+            android:padding="18dp"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/fiveYears"
@@ -39,17 +38,19 @@
                 style="@style/textViewHeaders.statistics"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:textColor="@color/colorPrimaryDark"
+                android:gravity="end"
+                android:textColor="@color/darkOrangeZilla"
                 android:textStyle="bold"
                 tools:text="50%" />
         </LinearLayout>
 
         <LinearLayout
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center_vertical">
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/frame"
+            android:gravity="center_vertical"
+            android:padding="18dp"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/oneYear"
@@ -63,17 +64,19 @@
                 style="@style/textViewHeaders.statistics"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:textColor="@color/colorPrimaryDark"
+                android:gravity="end"
+                android:textColor="@color/darkOrangeZilla"
                 android:textStyle="bold"
                 tools:text="50%" />
         </LinearLayout>
 
         <LinearLayout
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center_vertical">
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/frame"
+            android:gravity="center_vertical"
+            android:padding="18dp"
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:id="@+id/month"
@@ -87,17 +90,19 @@
                 style="@style/textViewHeaders.statistics"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:textColor="@color/colorPrimaryDark"
+                android:gravity="end"
+                android:textColor="@color/darkOrangeZilla"
                 android:textStyle="bold"
                 tools:text="50%" />
         </LinearLayout>
 
         <LinearLayout
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:gravity="center_vertical">
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/frame"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:padding="18dp">
 
             <TextView
                 android:id="@+id/day"
@@ -111,7 +116,8 @@
                 style="@style/textViewHeaders.statistics"
                 android:layout_width="0dp"
                 android:layout_weight="2"
-                android:textColor="@color/colorPrimaryDark"
+                android:gravity="end"
+                android:textColor="@color/darkOrangeZilla"
                 android:textStyle="bold"
                 tools:text="50%" />
         </LinearLayout>

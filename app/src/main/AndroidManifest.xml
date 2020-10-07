@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,10 +24,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:process="com.dianaszczepankowska.AllInOneCalendar.android"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
-        android:process="com.dianaszczepankowska.AllInOneCalendar.android">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name="com.dianaszczepankowska.AllInOneCalendar.android.LoginActivity"
             android:label="@string/app_name"
@@ -38,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.dianaszczepankowska.AllInOneCalendar.android.mainActivity.MainActivity"
+            android:name="com.dianaszczepankowska.AllInOneCalendar.android.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan">
@@ -80,12 +82,12 @@
         <service android:name="com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock" />
 
         <service
-            android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.GridViewWidgetService"
+            android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.shifts.GridViewWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service android:name="com.dianaszczepankowska.AllInOneCalendar.android.alarm.Notification" />
         <service android:name="com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmService" />
 
-        <receiver android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.CalendarWidgetProvider">
+        <receiver android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.shifts.CalendarWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -93,6 +95,19 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/calendar_widget_info" />
         </receiver>
+
+        <receiver android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.events.CalendarWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_widget_events_info" />
+        </receiver>
+
+        <service
+            android:name="com.dianaszczepankowska.AllInOneCalendar.android.widget.events.ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

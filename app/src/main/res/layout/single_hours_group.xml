@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutVerticalStyle">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle"
+    android:background="@color/lightOrangeZilla">
 
     <LinearLayout
         style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
@@ -19,7 +21,6 @@
                 style="@style/textViewScheduleHours.item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorWhite"
                 tools:text="01:00" />
 
             <ImageView
@@ -41,17 +42,15 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:layout_weight="3"
-            android:background="@color/colorWhite">
+            android:layout_weight="3">
 
             <ImageView
                 android:id="@+id/work"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:background="@color/colorWhite"
                 android:src="@drawable/baseline_business_center_black_48"
-                android:tint="@color/colorPrimary"
+                app:tint="@color/darkOrangeZilla"
                 android:visibility="gone"
                 android:layout_alignParentEnd="true"
                 tools:ignore="ContentDescription" />
@@ -73,5 +72,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/lightGreyZilla" />
 </LinearLayout>

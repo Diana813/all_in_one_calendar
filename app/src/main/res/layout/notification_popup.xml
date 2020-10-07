@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popUpNotificationLayout"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
+    android:layout_gravity="center"
+    android:background="@drawable/frame_for_other_month_days"
+    android:padding="10dp"
+    app:cardElevation="8dp">
+
+    <TextView
+        style="@style/textViewHeaders.statistics.small"
+        android:gravity="center"
+        android:text="@string/title"
+        android:textColor="#000" />
+
+    <EditText
+        android:id="@+id/editTextNotification"
+        style="@style/textViewDateStyle"
+        android:layout_gravity="center"
+        android:backgroundTint="#000"
+        android:gravity="center"
+        android:hint="@string/add_notification_title"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences"
+        android:textColor="#000"
+        android:textColorHint="@color/lightGreyZilla" />
+
+    <TextView
+        style="@style/textViewHeaders.statistics.small"
+        android:gravity="center"
+        android:text="@string/what_time"
+        android:textColor="#000" />
+
+    <TextView
+        android:id="@+id/notificationTime"
+        style="@style/textViewHeaders.statistics.small"
+        android:gravity="center"
+        android:text="@string/_06_00"
+        android:textColor="@color/lightGreyZilla" />
+
+</LinearLayout>

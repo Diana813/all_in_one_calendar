@@ -11,11 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
@@ -23,7 +22,8 @@ import com.dianaszczepankowska.AllInOneCalendar.android.database.StatisticsPerso
 import com.dianaszczepankowska.AllInOneCalendar.android.database.StatisticsPersonalGrowthDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsRecyclerView;
 import com.dianaszczepankowska.AllInOneCalendar.android.statistics.StatisticsOfEffectiveness;
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.DialogsUtils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -41,11 +41,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
+
 public class Plan extends Fragment {
 
-    BigPlanAdapter adapter;
+    PlansRecyclerViewAdapter adapter;
     private Context context;
-    ProgressBar determinateBar;
     TextView effectiveness;
     TextView timeOut;
     LocalDate firstItemDate;
@@ -53,11 +54,11 @@ public class Plan extends Fragment {
     int newId;
     RecyclerView recyclerView;
     EditText aimText;
-    ImageButton confirm;
     TextView question;
     int layout;
     ViewGroup rootView;
     PlanViewModel planViewModel;
+    FloatingActionButton fab;
 
 
     public Plan() {
@@ -68,7 +69,7 @@ public class Plan extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        adapter = new BigPlanAdapter(context);
+        adapter = new PlansRecyclerViewAdapter(context);
     }
 
 
@@ -77,7 +78,7 @@ public class Plan extends Fragment {
         super.onPause();
         adapter.deleteFromDatabase();
         adapter.setAimIndexInDB();
-        AppUtils.hideKeyboard(getView(), context);
+        DialogsUtils.hideKeyboard(getView(), context);
     }
 
 
@@ -110,7 +111,7 @@ public class Plan extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_delete_all_entries) {
-            AppUtils.showDeleteConfirmationDialog(1);
+            DialogsUtils.showDeleteConfirmationDialogAims(1);
             return true;
 
         } else if (item.getItemId() == R.id.statistics) {
@@ -122,28 +123,26 @@ public class Plan extends Fragment {
 
 
     @SuppressLint("SetTextI18n")
-    void initData(Fragment fragment, final BigPlanAdapter adapter, LiveData<List<BigPlanData>> listLiveData, androidx.lifecycle.LiveData<List<BigPlanData>> listLiveDataIsChecked) {
+    void initData(Fragment fragment, final PlansRecyclerViewAdapter adapter, LiveData<List<BigPlanData>> listLiveData, androidx.lifecycle.LiveData<List<BigPlanData>> listLiveDataIsChecked) {
         listLiveData.observe(fragment, aims -> {
             adapter.setAimsList(aims);
 
             if (aims != null) {
                 if (!aims.isEmpty()) {
                     String firstItemDateString = aims.get(0).getStartDate();
-                    firstItemDate = AppUtils.refactorStringIntoDate(firstItemDateString);
+                    firstItemDate = refactorStringIntoDate(firstItemDateString);
                 }
                 newId = aims.size();
                 listLiveDataIsChecked.observe(fragment, aimsListIsChecked -> {
                     if (aimsListIsChecked.size() != 0 && newId != 0) {
-                        progress = aimsListIsChecked.size() * 100 / aims.size();
-                        determinateBar.setProgress(progress);
+                        progress = aimsListIsChecked.size() * 100 / newId;
                         effectiveness.setVisibility(View.VISIBLE);
-                        effectiveness.setText((getString(R.string.effectiveness)) + " " + progress + "%");
+                        effectiveness.setText(progress + "%");
                     } else if (aims.size() == 0) {
                         progress = -1;
                     } else {
                         progress = 0;
-                        determinateBar.setProgress(0);
-                        effectiveness.setVisibility(View.GONE);
+                        effectiveness.setText(progress + "%");
                     }
                 });
             }
@@ -187,7 +186,7 @@ public class Plan extends Fragment {
     }
 
 
-    void addEffectivenesToDB(Context context, int i, LocalDate dateOfAddingFirstItem, int newEffectiveness) {
+    public static void addEffectivenesToDB(Context context, int i, LocalDate dateOfAddingFirstItem, int newEffectiveness) {
 
         if (newEffectiveness == -1) {
             return;
@@ -259,29 +258,33 @@ public class Plan extends Fragment {
 
 
     void findViews(View rootView) {
-        recyclerView = rootView.findViewById(R.id.list);
+        recyclerView = rootView.findViewById(R.id.list2);
         aimText = rootView.findViewById(R.id.editText);
-        confirm = rootView.findViewById(R.id.confirm_button);
         question = rootView.findViewById(R.id.title);
-        determinateBar = rootView.findViewById(R.id.determinateBar);
-        effectiveness = rootView.findViewById(R.id.effectiveness);
-        timeOut = rootView.findViewById(R.id.timeOut);
+        effectiveness = rootView.findViewById(R.id.effectivenessResult);
+        timeOut = rootView.findViewById(R.id.timeOutResult);
+        fab = rootView.findViewById(R.id.fab2);
+        fab.setVisibility(View.VISIBLE);
     }
 
 
-    void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, BigPlanAdapter adapter, Context context) {
+    void setRecyclerViewPersonalGrowth(RecyclerView recyclerView, PlansRecyclerViewAdapter adapter, Context context) {
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
     }
 
 
-    void setItemTouchHelperPersonalGrowth(BigPlanAdapter adapter, RecyclerView recyclerView) {
+    void setItemTouchHelperPersonalGrowth(PlansRecyclerViewAdapter adapter, RecyclerView recyclerView) {
 
         ItemTouchHelper itemTouchHelper = new
                 ItemTouchHelper(new GestureInteractionsRecyclerView(adapter));
 
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    void setFabListener(final PlansRecyclerViewAdapter adapter, final int i, String pickedDay) {
+        fab.setOnClickListener(v -> DialogsUtils.createEditTextDialog(context, adapter, i, pickedDay));
     }
 }
 

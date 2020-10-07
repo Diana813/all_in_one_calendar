@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CalendarEvents.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class, StatisticsPersonalGrowth.class}, version = 20)
+@Database(entities = {CalendarEvents.class, Shift.class, PeriodData.class, Event.class, ImagePath.class, BigPlanData.class, StatisticsPersonalGrowth.class, UserData.class}, version = 25)
 public abstract class CalendarDatabase extends RoomDatabase {
 
     private static CalendarDatabase INSTANCE;
@@ -32,7 +32,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
                                     new PopulateDbAsync(INSTANCE).execute();
                                 }
                             })
-                            .addMigrations(MIGRATION_12_13, MIGRATION_13_14, MIGRATION_15_16, MIGRATION_16_17, MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20)
+                            .addMigrations(MIGRATION_12_13, MIGRATION_13_14, MIGRATION_15_16, MIGRATION_16_17, MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21, MIGRATION_21_22, MIGRATION_22_23, MIGRATION_23_24, MIGRATION_24_25)
                             //.fallbackToDestructiveMigration()
                             .build();
                 }
@@ -62,6 +62,9 @@ public abstract class CalendarDatabase extends RoomDatabase {
 
     public abstract StatisticsPersonalGrowthDao statisticsPersonalGrowthDao();
 
+    public abstract UserDataDao userDataDao();
+
+
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
         private final CalendarEventsDao calendarEventsDao;
@@ -71,6 +74,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
         private final ImagePathDao imagePathDao;
         private final BigPlanDao bigPlanDao;
         private final StatisticsPersonalGrowthDao statisticsPersonalGrowthDao;
+        private final UserDataDao userDataDao;
 
         PopulateDbAsync(CalendarDatabase instance) {
             calendarEventsDao = instance.calendarEventsDao();
@@ -80,6 +84,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
             imagePathDao = instance.imagePathDao();
             bigPlanDao = instance.bigPlanDao();
             statisticsPersonalGrowthDao = instance.statisticsPersonalGrowthDao();
+            userDataDao = instance.userDataDao();
         }
 
         @Override
@@ -90,6 +95,7 @@ public abstract class CalendarDatabase extends RoomDatabase {
             eventsDao.deleteAll();
             imagePathDao.deleteAll();
             statisticsPersonalGrowthDao.deleteAll();
+            userDataDao.deleteAll();
             return null;
         }
     }
@@ -165,4 +171,52 @@ public abstract class CalendarDatabase extends RoomDatabase {
                     "DROP table Colors");
         }
     };
+
+    private static final Migration MIGRATION_20_21 = new Migration(20, 21) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE event ADD COLUMN eventId TEXT");
+            database.execSQL(
+                    "ALTER TABLE calendar_events ADD COLUMN shiftIdForGoogle TEXT");
+        }
+    };
+
+    private static final Migration MIGRATION_21_22 = new Migration(21, 22) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE user_data (" +
+                    "id INTEGER PRIMARY KEY NOT NULL," +
+                    "name TEXT," +
+                    "email TEXT," +
+                    "photo TEXT)");
+        }
+
+    };
+
+    private static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+
+            database.execSQL("CREATE TABLE `rota` (id INTEGER PRIMARY KEY NOT NULL, "
+                    + "shift_name TEXT, " + " date TEXT, " + " alarm TEXT, " + " shift_start_hour TEXT, " + " shift_end_hour TEXT )");
+        }
+    };
+
+    private static final Migration MIGRATION_23_24 = new Migration(23, 24) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "ALTER TABLE rota ADD COLUMN shiftIdForGoogle TEXT");
+        }
+    };
+
+    private static final Migration MIGRATION_24_25 = new Migration(24, 25) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL(
+                    "DROP table Rota");
+        }
+    };
+
 }

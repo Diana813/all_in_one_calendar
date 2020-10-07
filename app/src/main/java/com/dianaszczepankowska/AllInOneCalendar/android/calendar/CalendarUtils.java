@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -26,7 +27,7 @@ import static com.dianaszczepankowska.AllInOneCalendar.android.database.Calendar
 public class CalendarUtils {
 
     //Animacja obrotu kalendarza
-    static void flipAnimation(CardView calendarCardView) {
+    static void flipAnimation(FrameLayout calendarCardView) {
 
         final ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 1f, 0f);
         final ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(calendarCardView, "scaleX", 0f, 1f);
@@ -81,7 +82,7 @@ public class CalendarUtils {
 
             }
         } else {
-            calendarEventsDao.insert(new CalendarEvents("", false, pickedDay, String.valueOf(numberOfEvents), null));
+            calendarEventsDao.insert(new CalendarEvents("", false, pickedDay, String.valueOf(numberOfEvents), null, null));
         }
     }
 }

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
+    android:background="@color/lightOrangeZilla">
 
     <TextView
         android:id="@+id/hour"
         style="@style/textViewScheduleHours.item"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/colorWhite"
         android:textSize="18sp"
         tools:text="01:00" />
 
@@ -17,19 +18,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
-        android:layout_weight="3"
-        android:background="@color/colorWhite">
+        android:layout_weight="3">
 
 
         <ImageView
             android:id="@+id/work"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
-            android:background="@color/colorWhite"
+            app:tint="@color/darkOrangeZilla"
             android:src="@drawable/baseline_business_center_black_48"
-            android:tint="@color/colorPrimary"
             android:visibility="gone"
             tools:ignore="ContentDescription" />
 

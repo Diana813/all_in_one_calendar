@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent">
+
+    <TableLayout
+        android:id="@+id/label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:id="@+id/row"
+            style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
+
+            <TextView
+                android:id="@+id/title_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="start"
+                android:text="@string/shift_name"
+                android:textAllCaps="true"
+                android:textColor="@color/lightGreyZilla"
+                tools:ignore="RtlSymmetry" />
+
+
+            <TextView
+                android:id="@+id/quantity_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/notification"
+                android:textAllCaps="true"
+                android:textColor="@color/lightGreyZilla"
+                tools:ignore="RtlSymmetry" />
+
+        </LinearLayout>
+    </TableLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_of_events"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="5dp"
+        android:visibility="gone" />
+</LinearLayout>

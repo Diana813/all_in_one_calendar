@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#7CB342</color><!--#BDBDBD--><!--#ffa000-->
-    <color name="colorPrimaryDark">#33691E</color><!--#616161--><!--#5f5fc4--><!--#002171-->
     <color name="colorAccent">#558B2F</color><!--#B71C1C-->
     <color name="semiTransparentColorAccent">#90ef6c00</color>
     <color name="colorSecondary">#5472d3</color>
@@ -20,17 +19,30 @@
     <color name="toolbarColor">#424242</color>
     <color name="violet">#ba68c8</color><!--#aa00ff, #ab47bc-->
     <color name="lightViolet">#e1bee7</color><!--#ce93d8-->
-    <color name="grey">#757575</color>
-    <color name="lightGrey">#eeeeee</color>
     <color name="eventBackgroundRed">#ef9a9a</color>
     <color name="eventBackgroundyellow">#fff59d</color>
     <color name="eventBackgroundGreen">#b9f6ca</color>
     <color name="eventBackgroundBlue">#b2ebf2</color>
     <color name="eventBackgroundViolet">#d1c4e9</color>
-    <color name="eventBackgroundGrey">#eeeeee</color>
     <color name="semiTransparentColor">#99ffffff</color>
-    <color name="semiTransparentColorGrey">#98BDBDBD</color>
     <color name="semiTransparentColorWhite">#98FFFFFF</color>
     <color name="deepPurple">#512da8</color>
     <color name="amber">#ffa000</color>
+    <color name="lightOrangeZilla">#F6F5F5</color>
+    <color name="darkOrangeZilla">#EE6F57</color>
+    <color name="lightGreenZilla">#A9E8D5</color>
+    <color name="greenZilla">#32C771</color>
+    <color name="lightestGreenzilla">#e8fdf8</color>
+    <color name="lightGreyZilla">#BDBDBD</color>
+    <color name="grey2zilla">#898F92</color>
+    <color name="grey3zilla">#555D62</color>
+    <color name="lightestGreyZilla">#F1F0F0</color>
+    <color name="darkGreyZilla">#384348</color>
+    <color name="blackZilla">#000000</color>
+    <color name="lightBlackZilla">#1F1F1F</color>
+    <color name="whiteZilla">#ffffff</color>
+    <color name="blueZilla">#0066FF</color>
+    <color name="lightBlueZilla">#DDE7F6</color>
+    <color name="checkboxGreyZilla">#CACCCD</color>
+    <color name="editTextInactive">#eeeeee</color>
 </resources>

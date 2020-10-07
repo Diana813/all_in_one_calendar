@@ -19,11 +19,11 @@ public class CyclicalEventsViewModel extends AndroidViewModel {
     public CyclicalEventsViewModel(@NonNull Application application) {
         super(application);
         eventsDao = CalendarDatabase.getDatabase(application).eventsDao();
-        eventsLiveData = eventsDao.findByEventKind(0);
+        eventsLiveData = eventsDao.findByEventKindOrderedBYDate(0);
 
     }
 
-    LiveData<List<Event>> getEventsList() {
+    public LiveData<List<Event>> getEventsList() {
         return eventsLiveData;
     }
 

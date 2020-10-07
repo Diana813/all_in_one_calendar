@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.dianaszczepankowska.AllInOneCalendar.android.EventKind;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
@@ -28,6 +29,7 @@ public class ExpandedDayEvents extends Fragment {
     public Context context;
     public DrawerLayout mDrawer;
     public NavigationView navigationView;
+    //potrzebne do ustalenia jaki numer indeksu ma dany item w todoliście (DialogsUtils saveDataEvents)
     public static int eventsListSize;
 
     public ExpandedDayEvents() {
@@ -77,7 +79,7 @@ public class ExpandedDayEvents extends Fragment {
         List<Event> eventsToDelete = eventsDao.sortByPickedDay(pickedDay, eventKind);
 
         DeleteCyclicalEvent deleteCyclicalEvent = new DeleteCyclicalEvent();
-        List<Event> cyclicalEventsList = eventsDao.findByKind(0);
+        List<Event> cyclicalEventsList = eventsDao.findByKindOrderedByName(EventKind.CYCLICAL_EVENTS.getIntValue());
 
         for (Event eventToDelete : eventsToDelete) {
             if (cyclicalEventsList.isEmpty()) {
@@ -108,13 +110,14 @@ public class ExpandedDayEvents extends Fragment {
                 String[] parts = cyclicalEvent.split(";");
 
                 if (parts[0].equals(pickedDay)) {
+                    String id = UtilsEvents.createEventId(pickedDay);
                     EventsDao eventsDao = CalendarDatabase.getDatabase(context).eventsDao();
-                    Event event = eventsDao.findByEventKindAndName(parts[1], 0);
+                    Event event = eventsDao.findByEventKindAndName(parts[1], EventKind.CYCLICAL_EVENTS.getIntValue());
                     if (event != null && ((event.getSchedule() == null) || event.getSchedule().equals(""))) {
-                        UtilsEvents.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1);
+                        UtilsEvents.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 1, id);
                     } else {
                         assert event != null;
-                        UtilsEvents.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 3);
+                        UtilsEvents.saveDataEvents(null, pickedDay, event.getEvent_name(), event.getFrequency(), event.getSchedule(), 3, id);
 
                     }
 

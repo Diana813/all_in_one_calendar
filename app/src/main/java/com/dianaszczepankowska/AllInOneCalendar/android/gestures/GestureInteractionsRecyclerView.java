@@ -1,17 +1,17 @@
 package com.dianaszczepankowska.AllInOneCalendar.android.gestures;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents.CyclicalEventsListAdapter;
-import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.ExpandableListHoursAdapter;
-import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.EventsListAdapter;
-import com.dianaszczepankowska.AllInOneCalendar.android.personalGrowth.BigPlanAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
-import com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CyclicalEventsListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.EventsAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ShiftListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.WorkCalendarShiftListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.WorkListAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -19,21 +19,22 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallback {
-    private ExpandableListHoursAdapter expandableListHoursAdapter;
-    private ShiftsAdapter shiftsAdapter;
+    private ShiftListAdapter shiftListAdapter;
     private CyclicalEventsListAdapter cyclicalEventsListAdapter;
-    private BigPlanAdapter bigPlanAdapter;
-    private EventsListAdapter eventsListAdapter;
+    private PlansRecyclerViewAdapter plansRecyclerViewAdapter;
+    private EventsAdapter eventsListAdapter;
+    private WorkCalendarShiftListAdapter workCalendarShiftListAdapter;
+    private WorkListAdapter workListAdapter;
 
     private Drawable icon;
     private final ColorDrawable background;
 
-    public GestureInteractionsRecyclerView(ShiftsAdapter adapter) {
+    public GestureInteractionsRecyclerView(ShiftListAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        shiftsAdapter = adapter;
-        icon = ContextCompat.getDrawable(ShiftsAdapter.getContext(),
+        shiftListAdapter = adapter;
+        icon = ContextCompat.getDrawable(ShiftListAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
-        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+        background = new ColorDrawable(ContextCompat.getColor(ShiftListAdapter.getContext(), R.color.lightestGreyZilla));
     }
 
     public GestureInteractionsRecyclerView(CyclicalEventsListAdapter adapter) {
@@ -41,48 +42,62 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
         cyclicalEventsListAdapter = adapter;
         icon = ContextCompat.getDrawable(CyclicalEventsListAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
-        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+        background = new ColorDrawable(ContextCompat.getColor(CyclicalEventsListAdapter.getContext(), R.color.lightestGreyZilla));
     }
 
 
-    public GestureInteractionsRecyclerView(ExpandableListHoursAdapter adapter) {
-        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
-        expandableListHoursAdapter = adapter;
-        background = new ColorDrawable(Color.parseColor("#ffffff"));
-    }
-
-    public GestureInteractionsRecyclerView(BigPlanAdapter adapter) {
+    public GestureInteractionsRecyclerView(PlansRecyclerViewAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
-        bigPlanAdapter = adapter;
-        icon = ContextCompat.getDrawable(BigPlanAdapter.getContext(),
+        plansRecyclerViewAdapter = adapter;
+        icon = ContextCompat.getDrawable(PlansRecyclerViewAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
-        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+        background = new ColorDrawable(ContextCompat.getColor(PlansRecyclerViewAdapter.getContext(), R.color.lightestGreyZilla));
     }
 
-    public GestureInteractionsRecyclerView(EventsListAdapter adapter) {
+    public GestureInteractionsRecyclerView(EventsAdapter adapter) {
         super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         eventsListAdapter = adapter;
-        icon = ContextCompat.getDrawable(EventsListAdapter.getContext(),
+        icon = ContextCompat.getDrawable(EventsAdapter.getContext(),
                 R.drawable.baseline_delete_black_36);
-        background = new ColorDrawable(Color.parseColor("#BDBDBD"));
+        background = new ColorDrawable(ContextCompat.getColor(EventsAdapter.getContext(), R.color.lightestGreyZilla));
+    }
+
+    public GestureInteractionsRecyclerView(WorkCalendarShiftListAdapter adapter) {
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        workCalendarShiftListAdapter = adapter;
+        icon = ContextCompat.getDrawable(WorkCalendarShiftListAdapter.getContext(),
+                R.drawable.baseline_delete_black_36);
+        background = new ColorDrawable(ContextCompat.getColor(WorkCalendarShiftListAdapter.getContext(), R.color.lightestGreyZilla));
+    }
+
+    public GestureInteractionsRecyclerView(WorkListAdapter adapter) {
+        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        workListAdapter = adapter;
+        icon = ContextCompat.getDrawable(WorkListAdapter.getContext(),
+                R.drawable.baseline_delete_black_36);
+        background = new ColorDrawable(ContextCompat.getColor(WorkListAdapter.getContext(), R.color.lightestGreyZilla));
     }
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        if (expandableListHoursAdapter == null && cyclicalEventsListAdapter == null && bigPlanAdapter == null && eventsListAdapter == null) {
-            shiftsAdapter.onItemMove(viewHolder.getAdapterPosition(),
+        if (workCalendarShiftListAdapter == null && cyclicalEventsListAdapter == null && plansRecyclerViewAdapter == null && eventsListAdapter == null && workListAdapter == null) {
+            shiftListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        } else if (expandableListHoursAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {
-            bigPlanAdapter.onItemMove(viewHolder.getAdapterPosition(),
+        } else if (workCalendarShiftListAdapter == null && cyclicalEventsListAdapter == null && shiftListAdapter == null && eventsListAdapter == null && workListAdapter == null) {
+            plansRecyclerViewAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        } /*else if (bigPlanAdapter == null && cyclicalEventsListAdapter == null && shiftsAdapter == null && eventsListAdapter == null) {
-            expandableListHoursAdapter.onItemMove(viewHolder.getAdapterPosition(),
+        } else if (plansRecyclerViewAdapter == null && cyclicalEventsListAdapter == null && shiftListAdapter == null && eventsListAdapter == null && workListAdapter == null) {
+            workCalendarShiftListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
-        } */ else {
+
+        } else if (plansRecyclerViewAdapter == null && cyclicalEventsListAdapter == null && shiftListAdapter == null && eventsListAdapter == null && workCalendarShiftListAdapter == null) {
+            workListAdapter.onItemMove(viewHolder.getAdapterPosition(),
+                    target.getAdapterPosition());
+        } else {
+            assert eventsListAdapter != null;
             eventsListAdapter.onItemMove(viewHolder.getAdapterPosition(),
                     target.getAdapterPosition());
         }
-
 
         return true;
     }
@@ -90,17 +105,21 @@ public class GestureInteractionsRecyclerView extends ItemTouchHelper.SimpleCallb
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        if (shiftsAdapter == null && bigPlanAdapter == null && eventsListAdapter == null
-        ) {
+        if (shiftListAdapter == null && plansRecyclerViewAdapter == null && eventsListAdapter == null
+                && workListAdapter == null && workCalendarShiftListAdapter == null) {
             cyclicalEventsListAdapter.deleteItem(position);
-        } else if (shiftsAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null) {
-            bigPlanAdapter.deleteItem(position);
-        } else if (bigPlanAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null) {
-            shiftsAdapter.deleteItem(position);
+        } else if (shiftListAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null && workListAdapter == null && workCalendarShiftListAdapter == null) {
+            plansRecyclerViewAdapter.deleteItem(position);
+        } else if (plansRecyclerViewAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null && workListAdapter == null && workCalendarShiftListAdapter == null) {
+            shiftListAdapter.deleteItem(position);
+        } else if (plansRecyclerViewAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null && shiftListAdapter == null && workCalendarShiftListAdapter == null) {
+            workListAdapter.deleteItem(position);
+        } else if (plansRecyclerViewAdapter == null && cyclicalEventsListAdapter == null && eventsListAdapter == null && workListAdapter == null && shiftListAdapter == null) {
+            workCalendarShiftListAdapter.deleteItem(position);
         } else {
+            assert eventsListAdapter != null;
             eventsListAdapter.deleteItem(position);
         }
-
     }
 
     @Override

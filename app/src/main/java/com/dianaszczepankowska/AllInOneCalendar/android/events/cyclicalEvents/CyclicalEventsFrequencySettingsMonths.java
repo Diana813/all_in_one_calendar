@@ -9,9 +9,10 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
-import com.dianaszczepankowska.AllInOneCalendar.android.utils.AppUtils;
 
 import java.time.LocalDate;
+
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
 
 class CyclicalEventsFrequencySettingsMonths {
 
@@ -43,9 +44,9 @@ class CyclicalEventsFrequencySettingsMonths {
 
         LocalDate pickedStartDate;
         if (startDate != null) {
-            pickedStartDate = AppUtils.refactorStringIntoDate(startDate);
+            pickedStartDate = refactorStringIntoDate(startDate);
         } else {
-            pickedStartDate = AppUtils.refactorStringIntoDate(event_start_date_extra);
+            pickedStartDate = refactorStringIntoDate(event_start_date_extra);
         }
         return pickedStartDate;
     }

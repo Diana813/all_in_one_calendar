@@ -6,7 +6,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.viewpager2.widget.ViewPager2;
 
-import static com.dianaszczepankowska.AllInOneCalendar.android.personalGrowth.BigPlanAdapter.getContext;
+import static com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter.getContext;
 
 public class DepthPageTransformer implements ViewPager2.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
