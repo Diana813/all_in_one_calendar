@@ -68,7 +68,7 @@ public class DateUtils {
         return sdf.format(calendar.getTime());
     }
 
-    public static String displayDateInLongFormat(LocalDate date) {
+    public static String displayDateInALongFormat(LocalDate date) {
         DateTimeFormatter f2 = DateTimeFormatter.ofPattern("dd MMMM, yyyy");
         return date.format(f2);
     }

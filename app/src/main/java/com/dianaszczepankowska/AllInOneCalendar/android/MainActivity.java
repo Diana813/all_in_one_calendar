@@ -20,7 +20,8 @@ import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.BottomLayoutShiftsAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CustomExpandableListAdapter;
-import com.dianaszczepankowska.AllInOneCalendar.android.calendar.BottomLayoutsUtils;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ShiftListAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.BottomLayoutsUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.coworkers.CoworkerFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents.CyclicalEvents;
@@ -50,6 +51,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.dianaszczepankowska.AllInOneCalendar.android.calendar.CalendarFrame.shiftsSheetBehavior;
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.currentDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.shiftsSheetBehaviorExpandedDayView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,9 +68,17 @@ public class MainActivity extends AppCompatActivity {
     public Toolbar toolbar;
     private LinearLayout shifts_bottom_sheet;
     private RecyclerView shifts_recycler_view;
+    @SuppressLint("StaticFieldLeak")
+    public static LinearLayout shifts_bottom_sheet_expanded_day_view;
+    public static RecyclerView shifts_recycler_view_expanded_day_view;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView date;
     private TextView emptyShiftsTable;
     @SuppressLint("StaticFieldLeak")
     public static Button confirm;
+    @SuppressLint("StaticFieldLeak")
+    public static Button confirmButton;
+
 
     @Override
     public void onPause() {
@@ -84,9 +95,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.replace(R.id.flContent, new CalendarFragment());
+        tx.addToBackStack("tag");
         tx.commit();
+
 
         //no background for status bar
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -120,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
         shifts_bottom_sheet = findViewById(R.id.shiftsSettings);
         shifts_recycler_view = findViewById(R.id.shifts_list_recycler);
 
+        shifts_bottom_sheet_expanded_day_view = findViewById(R.id.shiftsSettingsExpandedDayView);
+        shifts_recycler_view_expanded_day_view = findViewById(R.id.shifts_list_recycler_expanded_day_view);
+        shiftsSheetBehaviorExpandedDayView = BottomSheetBehavior.from(shifts_bottom_sheet_expanded_day_view);
+        shiftsSheetBehaviorExpandedDayView.setHideable(true);
+        shiftsSheetBehaviorExpandedDayView.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        date = findViewById(R.id.date);
+
         emptyShiftsTable = findViewById(R.id.emptyShifts);
 
         setBottomSheetsBehaviorShifts();
@@ -128,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         buttonLayout.setPadding(0, 10, 1, 10);
         confirm = findViewById(R.id.confirmButton);
         confirm.setText(R.string.close);
-
+        confirmButton = findViewById(R.id.confirmButtonShifts);
 
     }
 
@@ -400,6 +422,7 @@ public class MainActivity extends AppCompatActivity {
         shiftsSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
+
     public void setBottomLayoutShiftsAdapter() {
         BottomLayoutShiftsAdapter shiftsAdapter = new BottomLayoutShiftsAdapter(getBaseContext());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -407,4 +430,6 @@ public class MainActivity extends AppCompatActivity {
         shifts_recycler_view.setAdapter(shiftsAdapter);
         BottomLayoutsUtils.initShiftsData(this, shiftsAdapter, emptyShiftsTable);
     }
+
+
 }

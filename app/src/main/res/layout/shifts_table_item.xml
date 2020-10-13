@@ -3,30 +3,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
     android:id="@+id/shiftTableItemLinearLayout"
+    style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent"
     android:paddingVertical="8dp">
 
     <TableLayout
         android:id="@+id/list_of_items"
         android:layout_width="0dp"
-        android:layout_weight="3"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
+        android:layout_weight="3"
         android:padding="8dp">
 
         <LinearLayout
             android:id="@+id/row"
             style="@style/BackgroundLayout.LinearLayoutHorizontalStyle.shortContent">
 
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/shiftItem"
                 style="@style/textViewShift"
+                android:layout_width="100dp"
                 android:gravity="start"
                 android:paddingStart="10dp"
-                android:layout_width="100dp"
-                tools:text="2"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="2" />
 
 
             <TextView
@@ -35,8 +41,8 @@
                 android:paddingStart="5dp"
                 android:textColor="@color/blackZilla"
                 android:textSize="15sp"
-                tools:text="12:00 - 18:00"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="12:00 - 18:00" />
 
 
             <TextView
@@ -45,8 +51,8 @@
                 android:paddingStart="5dp"
                 android:textColor="@color/blackZilla"
                 android:textSize="15sp"
-                tools:text="11:00"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="11:00" />
 
         </LinearLayout>
     </TableLayout>
@@ -54,9 +60,9 @@
     <ImageView
         android:id="@+id/imageArrow"
         style="@style/ImageViewEditStyle"
+        android:layout_marginEnd="2dp"
         android:src="@drawable/baseline_navigate_next_black_18"
         app:tint="@color/blueZilla"
-        android:layout_marginEnd="2dp"
         tools:ignore="ContentDescription" />
 </LinearLayout>
 

@@ -7,6 +7,7 @@
 
 
     <ScrollView
+        android:id="@+id/background_layout_expanded_day"
         style="@style/BackgroundLayout.LinearLayoutVerticalStyle.shortContent"
         android:layout_marginBottom="140dp"
         android:background="@color/whiteZilla"
@@ -164,7 +165,7 @@
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/baseline_check_circle_outline_black_48"
                         app:tint="@color/grey3zilla"
-                        android:contentDescription="TODO" />
+                        android:contentDescription="@string/task" />
 
                     <TextView
                         android:id="@+id/toDo"
@@ -210,7 +211,7 @@
                         android:layout_gravity="center_vertical"
                         android:src="@drawable/baseline_format_list_bulleted_black_48"
                         app:tint="@color/grey3zilla"
-                        android:contentDescription="TODO" />
+                        android:contentDescription="@string/schedule" />
 
                     <TextView
                         android:id="@+id/schedule"

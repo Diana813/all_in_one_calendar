@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.dianaszczepankowska.AllInOneCalendar.android.EventKind;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRecyclerViewAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
@@ -28,7 +27,6 @@ import static com.dianaszczepankowska.AllInOneCalendar.android.adapters.PlansRec
 import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.Notification.ACTION_OPEN_NOTIFICATION_CLASS;
 import static com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase.getDatabase;
-import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.AddWorkFragment.newWorkLength;
 import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.currentDate;
 import static com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsEditor.newShiftLength;
 import static com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsFragment.newId;
@@ -181,7 +179,7 @@ public class DatabaseUtils {
     }
 
 
-    public static void saveWorkData(TextInputEditText nameEditText, TextView startTextView, TextView alarmTextView, TextInputEditText lengthEditText, Context context, String name_extra) {
+    public static void saveWorkAndEventData(TextInputEditText nameEditText, TextView startTextView, TextView alarmTextView, TextInputEditText lengthEditText, Context context, String name_extra, int eventKind, int newWorkLength) {
 
         String newWorkName = Objects.requireNonNull(nameEditText.getText()).toString();
         String newWorkStart = startTextView.getText().toString();
@@ -205,7 +203,7 @@ public class DatabaseUtils {
 
         if (!name_extra.equals("-1")) {
 
-            Event eventToUpdate = eventsDao.findByEventNameKindAndPickedDay(name_extra, currentDate, EventKind.WORK.getIntValue());
+            Event eventToUpdate = eventsDao.findByEventNameKindAndPickedDay(name_extra, currentDate, eventKind);
             if (eventToUpdate != null) {
                 if (eventToUpdate.getAlarm() != null) {
                     AlarmUtils.deleteAlarmFromAPickedDay(refactorStringIntoDate(currentDate), AlarmUtils.getAlarmHour(eventToUpdate), AlarmUtils.getAlarmMinute(eventToUpdate), context, ACTION_OPEN_NOTIFICATION_CLASS);
@@ -226,7 +224,7 @@ public class DatabaseUtils {
 
         } else {
 
-            eventsDao.insert(new Event(newId, newWorkName, newWorkStart, newAlarm, newWorkLength, currentDate, EventKind.WORK.getIntValue(), null, null, UtilsEvents.createEventId(currentDate)));
+            eventsDao.insert(new Event(newId, newWorkName, newWorkStart, newAlarm, newWorkLength, currentDate, eventKind, null, null, UtilsEvents.createEventId(currentDate)));
             AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(newAlarm), AlarmUtils.getAlarmMinute(newAlarm), refactorStringIntoDate(currentDate), context, ACTION_OPEN_NOTIFICATION_CLASS, newWorkName);
 
         }

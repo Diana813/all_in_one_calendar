@@ -30,39 +30,39 @@ import androidx.fragment.app.FragmentTransaction;
 import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.currentDate;
 import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DatabaseUtils.saveWorkAndEventData;
 
-public class AddWorkFragment extends Fragment {
+public class AddEventFragment extends Fragment {
 
     private Context context;
-    private String work_name_extra;
-    private String work_schedule_extra;
-    private String work_notification_extra;
-    private String work_length_extra;
-    private static final String EXTRA_WORK_NAME = "work_name";
-    private static final String EXTRA_WORK_ID = "id";
-    private static final String EXTRA_WORK_SCHEDULE = "work_start_time";
-    private static final String EXTRA_WORK_ALARM = "work_alarm";
-    private static final String EXTRA_WORK_LENGHT = "work_length";
+    private String event_name_extra;
+    private String event_schedule_extra;
+    private String event_notification_extra;
+    private String event_length_extra;
+    private static final String EXTRA_EVENT_NAME = "event_name";
+    private static final String EXTRA_EVENT_ID = "id";
+    private static final String EXTRA_EVENT_SCHEDULE = "event_start_time";
+    private static final String EXTRA_EVENT_ALARM = "event_alarm";
+    private static final String EXTRA_EVENT_LENGHT = "event_length";
 
-    private TextView workStartTextView;
+    private TextView eventStartTextView;
     private TextView notificationTextView;
-    private TextInputEditText workNameEditText;
-    private TextInputEditText workLengthEditText;
-    public  int newWorkLength;
+    private TextInputEditText eventNameEditText;
+    private TextInputEditText eventLengthEditText;
+    public int newEventLength;
     private TextView resetAlarm;
     private Button confirm;
     private TextView clean;
     private LinearLayout startLayout;
     private LinearLayout alarmButton;
 
-    public static AddWorkFragment newInstance(int id, String shiftName, String shift_start, String alarm, Integer shift_length) {
+    public static AddEventFragment newInstance(int id, String eventName, String event_start, String alarm, Integer event_length) {
 
-        AddWorkFragment fragment = new AddWorkFragment();
+        AddEventFragment fragment = new AddEventFragment();
         Bundle args = new Bundle();
-        args.putInt(EXTRA_WORK_ID, id);
-        args.putString(EXTRA_WORK_NAME, shiftName);
-        args.putString(EXTRA_WORK_SCHEDULE, shift_start);
-        args.putString(EXTRA_WORK_ALARM, alarm);
-        args.putString(EXTRA_WORK_LENGHT, String.valueOf(shift_length));
+        args.putInt(EXTRA_EVENT_ID, id);
+        args.putString(EXTRA_EVENT_NAME, eventName);
+        args.putString(EXTRA_EVENT_SCHEDULE, event_start);
+        args.putString(EXTRA_EVENT_ALARM, alarm);
+        args.putString(EXTRA_EVENT_LENGHT, String.valueOf(event_length));
         fragment.setArguments(args);
         return fragment;
     }
@@ -79,14 +79,14 @@ public class AddWorkFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            work_name_extra = args.getString(EXTRA_WORK_NAME);
-            work_schedule_extra = args.getString(EXTRA_WORK_SCHEDULE);
-            work_notification_extra = args.getString(EXTRA_WORK_ALARM);
-            work_length_extra = args.getString(EXTRA_WORK_LENGHT);
+            event_name_extra = args.getString(EXTRA_EVENT_NAME);
+            event_schedule_extra = args.getString(EXTRA_EVENT_SCHEDULE);
+            event_notification_extra = args.getString(EXTRA_EVENT_ALARM);
+            event_length_extra = args.getString(EXTRA_EVENT_LENGHT);
         }
 
-        if (work_name_extra == null) {
-            work_name_extra = "-1";
+        if (event_name_extra == null) {
+            event_name_extra = "-1";
         }
     }
 
@@ -98,21 +98,21 @@ public class AddWorkFragment extends Fragment {
         setHasOptionsMenu(true);
         handleToolbarAndBottomMenu();
         findViews(view);
-        startLayout.setOnClickListener(v -> shiftSettingDialog());
+        startLayout.setOnClickListener(v -> eventStartSettingDialog());
         setConfirmButton();
         setCleanButton();
         alarmButton.setOnClickListener(v -> alarmSettingDialog());
         setResetAlarm();
 
-        if (!work_name_extra.equals("-1") &&
-                work_notification_extra != null &&
-                work_schedule_extra != null) {
-            workNameEditText.setText(work_name_extra);
-            workNameEditText.setSelection(work_name_extra.length());
-            workStartTextView.setText(work_schedule_extra);
-            notificationTextView.setText(work_notification_extra);
-            workLengthEditText.setText(work_length_extra);
-            workStartTextView.setVisibility(View.VISIBLE);
+        if (!event_name_extra.equals("-1") &&
+                event_notification_extra != null &&
+                event_schedule_extra != null) {
+            eventNameEditText.setText(event_name_extra);
+            eventNameEditText.setSelection(event_name_extra.length());
+            eventStartTextView.setText(event_schedule_extra);
+            notificationTextView.setText(event_notification_extra);
+            eventLengthEditText.setText(event_length_extra);
+            eventStartTextView.setVisibility(View.VISIBLE);
         }
 
         return view;
@@ -120,7 +120,7 @@ public class AddWorkFragment extends Fragment {
 
 
     private void handleToolbarAndBottomMenu() {
-        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.add_task));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.add_event));
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setSubtitle(null);
         Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setIcon(R.drawable.baseline_chevron_left_black_24);
         MainActivity.menu.findItem(R.id.events).setIcon(R.drawable.baseline_today_black_48).setChecked(true).setOnMenuItemClickListener(item -> {
@@ -142,9 +142,9 @@ public class AddWorkFragment extends Fragment {
         eventLengthLabel.setHint(context.getString(R.string.duration));
         TextView alarmLabel = view.findViewById(R.id.shift_alarm);
         alarmLabel.setText(R.string.notification);
-        workLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
-        workNameEditText = view.findViewById(R.id.textinput);
-        workStartTextView = view.findViewById(R.id.shiftStart);
+        eventLengthEditText = view.findViewById(R.id.shift_lenght_edit_text);
+        eventNameEditText = view.findViewById(R.id.textinput);
+        eventStartTextView = view.findViewById(R.id.shiftStart);
         resetAlarm = view.findViewById(R.id.reset);
         resetAlarm.setText(R.string.resetNotification);
         confirm = view.findViewById(R.id.confirmButton);
@@ -155,12 +155,12 @@ public class AddWorkFragment extends Fragment {
 
     }
 
-    private void shiftSettingDialog() {
+    private void eventStartSettingDialog() {
 
         @SuppressLint({"DefaultLocale", "SetTextI18n"}) TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), R.style.TimePickerTheme,
-                (view, hour, minute) -> workStartTextView.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
+                (view, hour, minute) -> eventStartTextView.setText(String.format("%02d:%02d", hour, minute)), 0, 0, true);
         timePickerDialog.show();
-        workStartTextView.setVisibility(View.VISIBLE);
+        eventStartTextView.setVisibility(View.VISIBLE);
 
     }
 
@@ -176,7 +176,7 @@ public class AddWorkFragment extends Fragment {
     private void setConfirmButton() {
 
         confirm.setOnClickListener(v -> {
-            saveWorkAndEventData(workNameEditText, workStartTextView, notificationTextView, workLengthEditText, context, work_name_extra, EventKind.WORK.getIntValue(), newWorkLength);
+            saveWorkAndEventData(eventNameEditText, eventStartTextView, notificationTextView, eventLengthEditText, context, event_name_extra, EventKind.EVENTS.getIntValue(), newEventLength);
             DialogsUtils.hideKeyboard(getView(), context);
             goBackToExpandedDayView();
         });
@@ -202,9 +202,9 @@ public class AddWorkFragment extends Fragment {
 
     private void setCleanButton() {
         clean.setOnClickListener(v -> {
-            workNameEditText.setText("");
-            workStartTextView.setText("");
-            workLengthEditText.setText("");
+            eventNameEditText.setText("");
+            eventStartTextView.setText("");
+            eventLengthEditText.setText("");
             notificationTextView.setText("");
         });
     }

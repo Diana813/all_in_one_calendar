@@ -184,5 +184,8 @@
     <string name="no_plans">Nie masz żadnych planów na najbliższe 7 dni</string>
     <string name="today">Dziś</string>
     <string name="tomorrow">Jutro</string>
+    <string name="add_task">Dodaj zadanie</string>
+    <string name="add_event">Dodaj wydarzenie</string>
+    <string name="edit_shift">Edytuj zmianę</string>
 
 </resources>

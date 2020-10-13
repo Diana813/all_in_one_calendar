@@ -38,7 +38,10 @@
 
 
     <include layout="@layout/bottom_sheet_menu" />
+
     <include layout="@layout/shifts_setting_bottom_sheet" />
+
+    <include layout="@layout/shifts_bottom_layout_expanded_day_view" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

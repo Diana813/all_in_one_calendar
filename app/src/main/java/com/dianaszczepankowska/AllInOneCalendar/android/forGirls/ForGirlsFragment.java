@@ -33,7 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayDateInLongFormat;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayDateInALongFormat;
 import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
 import static com.dianaszczepankowska.AllInOneCalendar.android.utils.LanguageUtils.dayGramma;
 
@@ -307,9 +307,9 @@ public class ForGirlsFragment extends Fragment {
 
             if (startPeriodDate != null) {
                 LocalDate startPeriod = refactorStringIntoDate(startPeriodDate);
-                date_editText.setText(displayDateInLongFormat(startPeriod));
+                date_editText.setText(displayDateInALongFormat(startPeriod));
             } else {
-                date_editText.setText(displayDateInLongFormat(periodStartDate));
+                date_editText.setText(displayDateInALongFormat(periodStartDate));
             }
 
             int periodLength = periodDataDao.findLastPeriod().getPeriodLength();

@@ -20,9 +20,6 @@ import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CalendarAdapterWithRota;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.CalendarAdapterNoRota;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanDao;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.BigPlanData;
-import com.dianaszczepankowska.AllInOneCalendar.android.database.StatisticsPersonalGrowthDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.utils.AlarmUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEvents;
@@ -39,6 +36,7 @@ import com.dianaszczepankowska.AllInOneCalendar.android.events.cyclicalEvents.Di
 import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsViews;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.Holiday;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.BottomLayoutsUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -54,8 +52,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.confirm;
 import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase.getDatabase;
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.shiftsSheetBehaviorExpandedDayView;
 import static com.google.common.collect.Lists.reverse;
 
 
@@ -238,7 +238,7 @@ public class CalendarFragment extends CalendarBrain {
         while (calendarViewsArrayList.size() < DAYS_COUNT) {
 
             dayOfMonth = calendarFill.getDayOfMonth();
-            displayEventsAndShiftsIfEmpty();
+            displayEventsAndShifts();
             event = CalendarBrain.numberOfEvents(event, context, calendarFill, listOfCyclicalEvents);
 
             if (periodStartDate != null) {
@@ -272,7 +272,7 @@ public class CalendarFragment extends CalendarBrain {
     }
 
 
-    public void displayEventsAndShiftsIfEmpty() {
+    public void displayEventsAndShifts() {
 
         CalendarEventsDao calendarEventsDao = getDatabase(context).calendarEventsDao();
         CalendarEvents calendarEventToAdd = calendarEventsDao.findBypickedDate(String.valueOf(calendarFill));

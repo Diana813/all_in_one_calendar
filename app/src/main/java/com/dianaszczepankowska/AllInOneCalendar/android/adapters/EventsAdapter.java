@@ -14,6 +14,7 @@ import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.Event;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.EventsDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.AddEventFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.AddWorkFragment;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView;
 import com.dianaszczepankowska.AllInOneCalendar.android.utils.AlarmUtils;
@@ -102,7 +103,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsView
             }
             holder.itemView.setOnClickListener(v -> {
 
-                Fragment editorFragment = AddWorkFragment.newInstance(event.getId(), event.getEvent_name(),
+                Fragment editorFragment = AddEventFragment.newInstance(event.getId(), event.getEvent_name(),
                         event.getSchedule(), event.getAlarm(), event.getEvent_length());
                 AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContent, editorFragment).addToBackStack(null).commit();

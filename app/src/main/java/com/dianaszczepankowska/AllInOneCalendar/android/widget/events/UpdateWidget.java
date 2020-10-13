@@ -37,7 +37,7 @@ public class UpdateWidget {
 
     public static void updateWidgetAtMidnight(Context context) {
 
-        Intent intent = new Intent(context, com.dianaszczepankowska.AllInOneCalendar.android.widget.shifts.CalendarWidgetProvider.class);
+        Intent intent = new Intent(context, CalendarWidgetProvider.class);
         intent.setAction("UPDATE_WIDGET_AT_MIDNIGHT_EVENTS");
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         ComponentName thisAppWidget = new ComponentName(context, CalendarWidgetProvider.class);

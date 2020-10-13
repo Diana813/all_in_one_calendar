@@ -93,7 +93,7 @@ class AppWidgetListView implements RemoteViewsService.RemoteViewsFactory {
             views.setTextViewTextSize(R.id.dayOfAMonth, TypedValue.COMPLEX_UNIT_SP, 18);
             views.setTextViewText(R.id.month, "");
         } else {
-            views.setTextViewText(R.id.dayOfAWeek, LanguageUtils.dayOfWeekShortName(eventDate, context) + ", ");
+            views.setTextViewText(R.id.dayOfAWeek, LanguageUtils.dayOfWeekShortName(eventDate, context) + " ");
             views.setTextViewText(R.id.dayOfAMonth, eventDate.getDayOfMonth() + " ");
             views.setTextViewText(R.id.month, monthUpperFirstCase.substring(0, 3));
         }

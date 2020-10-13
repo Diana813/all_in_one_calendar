@@ -56,11 +56,6 @@ public class DailyScheduleEvents extends ExpandedDayEvents {
     }
 
 
-   /* public void setContent(int layout) {
-        this.layout = layout;
-    }*/
-
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

@@ -22,6 +22,7 @@ import com.dianaszczepankowska.AllInOneCalendar.android.coworkers.CoworkersUtils
 import com.dianaszczepankowska.AllInOneCalendar.android.coworkers.FriendsPicker;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.Holiday;
 import com.dianaszczepankowska.AllInOneCalendar.android.holidaysData.HolidaysLoader;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.BottomLayoutsUtils;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
@@ -161,7 +162,7 @@ public class CalendarFrame extends Fragment implements LoaderManager.LoaderCallb
 
         //en.uk%40holiday.calendar.google.com/events?key=yourAPIKey";
 
-        ; //;
+         //;
        /* uriBuilder.appendQueryParameter("api_key", key);
         uriBuilder.appendQueryParameter("country", country);
         uriBuilder.appendQueryParameter("year", year);

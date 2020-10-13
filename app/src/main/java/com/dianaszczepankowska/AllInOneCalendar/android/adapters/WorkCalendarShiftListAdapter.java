@@ -15,6 +15,7 @@ import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabas
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEventsDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.Event;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.EventsDao;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.BottomLayoutsUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -24,7 +25,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.confirm;
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.confirmButton;
 import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.currentDate;
+import static com.dianaszczepankowska.AllInOneCalendar.android.events.expandedDayView.BackgroundActivityExpandedDayView.shiftsSheetBehaviorExpandedDayView;
 import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.findEventEndTime;
 
 public class WorkCalendarShiftListAdapter extends RecyclerView.Adapter<WorkCalendarShiftListAdapter.WorkCalendarShiftsViewHolder> {
@@ -94,6 +98,11 @@ public class WorkCalendarShiftListAdapter extends RecyclerView.Adapter<WorkCalen
             }
 
         }
+
+        holder.itemView.setOnClickListener(v -> {
+            BottomLayoutsUtils.checkBottomLayoutState(shiftsSheetBehaviorExpandedDayView, context.getApplicationContext());
+            BottomLayoutsUtils.bottomSheetListener(shiftsSheetBehaviorExpandedDayView, confirmButton);
+        });
 
 
     }

@@ -59,7 +59,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             setAllTheNotifications(context);
             setAllTheAlarms(context);
         }
-
     }
 
 
@@ -146,10 +145,19 @@ public class AlarmReceiver extends BroadcastReceiver {
             CyclicalEventsNotifications.setNotification(event, context);
         }
         for (Event event : workEvents) {
-            AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(event.getAlarm()), AlarmUtils.getAlarmMinute(event.getAlarm()), refactorStringIntoDate(event.getPickedDay()), context, ACTION_OPEN_NOTIFICATION_CLASS, event.getEvent_name());
+            if (!workEvents.isEmpty() && refactorStringIntoDate(event.getPickedDay()) != null) {
+                if (!refactorStringIntoDate(event.getPickedDay()).isBefore(LocalDate.now())) {
+                    AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(event.getAlarm()), AlarmUtils.getAlarmMinute(event.getAlarm()), refactorStringIntoDate(event.getPickedDay()), context, ACTION_OPEN_NOTIFICATION_CLASS, event.getEvent_name());
+                }
+            }
         }
         for (Event event : otherEvents) {
-            AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(event.getAlarm()), AlarmUtils.getAlarmMinute(event.getAlarm()), refactorStringIntoDate(event.getPickedDay()), context, ACTION_OPEN_NOTIFICATION_CLASS, event.getEvent_name());
+            if (!otherEvents.isEmpty() && refactorStringIntoDate(event.getPickedDay()) != null) {
+                if (!refactorStringIntoDate(event.getPickedDay()).isBefore(LocalDate.now())) {
+                    AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(event.getAlarm()), AlarmUtils.getAlarmMinute(event.getAlarm()), refactorStringIntoDate(event.getPickedDay()), context, ACTION_OPEN_NOTIFICATION_CLASS, event.getEvent_name());
+                }
+            }
+
         }
     }
 
@@ -159,13 +167,16 @@ public class AlarmReceiver extends BroadcastReceiver {
         List<CalendarEvents> calendarEvents = calendarEventsDao.findAllEvents();
 
         for (CalendarEvents calendarEvent : calendarEvents) {
-            if (calendarEvent.getShiftNumber() != null && !calendarEvent.getShiftNumber().equals("") && (refactorStringIntoDate(calendarEvent.getPickedDate()).isAfter(LocalDate.now()) || refactorStringIntoDate(calendarEvent.getPickedDate()).isEqual(LocalDate.now()))) {
-                ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
-                Shift shift = shiftsDao.findByShiftName(calendarEvent.getShiftNumber());
+            if (!calendarEvents.isEmpty() && refactorStringIntoDate(calendarEvent.getPickedDate()) != null) {
+                if (!refactorStringIntoDate(calendarEvent.getPickedDate()).isBefore(LocalDate.now())) {
+                    if (calendarEvent.getShiftNumber() != null && !calendarEvent.getShiftNumber().equals("") && (refactorStringIntoDate(calendarEvent.getPickedDate()).isAfter(LocalDate.now()) || refactorStringIntoDate(calendarEvent.getPickedDate()).isEqual(LocalDate.now()))) {
+                        ShiftsDao shiftsDao = CalendarDatabase.getDatabase(context).shiftsDao();
+                        Shift shift = shiftsDao.findByShiftName(calendarEvent.getShiftNumber());
 
-                AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(shift), AlarmUtils.getAlarmMinute(shift), refactorStringIntoDate(calendarEvent.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS, null);
+                        AlarmUtils.setAlarmToPickedDay(AlarmUtils.getAlarmHour(shift), AlarmUtils.getAlarmMinute(shift), refactorStringIntoDate(calendarEvent.getPickedDate()), context, ACTION_OPEN_ALARM_CLASS, null);
+                    }
+                }
             }
         }
     }
-
 }

@@ -9,14 +9,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import com.dianaszczepankowska.AllInOneCalendar.android.R;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.EventsAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ExpandedDayEditShiftAdapter;
+import com.dianaszczepankowska.AllInOneCalendar.android.adapters.ShiftListAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.WorkCalendarShiftListAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.adapters.WorkListAdapter;
 import com.dianaszczepankowska.AllInOneCalendar.android.events.eventsUtils.EventsViewModel;
+import com.dianaszczepankowska.AllInOneCalendar.android.shifts.ShiftsEditor;
 import com.dianaszczepankowska.AllInOneCalendar.android.utils.AlarmUtils;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEvents;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarEventsDao;
@@ -24,6 +28,8 @@ import com.dianaszczepankowska.AllInOneCalendar.android.database.Shift;
 import com.dianaszczepankowska.AllInOneCalendar.android.database.ShiftsDao;
 import com.dianaszczepankowska.AllInOneCalendar.android.MainActivity;
 import com.dianaszczepankowska.AllInOneCalendar.android.gestures.GestureInteractionsRecyclerView;
+import com.dianaszczepankowska.AllInOneCalendar.android.utils.BottomLayoutsUtils;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -38,9 +44,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.confirm;
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.shifts_bottom_sheet_expanded_day_view;
+import static com.dianaszczepankowska.AllInOneCalendar.android.MainActivity.shifts_recycler_view_expanded_day_view;
 import static com.dianaszczepankowska.AllInOneCalendar.android.alarm.AlarmClock.ACTION_OPEN_ALARM_CLASS;
 import static com.dianaszczepankowska.AllInOneCalendar.android.database.CalendarDatabase.getDatabase;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayDateInALongFormat;
 import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.displayHeaderDateInToolbar;
+import static com.dianaszczepankowska.AllInOneCalendar.android.utils.DateUtils.refactorStringIntoDate;
 
 public class BackgroundActivityExpandedDayView extends Fragment {
 
@@ -64,7 +75,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
     private LinearLayout workLayout;
     private LinearLayout eventsLayout;
     private LinearLayout alarmLayout;
-
+    public static BottomSheetBehavior shiftsSheetBehaviorExpandedDayView;
 
     public BackgroundActivityExpandedDayView() {
         // Required empty public constructor
@@ -76,6 +87,8 @@ public class BackgroundActivityExpandedDayView extends Fragment {
         shiftListAdapter = new WorkCalendarShiftListAdapter(context);
         workListAdapter = new WorkListAdapter(context);
         eventsAdapter = new EventsAdapter(context);
+        shiftsSheetBehaviorExpandedDayView = new BottomSheetBehavior();
+
     }
 
     @Override
@@ -122,9 +135,14 @@ public class BackgroundActivityExpandedDayView extends Fragment {
 
 
         setOnWorkAddButtinClickListener(new AddWorkFragment());
-        /*setOnEventsAddButtonClickListener(new ShiftsEditor());*/
+        setOnEventsAddButtonClickListener(new AddEventFragment());
 
         setAlarmClockSwitch(rootView);
+
+        setBottomSheetsBehaviorShiftsExpandedDayView();
+        setBottomLayoutShiftsAdapterExpandedDayView();
+        MainActivity.date.setText(displayDateInALongFormat(refactorStringIntoDate(currentDate)));
+
 
         return rootView;
     }
@@ -144,6 +162,7 @@ public class BackgroundActivityExpandedDayView extends Fragment {
         alarmLayout = rootView.findViewById(R.id.alarmClock);
         eventsList = rootView.findViewById(R.id.list_of_events);
     }
+
 
     private void setAdapters(RecyclerView recyclerView, WorkCalendarShiftListAdapter adapter, Context context) {
         recyclerView.setAdapter(adapter);
@@ -346,5 +365,18 @@ public class BackgroundActivityExpandedDayView extends Fragment {
 
     }
 
+    public void setBottomSheetsBehaviorShiftsExpandedDayView() {
+        shiftsSheetBehaviorExpandedDayView = BottomSheetBehavior.from(shifts_bottom_sheet_expanded_day_view);
+        shiftsSheetBehaviorExpandedDayView.setHideable(true);
+        shiftsSheetBehaviorExpandedDayView.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+    public void setBottomLayoutShiftsAdapterExpandedDayView() {
+        ExpandedDayEditShiftAdapter shiftsAdapter = new ExpandedDayEditShiftAdapter(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        shifts_recycler_view_expanded_day_view.setLayoutManager(layoutManager);
+        shifts_recycler_view_expanded_day_view.setAdapter(shiftsAdapter);
+        BottomLayoutsUtils.initShiftsData(getContext(), shiftsAdapter);
+    }
 
 }
